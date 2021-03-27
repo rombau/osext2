@@ -1,0 +1,47 @@
+{
+	"manifest_version": 2,
+	"name": "OSext",
+	"version": "2.0.0",
+	"description": "Online Soccer Extension",
+	"icons": {
+		"48": "img/osext.png"
+	},
+	"background": {
+		"scripts": [
+			"js/background/cache.js"
+		]
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"*://os.ongapo.com/*"
+			],
+			"js": [
+				"js/content/model/common.js",
+				"js/content/model/league.js",
+				"js/content/model/player.js",
+				"js/content/model/team.js",
+				"js/content/queue.js",
+				"js/content/htmlutil.js",
+				"js/content/storage.js",
+				"js/content/page.js",
+				"js/content/pages/wappen.js",
+				"js/content/pages/sp.js",
+				"js/content/pages/showteam.overview.js",
+				"js/content/pages/showteam.skills.js",
+				"js/content/pages/showteam.contracts.js",
+				"js/content/pages/showteam.info.js",
+				"js/content/pages/lt.js",
+				"js/content/pages/st.overview.js",
+				"js/content/pages/st.skills.js",
+				"js/content/handler.js"
+			],
+			"all_frames": true
+		}
+	],
+	"permissions": [
+		"*://os.ongapo.com/*",
+		"tabs",
+		"storage"
+	]
+}

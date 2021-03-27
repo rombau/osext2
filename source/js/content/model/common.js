@@ -1,0 +1,3 @@
+
+const SAISON_MATCH_DAYS = 72;
+
