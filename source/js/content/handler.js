@@ -1,3 +1,4 @@
+// TODO maybe remove this ...
 let topthema = document.getElementById('TopThema');
 if (topthema) {
 	topthema.style.display = 'none';
@@ -9,7 +10,7 @@ if (page) {
 		page.check(document);
 		page.process(document, RequestQueue.InitializerQueue);
 	} catch (e) {
-		// TODO error handling
+		// TODO improve error handling
 		console.error(e);
 	}
 }

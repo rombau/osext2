@@ -1,22 +1,25 @@
 /**
  * The extension cache.
  */
-const Cache = {
+const DataCache = {
 	
-	/**
-	 * The data object holds all the team information across page navigations.
+	/** 
+	 * the data object caches all information across page navigations 
 	 */
 	data : {},
-	
+
 	/**
-	 * The listener method called when a runtime message is sent.
+	 * listener method called when a runtime message is sent
 	 */
-	handleMessage (message, sender, callback = () => null) {
+	handleMessage (message, _sender, callback = () => null) {
 		if (message.data) {
-			Cache.data = message.data;
+			DataCache.data = message.data;
 		}
-		callback(Cache.data);
+		callback(DataCache.data);
 	}
 };
 
-chrome.runtime.onMessage.addListener(Cache.handleMessage);
+/**
+ * registering listener method.
+ */
+chrome.runtime.onMessage.addListener(DataCache.handleMessage);

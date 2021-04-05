@@ -19,7 +19,10 @@
 			"js": [
 				"js/content/model/common.js",
 				"js/content/model/league.js",
+				"js/content/model/matchday.js",
 				"js/content/model/player.js",
+				"js/content/model/squadplayer.js",
+				"js/content/model/youthplayer.js",
 				"js/content/model/team.js",
 				"js/content/queue.js",
 				"js/content/htmlutil.js",

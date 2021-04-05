@@ -20,36 +20,36 @@ describe('Request queue', () => {
 		expect(queue.frame.id).toEqual(RequestQueue.FRAME_ID);
 		expect(queue.frame.src).toEqual('about:blank');
 		expect(queue.frame.style.display).toEqual('none');
-		expect(queue.frame.loadedAndCached).toBeDefined();
+		expect(queue.frame.readyAfterLoad).toBeDefined();
 	});
 
 	it('should request pages', () => {
 		
-		queue.addPage(Page.Wappen);
-		queue.addPage(Page.ShowteamOverview);
-		queue.addPage(Page.ShowteamSkills);
+		queue.addPage(new WappenPage());
+		queue.addPage(new ShowteamOverviewPage());
+		queue.addPage(new ShowteamSkillsPage());
 		
 		expect(queue.pages.length).toEqual(3);
 		expect(queue.status).toBeUndefined();
 		
-		queue.start(Page.ShowteamOverview);
+		queue.start(new ShowteamOverviewPage());
 		
 		expect(queue.status.style.display).toEqual('block');
 		
 		expect(queue.pages.length).toEqual(2);
 		expect(queue.status.textContent).toEqual('Initialisiere Wappen ...');
 
-		queue.frame.loadedAndCached();
+		queue.frame.readyAfterLoad();
 
 		expect(queue.pages.length).toEqual(0);
 		expect(queue.status.textContent).toEqual('Initialisiere Einzelskills ...');
 
-		queue.frame.loadedAndCached([{url: Page.ShowPlayer.createUrl({s: 1}), name: 'Hugo'}]);
+		queue.frame.readyAfterLoad([{url: new ShowPlayerPage().createUrl({s: 1}), name: 'Hugo'}]);
 
 		expect(queue.pages.length).toEqual(0);
 		expect(queue.status.textContent).toEqual('Initialisiere Hugo ...');
 
-		queue.frame.loadedAndCached();
+		queue.frame.readyAfterLoad();
 
 		expect(queue.status.style.display).toEqual('none');
 		

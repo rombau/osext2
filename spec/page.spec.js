@@ -145,10 +145,10 @@ describe('Page', () => {
 	
 	it('should return page by location', () => {
 
-		expect(Page.byLocation('http://www.any.com/test.php')).toBeNull();
-		expect(Page.byLocation('http://www.any.com/showteam.php')).toEqual(Page.ShowteamOverview);
-		expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqual(Page.ShowteamSkills);
-		expect(Page.byLocation('http://www.any.com/st.php?s=2&c=1')).toEqual(Page.StSkills);
+		expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
+		expect(Page.byLocation('http://www.any.com/showteam.php')).toEqual(new ShowteamOverviewPage());
+		expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqual(new ShowteamSkillsPage());
+		expect(Page.byLocation('http://www.any.com/st.php?s=2&c=1')).toEqual(new StSkillsPage());
 	});
 
 	describe('should be checked', () => {
@@ -159,28 +159,28 @@ describe('Page', () => {
 			
 			let fixture = Fixture.createDocument('Für die Dauer von ZAT 42 sind die Seiten von OS 2.0 gesperrt!');
 	
-			expect(() => page.check(fixture)).toThrowError('Es läuft derzeit eine Auswertung.');		
+			expect(() => page.check(fixture)).toThrowError('Auswertung läuft!');		
 		});
 		
 		it('and throw error if user accessing office without authentication', () => {
 			
 			let fixture = Fixture.createDocument('Willkommen im Managerbüro von DemoTeam');
 	
-			expect(() => page.check(fixture)).toThrowError('Es ist eine Anmeldung erforderlich.');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
 		});
 	
 		it('and throw error if user accessing team overview without authentication', () => {
 			
 			let fixture = Fixture.createDocument('<b>Demoteam</b>');
 	
-			expect(() => page.check(fixture)).toThrowError('Es ist eine Anmeldung erforderlich.');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
 		});
 	
 		it('and throw error if user accessing private page without authentication', () => {
 			
 			let fixture = Fixture.createDocument('Diese Seite ist ohne Team nicht verfügbar!');
 	
-			expect(() => page.check(fixture)).toThrowError('Es ist eine Anmeldung erforderlich.');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
 		});
 
 	});
@@ -190,8 +190,9 @@ describe('Page', () => {
 		let data, queue, frame, page = new Page();
 		
 		beforeEach(() => {
-			data = { initialized: true };
 			queue = new RequestQueue();
+			data = new ExtensionData();
+			data.initialized = true;
 			frame = document.getElementById(RequestQueue.FRAME_ID);
 			spyOn(chrome.runtime, 'sendMessage').and.callFake((message, callback) => {
 				if (callback) callback(data);
@@ -219,12 +220,12 @@ describe('Page', () => {
 		it('by notifying the embedding frame if page is loaded from request queue', () => {
 
 			spyOn(page, 'extract');
-			spyOn(frame, 'loadedAndCached');
+			spyOn(frame, 'readyAfterLoad');
 			
 			page.process(frame.contentDocument, null, frame.contentWindow);
 			
 			expect(page.extend).not.toHaveBeenCalled();
-			expect(frame.loadedAndCached).toHaveBeenCalled();
+			expect(frame.readyAfterLoad).toHaveBeenCalled();
 		});
 
 		it('by notifying the embedding frame if page is loaded from request queue with additional pages to load', () => {
@@ -232,12 +233,12 @@ describe('Page', () => {
 			let additionalPages = [{url:'', name:''}];
 			
 			spyOn(page, 'extract').and.returnValue(additionalPages);
-			spyOn(frame, 'loadedAndCached');
+			spyOn(frame, 'readyAfterLoad');
 			
 			page.process(frame.contentDocument, null, frame.contentWindow);
 			
 			expect(page.extend).not.toHaveBeenCalled();
-			expect(frame.loadedAndCached).toHaveBeenCalledWith(additionalPages);
+			expect(frame.readyAfterLoad).toHaveBeenCalledWith(additionalPages);
 		});
 
 		it('by starting the initializer queue when not initialized', () => {
@@ -253,7 +254,7 @@ describe('Page', () => {
 
 			let doc = Fixture.createDocument('test'); 
 			data.initialized = false;
-			data.currentTeamName = 'TheName';
+			data.currentTeam.name = 'TheName';
 			
 			page.process(doc, queue);
 			

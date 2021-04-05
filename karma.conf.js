@@ -1,7 +1,6 @@
 module.exports = function(config) {
 
 	config.set({
-		basePath : '',
 		plugins : [
 			'karma-chrome-launcher',
 			'karma-jasmine',
@@ -16,9 +15,10 @@ module.exports = function(config) {
 		    'source/js/content/model/common.js',
 		    'source/js/content/model/league.js',
 		    'source/js/content/model/player.js',
+			'source/js/content/model/squadplayer.js',
+		    'source/js/content/model/youthplayer.js',
 		    'source/js/content/model/team.js',
 		    'source/js/content/model/matchday.js',
-		    'source/js/content/model/saison.js',
 		    'source/js/content/storage.js',
 		    'source/js/content/page.js',
 		    'source/js/content/htmlutil.js',
@@ -43,23 +43,14 @@ module.exports = function(config) {
 		      dir:'.coverage/'
 		    },
 		client: {
-		    captureConsole: true,
-		    useIframe: true
+			"captureConsole": false,
 		},
 		port : 9876,
 		colors : true,
 		logLevel : config.LOG_WARN,
 		autoWatch : true,
-		browsers : ['ChromiumHeadless'],
-		customLaunchers: {
-			ChromiumHeadless: {
-				base: 'Chromium',
-		        flags: ['--disable-gpu', '--remote-debugging-port=9333'],
-		        displayName: 'Chromium headless',
-				debug: true
-			}
-		},
-		singleRun : false,
+		browsers : ['ChromeHeadless'],
+		singleRun : true,
 		concurrency : Infinity
 	});
 };

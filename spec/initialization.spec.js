@@ -1,12 +1,15 @@
 describe('Initialization', () => {
 	
-	let data, queue, frame;
+	let data = new ExtensionData();
+	let queue = new RequestQueue();
+	let frame;
 	
 	beforeEach(() => {
-		data = { initialized: false };
+		data = new ExtensionData();
+		data.initialized = false;
 		queue = new RequestQueue();
 		frame = document.getElementById(RequestQueue.FRAME_ID);
-		spyOn(chrome.runtime, 'sendMessage').and.callFake((message, callback) => {
+		spyOn(chrome.runtime, 'sendMessage').and.callFake((_message, callback) => {
 			if (callback) callback(data);
 		});
 	});
@@ -17,19 +20,23 @@ describe('Initialization', () => {
     
 	xit('should run after login', (done) => {
 
-		queue.addPage(Page.ShowteamOverview);
-		queue.addPage(Page.ShowteamSkills);
+		let mainPage = new ShowteamOverviewPage()
+		let overviewPage = new ShowteamOverviewPage()
+		let skillsPage = new ShowteamSkillsPage()
+		
+		queue.addPage(overviewPage);
+		queue.addPage(skillsPage);
 
 		Fixture.getDocument('haupt.php', doc => {
 			frame.onload = () => {
 				frame.onload = () => {
-					Page.ShowteamSkills.process(frame.contentDocument, queue, frame.contentWindow);
+					overviewPage.process(frame.contentDocument, queue, frame.contentWindow);
 					expect(data.initialized).toBeTruthy();
 					done();
 				};				
-				Page.ShowteamOverview.process(frame.contentDocument, queue, frame.contentWindow);
+				skillsPage.process(frame.contentDocument, queue, frame.contentWindow);
 			};
-			Page.Haupt.process(doc, queue);
+			new WappenPage().process(doc, queue);
 		});
 	});
 

@@ -1,10 +1,15 @@
 
-Page.StSkills = new Page('Teamdaten', 'st.php', new Page.Param('s', 2), new Page.Param('c'));
+class StSkillsPage extends ShowteamSkillsPage {
+	
+	constructor() {
 
-Page.StSkills.extract = (doc, data) => {
-	return Page.ShowteamSkills.extract(doc, data);
-};
+		super();
 
-Page.StSkills.extend = (doc, data) => {
-	return Page.ShowteamSkills.extend(doc, data);
-};
+		this.name = 'Teamdateneinzelskills';
+		this.path = 'st.php';
+		this.params.push(new Page.Param('c'));
+	}
+
+}
+
+Page.register(new StSkillsPage());

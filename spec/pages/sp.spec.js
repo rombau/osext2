@@ -1,27 +1,21 @@
-describe('Page (s)how (p)layer', () => {
+describe('ShowPlayerPage', () => {
 
-	let data;
+	let data = new ExtensionData();
+	let page = new ShowPlayerPage();
 	
 	beforeEach(() => {
-		data = {};
-		data.team = new Team();
-		data.team.squadPlayers.push(new SquadPlayer());
-		data.team.squadPlayers.push(new SquadPlayer());
-		data.team.squadPlayers.push(new SquadPlayer());
-		data.team.squadPlayers[1].id = 20494;
+		data = new ExtensionData();
+		page = new ShowPlayerPage();
 	});
 
 	it('should extract player birthday', (done) => {
 
 		Fixture.getDocument('sp.php', doc => {
 			
-			Page.ShowPlayer.extract(doc, data);
-
-			expect(data.team.squadPlayers.length).toEqual(3);
-			expect(data.team.squadPlayers[0].birthday).toBeUndefined();
-			expect(data.team.squadPlayers[1].birthday).toEqual(12);
-			expect(data.team.squadPlayers[2].birthday).toBeUndefined();
+			page.extract(doc, data);
 			
+			page.extend(doc, data);
+
 			done();
 		});
 	});

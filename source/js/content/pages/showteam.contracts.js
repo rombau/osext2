@@ -1,25 +1,33 @@
 
-Page.ShowteamContracts = new Page('Verträge', 'showteam.php', new Page.Param('s', 1));
-
-Page.ShowteamContracts.HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', '', 'Land', 'U', 'Skillschnitt', 'Opt.Skill', 'Vertrag', 'Monatsgehalt', 'Spielerwert', 'TS'];  
-
-Page.ShowteamContracts.extract = (doc, data) => {
-
-	data.team = Object.assign(new Team(), data.team);
+class ShowteamContractsPage extends Page {
 	
-	new HtmlUtil(doc).getTableRowsByHeaderAndFooter(...Page.ShowteamContracts.HEADERS).forEach(row => {
+	constructor() {
 
-		let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
-		let player = data.team.getSquadPlayer(id); 
+		super('Verträge', 'showteam.php', new Page.Param('s', 1));
+
+		this.headers = ['#', 'Nr.', 'Name', 'Alter', 'Geb.Tag', 'Pos', '', 'Land', 'U', 'Skillschnitt', 'Opt.Skill', 'Vertrag', 'Monatsgehalt', 'Spielerwert', 'TS'];
+	}
+
+	/**
+	 * @param {Document} doc
+	 * @param {ExtensionData} data
+	 */
+	extract(doc, data) {
+
+		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 		
-		player.contract = +row.cells[10].textContent;
-		player.salary = +row.cells[11].textContent.replace(/\./g, '');
-		player.value = +row.cells[12].textContent.replace(/\./g, '');
+		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...this.headers).forEach(row => {
 
-	});
+			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let player = data.currentTeam.getSquadPlayer(id); 
+			
+			player.birthday = +row.cells[4].textContent;
+			player.contractTerm = +row.cells[11].textContent;
+			player.salary = +row.cells[12].textContent.replace(/\./g, '');
+			player.marketValue = +row.cells[13].textContent.replace(/\./g, '');
 
-};
+		});
+	};
+}
 
-Page.ShowteamContracts.extend = (doc, data) => {
-
-};
+Page.register(new ShowteamContractsPage());

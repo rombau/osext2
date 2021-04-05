@@ -1,39 +1,35 @@
-describe('Page wappen', () => {
+describe('WappenPage', () => {
+
+	let data = new ExtensionData();
 
 	beforeEach(() => {
-		this.data = {};
+		data = new ExtensionData();
 	});
 
-	it('should extract team data', (done) => {
+	it('should extract team name', (done) => {
 
 		Fixture.getDocument('wappen.php', doc => {
 			
-			Page.Wappen.extract(doc, this.data);
+			new WappenPage().extract(doc, data);
 			
-			expect(this.data.currentTeamName).toEqual('FC Nivellois');
+			expect(data.currentTeam.name).toEqual('FC Nivellois');
 			
 			done();
 		});
 	});
 
-	it('should extract team data after team change', (done) => {
+	it('should extract team name after team change', (done) => {
 
-		this.data = {
-			initialized : true,
-			currentTeamName : 'FC Cork',
-			team : {
-				id : 19,
-				image : '00000019.gif'
-			}
-		};
+		data.initilized = true;
+		data.currentTeam = new Team();
+		data.currentTeam.name = 'FC Cork';
 		
 		Fixture.getDocument('wappen.php', doc => {
 			
-			Page.Wappen.extract(doc, this.data);
+			new WappenPage().extract(doc, data);
 			
-			expect(this.data.initialized).toBeFalsy();
-			expect(this.data.team).toBeUndefined();
-			expect(this.data.currentTeamName).toEqual('FC Nivellois');
+			expect(data.initialized).toBeFalsy();
+			expect(data.currentTeam.name).toEqual('FC Nivellois');
 			
 			done();
 		});

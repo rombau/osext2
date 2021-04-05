@@ -1,10 +1,11 @@
 
-Page.ShowteamInfo = new Page('Teaminfo', 'showteam.php', new Page.Param('s', 5));
+class ShowteamInfoPage extends Page {
+	
+	constructor() {
 
-Page.ShowteamInfo.extract = (doc, data) => {
+		super('Teaminfo', 'showteam.php', new Page.Param('s', 5));
+	}
 
-};
+}
 
-Page.ShowteamInfo.extend = (doc, data) => {
-
-};
+Page.register(new ShowteamInfoPage());

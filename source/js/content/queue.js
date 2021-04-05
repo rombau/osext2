@@ -38,15 +38,18 @@ class RequestQueue {
 	
 	static get InitializerQueue () {
 		let queue = new RequestQueue();
-		queue.addPage(Page.ShowteamOverview);
-		queue.addPage(Page.ShowteamSkills);
+		queue.addPage(new ShowteamOverviewPage());
+		queue.addPage(new ShowteamSkillsPage());
+		queue.addPage(new ShowteamContractsPage());
 		// to be continued ...
 		return queue;
 	}
 	
 	_createStatus (currentDoc) {
+		/** @type {HTMLDocument} */
 		let doc = top.frames.os_main ? top.frames.os_main.document : currentDoc;
 		let status = doc.getElementById(RequestQueue.STATUS_ID) || doc.createElement('div');
+		doc.body.firstElementChild.style.marginTop = "25px"; 
 		status.id = RequestQueue.STATUS_ID;
 		status.style.display = 'block';
 		status.style.padding = '2px 20px';
@@ -55,7 +58,7 @@ class RequestQueue {
 		status.style.right = '0px';
 		status.style.top = '0px';
 		status.style.backgroundColor = '#CCCCFF';
-		status.style.color = '##6666CC';
+		status.style.color = '#6666CC';
 		if (doc.body) {
 			doc.body.appendChild(status);
 		}
@@ -67,7 +70,7 @@ class RequestQueue {
 		frame.id = RequestQueue.FRAME_ID;
 		frame.src = 'about:blank';
 		frame.style.display = 'none';
-		frame.loadedAndCached = additionalPagesToLoad => {
+		frame.readyAfterLoad = additionalPagesToLoad => {
 			if (additionalPagesToLoad) { 
 				this.pages = this.pages.concat(additionalPagesToLoad);
 			}
@@ -88,6 +91,7 @@ class RequestQueue {
 			}
 		} else {
 			this.status.style.display = 'none';
+			this.status.parentElement.firstElementChild.style.marginTop = "0px"; 
 			chrome.runtime.sendMessage({}, data => {
 				this.finishCallback(this.doc, data);
 				chrome.runtime.sendMessage({data});

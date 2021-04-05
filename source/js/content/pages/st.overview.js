@@ -1,10 +1,16 @@
 
-Page.StOverview = new Page('Teamdaten', 'st.php', new Page.Param('s', 0, true), new Page.Param('c'));
+class StOverviewPage extends ShowteamOverviewPage {
+	
+	constructor() {
 
-Page.StOverview.extract = (doc, data) => {
-	return Page.ShowteamOverview.extract(doc, data);
-};
+		super();
 
-Page.StOverview.extend = (doc, data) => {
-	return Page.ShowteamOverview.extend(doc, data);
-};
+		this.name = 'Teamdatenübersicht';
+		this.path = 'st.php';
+		this.params.push(new Page.Param('c'));
+	}
+
+}
+
+Page.register(new StOverviewPage());
+

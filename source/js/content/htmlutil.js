@@ -1,34 +1,73 @@
+/**
+ * Utilities for DOM parsing and manipulation.
+ */
 class HtmlUtil {
-	constructor (doc = document) {
-		this.doc = doc;
+
+	constructor () {
+		// utility
 	}
 	
-	getTableByHeader (...headers) {
-		return Array.from(this.doc.getElementsByTagName('table')).find((table, t) => {
+	/**
+	 * Returns the HTML table with the specified headers.
+	 * 
+	 * @param  {Document} doc 
+	 * @param  {...String} headers 
+	 * @returns {HTMLTableElement}
+	 */
+	static getTableByHeader (doc, ...headers) {
+		return Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 			return Array.from(table.rows[0].cells).every((cell, i) => {
 				return cell.textContent === headers[i];
 			});
 		});
 	}
 
-	getTableRowsByHeader (...headers) {
-		let rows = Array.from(this.getTableByHeader(...headers).rows);
+	/**
+	 * Returns an array with HTML table rows of the table with the specified headers.
+	 * Header is not part of the array.
+	 * 
+	 * @param  {Document} doc 
+	 * @param  {...String} headers 
+	 * @returns {[HTMLTableRowElement]}
+	 */
+	static getTableRowsByHeader (doc, ...headers) {
+		let rows = Array.from(HtmlUtil.getTableByHeader(doc, ...headers).rows);
 		rows.splice(0, 1);
 		return rows;
 	}
 
-	getTableRowsByHeaderAndFooter (...headers) {
-		let rows = this.getTableRowsByHeader(...headers);
+	/**
+	 * Returns an array with HTML table rows of the table with the specified headers and footers.
+	 * Header and footer are not part of the array.
+	 * 
+	 * @param  {Document} doc 
+	 * @param  {...String} headers 
+	 * @returns {[HTMLTableRowElement]}
+	 */
+	static getTableRowsByHeaderAndFooter (doc, ...headers) {
+		let rows = HtmlUtil.getTableRowsByHeader(doc, ...headers);
 		rows.splice(-1, 1);
 		return rows;
 	}
 	
-	appendScript (text) {
-		let script = this.doc.createElement('script');
-		script.appendChild(this.doc.createTextNode(text));
-		this.doc.body.appendChild(script);
+	/**
+	 * Adds script element with the given code.
+	 * 
+	 * @param {Document} doc 
+	 * @param {String} text
+	 */
+	static appendScript (doc, text) {
+		let script = doc.createElement('script');
+		script.appendChild(doc.createTextNode(text));
+		doc.body.appendChild(script);
 	}
 	
+	/**
+	 * Returns the id extracted from a href.
+	 * 
+	 * @param {String} href 
+	 * @returns {Number} id
+	 */
 	static extractIdFromHref (href) {
 		return +(/(javascript:.+|st\.php.+c=|sp\.php.+s=|faceprev\.php.+id=)(\d+)/.exec(href))[2];
 	}
