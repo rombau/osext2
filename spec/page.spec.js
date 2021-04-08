@@ -36,6 +36,14 @@ describe('Page', () => {
 			
 			expect(page.createUrl()).toMatch(/rep\/1\/2\.html/);
 		});
+			
+		it('with form param', () => {
+			
+			let page = new Page('Testseite', 'xyz.php', new Page.Param('s', '1'));
+			page.method = HttpMethod.POST;
+			
+			expect(page.createUrl()).toMatch(/xyz\.php/);
+		});
 	});
 	
 	describe('should match given location', () => {

@@ -56,12 +56,14 @@ class Page {
 	 */
 	createUrl () {
 		let url = new URL(this.path, document.location.href);
-		this.params.forEach((param) => {
-			if (!param.value && !param.optional) {
-				throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
-			}
-			url.searchParams.append(param.name, param.value);
-		});
+		if (this.method === HttpMethod.GET) {
+			this.params.forEach((param) => {
+				if (!param.value && !param.optional) {
+					throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
+				}
+				url.searchParams.append(param.name, param.value);
+			});
+		}
 		return url;
 	}
 
@@ -166,7 +168,7 @@ Page.Param = class {
 	 * @param {String} value the paramtere value
 	 * @param {Boolean} optional flag indicating an optional parameter (default = false)
 	 */
-	constructor(name, value, optional = false, post = false) {
+	constructor(name, value, optional = false) {
 
 		this.name = name;
 		this.value = value;

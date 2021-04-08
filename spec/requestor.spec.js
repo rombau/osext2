@@ -25,7 +25,7 @@ describe('Requestor', () => {
 		expect(requestor.frame.pageLoaded).toBeDefined();
 	});
 
-	it('should request pages', () => {
+	it('should request pages with query parameters', () => {
 		
 		requestor.addPage(new ShowteamOverviewPage());
 		requestor.addPage(new ShowteamSkillsPage());
@@ -57,4 +57,31 @@ describe('Requestor', () => {
 		
 	});
 
+	it('should request pages with form parameters', () => {
+		
+		requestor.addPage(new MatchDayReportPage(15, 43));
+		
+		expect(requestor.pageQueue.length).toEqual(1);
+		expect(requestor.status).toBeUndefined();
+		
+		requestor.start(new MainPage());
+		
+		expect(requestor.status.style.display).toEqual('block');
+		
+		expect(requestor.pageQueue.length).toEqual(0);
+		expect(requestor.status.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43) ...');
+
+		/** @type {HTMLFormElement} */
+		let form = doc.getElementById(Requestor.FORM_ID)
+
+		expect(form.firstElementChild.name).toEqual('saison');
+		expect(form.firstElementChild.value).toEqual('15');
+		expect(form.lastElementChild.name).toEqual('zat');
+		expect(form.lastElementChild.value).toEqual('43');
+
+		requestor.frame.pageLoaded();
+
+		expect(requestor.status.style.display).toEqual('none');
+		
+	});
 });

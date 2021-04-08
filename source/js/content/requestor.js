@@ -62,6 +62,13 @@ class Requestor {
 	}
 	
 	/**
+	 * @returns {String} the id of the form element
+	 */
+	static get FORM_ID () {
+		return 'page-request-form';
+	}
+
+	/**
 	 * @returns {Requestor} a new instance
 	 */
 	static create () {
@@ -75,9 +82,10 @@ class Requestor {
 	 * @returns {HTMLElement} the status element
 	 */
 	createStatus (doc) {
+		/** @type {Document} */
 		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
 		statusDoc.body.firstElementChild.style.marginTop = "25px"; 
-
+		/** @type {HTMLElement} */
 		let status = statusDoc.getElementById(Requestor.STATUS_ID) || statusDoc.createElement('div');
 		status.id = Requestor.STATUS_ID;
 		status.style.display = 'block';
@@ -88,9 +96,7 @@ class Requestor {
 		status.style.top = '0px';
 		status.style.backgroundColor = '#CCCCFF';
 		status.style.color = '#6666CC';
-
 		statusDoc.body.appendChild(status);
-
 		return status;
 	}
 
@@ -98,21 +104,49 @@ class Requestor {
 	 * Creates the hidden frame element where the pages are loaded in.
 	 * 
 	 * @param {Document} doc the parent document for the status (only used when there is no os_main frame)
-	 * @returns {HTMLElement} the status element
+	 * @returns {HTMLFrameElement} the frame element
 	 */
 	createHiddenFrame (doc) {
+		/** @type {HTMLFrameElement} */
 		let frame = doc.getElementById(Requestor.FRAME_ID) || doc.createElement('iframe');
 		frame.id = Requestor.FRAME_ID;
+		frame.name = Requestor.FRAME_ID; // for form target
 		frame.src = 'about:blank';
 		frame.style.display = 'none';
 		frame.requestAdditionalPages = (additionalPagesToLoad) => {
 			this.pageQueue = this.pageQueue.concat(additionalPagesToLoad);
 		};
 		frame.pageLoaded = () => this.requestNextPage();
-
 		doc.body.appendChild(frame);
-
 		return frame;
+	}
+
+	/**
+	 * Creates the form element for POST requests.
+	 * 
+	 * @param {Document} doc the parent document for the status (only used when there is no os_main frame)
+	 * @param {Page} page the page with the form parameters
+	 * @returns {HTMLFormElement} the form element
+	 */
+	createForm (doc, page) {
+		/** @type {HTMLFormElement} */
+		let form = doc.getElementById(Requestor.FORM_ID) || doc.createElement('form');
+		form.id = Requestor.FORM_ID;
+		form.style.display = 'none';
+		form.action = page.createUrl();
+		form.method = page.method;
+		form.target = Requestor.FRAME_ID;
+		form.textContent = ''; // remove all inputs
+		page.params.forEach(param => {
+			/** @type {HTMLInputElement} */
+			let input = doc.createElement('input');
+			input.name = param.name;
+			input.type = 'number';
+			input.value = param.value;
+			form.appendChild(input);
+		});
+		doc.body.appendChild(form);
+		return form;
 	}
 		
 	/**
@@ -127,8 +161,11 @@ class Requestor {
 				this.requestNextPage();
 			} else {
 				this.status.textContent = `Initialisiere ${page.name} ...`;
-				
-				this.frame.src = page.createUrl();
+				if (page.method === HttpMethod.POST) {
+					this.createForm(this.doc, page).submit();
+				} else {
+					this.frame.src = page.createUrl();
+				}
 			}
 		} else {
 			this.status.style.display = 'none';

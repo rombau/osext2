@@ -31,6 +31,7 @@
 				"js/content/pages/main.js",
 				"js/content/pages/showplayer.js",
 				"js/content/pages/gamereport.js",
+				"js/content/pages/matchdayreport.js",
 				"js/content/pages/showteam.overview.js",
 				"js/content/pages/showteam.skills.js",
 				"js/content/pages/showteam.contracts.js",
