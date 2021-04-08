@@ -12,7 +12,7 @@ class LeagueTablePage extends Page {
 	 */
 	extract(doc, data) {
 		
-		let queue = new RequestQueue(doc);
+		let queue = new Requestor(doc);
 		queue.addPage(Page.StSkills, {c: 3});
 		queue.addPage(Page.StSkills, {c: 4});
 		queue.addPage(Page.StSkills, {c: 5});

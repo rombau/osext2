@@ -1,6 +1,6 @@
 describe('Page', () => {
 	
-	describe('should return URL', () => {
+	describe('should return URL for request', () => {
 		
 		it('without params', () => {
 			
@@ -29,23 +29,12 @@ describe('Page', () => {
 			
 			expect(() => { page.createUrl(); }).toThrowError(/Value for s \(url: .+\) is missing/);
 		});
-		
-		it('with dynamic param', () => {
 			
-			let page = new Page('Testseite', 'xyz.php', new Page.Param('s'));
+		it('with path param', () => {
 			
-			expect(page.createUrl({s:1})).toMatch(/xyz\.php\?s=1/);
-		});
-		
-		it('with multiple params', () => {
+			let page = new Page('Testseite', 'rep/1/2.html');
 			
-			let page = new Page('Testseite', 'xyz.php',
-				new Page.Param('s', '0', true),
-				new Page.Param('t', '1'),
-				new Page.Param('u', '2', true),
-				new Page.Param('v', '3', false));
-			
-			expect(page.createUrl()).toMatch(/xyz\.php\?t=1\&v=3/);
+			expect(page.createUrl()).toMatch(/rep\/1\/2\.html/);
 		});
 	});
 	
@@ -141,14 +130,42 @@ describe('Page', () => {
 			expect(page.match('http://www.any.com/test.php?c=1&s=0')).toBeTruthy();
 			expect(page.match('http://www.any.com/test.php?c=1&s=1')).toBeFalsy();
 		});
+
+		it('with path param', () => {
+			
+			let page = new Page('Testseite', 'rep/1/2.html');
+			
+			expect(page.match('http://www.any.com')).toBeFalsy();
+			expect(page.match('http://www.any.com/rep.html')).toBeFalsy();
+			expect(page.match('http://www.any.com/rep/1.html')).toBeFalsy();
+			expect(page.match('http://www.any.com/rep/1/2.html')).toBeTruthy();
+		});
 	});
 	
-	it('should return page by location', () => {
+	it('should return page with query params by location', () => {
 
 		expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
 		expect(Page.byLocation('http://www.any.com/showteam.php')).toEqual(new ShowteamOverviewPage());
 		expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqual(new ShowteamSkillsPage());
-		expect(Page.byLocation('http://www.any.com/st.php?s=2&c=1')).toEqual(new StSkillsPage());
+		expect(Page.byLocation('http://www.any.com/st.php?s=2&c=1')).toEqual(new TeamSkillsPage());
+	});
+		
+	it('should return page with post params by location', () => {
+
+		expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
+		expect(Page.byLocation('http://www.any.com/zar.php')).toEqual(new MatchDayReportPage());
+		expect(Page.byLocation('http://www.any.com/zar.php')).not.toEqual(new MatchDayReportPage(15, 42));
+	});
+
+	it('should return page with path params by location', () => {
+
+		let reportPage = new GameReportPage(new MatchDay(15, 42), new Team(1), new Team(2));
+
+		Page.register(reportPage);
+
+		expect(Page.byLocation('http://www.any.com/rep/saison')).toBeUndefined();
+		expect(Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html')).toBeUndefined();
+		expect(Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html')).toEqual(reportPage);
 	});
 
 	describe('should be checked', () => {
@@ -187,16 +204,25 @@ describe('Page', () => {
 	
 	describe('should be processed', () => {
 		
-		let data, queue, frame, page = new Page();
+		/** @type {Page} */ let page
+		/** @type {Requestor} */ let queue;
+		/** @type {ExtensionData} */ let data;
+		/** @type {HTMLElement} */ let frame;
+		/** @type {Document} */ let doc
 		
 		beforeEach(() => {
-			queue = new RequestQueue();
+			page = new Page();
+			queue = new Requestor();
 			data = new ExtensionData();
-			data.initialized = true;
-			frame = document.getElementById(RequestQueue.FRAME_ID);
-			spyOn(chrome.runtime, 'sendMessage').and.callFake((message, callback) => {
-				if (callback) callback(data);
-			});
+			doc = Fixture.createDocument('test'); 
+
+			frame = document.getElementById(Requestor.FRAME_ID);
+
+			spyOn(Persistence, 'getCachedData').and.callFake((callback) => callback(data));
+			spyOn(Persistence, 'setCachedData').and.callFake((data, callback) => callback(data));
+
+			spyOn(Requestor, 'create').and.callFake(() => queue);
+
 			spyOn(page, 'extend');
 		});
 
@@ -208,60 +234,53 @@ describe('Page', () => {
 			
 			spyOn(page, 'extract');
 			
-			let doc = Fixture.createDocument('test'); 
-			
 			page.process(doc);
 			
-			expect(chrome.runtime.sendMessage).toHaveBeenCalled();
+			expect(Persistence.getCachedData).toHaveBeenCalled();
 			expect(page.extract).toHaveBeenCalled();
+			expect(Persistence.setCachedData).toHaveBeenCalled();
 			expect(page.extend).toHaveBeenCalled();
 		});
 
 		it('by notifying the embedding frame if page is loaded from request queue', () => {
 
 			spyOn(page, 'extract');
-			spyOn(frame, 'readyAfterLoad');
+			spyOn(frame, 'pageLoaded');
 			
-			page.process(frame.contentDocument, null, frame.contentWindow);
+			page.process(frame.contentDocument, frame.contentWindow);
 			
+			expect(frame.pageLoaded).toHaveBeenCalled();
 			expect(page.extend).not.toHaveBeenCalled();
-			expect(frame.readyAfterLoad).toHaveBeenCalled();
 		});
 
 		it('by notifying the embedding frame if page is loaded from request queue with additional pages to load', () => {
 
-			let additionalPages = [{url:'', name:''}];
+			let pagesToRequest = [new Page()];
 			
-			spyOn(page, 'extract').and.returnValue(additionalPages);
-			spyOn(frame, 'readyAfterLoad');
+			spyOn(page, 'extract').and.returnValue(pagesToRequest);
+			spyOn(frame, 'requestAdditionalPages');
+			spyOn(frame, 'pageLoaded');
+
+			page.process(frame.contentDocument, frame.contentWindow);
 			
-			page.process(frame.contentDocument, null, frame.contentWindow);
-			
+			expect(frame.requestAdditionalPages).toHaveBeenCalledWith(pagesToRequest);
+			expect(frame.pageLoaded).toHaveBeenCalled();
 			expect(page.extend).not.toHaveBeenCalled();
-			expect(frame.readyAfterLoad).toHaveBeenCalledWith(additionalPages);
 		});
 
-		it('by starting the initializer queue when not initialized', () => {
+		it('by starting and finishing a new request queue', () => {
 			
-			spyOn(page, 'extract');
+			let pagesToRequest = [new Page()];
 			
-			spyOn(chrome.storage.local, 'get').and.callFake((key, callback) => {
-				if (callback) callback({});
-			});
-			spyOn(chrome.storage.local, 'set').and.callFake((object, callback) => {
-				if (callback) callback();
-			});
-
-			let doc = Fixture.createDocument('test'); 
-			data.initialized = false;
-			data.currentTeam.name = 'TheName';
+			spyOn(page, 'extract').and.returnValue(pagesToRequest);
+			spyOn(queue, 'addPage').and.callThrough();
+			spyOn(queue, 'start').and.callFake((page, callback) => callback());
 			
-			page.process(doc, queue);
+			page.process(doc);
 			
-			expect(chrome.storage.local.get).toHaveBeenCalled();
-			expect(chrome.storage.local.set).toHaveBeenCalled();
+			expect(queue.addPage).toHaveBeenCalledTimes(1);
+			expect(queue.start).toHaveBeenCalled();
 			expect(page.extend).toHaveBeenCalled();
-			expect(data.initialized).toBeTruthy();
 		});
 	});
 

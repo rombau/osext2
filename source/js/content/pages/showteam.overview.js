@@ -15,17 +15,6 @@ class ShowteamOverviewPage extends Page {
 	extract(doc, data) {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
-
-		let matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
-
-		data.currentTeam.id = +matches[2];
-		data.currentTeam.emblem = matches[1];
-		
-		matches = /([\w|\s]+)\s-\s(\d)\.\s\Liga\s(\w+)/.exec(doc.getElementsByTagName('b')[0].textContent);
-		
-		data.currentTeam.name = matches[1];
-		data.currentTeam.league.level = +matches[2];
-		data.currentTeam.league.countryName = matches[3];
 		
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...this.headers).forEach(row => {
 	

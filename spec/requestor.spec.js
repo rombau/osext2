@@ -1,0 +1,60 @@
+describe('Requestor', () => {
+	
+	/** @type {Document} */ let doc;
+	/** @type {Requestor} */ let requestor;
+	
+	beforeEach(() => {
+		doc = Fixture.createDocument('');
+		requestor = new Requestor(doc);
+	});
+
+    afterEach(() => {
+    	if (requestor.frame) requestor.frame.parentNode.removeChild(requestor.frame);
+		if (requestor.status) requestor.status.parentNode.removeChild(requestor.status);
+    });
+    
+	it('should be created with hidden iframe', () => {
+		
+		expect(requestor.doc).toEqual(doc);
+		expect(requestor.pageQueue.length).toEqual(0);
+		expect(requestor.frame).not.toBeNull();
+		expect(requestor.frame.id).toEqual(Requestor.FRAME_ID);
+		expect(requestor.frame.src).toEqual('about:blank');
+		expect(requestor.frame.style.display).toEqual('none');
+		expect(requestor.frame.requestAdditionalPages).toBeDefined();
+		expect(requestor.frame.pageLoaded).toBeDefined();
+	});
+
+	it('should request pages', () => {
+		
+		requestor.addPage(new ShowteamOverviewPage());
+		requestor.addPage(new ShowteamSkillsPage());
+		
+		expect(requestor.pageQueue.length).toEqual(2);
+		expect(requestor.status).toBeUndefined();
+		
+		requestor.start(new MainPage());
+		
+		expect(requestor.status.style.display).toEqual('block');
+		
+		expect(requestor.pageQueue.length).toEqual(1);
+		expect(requestor.status.textContent).toEqual('Initialisiere Teamübersicht ...');
+
+		requestor.frame.pageLoaded();
+
+		expect(requestor.pageQueue.length).toEqual(0);
+		expect(requestor.status.textContent).toEqual('Initialisiere Einzelskills ...');
+
+		requestor.frame.requestAdditionalPages(new ShowPlayerPage(1, 'Hugo'));
+		requestor.frame.pageLoaded();
+
+		expect(requestor.pageQueue.length).toEqual(0);
+		expect(requestor.status.textContent).toEqual('Initialisiere Spieler Hugo ...');
+
+		requestor.frame.pageLoaded();
+
+		expect(requestor.status.style.display).toEqual('none');
+		
+	});
+
+});

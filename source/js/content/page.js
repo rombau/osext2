@@ -1,14 +1,26 @@
 /**
+ * Enum for http methods.
+ * @readonly
+ */
+ const HttpMethod = Object.freeze({
+	GET: 'GET',
+	POST: 'POST'
+});
+
+/**
  * Page representation
  */
 class Page {
 
 	/**
-	 * @param {*} name the name shown when loading
-	 * @param {*} path the path (e.g showteam.php)
+	 * @param {String} name the name shown when loading
+	 * @param {String} path the path (e.g showteam.php)
 	 * @param  {...Page.Param} params the parameters this page can handle
 	 */
 	constructor(name, path, ...params) {
+
+		/** @type {String} the request method */
+		this.method = HttpMethod.GET;
 
 		/** @type {String} the name */
 		this.name = name;
@@ -18,7 +30,6 @@ class Page {
 
 		/** @type {[Page.Param]} the parameters this page can handle */
 		this.params = params;
-
 	}
 
 	/**
@@ -28,7 +39,7 @@ class Page {
 	 * @returns {boolean}
 	 */
 	match (location) {
-		let url = new URL(location, document.location.href); // TODO: should document be a parameter?
+		let url = new URL(location, document.location.href);
 		if (!url.pathname.includes(this.path)) {
 			return false;
 		}
@@ -41,25 +52,15 @@ class Page {
 	/**
 	 * Creates a URL with the given parameters.
 	 * 
-	 * @param  {...Page.Param} params the parameters should be sent with the page
 	 * @returns {URL} the resulting URL
 	 */
-	createUrl (...params) {
-		let url = new URL(this.path, document.location.href); // TODO: should document be a parameter?
+	createUrl () {
+		let url = new URL(this.path, document.location.href);
 		this.params.forEach((param) => {
-			let value = param.value;
-			if (!value) {
-				let givenParam = params.find(p => p[param.name]);
-				if (givenParam) {
-					value = givenParam[param.name];
-				}
+			if (!param.value && !param.optional) {
+				throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
 			}
-			if (!param.optional) {
-				if (!value) {
-					throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
-				}
-				url.searchParams.append(param.name, value);
-			}
+			url.searchParams.append(param.name, param.value);
 		});
 		return url;
 	}
@@ -125,26 +126,25 @@ class Page {
 	 * Processes the given document.
 	 * 
 	 * @param {Document} doc the document that should be processed
-	 * @param {RequestQueue} initQueue the initialization request queue
 	 * @param {Window} win the current window
 	 */
-	process (doc, initQueue, win = window) {
+	process (doc, win = window) {
 		let page = this;
-		Persistence.getData(data => {
-			let additionalPagesToLoad = page.extract(doc, data);
-			Persistence.setData(data, data => {
-				if (win.frameElement && win.frameElement.id === RequestQueue.FRAME_ID) {
-					win.frameElement.readyAfterLoad(additionalPagesToLoad);
-				} else {
-					if (data.initialized) {
-						page.extend(doc, data);
-					} else {
-						initQueue.start(page, (doc, data) => {
-							data.initialized = true;
-							Persistence.persist(data, () => page.extend(doc, data));
-						});
+		Persistence.getCachedData(data => {
+			let pagesToRequest = page.extract(doc, data);
+			Persistence.setCachedData(data, () => {
+				if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
+					if (pagesToRequest && pagesToRequest.length) {
+						win.frameElement.requestAdditionalPages(pagesToRequest);
 					}
-				}
+					win.frameElement.pageLoaded();
+				} else if (pagesToRequest && pagesToRequest.length) {
+					let requestor = Requestor.create(doc);
+					pagesToRequest.forEach((page) => requestor.addPage(page));
+					requestor.start(page, () => page.extend(doc, data));
+				} else {
+					page.extend(doc, data);
+				}			
 			});
 		});
 	}
@@ -164,14 +164,12 @@ Page.Param = class {
 	/**
 	 * @param {String} name the paramtere name
 	 * @param {String} value the paramtere value
-	 * @param {Boolean} optional flag indicating an optional parameter
+	 * @param {Boolean} optional flag indicating an optional parameter (default = false)
 	 */
-	constructor(name, value, optional) {
+	constructor(name, value, optional = false, post = false) {
 
 		this.name = name;
 		this.value = value;
 		this.optional = optional;
-		
-		// TODO: post flag for form params
 	}
 };

@@ -1,5 +1,5 @@
 
-class StSkillsPage extends ShowteamSkillsPage {
+class TeamSkillsPage extends ShowteamSkillsPage {
 	
 	constructor() {
 
@@ -12,4 +12,4 @@ class StSkillsPage extends ShowteamSkillsPage {
 
 }
 
-Page.register(new StSkillsPage());
+Page.register(new TeamSkillsPage());

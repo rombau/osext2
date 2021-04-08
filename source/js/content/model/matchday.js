@@ -17,13 +17,17 @@
  */
 class MatchDay {
 
-	constructor() {
+	/**
+	 * @param {Number} season 
+	 * @param {Number} zat 
+	 */
+	constructor(season, zat) {
 			
 		/** @type {Number} the season number */ 
-		this.season;
+		this.season = season;
 
 		/** @type {Number} the number of this match day in the season */ 
-		this.zat;
+		this.zat = zat;
 
 		/** @type {Competition} the competition */
 		this.competition;

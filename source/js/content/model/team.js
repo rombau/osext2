@@ -3,16 +3,20 @@
  */
 class Team {
 
-	constructor() {
+	/**
+	 * @param {Number} id 
+	 * @param {String} name 
+	 */
+	constructor(id, name) {
 		
 		/** @type {Number} the internal id */ 
-		this.id;
+		this.id = id;
+
+		/** @type {String} the name of the team */ 
+		this.name = name;
 
 		/** @type {String} the emblem file name */ 
 		this.emblem;
-
-		/** @type {String} the name of the team */ 
-		this.name;
 
 		/** @type {League} the league this team belong to */ 
 		this.league = new League();
@@ -77,7 +81,7 @@ class Team {
 	 * @param {Team} data the team data to be restored
 	 */
 	applyStorageData (teamToRestore) {
-		if (teamToRestore) {
+		if (teamToRestore && teamToRestore.squadPlayers) {
 			teamToRestore.squadPlayers.forEach(player => Object.assign(this.getSquadPlayer(player.id), player));
 		}
 	}

@@ -1,9 +1,15 @@
 
 class ShowPlayerPage extends Page {
 	
-	constructor() {
+	/**
+	 * @param {Number} id the player id
+	 * @param {String} name the player name shown when loading
+	 */
+	constructor(id, name = '') {
 
-		super('Spieler', 'sp.php', new Page.Param('s'));
+		super(`Spieler ${name}`, 'sp.php');
+
+		this.params.push(id ? new Page.Param('s', id) : new Page.Param('s'));
 	}
 
 	/**

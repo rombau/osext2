@@ -1,5 +1,5 @@
 
-class StOverviewPage extends ShowteamOverviewPage {
+class TeamOverviewPage extends ShowteamOverviewPage {
 	
 	constructor() {
 
@@ -12,5 +12,5 @@ class StOverviewPage extends ShowteamOverviewPage {
 
 }
 
-Page.register(new StOverviewPage());
+Page.register(new TeamOverviewPage());
 
