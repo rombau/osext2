@@ -10,6 +10,7 @@ class GameReportPage extends Page {
 
 		super('Spielbericht', `rep/saison/${matchDay.season}/${matchDay.zat}/${homeTeam.id}-${awayTeam.id}.html`);
 	}
+
 }
 
 

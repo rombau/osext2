@@ -7,9 +7,9 @@ class ShowPlayerPage extends Page {
 	 */
 	constructor(id, name = '') {
 
-		super(`Spieler ${name}`, 'sp.php');
-
-		this.params.push(id ? new Page.Param('s', id) : new Page.Param('s'));
+		super(`Spieler ${name}`, 'sp.php', new Page.Param('s', id));
+		
+		Page.register(this);
 	}
 
 	/**
@@ -24,5 +24,4 @@ class ShowPlayerPage extends Page {
 	};
 }
 
-Page.register(new ShowPlayerPage());
 

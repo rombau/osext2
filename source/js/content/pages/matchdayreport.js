@@ -16,6 +16,7 @@ class MatchDayReportPage extends Page {
 			this.params.push(new Page.Param('zat', zat, true));
 		}
 	}
+
 }
 
 Page.register(new MatchDayReportPage());

@@ -42,7 +42,7 @@ class MainPage extends Page {
 			initPages.push(new ShowteamContractsPage());
 			initPages.push(new ShowteamSeasonPage());
 
-			// TODO ...
+			// TODO add all needed pages
 
 			return initPages;
 		}

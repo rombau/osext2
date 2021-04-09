@@ -12,13 +12,13 @@ class LeagueTablePage extends Page {
 	 */
 	extract(doc, data) {
 		
-		let queue = new Requestor(doc);
-		queue.addPage(Page.StSkills, {c: 3});
-		queue.addPage(Page.StSkills, {c: 4});
-		queue.addPage(Page.StSkills, {c: 5});
-		return queue.start((doc, data) => {
-			this.extend(doc, data);
-		});
+		let pagesToLoad = [];
+		
+		pagesToLoad.push(new TeamSkillsPage(1, ''));
+		pagesToLoad.push(new TeamSkillsPage(2, ''));
+		
+
+		// return pagesToLoad;
 	};
 }
 

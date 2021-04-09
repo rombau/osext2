@@ -27,7 +27,6 @@ class ShowteamSkillsPage extends Page {
 				player.skills[skillname] = +row.cells[4 + s].textContent;
 			});
 		});
-	
 	}
 	
 	/**
