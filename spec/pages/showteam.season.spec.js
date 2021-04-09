@@ -10,11 +10,11 @@ describe('ShowteamSeasonPage', () => {
 
 	it('should extract match days', (done) => {
 
+		data.nextZat = 49;
+
 		Fixture.getDocument('showteam.php?s=6', doc => {
 			
 			page.extract(doc, data);
-					
-			expect(data.nextMatchDay.season).toEqual(10);
 						
 			expect(data.currentTeam.matchDays.length).toEqual(72);
 			expect(data.currentTeam.matchDays[0].zat).toEqual(1);
@@ -22,65 +22,38 @@ describe('ShowteamSeasonPage', () => {
 			expect(data.currentTeam.matchDays[0].competition).toEqual(Competition.FRIENDLY);
 			expect(data.currentTeam.matchDays[0].location).toEqual(GameLocation.AWAY);
 			expect(data.currentTeam.matchDays[0].result).toEqual('1 : 0');
-			expect(data.currentTeam.matchDays[0].immutable).toBeTruthy();
+			expect(data.currentTeam.matchDays[0].opponent.id).toEqual(724);
+			expect(data.currentTeam.matchDays[0].opponent.name).toEqual('FC Ferastrau Suceava');
 
 			expect(data.currentTeam.matchDays[66].friendlyShare).toEqual(50);
-			expect(data.currentTeam.matchDays[66].immutable).toBeFalsy()
 
-			// TODO: assert opponent
-			
+			expect(data.nextMatchDay.season).toEqual(10);
+			expect(data.nextMatchDay.zat).toEqual(49);
+			expect(data.nextMatchDay.opponent.name).toEqual('Eski Turgutluspor');
+
 			done();
 		});
 	});
 
-	it('should not handle next match day if already done', () => {
+	it('should extract match days from previous season', (done) => {
 
-		data.nextMatchDay.season = 5;
-		data.nextMatchDay.zat = 12;
-		data.nextMatchDay.immutable = true;
+		data.nextZat = 1;
 
-		let ok = page.handleNextMatchDay(data, 4);
-				
-		expect(ok).toBeTruthy();
-		expect(data.nextMatchDay.season).toEqual(5);
-		expect(data.nextMatchDay.zat).toEqual(12);
-		expect(data.nextMatchDay.immutable).toBeTruthy();
+		Fixture.getDocument('showteam.php?s=6', doc => {
+			
+			HtmlUtil.getTableRowsByHeader(doc, ...page.headers).forEach(row => {
+				row.cells[3].textContent = '';
+			});
+
+			let pagesToLoad = page.extract(doc, data);
+						
+			expect(pagesToLoad.length).toEqual(1);
+			expect(pagesToLoad[0].name).toEqual('Saisonplan (Saison 9)');
+
+			expect(data.nextMatchDay).toBeNull();
+
+			done();
+		});
 	});
 
-	it('should handle next match day regularly', () => {
-
-		data.nextMatchDay.zat = 16;
-
-		let ok = page.handleNextMatchDay(data, 10);
-				
-		expect(ok).toBeTruthy();
-		expect(data.nextMatchDay.season).toEqual(10);
-		expect(data.nextMatchDay.zat).toEqual(16);
-		expect(data.nextMatchDay.immutable).toBeTruthy();
-	});
-
-	it('should handle next match day after season', () => {
-
-		data.currentTeam.getMatchDay(10,1).result = '0 : 0';
-		data.nextMatchDay.zat = 73;
-
-		let ok = page.handleNextMatchDay(data, 10);
-				
-		expect(ok).toBeTruthy();
-		expect(data.nextMatchDay.season).toEqual(11);
-		expect(data.nextMatchDay.zat).toEqual(1);
-		expect(data.nextMatchDay.immutable).toBeTruthy();
-	});
-
-	it('should handle next match day before season', () => {
-
-		data.nextMatchDay.zat = 1;
-
-		let ok = page.handleNextMatchDay(data, 10);
-				
-		expect(ok).toBeFalsy();
-		expect(data.nextMatchDay.season).toEqual(10);
-		expect(data.nextMatchDay.zat).toEqual(1);
-		expect(data.nextMatchDay.immutable).toBeFalsy();
-	});
 });

@@ -24,8 +24,6 @@ describe('ShowteamOverviewPage', () => {
 			expect(data.currentTeam.squadPlayers[0].injured).toBeUndefined();
 			expect(data.currentTeam.squadPlayers[0].transferState).toEqual('U');
 			expect(data.currentTeam.squadPlayers[0].transferLock).toBeUndefined();
-
-			// TODO: extract bans and loans ...
 			
 			page.extend(doc, data);
 			

@@ -53,8 +53,6 @@ class MatchDay {
 		/** @type {Number} the friendly share for the team */
 		this.friendlyShare;
 
-		/** @type {Boolean} flag indicating this match day is unchangable, e.g. already played or initialized pointers */
-		this.immutable;
-
 	}
+
 }

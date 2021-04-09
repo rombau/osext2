@@ -14,6 +14,8 @@ describe('MainPage', () => {
 			
 			let initPages = page.extract(doc, data);
 			
+			expect(data.nextZat).toEqual(49);
+
 			expect(data.currentTeam.id).toEqual(19);
 			expect(data.currentTeam.name).toEqual('FC Cork');
 			expect(data.currentTeam.emblem).toEqual('00000019.png');

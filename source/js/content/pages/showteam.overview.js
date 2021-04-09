@@ -34,11 +34,7 @@ class ShowteamOverviewPage extends Page {
 			player.transferState = row.cells[16].textContent;
 			player.transferLock = row.cells[17].textContent !== '0' ? row.cells[17].textContent : undefined;
 			
-
-			// TODO: extract bans ...
-			// player.banned = row.cells[14].textContent !== '0' ? row.cells[14].textContent : undefined;
-
-			// TODO: extract loans ...
+			// TODO: extract bans and loans ...
 			
 		});
 	}

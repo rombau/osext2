@@ -14,8 +14,7 @@ class MainPage extends Page {
 		
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
 
-		// initial value (ZAT) for the next matchday; see ShowteamSeasonPage.handleNextMatchDay()
-		data.nextMatchDay.zat = +matches[1];
+		data.initNextZat(+matches[1]);
 
 		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
 

@@ -17,7 +17,8 @@
 				"*://os.ongapo.com/*"
 			],
 			"js": [
-				"js/content/model/common.js",
+				"js/content/model/consts.js",
+				"js/content/model/data.js",
 				"js/content/model/league.js",
 				"js/content/model/matchday.js",
 				"js/content/model/player.js",

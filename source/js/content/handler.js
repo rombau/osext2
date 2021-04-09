@@ -1,4 +1,3 @@
-// TODO maybe remove this ...
 let topthema = document.getElementById('TopThema');
 if (topthema) {
 	topthema.style.display = 'none';

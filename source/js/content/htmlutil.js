@@ -16,9 +16,10 @@ class HtmlUtil {
 	 */
 	static getTableByHeader (doc, ...headers) {
 		return Array.from(doc.getElementsByTagName('table')).find((table, t) => {
-			return Array.from(table.rows[0].cells).every((cell, i) => {
+			let ok = Array.from(table.rows[0].cells).every((cell, i) => {
 				return cell.textContent === headers[i];
 			});
+			return ok;
 		});
 	}
 
