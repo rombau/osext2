@@ -56,14 +56,15 @@ class Page {
 	 */
 	createUrl () {
 		let url = new URL(this.path, document.location.href);
-		if (this.method === HttpMethod.GET) {
-			this.params.forEach((param) => {
-				if (!param.value && !param.optional) {
+		this.params.forEach((param) => {
+			if (!param.optional) {
+				if (param.value) {
+					url.searchParams.append(param.name, param.value);
+				} else {
 					throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
 				}
-				url.searchParams.append(param.name, param.value);
-			});
-		}
+			}
+		});
 		return url;
 	}
 
@@ -126,6 +127,8 @@ class Page {
 
 	/**
 	 * Processes the given document.
+	 * 
+	 * TODO: errors without a soultion (DOM changes, ...) should disable the extension
 	 * 
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window

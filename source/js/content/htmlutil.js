@@ -24,7 +24,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns an array with HTML table rows of the table with the specified headers.
-	 * Header is not part of the array.
+	 * The header (first) row is not part of the array.
 	 * 
 	 * @param  {Document} doc 
 	 * @param  {...String} headers 
@@ -38,7 +38,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns an array with HTML table rows of the table with the specified headers and footers.
-	 * Header and footer are not part of the array.
+	 * The header (first) and footer (last) row are not part of the array.
 	 * 
 	 * @param  {Document} doc 
 	 * @param  {...String} headers 

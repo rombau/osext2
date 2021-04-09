@@ -3,13 +3,22 @@
  * @readonly
  */
  const Competition = Object.freeze({
-	FRIENDLY: 'Fiendly',
+	FRIENDLY: 'Friendly',
 	LEAGUE: 'Liga',
 	CUP: 'LP',
 	OSEQ: 'OSEQ',
 	OSE: 'OSE',
 	OSCQ: 'OSCQ',
 	OSC: 'OSC',
+});
+
+/**
+ * Enum for place types.
+ * @readonly
+ */
+ const GameLocation = Object.freeze({
+	HOME: 'Heim',
+	AWAY: 'Auswärts'
 });
 
 /**
@@ -32,8 +41,20 @@ class MatchDay {
 		/** @type {Competition} the competition */
 		this.competition;
 
+		/** @type {GameLocation} the ganme location */
+		this.location;
+
 		/** @type {Team} the oponent team */ 
 		this.opponent = new Team();
+
+		/** @type {String} the game result */
+		this.result;
+
+		/** @type {Number} the friendly share for the team */
+		this.friendlyShare;
+
+		/** @type {Boolean} flag indicating this match day is unchangable, e.g. already played or initialized pointers */
+		this.immutable;
 
 	}
 }

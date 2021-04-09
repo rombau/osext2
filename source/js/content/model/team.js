@@ -58,6 +58,28 @@ class Team {
 	}
 
 	/**
+	 * Returns the match day with the season and zat. If the match day can't be found, a new one is added to the team and returned.
+	 * 
+	 * @param {Number} season the season of the match day to find (or add)
+	 * @param {Number} zat the zat of the match day to find (or add)
+	 * @returns @type {MatchDay} the match day
+	 */
+	getMatchDay (season, zat) {
+		if (!season || !zat) return null;
+
+		let matchDay;
+		let idx = this.matchDays.findIndex(matchDay => matchDay.season === season && matchDay.zat === zat);
+		if (idx >= 0) {
+			matchDay = Object.assign(new MatchDay(season, zat), this.matchDays[idx]);
+			this.matchDays[idx] = matchDay;
+			return matchDay;
+		} 
+		matchDay = new MatchDay(season, zat);
+		this.matchDays.push(matchDay);
+		return matchDay;
+	}
+
+	/**
 	 * Returns the data of the team that have to be stored.
 	 * 
 	 * @returns @type {Team} the team to store

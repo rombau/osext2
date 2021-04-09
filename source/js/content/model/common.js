@@ -11,10 +11,7 @@ const SAISON_MATCH_DAYS = 72;
 class ExtensionData {
 	
 	constructor() {
-
-        /** @type {Boolean} flag indicating the extension data is already restored */ 
-		this.restored;
-		
+	
 		/** @type {Team} the current team */ 
 		this.currentTeam = new Team();
 
@@ -35,4 +32,6 @@ class ExtensionData {
 		this.lastMatchDay = new MatchDay();
 		this.nextMatchDay = new MatchDay();
 	}
+
+
 }
