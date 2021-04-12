@@ -108,5 +108,3 @@ class ShowteamOverviewPage extends Page {
 	
 	};
 }
-
-Page.register(new ShowteamOverviewPage());

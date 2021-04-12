@@ -14,18 +14,17 @@ class ExtensionData {
 		/** @type {Number} the next zat season */ 
 		this.nextZatSeason;
 
-		this.clear();
 	}
 
 	/**
-	 * Resets all the extension data
+	 * Resets all the current team data
 	 */
-	clear () {
+	clearCurrentTeam () {
 		this.currentTeam = new Team();
 	}
 
 	/**
-	 * Initializes the next zat.
+	 * Initializes the next zat. During saison interval the next zat is always set to 1.
 	 * 
 	 * @param {Number} zat 
 	 */

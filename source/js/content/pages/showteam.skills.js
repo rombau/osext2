@@ -96,4 +96,3 @@ class ShowteamSkillsPage extends Page {
 	};
 }
 
-Page.register(new ShowteamSkillsPage());

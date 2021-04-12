@@ -13,5 +13,8 @@ class League {
 
 		/** @type {String} the league country name */ 
 		this.countryName;
+
+		/** @type {[Team]} the teams sorted by current ranking */
+		this.teams = [];
 	}
 }

@@ -53,5 +53,3 @@ class ShowteamSeasonPage extends Page {
 	};
 
 }
-
-Page.register(new ShowteamSeasonPage());

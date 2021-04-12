@@ -2,6 +2,10 @@ describe('Page', () => {
 	
 	describe('should return URL for request', () => {
 		
+		beforeEach(() => {		
+			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		});
+		
 		it('without params', () => {
 			
 			let page = new Page('Testseite', 'xyz.php');
@@ -24,7 +28,7 @@ describe('Page', () => {
 		});
 		
 		it('with undefined dynamic param', () => {
-			
+					
 			let page = new Page('Testseite', 'xyz.php', new Page.Param('s'));
 			
 			expect(() => { page.createUrl(); }).toThrowError(/Value for s \(url: .+\) is missing/);
@@ -40,7 +44,11 @@ describe('Page', () => {
 	});
 	
 	describe('should match given location', () => {
-		
+
+		beforeEach(() => {		
+			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		});
+
 		it('with invalid url', () => {
 			
 			let page = new Page('Testseite', 'test.php');
@@ -106,7 +114,7 @@ describe('Page', () => {
 		
 		it('with one mandatory and one dynamic query param', () => {
 			
-			let page = new Page('Testseite', 'test.php', new Page.Param('c'), new Page.Param('s', '1'));
+			let page = new Page('Testseite', 'test.php', new Page.Param('c', '1'), new Page.Param('s', '1'));
 			
 			expect(page.match('http://www.any.com')).toBeFalsy();
 			expect(page.match('http://www.any.com/showit.php')).toBeFalsy();
@@ -120,7 +128,7 @@ describe('Page', () => {
 		
 		it('with one dynamic and one optional query param', () => {
 			
-			let page = new Page('Testseite', 'test.php', new Page.Param('c'), new Page.Param('s', '0', true));
+			let page = new Page('Testseite', 'test.php', new Page.Param('c', '1'), new Page.Param('s', '0', true));
 			
 			expect(page.match('http://www.any.com')).toBeFalsy();
 			expect(page.match('http://www.any.com/showit.php')).toBeFalsy();
@@ -143,35 +151,73 @@ describe('Page', () => {
 		});
 	});
 	
-	it('should return page with query params by location', () => {
+	describe('should return page by location', () => {
 
-		expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
-		expect(Page.byLocation('http://www.any.com/showteam.php')).toEqual(new ShowteamOverviewPage());
-		expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqual(new ShowteamSkillsPage());
-		expect(Page.byLocation('http://www.any.com/st.php?s=2&c=1')).toEqual(new TeamSkillsPage());
-	});
-		
-	it('should return page with post params by location', () => {
+		/** @type {ExtensionData} */ let data;
 
-		expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
-		expect(Page.byLocation('http://www.any.com/zar.php')).toEqual(new MatchDayReportPage());
-		expect(Page.byLocation('http://www.any.com/zar.php')).not.toEqual(new MatchDayReportPage(15, 42));
-	});
+		beforeEach(() => {
+			
+			data = new ExtensionData();
 
-	it('should return page with path params by location', () => {
+			spyOn(Persistence, 'getCachedData').and.callFake(() => Promise.resolve(JSON.parse(JSON.stringify(data))));
+			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+				modifyData(data);
+				return Promise.resolve();
+			});
+		});
 
-		let reportPage = new GameReportPage(new MatchDay(15, 42), new Team(1), new Team(2));
+		it('with query params', () => {
 
-		Page.register(reportPage);
+			let showteamOverview = new ShowteamOverviewPage();
+			let showteamSkills = new ShowteamSkillsPage();
 
-		expect(Page.byLocation('http://www.any.com/rep/saison')).toBeUndefined();
-		expect(Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html')).toBeUndefined();
-		expect(Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html')).toEqual(reportPage);
+			Page.byLocation('http://www.any.com/test.php', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/showteam.php', page => expect(page).toEqual(showteamOverview));
+			Page.byLocation('http://www.any.com/showteam.php?s=2', page => expect(page).toEqual(showteamSkills));
+			Page.byLocation('http://www.any.com/showteam.php?s=4711', page => expect(page).toBeUndefined());
+		});
+
+		it('with mandatory query params', () => {
+
+			Page.byLocation('http://www.any.com/sp.php?s=1', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/sp.php?s=2', page => expect(page).toBeUndefined());
+
+			let playerPage1 = new ShowPlayerPage(1);
+			let playerPage2 = new ShowPlayerPage(2);
+			
+			Page.byLocation('http://www.any.com/test.php', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/sp.php?s=1', page => expect(page).toEqual(playerPage1));
+			Page.byLocation('http://www.any.com/sp.php?s=2', page => expect(page).toEqual(playerPage2));
+		});
+			
+		it('with post params', () => {
+
+			let matchDayReport = new MatchDayReportPage();
+			let matchDayReportWithParams = new MatchDayReportPage(15, 42);
+
+			Page.byLocation('http://www.any.com/test.php', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/zar.php', page => expect(page).toEqual(matchDayReport));
+			Page.byLocation('http://www.any.com/zar.php', page => expect(page).not.toEqual(matchDayReportWithParams));
+		});
+
+		it('with path params', () => {
+
+			let reportPage = new GameReportPage(15, 42, 1, 2);
+
+			Page.byLocation('http://www.any.com/rep/saison', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html', page => expect(page).toBeUndefined());
+			Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html', page => expect(page).toEqual(reportPage));
+		});
 	});
 
 	describe('should be checked', () => {
 		
-		let page = new Page();
+		let page;
+
+		beforeEach(() => {		
+			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+			page = new Page();
+		});
 		
 		it('and throw error if calculation is running', () => {
 			
@@ -212,76 +258,70 @@ describe('Page', () => {
 		/** @type {Document} */ let doc
 		
 		beforeEach(() => {
-			page = new Page();
-			queue = new Requestor();
 			data = new ExtensionData();
+			queue = new Requestor();
+
+			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+				modifyData(data);
+				return Promise.resolve(data);
+			});
+			spyOn(Requestor, 'create').and.callFake(() => queue);
+
+			page = new Page();
 			doc = Fixture.createDocument('test'); 
 
 			frame = document.getElementById(Requestor.FRAME_ID);
 
-			spyOn(Persistence, 'getCachedData').and.callFake((callback) => callback(data));
-			spyOn(Persistence, 'setCachedData').and.callFake((data, callback) => callback(data));
-
-			spyOn(Requestor, 'create').and.callFake(() => queue);
-
-			spyOn(page, 'extend');
 		});
 
 	    afterEach(() => {
 	    	frame.parentNode.removeChild(frame);
 	    });
 	    		
-		it('by extracting and extending simple page', () => {
+		it('by extracting and extending simple page', (done) => {
 			
 			spyOn(page, 'extract');
+			spyOn(page, 'extend').and.callFake(done);
 			
 			page.process(doc);
 			
-			expect(Persistence.getCachedData).toHaveBeenCalled();
+			expect(Persistence.updateCachedData).toHaveBeenCalled();
 			expect(page.extract).toHaveBeenCalled();
-			expect(Persistence.setCachedData).toHaveBeenCalled();
-			expect(page.extend).toHaveBeenCalled();
 		});
 
-		it('by notifying the embedding frame if page is loaded from request queue', () => {
+		it('by notifying the embedding frame if page is loaded from request queue', (done) => {
 
 			spyOn(page, 'extract');
-			spyOn(frame, 'pageLoaded');
+			spyOn(frame, 'pageLoaded').and.callFake(done);
 			
 			page.process(frame.contentDocument, frame.contentWindow);
-			
-			expect(frame.pageLoaded).toHaveBeenCalled();
-			expect(page.extend).not.toHaveBeenCalled();
 		});
 
-		it('by notifying the embedding frame if page is loaded from request queue with additional pages to load', () => {
+		it('by notifying the embedding frame if page is loaded from request queue with additional pages to load', (done) => {
 
 			let pagesToRequest = [new Page()];
 			
 			spyOn(page, 'extract').and.returnValue(pagesToRequest);
-			spyOn(frame, 'requestAdditionalPages');
-			spyOn(frame, 'pageLoaded');
+			spyOn(frame, 'requestAdditionalPages').and.callFake(pages => {
+				expect(pages).toEqual(pagesToRequest);
+				done();
+			});
 
 			page.process(frame.contentDocument, frame.contentWindow);
-			
-			expect(frame.requestAdditionalPages).toHaveBeenCalledWith(pagesToRequest);
-			expect(frame.pageLoaded).toHaveBeenCalled();
-			expect(page.extend).not.toHaveBeenCalled();
 		});
 
-		it('by starting and finishing a new request queue', () => {
+		it('by starting and finishing a new request queue', (done) => {
 			
 			let pagesToRequest = [new Page()];
 			
 			spyOn(page, 'extract').and.returnValue(pagesToRequest);
 			spyOn(queue, 'addPage').and.callThrough();
-			spyOn(queue, 'start').and.callFake((page, callback) => callback());
+			spyOn(queue, 'start').and.callFake((triggerPage, _callback) => {
+				expect(triggerPage).toEqual(page);
+				done();
+			});
 			
-			page.process(doc);
-			
-			expect(queue.addPage).toHaveBeenCalledTimes(1);
-			expect(queue.start).toHaveBeenCalled();
-			expect(page.extend).toHaveBeenCalled();
+			page.process(doc);			
 		});
 	});
 

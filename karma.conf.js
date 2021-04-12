@@ -44,7 +44,7 @@ module.exports = function(config) {
 		      dir:'.coverage/'
 		    },
 		client: {
-			"captureConsole": false,
+			"captureConsole": true,
 		},
 		port : 9876,
 		colors : true,

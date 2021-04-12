@@ -1,10 +1,14 @@
 describe('MainPage', () => {
 
 	let data = new ExtensionData();
-	let page = new MainPage();
+	let page;
 	
 	beforeEach(() => {
 		data = new ExtensionData();
+
+		// for automatic regististration on new page
+		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+	
 		page = new MainPage();
 	});
 

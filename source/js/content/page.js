@@ -19,6 +19,9 @@ class Page {
 	 */
 	constructor(name, path, ...params) {
 
+		/** @type {String} the class name of the page */
+		this.className = this.constructor.name;
+
 		/** @type {String} the request method */
 		this.method = HttpMethod.GET;
 
@@ -30,6 +33,8 @@ class Page {
 
 		/** @type {[Page.Param]} the parameters this page can handle */
 		this.params = params;
+
+		Page.register(this);
 	}
 
 	/**
@@ -74,21 +79,43 @@ class Page {
 	 * @param {Page} pageToRegister the page to register
 	 */
 	static register (pageToRegister) {
-		if (!Page.registry.find(page => page && page instanceof Page && page.name === pageToRegister.name && page.path === pageToRegister.path)) {
-			Page.registry.push(pageToRegister);
-		}
+		Persistence.updateCachedData(data => {
+			data.pageRegistry = Array.from(data.pageRegistry || []);
+			if (!data.pageRegistry.filter(page => page.className == pageToRegister.className).find(page => {
+				let pageClass = eval(page.className);
+				Object.setPrototypeOf(page, pageClass.prototype);
+				return page && page instanceof Page && page.createUrl().toString() == pageToRegister.createUrl().toString();
+			})) {
+				data.pageRegistry.push(pageToRegister);
+			}
+		});
 	}
+
+	/**
+	 * @callback pageFoundCallback
+	 * @param {Page} page
+	 */
 
 	/**
 	 * Returns the registered page for a given document location.
 	 * 
 	 * @param {string} location of the document
-	 * @returns {Page} the registered page 
+	 * @param {pageFoundCallback} found
 	 */
-	static byLocation (location) {
-		return Page.registry.find(page => {
-			return page && page instanceof Page && page.match(location);
-		});
+	static byLocation (location, found = () => {}) {
+		Persistence.getCachedData().then(data => {
+			data.pageRegistry = Array.from(data.pageRegistry);
+			let pageFound = data.pageRegistry.find(page => {
+				if (!page.className) return false;
+				let pageClass = eval(page.className);
+				Object.setPrototypeOf(page, pageClass.prototype);
+				return page && page instanceof Page && page.match(location);
+			});
+			if (pageFound) {
+				pageFound.params.forEach((param, p) => pageFound.params[p] = Object.assign(new Page.Param(),param));
+			}
+			found(pageFound);
+		}, console.error);
 	}
 
 	/**
@@ -128,38 +155,32 @@ class Page {
 	/**
 	 * Processes the given document.
 	 * 
-	 * TODO: errors without a soultion (DOM changes, ...) should disable the extension
+	 * TODO: errors without a solution (DOM changes, ...) should disable the extension
 	 * 
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */
 	process (doc, win = window) {
 		let page = this;
-		Persistence.getCachedData(data => {
-			let pagesToRequest = page.extract(doc, data);
-			Persistence.setCachedData(data, () => {
-				if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
-					if (pagesToRequest && pagesToRequest.length) {
-						win.frameElement.requestAdditionalPages(pagesToRequest);
-					}
-					win.frameElement.pageLoaded();
-				} else if (pagesToRequest && pagesToRequest.length) {
-					let requestor = Requestor.create(doc);
-					pagesToRequest.forEach((page) => requestor.addPage(page));
-					requestor.start(page, () => page.extend(doc, data));
-				} else {
-					page.extend(doc, data);
-				}			
-			});
+		let pagesToRequest;
+		Persistence.updateCachedData(data => {
+			pagesToRequest = page.extract(doc, data);
+		}).then(data => {
+			if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
+				if (pagesToRequest && pagesToRequest.length) {
+					win.frameElement.requestAdditionalPages(pagesToRequest);
+				}
+				win.frameElement.pageLoaded();
+			} else if (pagesToRequest && pagesToRequest.length) {
+				let requestor = Requestor.create(doc);
+				pagesToRequest.forEach((page) => requestor.addPage(page));
+				requestor.start(page, () => page.extend(doc, data));
+			} else {
+				page.extend(doc, data);
+			}			
 		});
 	}
 }
-
-/**
- * Registered pages for processing.
- * @type {[Page]}
- */
-Page.registry = [];
 
 /**
  * Page parameter representation

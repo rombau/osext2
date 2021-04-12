@@ -6,98 +6,138 @@
  */
 class Persistence {
 	
+	/** @type {ExtensionData} local data cache remains as long there is no new page loaded */
+	static localCachedData;
+
 	/**
-	 * @callback cacheCallback
+	 * Returns a promise with the given operation. The new promise always waits for the last 
+	 * requested promise to resolve. This ensures synchronized access on the background cache
+	 * data.
+	 * 
+	 * @returns {Promise}
+	 */
+	static getPromise = (() => {
+		let pending = Promise.resolve();
+		const run = async (operation) => {
+			try {
+				await pending;
+			} finally {
+				return new Promise(operation);
+			}
+		}
+		return (operation) => (pending = run(operation));
+	})();
+
+	/**
+	 * Returns the data from the background cache. 
+	 * The data is sent back with the resolved promise.
+	 * 
+	 * @async
+	 * @returns {Promise} resolved promise returns the data
+	 */
+	static getCachedData () {
+		if (Persistence.localCachedData) {
+			return Promise.resolve(Persistence.localCachedData);
+		}
+		return Persistence.getPromise((resolve, reject) => {
+			chrome.runtime.sendMessage({}, data => {
+				if (chrome.runtime.lastError) {
+					reject('Caching failed: ' + chrome.runtime.lastError);
+				} else {
+					Persistence.localCachedData = Object.assign(new ExtensionData(), data)
+					resolve(Persistence.localCachedData);
+				}
+			});
+		});
+	}
+
+	/**
+	 * @callback modifyDataCallback
 	 * @param {ExtensionData} data
 	 */
 
 	/**
-	 * Returns the data from the background cache. 
-	 * The data is sent as parameter to the given callback.
+	 * Updates the cached data in the background cache.
+	 * The cached data referenrce can be modified in the given callback.
+	 * The data is sent back with the resolved promise.
 	 * 
 	 * @async
-	 * @param {cacheCallback} success is called when data was loaded from cache and/or restored
-	 * @param failed is called when something went wrong
+	 * @param {modifyDataCallback} modifyData 
+	 * @returns {Promise} resolved promise returns the data
 	 */
-	static getCachedData (success = () => {}, failed = () => {}) {
-		chrome.runtime.sendMessage({}, data => {
-			if (chrome.runtime.lastError) {
-				failed('Caching failed: ' + chrome.runtime.lastError);
+	static updateCachedData (modifyData = (_data) => {}) {
+		return Persistence.getPromise((resolve, reject) => {
+			let sendStoreMessage = (data) => chrome.runtime.sendMessage({data}, () => {
+				if (chrome.runtime.lastError) {
+					reject('Caching failed: ' + chrome.runtime.lastError);
+				} else {
+					resolve(data);
+				}
+			});
+			if (Persistence.localCachedData) {
+				modifyData(Persistence.localCachedData);
+				sendStoreMessage(Persistence.localCachedData);
 			} else {
-				data = Object.assign(new ExtensionData(), data);
-				success(data);
+				chrome.runtime.sendMessage({}, data => {
+					if (chrome.runtime.lastError) {
+						reject('Caching failed: ' + chrome.runtime.lastError);
+					} else {
+						Persistence.localCachedData = Object.assign(new ExtensionData(), data);
+						modifyData(Persistence.localCachedData);
+						sendStoreMessage(Persistence.localCachedData);
+					}
+				});
 			}
 		});
 	}
-
-	/**
-	 * Sends the given data to the background cache.
-	 * The data is sent as parameter to the given callback.
-	 * 
-	 * @async
-	 * @param {ExtensionData} data 
-	 * @param {cacheCallback} success is called when data was cached
-	 * @param failed is called when something went wrong
-	 */
-	static setCachedData (data, success = () => {}, failed = () => {}) {
-		chrome.runtime.sendMessage({data}, () => {
-			if (chrome.runtime.lastError) {
-				failed('Caching failed: ' + chrome.runtime.lastError);
-			} else {
-				success(data);
-			}
-		});
-	}
-
-	/**
-	 * @callback storageCallback
-	 * @param {Team} team
-	 */
 
 	/**
 	 * Loads the team data by team name from the local storage.
-	 * The data is sent as parameter to the given callback.
+	 * The data is sent back with the resolved promise.
 	 * 
 	 * @async
 	 * @param {String} teamName the name of the team
-	 * @param {storageCallback} success is called when team was restored
-	 * @param failed is called when something went wrong
+	 * @returns {Promise} resolved promise returns the data
 	 */
-	static loadData (teamName, success = () => {}, failed = () => {}) {
-		if (teamName) {
-			chrome.storage.local.get(teamName, stored => {
-				if (chrome.runtime.lastError) {
-					failed('Loading failed: ' + chrome.runtime.lastError);
-				} else {
-					let restoredTeam = Object.assign(new Team(), stored[teamName]);
-					success(restoredTeam);
-				}
-			});
-		} else {
-			failed('Loading failed: Missing team name');
-		}
+	static loadData (teamName) {
+		return new Promise((resolved, reject) => {
+			if (teamName) {
+				chrome.storage.local.get(teamName, stored => {
+					if (chrome.runtime.lastError) {
+						reject('Loading failed: ' + chrome.runtime.lastError);
+					} else {
+						let restoredTeam = Object.assign(new Team(), stored[teamName]);
+						resolved(restoredTeam);
+					}
+				});
+			} else {
+				reject('Loading failed: Missing team name');
+			}
+		});
 	}
 
 	/**
-	 * Persists the team data in the local storage with the team name. The team 
-	 * The given callback is called on success.
+	 * Persists the team data in the local storage with the team name. 
+	 * Given team should only contain data not availaible after reinitialization.
+	 * The resolved promise indicates success.
 	 * 
 	 * @async
-	 * @param {Team} data the team data that should be stored. Should only contain data not availaible after reinitialization.
-	 * @param success is called when data was persisted
-	 * @param failed is called when something went wrong
+	 * @param {Team} data the team data that should be stored.
+	 * @returns {Promise} resolved promise returns the data
 	 */
-	static persistData (team, success = () => {}, failed = () => {}) {
-		if (team.name) {
-			chrome.storage.local.set({[team.name]: team}, () => {
-				if (chrome.runtime.lastError) {
-					failed('Persisting failed: ' + chrome.runtime.lastError);
-				} else {
-					success();
-				}
-			});
-		} else {
-			failed('Persisting failed: Missing team name');
-		}
+	static persistData (team) {
+		return new Promise((resolved, reject) => {
+			if (team.name) {
+				chrome.storage.local.set({[team.name]: team}, () => {
+					if (chrome.runtime.lastError) {
+						reject('Persisting failed: ' + chrome.runtime.lastError);
+					} else {
+						resolved();
+					}
+				});
+			} else {
+				reject('Persisting failed: Missing team name');
+			}
+		});
 	}
 }

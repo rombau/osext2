@@ -6,6 +6,9 @@ describe('Requestor', () => {
 	beforeEach(() => {
 		doc = Fixture.createDocument('');
 		requestor = new Requestor(doc);
+
+		// for automatic regististration on new page
+		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
 	});
 
     afterEach(() => {
@@ -45,7 +48,7 @@ describe('Requestor', () => {
 		expect(requestor.pageQueue.length).toEqual(0);
 		expect(requestor.status.textContent).toEqual('Initialisiere Einzelskills ...');
 
-		requestor.frame.requestAdditionalPages(new ShowPlayerPage(1, 'Hugo'));
+		requestor.frame.requestAdditionalPages(new ShowPlayerPage(123456, 'Hugo'));
 		requestor.frame.pageLoaded();
 
 		expect(requestor.pageQueue.length).toEqual(0);

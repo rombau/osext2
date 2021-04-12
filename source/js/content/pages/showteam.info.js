@@ -7,5 +7,3 @@ class ShowteamInfoPage extends Page {
 	}
 
 }
-
-Page.register(new ShowteamInfoPage());

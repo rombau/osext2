@@ -22,4 +22,3 @@ class LeagueTablePage extends Page {
 	};
 }
 
-Page.register(new LeagueTablePage());

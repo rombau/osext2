@@ -2,13 +2,15 @@
 class GameReportPage extends Page {
 	
 	/**
-	 * @param {MatchDay} matchDay 
-	 * @param {Team} homeTeam 
-	 * @param {Team} awayTeam 
+	 * @param {Number} season 
+	 * @param {Number} zat 
+	 * @param {Number} homeTeamId 
+	 * @param {Number} awayTeamId 
 	 */
-	constructor(matchDay, homeTeam, awayTeam) {
+	constructor(season, zat, homeTeamId, awayTeamId) {
 
-		super('Spielbericht', `rep/saison/${matchDay.season}/${matchDay.zat}/${homeTeam.id}-${awayTeam.id}.html`);
+		super('Spielbericht', `rep/saison/${season}/${zat}/${homeTeamId}-${awayTeamId}.html`);
+
 	}
 
 }

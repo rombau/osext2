@@ -18,5 +18,3 @@ class MatchDayReportPage extends Page {
 	}
 
 }
-
-Page.register(new MatchDayReportPage());

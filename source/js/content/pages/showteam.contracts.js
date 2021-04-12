@@ -29,5 +29,3 @@ class ShowteamContractsPage extends Page {
 		});
 	};
 }
-
-Page.register(new ShowteamContractsPage());

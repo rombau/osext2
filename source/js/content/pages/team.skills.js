@@ -13,8 +13,6 @@ class TeamSkillsPage extends ShowteamSkillsPage {
 		this.params.push(new Page.Param('c', id));
 		
 		if (name) this.name += ` (${name})`;
-
-		Page.register(this);
 	}
 
 	/**

@@ -16,7 +16,7 @@ describe('Extension Data', () => {
 		data.currentTeam.id = 1;
 		data.initNextZat(27);
 
-		data.clear();
+		data.clearCurrentTeam();
 
 		expect(data.currentTeam.id).toBeUndefined();
 		expect(data.nextZat).toEqual(27);
