@@ -18,8 +18,8 @@ class Team {
 		/** @type {String} the emblem file name */ 
 		this.emblem;
 
-		/** @type {League} the league this team belong to */ 
-		this.league = new League();
+		/** @type {Team.League} the league this team belong to */ 
+		this.league = new Team.League();
 		
 		/** @type {Number} the current league ranking */ 
 		this.leagueRanking;
@@ -33,25 +33,25 @@ class Team {
 		/** @type {[MatchDay]} the match days (ZATS) of the current (and following) saison(s) */ 
 		this.matchDays = [];
 
+		/** @type {[Team.Trainer]} the trainers for training the squad player */ 
+		this.trainers = [];
 	}
 
 	/**
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
 	 * 
 	 * @param {Number} id the id of the player to find (or add)
-	 * @returns @type {SquadPlayer} the player
+	 * @returns {SquadPlayer} the player
 	 */
 	getSquadPlayer (id) {
 		if (!id) return null;
 
-		let idx = this.squadPlayers.findIndex(squadPlayer => squadPlayer.id === id);
-		if (idx >= 0) {
-			let player = Object.assign(new SquadPlayer(), this.squadPlayers[idx]);
-			this.squadPlayers[idx] = player;
+		let player = this.squadPlayers.find(trainer => trainer.id === id);
+		if (player) {
+			Object.setPrototypeOf(player, SquadPlayer.prototype);
 			return player;
-		}	
-
-		let player = new SquadPlayer();
+		}
+		player = new SquadPlayer();
 		player.id = id;
 		this.squadPlayers.push(player);
 		return player;
@@ -62,27 +62,45 @@ class Team {
 	 * 
 	 * @param {Number} season the season of the match day to find (or add)
 	 * @param {Number} zat the zat of the match day to find (or add)
-	 * @returns @type {MatchDay} the match day
+	 * @returns {MatchDay} the match day
 	 */
 	getMatchDay (season, zat) {
 		if (!season || !zat) return null;
 
-		let matchDay;
-		let idx = this.matchDays.findIndex(matchDay => matchDay.season === season && matchDay.zat === zat);
-		if (idx >= 0) {
-			matchDay = Object.assign(new MatchDay(season, zat), this.matchDays[idx]);
-			this.matchDays[idx] = matchDay;
+		let matchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
+		if (matchDay) {
+			Object.setPrototypeOf(matchDay, MatchDay.prototype);
 			return matchDay;
-		} 
+		}
 		matchDay = new MatchDay(season, zat);
 		this.matchDays.push(matchDay);
 		return matchDay;
 	}
 
 	/**
+	 * Returns the trainer with the given id. If the trainer can't be found, a new one is added to the team and returned.
+	 * 
+	 * @param {Number} nr the id of the trainer to find (or add)
+	 * @returns {Team.Trainer} the trainer
+	 */
+	getTrainer (nr) {
+		if (!nr) return null;
+
+		let trainer = this.trainers.find(trainer => trainer.nr === nr);
+		if (trainer) {
+			Object.setPrototypeOf(trainer, Team.Trainer.prototype);
+			return trainer;
+		}
+		trainer = new Team.Trainer();
+		trainer.nr = nr;
+		this.trainers.push(trainer);
+		return trainer;
+	}
+
+	/**
 	 * Returns the data of the team that have to be stored.
 	 * 
-	 * @returns @type {Team} the team to store
+	 * @returns {Team} the team to store
 	 */
 	getStorageData () {
 		let teamToStore = new Team();
@@ -108,4 +126,44 @@ class Team {
 		}
 	}
 		
+}
+
+/**
+ * League representation.
+ */
+Team.League = class {
+	
+	constructor() {
+
+		/** @type {Number} the league level */ 
+		this.level;
+		
+		/** @type {Number} the league team count */ 
+		this.size;
+
+		/** @type {String} the league country name */ 
+		this.countryName;
+
+		/** @type {[Team]} the teams sorted by current ranking */
+		this.teams = [];
+	}
+}
+
+/**
+ * Trainer representation.
+ */
+Team.Trainer = class {
+	
+	constructor() {
+
+		/** @type {Number} the number of the trainer  */ 
+		this.nr;
+
+		/** @type {Number} the contract term in match days (zats) */
+		this.contractTerm;
+
+		/** @type {Number} the monthly salary */
+		this.salary;
+		
+	}
 }

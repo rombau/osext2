@@ -14,7 +14,6 @@ module.exports = function(config) {
 		    'source/js/content/requestor.js',
 		    'source/js/content/model/consts.js',
 		    'source/js/content/model/data.js',
-		    'source/js/content/model/league.js',
 		    'source/js/content/model/player.js',
 			'source/js/content/model/squadplayer.js',
 		    'source/js/content/model/youthplayer.js',

@@ -46,8 +46,6 @@ class ShowteamOverviewPage extends Page {
 			if (banCell.textContent.length > 1) {
 				banCell.textContent.split(' ').forEach(shortForm => player.bans.push(new SquadPlayer.Ban(shortForm)));
 			}
-
-			// TODO: extract bans and loans ...
 			
 		});
 	}

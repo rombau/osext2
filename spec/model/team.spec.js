@@ -9,6 +9,7 @@ describe('Team', () => {
 
 		expect(team.squadPlayers.length).toEqual(0);
 		expect(team.youthPlayers.length).toEqual(0);
+
 	});
 
 	it('should handle storage data', () => {

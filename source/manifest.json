@@ -19,7 +19,6 @@
 			"js": [
 				"js/content/model/consts.js",
 				"js/content/model/data.js",
-				"js/content/model/league.js",
 				"js/content/model/matchday.js",
 				"js/content/model/player.js",
 				"js/content/model/squadplayer.js",
@@ -41,6 +40,8 @@
 				"js/content/pages/leaguetable.js",
 				"js/content/pages/team.overview.js",
 				"js/content/pages/team.skills.js",
+				"js/content/pages/trainer.js",
+				"js/content/pages/training.js",
 				"js/content/handler.js"
 			],
 			"all_frames": true

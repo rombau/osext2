@@ -57,6 +57,11 @@ class SquadPlayer extends Player {
 		/** @type {MatchDay} the match day (ZAT) the player should be fastly transfered ('Blitz') */ 
 		this.fastTransfer;
 		
+		/** @type {SquadPlayer.Training} the training setup of the last match day */
+		this.lastTraining;
+
+		/** @type {SquadPlayer.Training} the training setup of the next match day */
+		this.nextTraining;
 	}
 }
 
@@ -147,3 +152,24 @@ SquadPlayer.Loan = class {
 		return '';
 	}
 };
+
+/**
+ * Training representation.
+ */
+SquadPlayer.Training = class {
+	
+	constructor() {
+
+		/** @type {Team.Trainer} the team trainer */ 
+		this.trainer;
+		
+		/** @type {Skill} the trainings skill */
+		this.skill;
+
+		/** @type {Number} the chance for increasing the skill value */
+		this.chance;
+		
+		/** @type {Number} the match bonus multiplying the chance */
+		this.matchBonus = 1;
+	}
+}

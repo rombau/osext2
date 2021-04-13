@@ -14,11 +14,13 @@ class MainPage extends Page {
 		
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
 
-		data.initNextZat(+matches[1]);
+		let nextZat = +matches[1];
 		
 		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
 		
-		if (data.currentTeam.id !== +matches[2]) {
+		if (data.currentTeam.id !== +matches[2] || data.nextZat !== nextZat) {
+
+			data.initNextZat(nextZat);
 			
 			data.clearCurrentTeam();
 
@@ -42,6 +44,9 @@ class MainPage extends Page {
 			initPages.push(new ShowteamContractsPage());
 			initPages.push(new ShowteamSeasonPage());
 			initPages.push(new LeagueTablePage());
+			initPages.push(new TrainerPage());
+			initPages.push(new TrainingPage());
+			
 
 			// TODO add all needed pages
 
