@@ -12,12 +12,12 @@ class ShowteamSeasonPage extends Page {
 			this.method = HttpMethod.POST;
 			this.name += ` (Saison ${season})`;
 			this.params.push(new Page.Param('saison', season, true));
-		}
-
-		this.headers = ['ZAT', 'Spielart', 'Gegner', 'Ergebnis', 'Bericht'];
-
-		this.unknownGameInfos = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
+		}	
 	}
+	
+	static HEADERS = ['ZAT', 'Spielart', 'Gegner', 'Ergebnis', 'Bericht'];
+
+	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
 
 	/**
 	 * @param {Document} doc
@@ -30,9 +30,9 @@ class ShowteamSeasonPage extends Page {
 
 		let season = +doc.querySelector('select[name=saison]').value;
 
-		HtmlUtil.getTableRowsByHeader(doc, ...this.headers).forEach(row => {
+		HtmlUtil.getTableRowsByHeader(doc, ...ShowteamSeasonPage.HEADERS).forEach(row => {
 			let gameInfo = row.cells[1].textContent;
-			if (gameInfo && this.unknownGameInfos.indexOf(gameInfo) == -1) {
+			if (gameInfo && ShowteamSeasonPage.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.currentTeam.getMatchDay(season, +row.cells[0].textContent);
 				matchday.competition = gameInfo.split(' : ')[0];
 				matchday.location = gameInfo.split(' : ')[1];

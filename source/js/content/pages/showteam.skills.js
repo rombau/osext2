@@ -5,9 +5,10 @@ class ShowteamSkillsPage extends Page {
 
 		super('Einzelskills', 'showteam.php', new Page.Param('s', 2));
 
-		this.headers = ['#', 'Name', 'Land', 'U', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
 	}
-
+	
+	static HEADERS = ['#', 'Name', 'Land', 'U', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
+	
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -16,7 +17,7 @@ class ShowteamSkillsPage extends Page {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
-		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...this.headers).forEach(row => {
+		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamSkillsPage.HEADERS).forEach(row => {
 	
 			let id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
@@ -37,7 +38,7 @@ class ShowteamSkillsPage extends Page {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
-		let table = HtmlUtil.getTableByHeader(doc, ...this.headers);
+		let table = HtmlUtil.getTableByHeader(doc, ...ShowteamSkillsPage.HEADERS);
 		let tableClone = table.cloneNode(true);
 
 		Array.from(tableClone.rows).forEach((row, i) => {

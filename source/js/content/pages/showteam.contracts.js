@@ -5,9 +5,10 @@ class ShowteamContractsPage extends Page {
 
 		super('Verträge', 'showteam.php', new Page.Param('s', 1));
 
-		this.headers = ['#', 'Nr.', 'Name', 'Alter', 'Geb.Tag', 'Pos', '', 'Land', 'U', 'Skillschnitt', 'Opt.Skill', 'Vertrag', 'Monatsgehalt', 'Spielerwert', 'TS'];
 	}
-
+	
+	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Geb.Tag', 'Pos', '', 'Land', 'U', 'Skillschnitt', 'Opt.Skill', 'Vertrag', 'Monatsgehalt', 'Spielerwert', 'TS'];
+	
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -16,7 +17,7 @@ class ShowteamContractsPage extends Page {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 		
-		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...this.headers).forEach(row => {
+		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamContractsPage.HEADERS).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 

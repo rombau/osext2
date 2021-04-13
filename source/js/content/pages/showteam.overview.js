@@ -4,9 +4,9 @@ class ShowteamOverviewPage extends Page {
 	constructor() {
 
 		super('Teamübersicht', 'showteam.php', new Page.Param('s', 0, true));
-
-		this.headers = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
 	}
+
+	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
 
 	/**
 	 * @param {Document} doc
@@ -16,7 +16,7 @@ class ShowteamOverviewPage extends Page {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 		
-		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...this.headers).forEach(row => {
+		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamOverviewPage.HEADERS).forEach(row => {
 	
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
@@ -60,7 +60,7 @@ class ShowteamOverviewPage extends Page {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
-		let table = HtmlUtil.getTableByHeader(doc, ...this.headers);
+		let table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
 	
 		/** @type {HTMLTableElement} */
 		let tableClone = table.cloneNode(true);
