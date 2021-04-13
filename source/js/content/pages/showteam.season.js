@@ -32,7 +32,7 @@ class ShowteamSeasonPage extends Page {
 
 		HtmlUtil.getTableRowsByHeader(doc, ...ShowteamSeasonPage.HEADERS).forEach(row => {
 			let gameInfo = row.cells[1].textContent;
-			if (gameInfo && ShowteamSeasonPage.GAMEINFO_NOT_SET.includes(gameInfo)) {
+			if (gameInfo && !ShowteamSeasonPage.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.currentTeam.getMatchDay(season, +row.cells[0].textContent);
 				matchday.competition = gameInfo.split(' : ')[0];
 				matchday.location = gameInfo.split(' : ')[1];
