@@ -70,7 +70,7 @@ class HtmlUtil {
 	 * @returns {Number} id
 	 */
 	static extractIdFromHref (href) {
-		return +(/(javascript:.+|st\.php.+c=|sp\.php.+s=|faceprev\.php.+id=)(\d+)/.exec(href))[2];
+		return +(/(javascript:.+\(|st\.php\?c=|sp\.php\?s=|faceprev\.php\?sid=)(\d+)/.exec(href))[2];
 	}
 
 }

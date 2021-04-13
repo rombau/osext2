@@ -172,4 +172,4 @@ SquadPlayer.Training = class {
 		/** @type {Number} the match bonus multiplying the chance */
 		this.matchBonus = 1;
 	}
-}
+};
