@@ -44,8 +44,11 @@ class MatchDay {
 		/** @type {GameLocation} the ganme location */
 		this.location;
 
-		/** @type {Team} the oponent team */ 
-		this.opponent = new Team();
+		/** @type {Team} the current team view at this matchday */ 
+		this.team;
+
+		/** @type {Team} the opponent team */ 
+		this.opponent;
 
 		/** @type {String} the game result */
 		this.result;

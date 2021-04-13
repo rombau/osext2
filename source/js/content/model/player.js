@@ -15,15 +15,15 @@ const Position = Object.freeze({
  * Enum for special skills.
  * @readonly
  */
- const SpecialSkill = Object.freeze({
-	E: { description: 'Elfmetertöter' },
-	L: { description: 'Libero' },
-	S: { description: 'Spielmacher' },
-	F: { description: 'Freistoßspezialist' },
-	T: { description: 'Torinstinkt' },
-	G: { description: 'Flankengott' },
-	K: { description: 'Kapitän' },
-	P: { description: 'Pferdelunge' }
+const SpecialSkill = Object.freeze({
+	E: { abbr: 'E', description: 'Elfmetertöter' },
+	L: { abbr: 'L', description: 'Libero' },
+	S: { abbr: 'S', description: 'Spielmacher' },
+	F: { abbr: 'F', description: 'Freistoßspezialist' },
+	T: { abbr: 'T', description: 'Torinstinkt' },
+	G: { abbr: 'G', description: 'Flankengott' },
+	K: { abbr: 'K', description: 'Kapitän' },
+	P: { abbr: 'P', description: 'Pferdelunge' }
 });
 
 /**

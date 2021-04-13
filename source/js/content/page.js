@@ -188,14 +188,19 @@ class Page {
 Page.Param = class {
 
 	/**
-	 * @param {String} name the paramtere name
-	 * @param {String} value the paramtere value
+	 * @param {String} name the parameter name
+	 * @param {String} value the parameter value
 	 * @param {Boolean} optional flag indicating an optional parameter (default = false)
 	 */
 	constructor(name, value, optional = false) {
 
+		/** @type {String} the parameter name */
 		this.name = name;
+
+		/** @type {String} the parameter value */
 		this.value = value;
+
+		/** @type {Boolean} flag indicatingthe parameter is optional (default = false) */
 		this.optional = optional;
 	}
 };

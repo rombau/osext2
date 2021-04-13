@@ -30,10 +30,23 @@ class ShowteamOverviewPage extends Page {
 			player.uefa = row.cells[8].textContent ? false : true;
 			player.moral = +row.cells[9].textContent;
 			player.fitness = +row.cells[10].textContent;
-			player.injured = row.cells[15].textContent !== '0' ? +row.cells[14].textContent : undefined;
+			player.injured = +row.cells[15].textContent;
 			player.transferState = row.cells[16].textContent;
-			player.transferLock = row.cells[17].textContent !== '0' ? row.cells[17].textContent : undefined;
+
+			let transferLockCell = row.cells[17];
+			if (transferLockCell.textContent.charAt(0) === 'L') {
+				let matches = /Leihgabe von (.+) an (.+) für (\d+) ZATs/gm.exec(transferLockCell.firstChild.title);
+				player.loan = new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
+				player.transferLock = +transferLockCell.textContent.substring(1);
+			} else {
+				player.transferLock = +transferLockCell.textContent;
+			}
 			
+			let banCell = row.cells[14];
+			if (banCell.textContent.length > 1) {
+				banCell.textContent.split(' ').forEach(shortForm => player.bans.push(new SquadPlayer.Ban(shortForm)));
+			}
+
 			// TODO: extract bans and loans ...
 			
 		});

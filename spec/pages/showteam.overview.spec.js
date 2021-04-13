@@ -25,10 +25,21 @@ describe('ShowteamOverviewPage', () => {
 			expect(data.currentTeam.squadPlayers[0].countryCode).toEqual('IRL');
 			expect(data.currentTeam.squadPlayers[0].countryName).toEqual('Irland');
 			expect(data.currentTeam.squadPlayers[0].uefa).toBeTruthy();
-			expect(data.currentTeam.squadPlayers[0].injured).toBeUndefined();
+			expect(data.currentTeam.squadPlayers[0].injured).toEqual(0);
 			expect(data.currentTeam.squadPlayers[0].transferState).toEqual('U');
-			expect(data.currentTeam.squadPlayers[0].transferLock).toBeUndefined();
-			
+			expect(data.currentTeam.squadPlayers[0].transferLock).toEqual(0);
+			expect(data.currentTeam.squadPlayers[0].bans.length).toEqual(3);
+			expect(data.currentTeam.squadPlayers[0].bans[0].type).toEqual(BanType.LEAGUE);
+			expect(data.currentTeam.squadPlayers[0].bans[0].duration).toEqual(1);
+			expect(data.currentTeam.squadPlayers[0].loan).toBeUndefined();
+
+			expect(data.currentTeam.squadPlayers[1].bans.length).toEqual(0);
+
+			expect(data.currentTeam.squadPlayers[21].pos).toEqual('LEI');
+			expect(data.currentTeam.squadPlayers[21].loan.from).toEqual('FC Cork');
+			expect(data.currentTeam.squadPlayers[21].loan.to).toEqual('Kickers Dresden');
+			expect(data.currentTeam.squadPlayers[21].loan.duration).toEqual(1);
+
 			page.extend(doc, data);
 			
 			done();

@@ -22,7 +22,7 @@ class Team {
 		this.league = new League();
 		
 		/** @type {Number} the current league ranking */ 
-		this.ranking;
+		this.leagueRanking;
 		
 		/** @type {[SquadPlayer]]} the squad players */ 
 		this.squadPlayers = [];
