@@ -6,19 +6,26 @@ class LeagueTablePage extends Page {
 		super('Ligatabelle', 'lt.php');
 	}
 
+	static HEADERS = ['#', '', 'Club', 'Spiele', 'Si.', 'Un.', 'Ni.', 'Tore+', 'Tore-', 'Tore +/-', 'Punkte'];
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-		
-		let pagesToLoad = [];
-		
-		pagesToLoad.push(new TeamSkillsPage(1, ''));
-		pagesToLoad.push(new TeamSkillsPage(2, ''));
-		
 
-		// return pagesToLoad;
+		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		
+		data.currentTeam.league.size = 0;
+
+		HtmlUtil.getTableRowsByHeader(doc, ...LeagueTablePage.HEADERS).forEach(row => {
+			
+			data.currentTeam.league.size++;
+
+			if (HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href) === data.currentTeam.id) {
+				data.currentTeam.leagueRanking = data.currentTeam.league.size;
+			}
+		});
 	};
 }
 
