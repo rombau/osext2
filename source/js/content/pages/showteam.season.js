@@ -50,6 +50,5 @@ class ShowteamSeasonPage extends Page {
 		if (!data.initNextZatSeason(season)) {
 			return [new ShowteamSeasonPage(season - 1)];
 		}
-	};
-
+	}
 }

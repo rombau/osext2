@@ -1,14 +1,13 @@
 describe('ShowteamSeasonPage', () => {
 
-	let data = new ExtensionData();
-	let page;
+	/** @type {ExtensionData} */ let data;
+	/** @type {ShowteamSeasonPage} */ let page;
 	
 	beforeEach(() => {
-		data = new ExtensionData();
-
 		// for automatic regististration on new page
 		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
 
+		data = new ExtensionData();
 		page = new ShowteamSeasonPage();
 	});
 
@@ -54,7 +53,7 @@ describe('ShowteamSeasonPage', () => {
 			expect(pagesToLoad.length).toEqual(1);
 			expect(pagesToLoad[0].name).toEqual('Saisonplan (Saison 9)');
 
-			expect(data.nextMatchDay).toBeNull();
+			expect(data.nextMatchDay).toBeUndefined();
 
 			done();
 		});

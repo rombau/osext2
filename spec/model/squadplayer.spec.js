@@ -44,6 +44,10 @@ describe('SquadPlayer', () => {
 			ban = new SquadPlayer.Ban('3I');
 			expect(ban.getText()).toEqual('3I');
 			expect(ban.getText(true)).toEqual('3 internationale Spiele');
+
+			ban = new SquadPlayer.Ban();
+			expect(ban.getText()).toEqual('');
+			expect(ban.getText(true)).toEqual('');
 		});
 	});
 
@@ -70,6 +74,10 @@ describe('SquadPlayer', () => {
 			loan = new SquadPlayer.Loan('FC Cork', 'Swallos', 23);
 			expect(loan.getText()).toEqual('L23');
 			expect(loan.getText(true)).toEqual('Leihgabe von FC Cork an Swallos für 23 ZATs');
+
+			loan = new SquadPlayer.Loan();
+			expect(loan.getText()).toEqual('');
+			expect(loan.getText(true)).toEqual('');
 		});
 	});
 

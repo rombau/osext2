@@ -91,6 +91,30 @@ describe('Persistence', () => {
 		});
 	});
 
+	it('should use local chache instead of background cache', (done) => {
+
+		Persistence.localCachedData = new ExtensionData();
+		Persistence.localCachedData.currentTeam.id = 1;
+
+		Persistence.getCachedData().then(data => {
+			expect(data.currentTeam.id).toEqual(1);
+			expect(data instanceof ExtensionData).toBeTruthy();
+			expect(chrome.runtime.sendMessage).not.toHaveBeenCalled();
+			Persistence.updateCachedData((data) => {
+				data.currentTeam.id = 2;
+			}).then(data => {
+				expect(data.currentTeam.id).toEqual(2);
+				expect(chrome.runtime.sendMessage).toHaveBeenCalled();
+				done();
+			}, error => {
+				fail(error);
+			});
+		}, error => {
+			fail(error);
+		});
+
+	});
+
 	it('should load team data from the local storage', (done) => {
 
 		storedTeam.id = 1;
@@ -107,7 +131,7 @@ describe('Persistence', () => {
 		});
 	});
 
-	it('should handle error when loading team data from the local storage', () => {
+	it('should handle error when loading team data from the local storage', (done) => {
 
 		chrome.runtime.lastError = 'Error';
 
@@ -120,7 +144,7 @@ describe('Persistence', () => {
 		});
 	});
 
-	it('should handle error when loading team data from the local storage without team name', () => {
+	it('should handle error when loading team data from the local storage without team name', (done) => {
 
 		Persistence.loadData(null).then((_team) => {
 			fail();
@@ -130,7 +154,7 @@ describe('Persistence', () => {
 		});
 	});
 
-	it('should persist team data to the local storage', () => {
+	it('should persist team data to the local storage', (done) => {
 
 		storedTeam.id = 1;
 		storedTeam.name = 'Wanderers';
@@ -145,7 +169,7 @@ describe('Persistence', () => {
 		});
 	});
 
-	it('should handle error when persisting team data to the local storage', () => {
+	it('should handle error when persisting team data to the local storage', (done) => {
 
 		chrome.runtime.lastError = 'Error';
 
@@ -158,7 +182,7 @@ describe('Persistence', () => {
 		});
 	});
 
-	it('should handle error when persisting team data to the local storage without team name', () => {
+	it('should handle error when persisting team data to the local storage without team name', (done) => {
 
 		Persistence.persistData(new Team()).then(() => {
 			fail();

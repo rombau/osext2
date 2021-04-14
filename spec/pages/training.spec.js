@@ -1,22 +1,22 @@
-describe('ShowPlayerPage', () => {
+describe('TrainingPage', () => {
 
 	/** @type {ExtensionData} */ let data;
-	
+	/** @type {TrainingPage} */ let page;
+
 	beforeEach(() => {
 		// for automatic regististration on new page
 		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
+		page = new TrainingPage();
 	});
 
-	it('should extract player birthday', (done) => {
+	it('should extract player training settings', (done) => {
 
-		let page = new ShowPlayerPage(20494, 'Ariel Barlarezo');
-
-		Fixture.getDocument('sp.php', doc => {
+		Fixture.getDocument('training.php', doc => {
 			
 			page.extract(doc, data);
-			
+
 			page.extend(doc, data);
 
 			done();

@@ -11,7 +11,7 @@ const DataCache = {
 	/**
 	 * listener method called when a runtime message is sent
 	 */
-	handleMessage (message, _sender, callback = () => null) {
+	handleMessage (message, _sender, callback) {
 		if (message.data) {
 			DataCache.data = message.data;
 		}

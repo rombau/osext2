@@ -1,6 +1,7 @@
-describe('Extension Data', () => {
+describe('ExtensionData', () => {
 
-	let data = new ExtensionData();
+	/** @type {ExtensionData} */
+	let data;
 
 	beforeEach(() => {
 		data = new ExtensionData();

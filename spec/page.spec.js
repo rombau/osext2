@@ -219,6 +219,13 @@ describe('Page', () => {
 			page = new Page();
 		});
 		
+		it('without any error', () => {
+			
+			let fixture = Fixture.createDocument('Any content');
+	
+			expect(() => page.check(fixture)).not.toThrowError();		
+		});
+
 		it('and throw error if calculation is running', () => {
 			
 			let fixture = Fixture.createDocument('Für die Dauer von ZAT 42 sind die Seiten von OS 2.0 gesperrt!');
@@ -252,20 +259,20 @@ describe('Page', () => {
 	describe('should be processed', () => {
 		
 		/** @type {Page} */ let page
-		/** @type {Requestor} */ let queue;
+		/** @type {Requestor} */ let requestor;
 		/** @type {ExtensionData} */ let data;
 		/** @type {HTMLElement} */ let frame;
 		/** @type {Document} */ let doc
 		
 		beforeEach(() => {
 			data = new ExtensionData();
-			queue = new Requestor();
+			requestor = new Requestor();
 
 			spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
 				modifyData(data);
 				return Promise.resolve(data);
 			});
-			spyOn(Requestor, 'create').and.callFake(() => queue);
+			spyOn(Requestor, 'create').and.callFake(() => requestor);
 
 			page = new Page();
 			doc = Fixture.createDocument('test'); 
@@ -315,8 +322,8 @@ describe('Page', () => {
 			let pagesToRequest = [new Page()];
 			
 			spyOn(page, 'extract').and.returnValue(pagesToRequest);
-			spyOn(queue, 'addPage').and.callThrough();
-			spyOn(queue, 'start').and.callFake((triggerPage, _callback) => {
+			spyOn(requestor, 'addPage').and.callThrough();
+			spyOn(requestor, 'start').and.callFake((triggerPage, _callback) => {
 				expect(triggerPage).toEqual(page);
 				done();
 			});

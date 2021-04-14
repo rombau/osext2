@@ -28,5 +28,5 @@ class ShowteamContractsPage extends Page {
 			player.marketValue = +row.cells[13].textContent.replace(/\./g, '');
 
 		});
-	};
+	}
 }

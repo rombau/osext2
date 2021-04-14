@@ -44,7 +44,7 @@ class Team {
 	 * @returns {SquadPlayer} the player
 	 */
 	getSquadPlayer (id) {
-		if (!id) return null;
+		if (!id) return undefined;
 
 		let player = this.squadPlayers.find(trainer => trainer.id === id);
 		if (player) {
@@ -65,7 +65,7 @@ class Team {
 	 * @returns {MatchDay} the match day
 	 */
 	getMatchDay (season, zat) {
-		if (!season || !zat) return null;
+		if (!season || !zat) return undefined;
 
 		let matchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
 		if (matchDay) {
@@ -84,7 +84,7 @@ class Team {
 	 * @returns {Team.Trainer} the trainer
 	 */
 	getTrainer (nr) {
-		if (!nr) return null;
+		if (!nr) return undefined;
 
 		let trainer = this.trainers.find(trainer => trainer.nr === nr);
 		if (trainer) {
