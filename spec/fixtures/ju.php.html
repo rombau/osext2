@@ -10,9 +10,15 @@
 
 <title>Online-Soccer 2.0</title>
 
-<script src="js/sorttable.js" type="text/javascript">
+<script src="js/sorttable.js" type="text/javascript"></script>
 
-</script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>-->
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
 
 <link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
 
@@ -27,21 +33,26 @@
 </head>
 
 <body><div>
-<table cellpadding="10" border="0">
+
+<p class="noprint" id="TopThema"><iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=3&p=48&l=ez&f=ifr&linkID=bf25862f2b332ae1aa729124b42a8489&t=onlinsocce20-21&tracking_id=onlinsocce20-21" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe></p><table cellpadding="10" border="0">
 
 <tbody>
 
 <tr>
 
-	<td><img align="middle" src="images/wappen/00000019.gif"></td>
+	<td><img align="middle" src="images/wappen/00000019.png"></td>
 
 	<td><a hspace="20" href="?page=1">Team&uuml;bersicht</a></td>
 
 	<td><a hspace="20" href="?page=2">Spielereinzelwerte</a></td>
 
-	<td><img align="middle" src="images/wappen/00000019.gif"></td>
+	<td><a hspace="20" href="?page=3">Opt. Skill</a></td>
 
-	<td><a href="javascript:os_hilfe(605)">
+	<td><a hspace="20" href="?page=4">Optionen</a></td>
+
+	<td><img align="middle" src="images/wappen/00000019.png"></td>
+
+	<td><a href="javascript:os_wiki('Jugendteam')">
 
 	<img border="0" align="right" src="images/os_hilfe.gif">
 
@@ -53,13 +64,28 @@
 
 </tbody>
 
-</table><form method="POST">
+</table>
+<b>Bitte beachten:</b><br />
+
+Jugendspieler mit einem "?" als Geburtstag, m&uuml;ssen bis sp&auml;testens vor ZAT 72 der jeweiligen Saison in der sie 18 sind gezogen werden.<br/>
+
+Ihnen wird beim Ziehen ein Geburtstag zugewiesen. Sollte dieser Geburtstag sp&auml;ter in der Saison sein, erscheinen sie ein Jahr j&uuml;nger im Profiteam<br />
+
+Bei Transfers gelten weiterhin die bestenenden Altersgrenzen.<br />
+
+Jugendspieler mit einem bereits generierten Geburtstag m&uuml;ssen vor ihrem 19. Geburtstag gezogen werden.<br />
+
+Jugendspieler, die nicht rechtzeitig gezogen werden, scheiden aus dem Spiel aus und k&ouml;nnen nicht wiederhergestellt werden.<br /><br />
+
+<form method="POST">
 
 <table border="0" align="left" cellspacing="5">
 
 	<tr align="right">
 
 		<td>Alter</td>
+
+		<td>Geb.</td>
 
 		<td align="center" colspan="2">Land</td>
 
@@ -74,25 +100,31 @@
 		<td>Aufwertung</td>
 
 	</tr>
+<tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 11</b><br /><hr /></td></tr>
 	<tr align="right">
 
 		<td class="">18</td>
 
-		<td><img src="images/flaggen/IRL.gif"/></td>
+		<td class="">24</td>
 
-		<td class=""><abbr title="Irland">IRL</abbr></td>
+		<td><img src="images/flaggen/CYP.gif"/></td>
+
+		<td class=""><abbr title="Zypern">CYP</abbr></td>
 
 		<td class="STU"></td>
 
-		<td class="">34.24</td>
+		<td class="">41.65</td>
 
 		<td class="">normal</td>
 
-		<td><input name="ziehmich" value="11701" type="radio"></td>
+		<td><input name="ziehmich" value="200864" type="radio"></td>
 
-		<td class="">+1 ZUV</td>
+		<td class=""></td>
 
-	</tr>	<tr align="right">
+	</tr><tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 12</b><br /><hr /></td></tr>
+	<tr align="right">
+
+		<td class="">17</td>
 
 		<td class="">18</td>
 
@@ -102,71 +134,19 @@
 
 		<td class="STU"></td>
 
-		<td class="">39.18</td>
-
-		<td class="">normal</td>
-
-		<td><input name="ziehmich" value="11703" type="radio"></td>
-
-		<td class="">+1 DEC</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">18</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">42.18</td>
-
-		<td class="">normal</td>
-
-		<td><input name="ziehmich" value="11704" type="radio"></td>
-
-		<td class="">+2 DEC</td>
-
-	</tr>	<tr align="right">
-
-		<td class="TOR">17</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class="TOR"><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="TOR">33.88</td>
-
-		<td class="TOR">normal</td>
-
-		<td><input name="ziehmich" value="11706" type="radio"></td>
-
-		<td class="TOR">+1 ZUV +1 DEC</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">16</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">25.76</td>
+		<td class="">34.59</td>
 
 		<td class="">normal</td>
 
 		<td></td>
 
-		<td class="">+1 ZUV</td>
+		<td class="">+1 GES +1 DEC</td>
 
 	</tr>	<tr align="right">
 
-		<td class="">16</td>
+		<td class="">17</td>
+
+		<td class="">30</td>
 
 		<td><img src="images/flaggen/IRL.gif"/></td>
 
@@ -174,61 +154,7 @@
 
 		<td class="STU"></td>
 
-		<td class="">32.47</td>
-
-		<td class="">hoch</td>
-
-		<td></td>
-
-		<td class="">+1 BAK +1 DEC</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">16</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">28.12</td>
-
-		<td class="">normal</td>
-
-		<td></td>
-
-		<td class="">+1 PAS +1 SCH</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">16</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">29.24</td>
-
-		<td class="">wenig</td>
-
-		<td></td>
-
-		<td class="">+1 GES +1 SCH</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">15</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">21.24</td>
+		<td class="">28.41</td>
 
 		<td class="">normal</td>
 
@@ -238,7 +164,9 @@
 
 	</tr>	<tr align="right">
 
-		<td class="">15</td>
+		<td class="">17</td>
+
+		<td class="">42</td>
 
 		<td><img src="images/flaggen/IRL.gif"/></td>
 
@@ -246,17 +174,19 @@
 
 		<td class="STU"></td>
 
-		<td class="">21.94</td>
+		<td class="">29.88</td>
 
 		<td class="">hoch</td>
 
 		<td></td>
 
-		<td class="">+1 GES</td>
+		<td class="">+1 UEB</td>
 
 	</tr>	<tr align="right">
 
-		<td class="">15</td>
+		<td class="">16</td>
+
+		<td class="">72</td>
 
 		<td><img src="images/flaggen/IRL.gif"/></td>
 
@@ -264,61 +194,7 @@
 
 		<td class="STU"></td>
 
-		<td class="">19.18</td>
-
-		<td class="">normal</td>
-
-		<td></td>
-
-		<td class="">+1 BAK</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">15</td>
-
-		<td><img src="images/flaggen/CRC.gif"/></td>
-
-		<td class=""><abbr title="Costa Rica">CRC</abbr></td>
-
-		<td class="STU">#</td>
-
-		<td class="">24.76</td>
-
-		<td class="">normal</td>
-
-		<td></td>
-
-		<td class="">+1 BAK</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">14</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">16.94</td>
-
-		<td class="">hoch</td>
-
-		<td></td>
-
-		<td class="">+1 DEC</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">14</td>
-
-		<td><img src="images/flaggen/IRL.gif"/></td>
-
-		<td class=""><abbr title="Irland">IRL</abbr></td>
-
-		<td class="STU"></td>
-
-		<td class="">17.53</td>
+		<td class="">25.88</td>
 
 		<td class="">wenig</td>
 
@@ -326,35 +202,20 @@
 
 		<td class=""></td>
 
-	</tr>	<tr align="right">
+	</tr><tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 13</b><br /><hr /></td></tr>
+	<tr align="right">
 
-		<td class="">14</td>
+		<td class="">16</td>
 
-		<td><img src="images/flaggen/IRL.gif"/></td>
+		<td class="">30</td>
 
-		<td class=""><abbr title="Irland">IRL</abbr></td>
+		<td><img src="images/flaggen/LIE.gif"/></td>
 
-		<td class="STU"></td>
-
-		<td class="">19.82</td>
-
-		<td class="">normal</td>
-
-		<td></td>
-
-		<td class="">+1 GES +1 ZUV</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">14</td>
-
-		<td><img src="images/flaggen/SCO.gif"/></td>
-
-		<td class=""><abbr title="Schottland">SCO</abbr></td>
+		<td class=""><abbr title="Liechtenstein">LIE</abbr></td>
 
 		<td class="STU"></td>
 
-		<td class="">15.53</td>
+		<td class="">25.65</td>
 
 		<td class="">normal</td>
 
@@ -364,7 +225,9 @@
 
 	</tr>	<tr align="right">
 
-		<td class="">13</td>
+		<td class="">16</td>
+
+		<td class="">36</td>
 
 		<td><img src="images/flaggen/IRL.gif"/></td>
 
@@ -372,53 +235,60 @@
 
 		<td class="STU"></td>
 
-		<td class="">14.76</td>
+		<td class="">20.76</td>
 
 		<td class="">wenig</td>
 
 		<td></td>
 
-		<td class="">+1 PAS +1 BAK</td>
+		<td class="">+1 SCH</td>
 
 	</tr>	<tr align="right">
 
-		<td class="">13</td>
+		<td class="">15</td>
 
-		<td><img src="images/flaggen/WAL.gif"/></td>
+		<td class="">66</td>
 
-		<td class=""><abbr title="Wales">WAL</abbr></td>
+		<td><img src="images/flaggen/IRL.gif"/></td>
 
-		<td class="STU"></td>
-
-		<td class="">15.18</td>
-
-		<td class="">hoch</td>
-
-		<td></td>
-
-		<td class="">+1 BAK</td>
-
-	</tr>	<tr align="right">
-
-		<td class="">13</td>
-
-		<td><img src="images/flaggen/DEN.gif"/></td>
-
-		<td class=""><abbr title="D&auml;nemark">DEN</abbr></td>
+		<td class=""><abbr title="Irland">IRL</abbr></td>
 
 		<td class="STU"></td>
 
-		<td class="">16.35</td>
+		<td class="">20.41</td>
 
 		<td class="">normal</td>
 
 		<td></td>
 
-		<td class="">+1 ZUV +1 SCH</td>
+		<td class="">+1 SCH +1 DEC</td>
 
 	</tr>	<tr align="right">
 
-		<td class="TOR">13</td>
+		<td class="">15</td>
+
+		<td class="">72</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">27.82</td>
+
+		<td class="">hoch</td>
+
+		<td></td>
+
+		<td class="">+1 BAK +1 ZWK</td>
+
+	</tr><tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 14</b><br /><hr /></td></tr>
+	<tr align="right">
+
+		<td class="TOR">15</td>
+
+		<td class="TOR">6</td>
 
 		<td><img src="images/flaggen/IRL.gif"/></td>
 
@@ -426,13 +296,235 @@
 
 		<td class="STU"></td>
 
-		<td class="TOR">13.53</td>
+		<td class="TOR">22.35</td>
 
 		<td class="TOR">normal</td>
 
 		<td></td>
 
-		<td class="TOR">+1 SCH</td>
+		<td class="TOR">+1 BAK</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">15</td>
+
+		<td class="">18</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">24.12</td>
+
+		<td class="">hoch</td>
+
+		<td></td>
+
+		<td class="">+1 ZUV</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">15</td>
+
+		<td class="">24</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">20.82</td>
+
+		<td class="">wenig</td>
+
+		<td></td>
+
+		<td class="">+1 SCH</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">15</td>
+
+		<td class="">42</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">20.29</td>
+
+		<td class="">normal</td>
+
+		<td></td>
+
+		<td class=""></td>
+
+	</tr><tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 15</b><br /><hr /></td></tr>
+	<tr align="right">
+
+		<td class="">14</td>
+
+		<td class="">6</td>
+
+		<td><img src="images/flaggen/WAL.gif"/></td>
+
+		<td class=""><abbr title="Wales">WAL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">10.59</td>
+
+		<td class="">normal</td>
+
+		<td></td>
+
+		<td class="">+1 BAK +1 ZWK</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">14</td>
+
+		<td class="">18</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">15.47</td>
+
+		<td class="">wenig</td>
+
+		<td></td>
+
+		<td class="">+1 DEC</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">13</td>
+
+		<td class="">72</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">15.65</td>
+
+		<td class="">normal</td>
+
+		<td></td>
+
+		<td class="">+1 SCH</td>
+
+	</tr>	<tr align="right">
+
+		<td class="">13</td>
+
+		<td class="">72</td>
+
+		<td><img src="images/flaggen/FRO.gif"/></td>
+
+		<td class=""><abbr title="Far&ouml;er">FRO</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">15.41</td>
+
+		<td class="">hoch</td>
+
+		<td></td>
+
+		<td class="">+1 GES +1 ZWK</td>
+
+	</tr><tr><td colspan="9" style="text-align:center"><b>Jahrgang Saison 16</b><br /><hr /></td></tr>
+	<tr align="right">
+
+		<td class="">13</td>
+
+		<td class="">18</td>
+
+		<td><img src="images/flaggen/CAN.gif"/></td>
+
+		<td class=""><abbr title="Kanada">CAN</abbr></td>
+
+		<td class="STU">#</td>
+
+		<td class="">13.18</td>
+
+		<td class="">normal</td>
+
+		<td></td>
+
+		<td class=""></td>
+
+	</tr>	<tr align="right">
+
+		<td class="TOR">13</td>
+
+		<td class="TOR">42</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class="TOR"><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="TOR">9.65</td>
+
+		<td class="TOR">normal</td>
+
+		<td></td>
+
+		<td class="TOR">+1 ZUV</td>
+
+	</tr>	<tr align="right">
+
+		<td class="TOR">12</td>
+
+		<td class="TOR">54</td>
+
+		<td><img src="images/flaggen/HUN.gif"/></td>
+
+		<td class="TOR"><abbr title="Ungarn">HUN</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="TOR">14.35</td>
+
+		<td class="TOR">wenig</td>
+
+		<td></td>
+
+		<td class="TOR"></td>
+
+	</tr>	<tr align="right">
+
+		<td class="">12</td>
+
+		<td class="">72</td>
+
+		<td><img src="images/flaggen/IRL.gif"/></td>
+
+		<td class=""><abbr title="Irland">IRL</abbr></td>
+
+		<td class="STU"></td>
+
+		<td class="">11.94</td>
+
+		<td class="">normal</td>
+
+		<td></td>
+
+		<td class=""></td>
 
 	</tr>	<tr>
 

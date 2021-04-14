@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<title>Online-Soccer 2.0</title>
+
+<script src="js/sorttable.js" type="text/javascript"></script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>-->
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
+
+<link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
+
+<link rel="stylesheet" href="css/os_styles.css" />
+
+<link rel="stylesheet" href="css/print.css" media="print" />
+
+<link rel="SHORTCUT ICON" href="images/favicon.ico" type="image/ico" />
+
+<script type="text/javascript" src="js/osfunc.js"></script>
+
+</head>
+
+<body><div>
+
+<p class="noprint" id="TopThema"><iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=3&p=48&l=ez&f=ifr&linkID=bf25862f2b332ae1aa729124b42a8489&t=onlinsocce20-21&tracking_id=onlinsocce20-21" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe></p><table cellpadding="10" border="0">
+
+<tbody>
+
+<tr>
+
+	<td><img align="middle" src="images/wappen/00000019.png"></td>
+
+	<td><a hspace="20" href="?page=1">Team&uuml;bersicht</a></td>
+
+	<td><a hspace="20" href="?page=2">Spielereinzelwerte</a></td>
+
+	<td><a hspace="20" href="?page=3">Opt. Skill</a></td>
+
+	<td><a hspace="20" href="?page=4">Optionen</a></td>
+
+	<td><img align="middle" src="images/wappen/00000019.png"></td>
+
+	<td><a href="javascript:os_wiki('Jugendteam')">
+
+	<img border="0" align="right" src="images/os_hilfe.gif">
+
+	</a>
+
+	</td>
+
+</tr>
+
+</tbody>
+
+</table>
+<form method="POST">
+
+	<fieldset><legend>Allgemeine Optionen</legend>
+
+		Jugendf&ouml;rderung pro ZAT und Spieler: <select name="foerderung"><option value="500">500</option><option value="1000">1000</option><option value="1500">1500</option><option value="2000">2000</option><option value="2500">2500</option><option value="3000">3000</option><option value="3500">3500</option><option value="4000">4000</option><option value="4500">4500</option><option value="5000">5000</option><option value="5500">5500</option><option value="6000">6000</option><option value="6500">6500</option><option value="7000">7000</option><option value="7500">7500</option><option value="8000">8000</option><option value="8500">8500</option><option value="9000">9000</option><option value="9500">9500</option><option value="10000" SELECTED>10000</option></select> Euro<br />
+
+		<input type="submit" value="speichern" />
+
+	</fieldset>
+
+</form>
+
+<form method="POST">
+
+	<fieldset><legend>Jugendschranke</legend>
+
+		<b>Was ist die Jugendschranke?</b><br />
+
+		Die Jugendschranke erm&ouml;glicht es einen Teil der Jugendlichen &uuml;ber oder unter einem gewisse Alterslimit<br />
+
+		nur minimal zu f&ouml;rdern, w&auml;hrend der Rest ja nach Einstellung gef&ouml;rdert wird.<br />
+
+		<!--Diese Einstellung kann jedoch nur einmal alle 6 Saisonen (Wenn du sie jetzt ausw&auml;hlst erst Saison 22 wieder)<br />
+
+		neu gesetzt und nicht deaktiviert werden.<br />-->
+
+		Das Alterslimit der Jugendschranke steigt mit jeder neuen Saison automatisch um ein Jahr.<!--Das Einstellen der<br />
+
+		Jugendschranke kann <b><u>nicht</u></b> r&uuml;ckg&auml;ngig gemacht werden! &Uuml;berlege dir also gut, ob du diese <br />
+
+		Einstellung wirklich setzen m&ouml;chtest!-->
+
+		
+
+		<br /><br />
+
+		
+
+		<input type="radio" name="schranke" value="1" />Ich m&ouml;chte alle Spieler Jahrgang Saison 16 und J&uuml;ngeren nur minimal f&ouml;rdern, unabh&auml;ngig von meinen anderen Einstellungen<br/>
+
+		<input type="radio" name="schranke" value="2" />Ich m&ouml;chte alle Spieler Jahrgang Saison 15 und &Auml;lteren nur minimal f&ouml;rdern, unabh&auml;ngig von meinen anderen Einstellungen<br />
+
+		<input type="radio" name="schranke" value="0"checked />Ich m&ouml;chte keine Jugendschranke setzen und alle Spieler gleich f&ouml;rdern<br />
+
+		<input type="submit" value="Jugendschranke setzen" onClick="return confirm('Jugendschranke setzen?')" />
+
+	</fieldset>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

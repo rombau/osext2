@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<title>Online-Soccer 2.0</title>
+
+<script src="js/sorttable.js" type="text/javascript"></script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>-->
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
+
+<link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
+
+<link rel="stylesheet" href="css/os_styles.css" />
+
+<link rel="stylesheet" href="css/print.css" media="print" />
+
+<link rel="SHORTCUT ICON" href="images/favicon.ico" type="image/ico" />
+
+<script type="text/javascript" src="js/osfunc.js"></script>
+
+</head>
+
+<body><div>
+
+<p class="noprint" id="TopThema"><iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=3&p=48&l=ez&f=ifr&linkID=bf25862f2b332ae1aa729124b42a8489&t=onlinsocce20-21&tracking_id=onlinsocce20-21" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe></p><form method="POST">
+
+<div align="center"><table style="border-collapse:collapse;" cellspacing="4">
+
+	<tr>
+
+		<td colspan="4" align="center"><b>Eintrittspreise (Heimspiele)</b></td>
+
+	</tr>
+
+	<tr>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center">&nbsp;Liga&nbsp;</td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center">&nbsp;Pokal&nbsp;</td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center">&nbsp;International&nbsp;</td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center">&nbsp;Speichern&nbsp;</td>
+
+	</tr>
+
+	<tr>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center"><input type="text" name="liga" value="31" size="2"></td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center"><input type="text" name="pokal" value="36" size="2"></td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center"><input type="text" name="int" value="43" size="2"></td>
+
+		<td style="width:80px; border: 1px #aaaaaa inset;" align="center"><input type="submit" name="speichern" value="Speichern"></td>
+
+	</tr>
+
+</table></div>
+
+</form><br><br>
+
+<div align="center">
+
+<form method="POST"><table border="0">
+
+	<tr><td>#</td><td>Spieler</td><td>FIT</td><td>Physio</td><td>Kosten</td></tr>
+
+	<tr>
+
+	<td class="TOR" align="right">1</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(11031)">Christoffer Palmer</td>
+
+	<td class="TOR">99</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[11031]"></td>
+
+	<td class="TOR">59.500</td>
+
+</tr><tr>
+
+	<td class="TOR" align="right">2</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(41930)">Steve Stapleton</td>
+
+	<td class="TOR">99</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[41930]"></td>
+
+	<td class="TOR">59.500</td>
+
+</tr><tr>
+
+	<td class="TOR" align="right">3</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(81726)">Anthony Madden</td>
+
+	<td class="TOR">99</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[81726]"></td>
+
+	<td class="TOR">59.500</td>
+
+</tr><tr>
+
+	<td class="TOR" align="right">4</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(105508)">Christopher McCann</td>
+
+	<td class="TOR">89</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[105508]"></td>
+
+	<td class="TOR">54.500</td>
+
+</tr><tr>
+
+	<td class="TOR" align="right">5</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(114762)">Sean McStay</td>
+
+	<td class="TOR">97</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[114762]"></td>
+
+	<td class="TOR">58.500</td>
+
+</tr><tr>
+
+	<td class="TOR" align="right">6</td>
+
+	<td class="TOR"><a href="javascript:spielerinfo(135694)">Keenan Moore</td>
+
+	<td class="TOR">99</td>
+
+	<td class="TOR"><input type="checkbox" name="physio[135694]"></td>
+
+	<td class="TOR">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">7</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(56340)">Gary Sheehy</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[56340]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">8</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(58271)">Karl Fitzgerald</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[58271]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">9</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(58642)">Ian Quigley</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[58642]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">10</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(60807)">Roman OLeary</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[60807]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">11</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(92290)">Clinton Reid</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[92290]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">12</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(100065)">Niall Mannion</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[100065]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">13</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(100690)">Darren Dempsey</td>
+
+	<td class="ABW">99</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[100690]"></td>
+
+	<td class="ABW">59.500</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">14</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(111254)">Paul Stewart</td>
+
+	<td class="ABW">80</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[111254]"></td>
+
+	<td class="ABW">50.000</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">15</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(132767)">Shay Gallagher</td>
+
+	<td class="ABW">74</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[132767]"></td>
+
+	<td class="ABW">47.000</td>
+
+</tr><tr>
+
+	<td class="ABW" align="right">16</td>
+
+	<td class="ABW"><a href="javascript:spielerinfo(140046)">Khrysthian de Lima</td>
+
+	<td class="ABW">74</td>
+
+	<td class="ABW"><input type="checkbox" name="physio[140046]"></td>
+
+	<td class="ABW">47.000</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">17</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(43418)">Martin Downey</td>
+
+	<td class="DMI">96</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[43418]"></td>
+
+	<td class="DMI">58.000</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">18</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(45479)">Joseph Mulligan</td>
+
+	<td class="DMI">99</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[45479]"></td>
+
+	<td class="DMI">59.500</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">19</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(45662)">Christopher Donovan</td>
+
+	<td class="DMI">99</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[45662]"></td>
+
+	<td class="DMI">59.500</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">20</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(89863)">Robert Higgins</td>
+
+	<td class="DMI">99</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[89863]"></td>
+
+	<td class="DMI">59.500</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">21</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(111249)">Owen Deeney</td>
+
+	<td class="DMI">75</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[111249]"></td>
+
+	<td class="DMI">47.500</td>
+
+</tr><tr>
+
+	<td class="DMI" align="right">22</td>
+
+	<td class="DMI"><a href="javascript:spielerinfo(139948)">Ramiro Kopingo</td>
+
+	<td class="DMI">75</td>
+
+	<td class="DMI"><input type="checkbox" name="physio[139948]"></td>
+
+	<td class="DMI">47.500</td>
+
+</tr><tr>
+
+	<td class="MIT" align="right">23</td>
+
+	<td class="MIT"><a href="javascript:spielerinfo(75108)">Anthony Downes</td>
+
+	<td class="MIT">99</td>
+
+	<td class="MIT"><input type="checkbox" name="physio[75108]"></td>
+
+	<td class="MIT">59.500</td>
+
+</tr><tr>
+
+	<td class="MIT" align="right">24</td>
+
+	<td class="MIT"><a href="javascript:spielerinfo(111198)">Damien Keegan</td>
+
+	<td class="MIT">77</td>
+
+	<td class="MIT"><input type="checkbox" name="physio[111198]"></td>
+
+	<td class="MIT">48.500</td>
+
+</tr><tr>
+
+	<td class="MIT" align="right">25</td>
+
+	<td class="MIT"><a href="javascript:spielerinfo(127535)">Gavin Yeates</td>
+
+	<td class="MIT">99</td>
+
+	<td class="MIT"><input type="checkbox" name="physio[127535]"></td>
+
+	<td class="MIT">59.500</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">26</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(41344)">Darragh Johnston</td>
+
+	<td class="OMI">99</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[41344]"></td>
+
+	<td class="OMI">59.500</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">27</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(68491)">Gareth Lyons</td>
+
+	<td class="OMI">99</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[68491]"></td>
+
+	<td class="OMI">59.500</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">28</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(87418)">Richie Brown</td>
+
+	<td class="OMI">98</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[87418]"></td>
+
+	<td class="OMI">59.000</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">29</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(106389)">Gleeson Lynch</td>
+
+	<td class="OMI">99</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[106389]"></td>
+
+	<td class="OMI">59.500</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">30</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(111423)">Gavin Keegan</td>
+
+	<td class="OMI">99</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[111423]"></td>
+
+	<td class="OMI">59.500</td>
+
+</tr><tr>
+
+	<td class="OMI" align="right">31</td>
+
+	<td class="OMI"><a href="javascript:spielerinfo(140286)">Conrad Thornton</td>
+
+	<td class="OMI">75</td>
+
+	<td class="OMI"><input type="checkbox" name="physio[140286]"></td>
+
+	<td class="OMI">47.500</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">32</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(56634)">Noel Goodwin</td>
+
+	<td class="STU">96</td>
+
+	<td class="STU"><input type="checkbox" name="physio[56634]"></td>
+
+	<td class="STU">58.000</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">33</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(75105)">Gavin Sheehan</td>
+
+	<td class="STU">94</td>
+
+	<td class="STU"><input type="checkbox" name="physio[75105]"></td>
+
+	<td class="STU">57.000</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">34</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(83700)">Nick Keogh</td>
+
+	<td class="STU">99</td>
+
+	<td class="STU"><input type="checkbox" name="physio[83700]"></td>
+
+	<td class="STU">59.500</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">35</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(110564)">Ross Manning</td>
+
+	<td class="STU">99</td>
+
+	<td class="STU"><input type="checkbox" name="physio[110564]"></td>
+
+	<td class="STU">59.500</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">36</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(123903)">Darren Holt</td>
+
+	<td class="STU">75</td>
+
+	<td class="STU"><input type="checkbox" name="physio[123903]"></td>
+
+	<td class="STU">47.500</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">37</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(132769)">Wayne Shinkins</td>
+
+	<td class="STU">74</td>
+
+	<td class="STU"><input type="checkbox" name="physio[132769]"></td>
+
+	<td class="STU">47.000</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">38</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(139655)">Joe Walsh</td>
+
+	<td class="STU">76</td>
+
+	<td class="STU"><input type="checkbox" name="physio[139655]"></td>
+
+	<td class="STU">48.000</td>
+
+</tr><tr>
+
+	<td class="STU" align="right">39</td>
+
+	<td class="STU"><a href="javascript:spielerinfo(139858)">John Paul McGeady</td>
+
+	<td class="STU">99</td>
+
+	<td class="STU"><input type="checkbox" name="physio[139858]"></td>
+
+	<td class="STU">59.500</td>
+
+</tr>
+
+	<tr><td colspan="5"><input type="submit" value="Zum Physio schicken" name="pspeichern"></td></tr>
+
+</table></form></div>
+</div>
+
+</body>
+
+</html>

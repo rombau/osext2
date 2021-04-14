@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<title>Online-Soccer 2.0</title>
+
+<script src="js/sorttable.js" type="text/javascript"></script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>-->
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
+
+<link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
+
+<link rel="stylesheet" href="css/os_styles.css" />
+
+<link rel="stylesheet" href="css/print.css" media="print" />
+
+<link rel="SHORTCUT ICON" href="images/favicon.ico" type="image/ico" />
+
+<script type="text/javascript" src="js/osfunc.js"></script>
+
+</head>
+
+<body><div>
+
+<p class="noprint" id="TopThema"><a href="http://os.ongapo.com/shop/prestashop"><img src="images/banner/stift.gif" /></a></p><br>
+
+<b>
+
+<font color="#ffffff">&Uuml;bersicht des Trainerstabes</font>
+
+</b>
+
+<a href="javascript:os_wiki('OS_Hilfesystem_Trainer')">
+
+
+
+<img border="0" src="images/os_hilfe.gif">
+
+</a>
+
+<table cellspacing="5" cellpadding="0" border="0">
+
+<tbody>
+
+<tr align="right">
+
+<td>#</td>
+
+<td>Skill</td>
+
+<td>Gehalt</td>
+
+<td>Vertrag</td>
+
+<td align="center">Aktion</td>
+
+</tr>
+<form method="POST">
+
+<input type="hidden" name="trainer" value="1">
+
+<tr align="right">
+
+	<td>1</td>
+
+	<td>Trainer 17</td>
+
+	<td>507.957</td>
+
+	<td>19</td>
+
+	<td align="left"><input type="submit" value="Trainer 1 feuern" name="feuern">und 2.936.522 Euro Abfindung zahlen!</td>
+
+</tr>
+
+</form><form method="POST">
+
+<input type="hidden" name="trainer" value="2">
+
+<tr align="right">
+
+	<td>2</td>
+
+	<td>Trainer 17</td>
+
+	<td>507.957</td>
+
+	<td>19</td>
+
+	<td align="left"><input type="submit" value="Trainer 2 feuern" name="feuern">und 2.936.522 Euro Abfindung zahlen!</td>
+
+</tr>
+
+</form><form method="POST">
+
+<input type="hidden" name="trainer" value="3">
+
+<tr align="right">
+
+	<td>3</td>
+
+	<td>Trainer 17</td>
+
+	<td>507.957</td>
+
+	<td>19</td>
+
+	<td align="left"><input type="submit" value="Trainer 3 feuern" name="feuern">und 2.936.522 Euro Abfindung zahlen!</td>
+
+</tr>
+
+</form><form method="POST">
+
+<input type="hidden" name="trainer" value="4">
+
+<tr align="right">
+
+	<td>4</td>
+
+	<td>Trainer 12</td>
+
+	<td>329.720</td>
+
+	<td>67</td>
+
+	<td align="left"><input type="submit" value="Trainer 4 feuern" name="feuern">und 1.233.757 Euro Abfindung zahlen!</td>
+
+</tr>
+
+</form><form method="POST">
+
+<input type="hidden" name="trainer" value="5">
+
+<tr align="right">
+
+	<td>5</td><td><!--60-->Trainer 01</td><td>10.000</td><td>0</td><td align="left">mit Skill <select name="skill">
+
+		<!--<option value="62.5">62,5</option>
+
+		<option>65</option>
+
+		<option value="67.5">67,5</option>
+
+		<option>70</option>
+
+		<option value="72.5">72,5</option>
+
+		<option>75</option>
+
+		<option value="77.5">77,5</option>
+
+		<option>80</option>
+
+		<option value="82.5">82,5</option>
+
+		<option>85</option>
+
+		<option value="87.5">87,5</option>
+
+		<option>90</option>
+
+		<option value="92.5">92,5</option>
+
+		<option>95</option>
+
+		<option value="97.5">97,5</option>
+
+		<option value="99.5">99,5</option>-->
+
+		<option value="62.5">Trainer 02</option>
+
+		<option value="65">Trainer 03</option>
+
+		<option value="67.5">Trainer 04</option>
+
+		<option value="70">Trainer 05</option>
+
+		<option value="72.5">Trainer 06</option>
+
+		<option value="75">Trainer 07</option>
+
+		<option value="77.5">Trainer 08</option>
+
+		<option value="80">Trainer 09</option>
+
+		<option value="82.5">Trainer 10</option>
+
+		<option value="85">Trainer 11</option>
+
+		<option value="87.5">Trainer 12</option>
+
+		<option value="90">Trainer 13</option>
+
+		<option value="92.5">Trainer 14</option>
+
+		<option value="95">Trainer 15</option>
+
+		<option value="97.5">Trainer 16</option>
+
+		<option value="99.5">Trainer 17</option>
+
+	</select>
+
+	<input type="submit" value="einstellen als Trainer 5" name="einstellen"> f&uuml;r <select name="dauer">
+
+		<option>6</option>
+
+		<option>12</option>
+
+		<option>18</option>
+
+		<option>24</option>
+
+		<option>30</option>
+
+		<option>36</option>
+
+		<option>42</option>
+
+		<option>48</option>
+
+		<option>54</option>
+
+		<option>60</option>
+
+		<option>66</option>
+
+		<option>72</option>
+
+		<option>78</option>
+
+		<option>84</option>
+
+		<option>90</option>
+
+		<option>96</option>
+
+	</select> ZATs</td>
+
+</tr>
+
+</form><form method="POST">
+
+<input type="hidden" name="trainer" value="6">
+
+<tr align="right">
+
+	<td>6</td>
+
+	<td>Trainer 17</td>
+
+	<td>507.957</td>
+
+	<td>66</td>
+
+	<td align="left"><input type="submit" value="Trainer 6 feuern" name="feuern">und 1.922.268 Euro Abfindung zahlen!</td>
+
+</tr>
+
+</form></tbody>
+
+</table>
+
+<b>Summe der zu zahlenden Trainermonatsgeh&auml;lter : 2.371.548 Euro!</b>
+
+<br /><br />
+
+<b>Legende: </b>
+
+<ol>
+
+	<li>Trainer 01: Ehemals Skill 20, trainiert bis Skill 60</li>
+
+	<li>Trainer 02: Ehemals Skill 25, trainiert bis Skill 62</li>
+
+	<li>Trainer 03: Ehemals Skill 30, trainiert bis Skill 65</li>
+
+	<li>Trainer 04: Ehemals Skill 35, trainiert bis Skill 67</li>
+
+	<li>Trainer 05: Ehemals Skill 40, trainiert bis Skill 70</li>
+
+	<li>Trainer 06: Ehemals Skill 45, trainiert bis Skill 72</li>
+
+	<li>Trainer 07: Ehemals Skill 50, trainiert bis Skill 75</li>
+
+	<li>Trainer 08: Ehemals Skill 55, trainiert bis Skill 77</li>
+
+	<li>Trainer 09: Ehemals Skill 60, trainiert bis Skill 80</li>
+
+	<li>Trainer 10: Ehemals Skill 65, trainiert bis Skill 82</li>
+
+	<li>Trainer 11: Ehemals Skill 70, trainiert bis Skill 85</li>
+
+	<li>Trainer 12: Ehemals Skill 75, trainiert bis Skill 87</li>
+
+	<li>Trainer 13: Ehemals Skill 80, trainiert bis Skill 90</li>
+
+	<li>Trainer 14: Ehemals Skill 85, trainiert bis Skill 92</li>
+
+	<li>Trainer 15: Ehemals Skill 90, trainiert bis Skill 95</li>
+
+	<li>Trainer 16: Ehemals Skill 95, trainiert bis Skill 97</li>
+
+	<li>Trainer 17: Ehemals Skill 99, trainiert bis Skill 99</li>
+
+</ol>
+
+</body>
+
+</html>
+</div>
+
+</body>
+
+</html>
