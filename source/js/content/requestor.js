@@ -50,24 +50,18 @@ class Requestor {
 	/**
 	 * @returns {String} the id of the hidden IFrame
 	 */
-	static get FRAME_ID () {
-		return 'page-request-frame';
-	}
+	static FRAME_ID = 'page-request-frame';
 
 	/**
 	 * @returns {String} the id of the status element
 	 */
-	static get STATUS_ID () {
-		return 'page-request-status';
-	}
+	static STATUS_ID = 'page-request-status';
 	
 	/**
 	 * @returns {String} the id of the form element
 	 */
-	static get FORM_ID () {
-		return 'page-request-form';
-	}
-
+	static FORM_ID = 'page-request-form';
+	
 	/**
 	 * @returns {Requestor} a new instance
 	 */

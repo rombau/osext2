@@ -52,6 +52,15 @@ class MainPage extends Page {
 
 			return initPages;
 		}
-	};
+	}
+
+	/**
+	 * @param {Document} doc
+	 * @param {ExtensionData} data
+	 */
+	extend (_doc, data) { 
+		console.log(data); 
+	}
+
 }
 

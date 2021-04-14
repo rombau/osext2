@@ -7,7 +7,7 @@
 class Persistence {
 	
 	/** @type {ExtensionData} local data cache remains as long there is no new page loaded */
-	static localCachedData;
+	static localCachedData = undefined;
 
 	/**
 	 * Returns a promise with the given operation. The new promise always waits for the last 

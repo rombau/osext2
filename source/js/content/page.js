@@ -150,7 +150,7 @@ class Page {
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
 	 */
-	extend (_doc, _data) {}	extend (_doc, _data) {}
+	extend (_doc, _data) {}
 
 	/**
 	 * Processes the given document.
@@ -174,11 +174,16 @@ class Page {
 			} else if (pagesToRequest && pagesToRequest.length) {
 				let requestor = Requestor.create(doc);
 				pagesToRequest.forEach((page) => requestor.addPage(page));
-				requestor.start(page, () => page.extend(doc, data));
+				requestor.start(page, () => {
+					Persistence.localCachedData = undefined;
+					Persistence.getCachedData().then(newdata => {
+						page.extend(doc, newdata);
+					}, console.error);
+				});
 			} else {
 				page.extend(doc, data);
 			}			
-		});
+		}, console.error);
 	}
 }
 
