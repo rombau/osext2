@@ -26,7 +26,7 @@ module.exports = function(config) {
 		    'spec/**/*.spec.js'],
 		exclude : [
 			'spec/handler.spec.js'
-			],
+		],
 		proxies: {
 			'/haupt.php': '/base/spec/fixtures/haupt.php.html',
 			'/showteam.php': '/base/spec/fixtures/showteam.php.html',

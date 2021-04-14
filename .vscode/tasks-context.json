@@ -1,20 +1,3 @@
 {
-  "tasks": [
-    {
-      "name": "extract and extend game report",
-      "complete": false,
-      "creationDate": "2021-04-09T18:20:45.103Z",
-      "files": [
-        "source/js/content/pages/gamereport.js"
-      ]
-    },
-    {
-      "name": "extract and extend league table",
-      "complete": false,
-      "creationDate": "2021-04-09T18:21:00.594Z",
-      "files": [
-        "source/js/content/pages/leaguetable.js"
-      ]
-    }
-  ]
+  "tasks": []
 }
