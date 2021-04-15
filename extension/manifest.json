@@ -34,6 +34,7 @@
 				"source/content/pages/showplayer.js",
 				"source/content/pages/gamereport.js",
 				"source/content/pages/matchdayreport.js",
+				"source/content/pages/showteam.base.js",
 				"source/content/pages/showteam.overview.js",
 				"source/content/pages/showteam.skills.js",
 				"source/content/pages/showteam.contracts.js",

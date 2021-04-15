@@ -1,5 +1,5 @@
 
-class ShowteamSkillsPage extends Page {
+class ShowteamSkillsPage extends ShowteamPage {
 	
 	constructor() {
 

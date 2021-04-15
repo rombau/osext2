@@ -22,6 +22,7 @@ module.exports = function(config) {
 		    'extension/source/content/persistence.js',
 		    'extension/source/content/page.js',
 		    'extension/source/content/htmlutil.js',
+			'extension/source/content/pages/showteam.base.js',
 		    'extension/source/content/pages/*.js',
 		    'test/**/*.spec.js'],
 		exclude : [

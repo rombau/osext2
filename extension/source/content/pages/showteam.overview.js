@@ -1,5 +1,5 @@
 
-class ShowteamOverviewPage extends Page {
+class ShowteamOverviewPage extends ShowteamPage {
 	
 	constructor() {
 
@@ -56,13 +56,15 @@ class ShowteamOverviewPage extends Page {
 	 */
 	extend(doc, data) {
 
+		let toolbar = this.createToolbar(doc, data);
+
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
 		let table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
 	
 		/** @type {HTMLTableElement} */
 		let tableClone = table.cloneNode(true);
-	
+
 		Array.from(tableClone.rows).forEach((row, i) => {
 							
 			/** @type {HTMLTableCellElement} */ let cellBirthday = row.cells[0].cloneNode(true);
@@ -115,7 +117,17 @@ class ShowteamOverviewPage extends Page {
 		
 		table.parentNode.replaceChild(tableClone, table);
 		
+		tableClone.parentNode.insertBefore(toolbar, tableClone);	
+
 		HtmlUtil.appendScript(doc, 'sortables_init();');
-	
-	};
+	}
+
+	/**
+	 * @param {Document} doc
+	 * @param {Team} team
+	 */
+	updateWithTeam (doc, team) {
+
+
+	}
 }

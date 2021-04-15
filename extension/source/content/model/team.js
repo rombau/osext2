@@ -98,6 +98,30 @@ class Team {
 	}
 
 	/**
+	 * Returns a forecast of the team for the given target match day.
+	 * The team is 'cached' in the appropriate target match day.
+	 * 
+	 * @param {MatchDay} lastMatchDay the last match day
+	 * @param {MatchDay} targetMatchDay the target match day
+	 * @returns {Team} the forecast of the team
+	 */
+	getForecast (lastMatchDay, targetMatchDay) {
+		if (lastMatchDay.equals(targetMatchDay)) return this;
+
+		targetMatchDay = this.getMatchDay(targetMatchDay.season, targetMatchDay.zat);
+		if (!targetMatchDay.team) {
+			targetMatchDay.team = new Team();
+			this.squadPlayers.forEach(player => {
+				targetMatchDay.team.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
+			});
+			this.youthPlayers.forEach(player => {
+				// targetMatchDay.team.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
+			});
+		}
+		return targetMatchDay.team;
+	}
+
+	/**
 	 * Returns the data of the team that have to be stored.
 	 * 
 	 * @returns {Team} the team to store

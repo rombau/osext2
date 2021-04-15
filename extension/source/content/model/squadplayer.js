@@ -63,6 +63,29 @@ class SquadPlayer extends Player {
 		/** @type {SquadPlayer.Training} the training setup of the next match day */
 		this.nextTraining;
 	}
+
+	/**
+	 * Returns a forecast of the player for the given target match day.
+	 * 
+	 * @param {MatchDay} lastMatchDay the last match day
+	 * @param {MatchDay} targetMatchDay the target match day
+	 * @returns {SquadPlayer} the forecast of the player
+	 */
+	getForecast (lastMatchDay, targetMatchDay) {
+		if (lastMatchDay.equals(targetMatchDay)) return this;
+
+		let forecastPlayer = Object.assign(new SquadPlayer(), this);
+
+		forecastPlayer.moral = undefined;
+		forecastPlayer.fitness = undefined;
+	
+		let interval = lastMatchDay.intervalTo(targetMatchDay);
+		
+		// TODO ...
+
+		return forecastPlayer;
+	}
+	
 }
 
 /**

@@ -58,4 +58,48 @@ class MatchDay {
 
 	}
 
+	/**
+	 * Returns ture if this and the given match day are equal.
+	 * 
+	 * @param {MatchDay} matchday 
+	 * @returns {Boolean}
+	 */
+	equals (matchday) {
+		return this.zat === matchday.zat && this.season === matchday.season;
+	}
+	
+	/**
+	 * Returns ture if this match day is before the given one.
+	 * 
+	 * @param {MatchDay} matchday 
+	 * @returns {Boolean}
+	 */
+	before (matchday) {
+		return (this.season * SAISON_MATCH_DAYS + this.zat) < (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+	}
+
+	/**
+	 * Returns ture if this match day is after the given one.
+	 * 
+	 * @param {MatchDay} matchday 
+	 * @returns {Boolean}
+	 */
+	after (matchday) {
+		return (this.season * SAISON_MATCH_DAYS + this.zat) > (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+	}
+	
+	/**
+	 * Returns the interval of this match day to the given one in days (zats).
+	 * 
+	 * @param {MatchDay} matchday 
+	 * @returns {Number}
+	 */
+	intervalTo (matchday) {
+		if (this.after(matchday)) {
+			return (this.season * SAISON_MATCH_DAYS + this.zat) - (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+		}
+		return (matchday.season * SAISON_MATCH_DAYS + matchday.zat) - (this.season * SAISON_MATCH_DAYS + this.zat);
+	}
+
+
 }

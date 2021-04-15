@@ -1,4 +1,14 @@
 /**
+ * Enum for squad player view options
+ * @readonly
+ */
+const SquadPlayerView = Object.freeze({
+	CURRENT: 'Keine',
+	THIS_SEASON_END: 'Ende dieser Saison',
+	NEXT_SEASON_END: 'Ende nächste Saison'
+});
+
+/**
  * Extension data
  */
 class ExtensionData {
@@ -14,6 +24,11 @@ class ExtensionData {
 		/** @type {Number} the next zat season */ 
 		this.nextZatSeason;
 
+		this.options = {
+
+			/** @type {SquadPlayerView} the current view for squad players */
+			squadPlayerView : SquadPlayerView.CURRENT
+		}
 	}
 
 	/**
@@ -21,6 +36,7 @@ class ExtensionData {
 	 */
 	clearCurrentTeam () {
 		this.currentTeam = new Team();
+		this.options.squadPlayerView = SquadPlayerView.CURRENT;
 	}
 
 	/**

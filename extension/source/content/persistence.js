@@ -33,7 +33,7 @@ class Persistence {
 	 * The data is sent back with the resolved promise.
 	 * 
 	 * @async
-	 * @returns {Promise} resolved promise returns the data
+	 * @returns {Promise<ExtensionData>} resolved promise returns the data
 	 */
 	static getCachedData () {
 		if (Persistence.localCachedData) {
@@ -63,7 +63,7 @@ class Persistence {
 	 * 
 	 * @async
 	 * @param {modifyDataCallback} modifyData 
-	 * @returns {Promise} resolved promise returns the data
+	 * @returns {Promise<ExtensionData>} resolved promise returns the data
 	 */
 	static updateCachedData (modifyData = (_data) => {}) {
 		return Persistence.getPromise((resolve, reject) => {
@@ -97,7 +97,7 @@ class Persistence {
 	 * 
 	 * @async
 	 * @param {String} teamName the name of the team
-	 * @returns {Promise} resolved promise returns the data
+	 * @returns {Promise<Team>} resolved promise returns the data
 	 */
 	static loadData (teamName) {
 		return new Promise((resolved, reject) => {
