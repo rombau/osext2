@@ -1,6 +1,6 @@
 const Fixture = {
 
-	_base : '/base/spec/fixtures/',
+	_base : '/base/test/fixtures/',
 	
 	_parser : new DOMParser(),
  

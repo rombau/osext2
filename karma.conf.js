@@ -8,24 +8,24 @@ module.exports = function(config) {
 			'karma-coverage'],
 		frameworks : ['jasmine'],
 		files : [
-			{ pattern: 'spec/fixtures/**/*', included: false },
-			'spec/lib/**/*',
-		    'source/js/background/cache.js',
-		    'source/js/content/requestor.js',
-		    'source/js/content/model/consts.js',
-		    'source/js/content/model/data.js',
-		    'source/js/content/model/player.js',
-			'source/js/content/model/squadplayer.js',
-		    'source/js/content/model/youthplayer.js',
-		    'source/js/content/model/team.js',
-		    'source/js/content/model/matchday.js',
-		    'source/js/content/persistence.js',
-		    'source/js/content/page.js',
-		    'source/js/content/htmlutil.js',
-		    'source/js/content/pages/*.js',
-		    'spec/**/*.spec.js'],
+			{ pattern: 'test/fixtures/**/*', included: false },
+			'test/lib/**/*',
+		    'extension/source/background/cache.js',
+		    'extension/source/content/requestor.js',
+		    'extension/source/content/model/consts.js',
+		    'extension/source/content/model/data.js',
+		    'extension/source/content/model/player.js',
+			'extension/source/content/model/squadplayer.js',
+		    'extension/source/content/model/youthplayer.js',
+		    'extension/source/content/model/team.js',
+		    'extension/source/content/model/matchday.js',
+		    'extension/source/content/persistence.js',
+		    'extension/source/content/page.js',
+		    'extension/source/content/htmlutil.js',
+		    'extension/source/content/pages/*.js',
+		    'test/**/*.spec.js'],
 		exclude : [
-			'spec/handler.spec.js'
+			'test/handler.spec.js'
 		],
 		proxies: {
 			'/haupt.php': '/base/spec/fixtures/haupt.php.html',
@@ -35,7 +35,7 @@ module.exports = function(config) {
 			'/images/': '/base/spec/fixtures/images/'
 		},
 		preprocessors : {
-			'source/js/**/*.js': 'coverage'
+			'extension/source/**/*.js': 'coverage'
 		},
 		reporters : ['spec', 'coverage'],
 		coverageReporter:{
