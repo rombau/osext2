@@ -13,17 +13,16 @@ describe('ExtensionData', () => {
 		expect(data.currentTeam.name).toBeUndefined();
 		expect(data.nextZat).toBeUndefined();
 		expect(data.nextZatSeason).toBeUndefined();
-		expect(data.options.squadPlayerView).toEqual(SquadPlayerView.CURRENT);
+		expect(data.options.squadPlayerViewMatchDay).toBeUndefined();
 		
 		data.currentTeam.id = 1;
 		data.initNextZat(27);
-		data.options.squadPlayerView = SquadPlayerView.THIS_SEASON_END;
+		data.options.squadPlayerViewMatchDay = new MatchDay(1, 1);
 
 		data.clearCurrentTeam();
 
 		expect(data.currentTeam.id).toBeUndefined();
-		expect(data.nextZat).toEqual(27);
-		expect(data.options.squadPlayerView).toEqual(SquadPlayerView.CURRENT);
+		expect(data.options.squadPlayerViewMatchDay).toBeUndefined();
 
 	});
 

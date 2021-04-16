@@ -19,42 +19,54 @@ class ShowteamPage extends Page {
 		
 		let page = this;
 
+		if (!data.options.squadPlayerViewMatchDay) data.options.squadPlayerViewMatchDay = data.lastMatchDay;
+
 		let toolbar = doc.createElement('div');
+		toolbar.id = 'osext-toolbar-container';
 
-		let span = doc.createElement('span');
-		span.innerHTML = 'Prognose: ';
-		toolbar.appendChild(span);
+		let toolTitle = doc.createElement('span');
+		toolTitle.innerHTML = 'Prognose: ';
+		toolbar.appendChild(toolTitle);
 
-		let select = doc.createElement('select');
-		Object.values(SquadPlayerView).forEach(view => {
-			let option = doc.createElement("option");
-			option.text = view;
-			option.value = view;
-			select.appendChild(option);
-		})
-		select.value = data.options.squadPlayerView;
-		select.addEventListener('change', (event) => {
+		
+		let viewInfo = doc.createElement('span');
+		viewInfo.update = (season, zat) => {
+			viewInfo.innerHTML = ` Saison ${season} / Zat ${zat}`;
+		};
+		viewInfo.update(data.options.squadPlayerViewMatchDay.season, data.options.squadPlayerViewMatchDay.zat);
+		
+		let newMatchDay = new MatchDay();
+
+		let rangeSlider = doc.createElement('input');
+		rangeSlider.type = 'range';
+		rangeSlider.min = data.lastMatchDay.season * SAISON_MATCH_DAYS + data.lastMatchDay.zat;
+		rangeSlider.max = (data.lastMatchDay.season + 2) * SAISON_MATCH_DAYS;
+		rangeSlider.value = data.options.squadPlayerViewMatchDay.season * SAISON_MATCH_DAYS + data.options.squadPlayerViewMatchDay.zat;
+		rangeSlider.addEventListener('input', (event) => {
+			newMatchDay.season = Math.floor(event.target.value / SAISON_MATCH_DAYS);
+			newMatchDay.zat = event.target.value % SAISON_MATCH_DAYS;
+			if (newMatchDay.zat === 0) {
+				newMatchDay.season--;
+				newMatchDay.zat = SAISON_MATCH_DAYS;
+			}
+			viewInfo.update(newMatchDay.season, newMatchDay.zat);
+		});
+		rangeSlider.addEventListener('change', (event) => {
 			Persistence.updateCachedData(data => {
-				data.options.squadPlayerView = event.target.value;
+				data.options.squadPlayerViewMatchDay = newMatchDay;
 			}).then(data => {
-				switch (data.options.squadPlayerView) {
-					case SquadPlayerView.CURRENT:
-						page.updateWithTeam(doc, data.currentTeam);
-						break;
-					case SquadPlayerView.THIS_SEASON_END:
-						page.updateWithTeam(doc, data.currentTeam.getForecast(data.lastMatchDay,
-							data.currentTeam.getMatchDay(data.lastMatchDay.season, SAISON_MATCH_DAYS)));
-						break;
-					case SquadPlayerView.NEXT_SEASON_END:
-						page.updateWithTeam(doc, data.currentTeam.getForecast(data.lastMatchDay,
-							data.currentTeam.getMatchDay(data.lastMatchDay.season + 1, SAISON_MATCH_DAYS)));
-						break;
-					default:				
-						break;
-				}
+				page.updateWithTeam(doc, 
+					data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
+					data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
 			});
 		});
-		toolbar.appendChild(select);
+		toolbar.appendChild(rangeSlider);
+
+		toolbar.appendChild(viewInfo);
+		
+		page.updateWithTeam(doc, 
+			data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
+			data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
 
 		return toolbar;
 	}
@@ -62,7 +74,8 @@ class ShowteamPage extends Page {
 	/**
 	 * @param {Document} _doc
 	 * @param {Team} _team
+	 * @param {Boolean} _current
 	 */
-	updateWithTeam (_doc, _team) {}
+	updateWithTeam (_doc, _team, _current) {}
 
 }

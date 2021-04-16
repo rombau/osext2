@@ -117,6 +117,8 @@ class Team {
 			this.youthPlayers.forEach(player => {
 				// targetMatchDay.team.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
 			});
+		} else {
+			targetMatchDay.team = Object.assign(new Team(), targetMatchDay.team);
 		}
 		return targetMatchDay.team;
 	}

@@ -80,6 +80,20 @@ class SquadPlayer extends Player {
 		forecastPlayer.fitness = undefined;
 	
 		let interval = lastMatchDay.intervalTo(targetMatchDay);
+
+		forecastPlayer.transferLock -= interval;
+		if (forecastPlayer.transferLock < 0) forecastPlayer.transferLock = 0;
+
+		// TODO: add option for physio
+		forecastPlayer.injured -= Math.floor(interval * 2);
+		if (forecastPlayer.injured < 0) forecastPlayer.injured = 0;
+
+		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
+		while (!matchday.add(1).after(targetMatchDay)) {
+			if (forecastPlayer.birthday === matchday.zat) forecastPlayer.age++;
+		}
+
+
 		
 		// TODO ...
 

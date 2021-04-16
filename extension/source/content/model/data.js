@@ -1,14 +1,4 @@
 /**
- * Enum for squad player view options
- * @readonly
- */
-const SquadPlayerView = Object.freeze({
-	CURRENT: 'Keine',
-	THIS_SEASON_END: 'Ende dieser Saison',
-	NEXT_SEASON_END: 'Ende nächste Saison'
-});
-
-/**
  * Extension data
  */
 class ExtensionData {
@@ -26,17 +16,17 @@ class ExtensionData {
 
 		this.options = {
 
-			/** @type {SquadPlayerView} the current view for squad players */
-			squadPlayerView : SquadPlayerView.CURRENT
+			/** @type {MatchDay} the current view of squad players match day */
+			squadPlayerViewMatchDay : undefined
 		}
 	}
 
 	/**
-	 * Resets all the current team data
+	 * Resets all the current team dependent data.
 	 */
 	clearCurrentTeam () {
 		this.currentTeam = new Team();
-		this.options.squadPlayerView = SquadPlayerView.CURRENT;
+		this.options.squadPlayerViewMatchDay = undefined;
 	}
 
 	/**

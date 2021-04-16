@@ -101,5 +101,19 @@ class MatchDay {
 		return (matchday.season * SAISON_MATCH_DAYS + matchday.zat) - (this.season * SAISON_MATCH_DAYS + this.zat);
 	}
 
+	/**
+	 * Adds the given days (zats) to the match day.
+	 * 
+	 * @param {Number} zats
+	 * @returns {MatchDay}
+	 */
+	add (zats) {
+		this.zat += zats;
+		while (this.zat > SAISON_MATCH_DAYS) {
+			this.zat -= SAISON_MATCH_DAYS;
+			this.season++;
+		}
+		return this;
+	}
 
 }

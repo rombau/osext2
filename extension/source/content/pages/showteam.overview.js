@@ -4,6 +4,9 @@ class ShowteamOverviewPage extends ShowteamPage {
 	constructor() {
 
 		super('Teamübersicht', 'showteam.php', new Page.Param('s', 0, true));
+
+		/** @type {HTMLTableElement} */
+		this.table;
 	}
 
 	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
@@ -56,16 +59,13 @@ class ShowteamOverviewPage extends ShowteamPage {
 	 */
 	extend(doc, data) {
 
-		let toolbar = this.createToolbar(doc, data);
-
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
 		let table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
 	
-		/** @type {HTMLTableElement} */
-		let tableClone = table.cloneNode(true);
+		this.table = table.cloneNode(true);
 
-		Array.from(tableClone.rows).forEach((row, i) => {
+		Array.from(this.table.rows).forEach((row, i) => {
 							
 			/** @type {HTMLTableCellElement} */ let cellBirthday = row.cells[0].cloneNode(true);
 			/** @type {HTMLTableCellElement} */ let cellP = row.cells[0].cloneNode(true);
@@ -80,7 +80,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			cellN.style.textAlign = 'right';
 			cellU.style.textAlign = 'right';
 			
-			if (i === 0 || i == (tableClone.rows.length - 1)) {
+			if (i === 0 || i == (this.table.rows.length - 1)) {
 	
 				row.cells[5].textContent = 'Auf';
 				row.cells[9].textContent = 'Mor';
@@ -115,9 +115,9 @@ class ShowteamOverviewPage extends ShowteamPage {
 			
 		});
 		
-		table.parentNode.replaceChild(tableClone, table);
+		table.parentNode.replaceChild(this.table, table);
 		
-		tableClone.parentNode.insertBefore(toolbar, tableClone);	
+		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');
 	}
@@ -125,9 +125,43 @@ class ShowteamOverviewPage extends ShowteamPage {
 	/**
 	 * @param {Document} doc
 	 * @param {Team} team
+	 * @param {Boolean} current
 	 */
-	updateWithTeam (doc, team) {
+	updateWithTeam (doc, team, current) {
 
+		Array.from(this.table.rows).slice(1, -1).forEach(row => {
 
+			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let player = team.getSquadPlayer(id);
+			
+			row.cells[3].textContent = player.age;
+
+			row.cells[10].textContent = (player.moral ? player.moral : '');
+			row.cells[11].textContent = (player.fitness ? player.fitness : '');
+
+			row.cells[16].textContent = player.injured;
+			
+			// TODO: combine transferLock with loan
+			row.cells[18].textContent = player.transferLock;
+
+			if (current) {
+				row.cells[3].classList.remove(STYLE_FORECAST);
+				row.cells[16].classList.remove(STYLE_FORECAST);
+				row.cells[18].classList.remove(STYLE_FORECAST);
+			} else {
+				row.cells[3].classList.add(STYLE_FORECAST);
+				row.cells[16].classList.add(STYLE_FORECAST);
+				row.cells[18].classList.add(STYLE_FORECAST);
+			}
+
+			Array.from(row.cells).forEach(cell => {
+				if (+cell.textContent === 0) {
+					cell.classList.add(STYLE_ZERO);
+				} else {
+					cell.classList.remove(STYLE_ZERO);
+				}
+			});
+
+		});
 	}
 }

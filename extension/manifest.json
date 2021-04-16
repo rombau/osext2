@@ -47,6 +47,9 @@
 				"source/content/pages/training.js",
 				"source/content/handler.js"
 			],
+			"css": [
+				"style/classic.css"
+			],
 			"all_frames": true
 		}
 	],
