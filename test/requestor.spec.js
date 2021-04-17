@@ -23,7 +23,7 @@ describe('Requestor', () => {
 		expect(requestor.frame).not.toBeNull();
 		expect(requestor.frame.id).toEqual(Requestor.FRAME_ID);
 		expect(requestor.frame.src).toEqual('about:blank');
-		expect(requestor.frame.style.display).toEqual('none');
+		expect(requestor.frame.className).toEqual('osext-hidden');
 		expect(requestor.frame.requestAdditionalPages).toBeDefined();
 		expect(requestor.frame.pageLoaded).toBeDefined();
 	});
@@ -38,7 +38,7 @@ describe('Requestor', () => {
 		
 		requestor.start(new MainPage());
 		
-		expect(requestor.status.style.display).toEqual('block');
+		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
 		expect(requestor.pageQueue.length).toEqual(1);
 		expect(requestor.status.textContent).toEqual('Initialisiere Teamübersicht ...');
@@ -56,7 +56,7 @@ describe('Requestor', () => {
 
 		requestor.frame.pageLoaded();
 
-		expect(requestor.status.style.display).toEqual('none');
+		expect(requestor.status.classList).toContain('osext-hidden');
 		
 	});
 
@@ -69,7 +69,7 @@ describe('Requestor', () => {
 		
 		requestor.start(new MainPage());
 		
-		expect(requestor.status.style.display).toEqual('block');
+		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
 		expect(requestor.pageQueue.length).toEqual(0);
 		expect(requestor.status.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43) ...');
@@ -84,7 +84,7 @@ describe('Requestor', () => {
 
 		requestor.frame.pageLoaded();
 
-		expect(requestor.status.style.display).toEqual('none');
+		expect(requestor.status.classList).toContain('osext-hidden');
 		
 	});
 });
