@@ -64,9 +64,11 @@ class ShowteamPage extends Page {
 
 		toolbar.appendChild(viewInfo);
 		
-		page.updateWithTeam(doc, 
-			data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
-			data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
+		if (!data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay)) {
+			page.updateWithTeam(doc, 
+				data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
+				data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
+		}
 
 		return toolbar;
 	}

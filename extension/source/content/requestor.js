@@ -50,17 +50,17 @@ class Requestor {
 	/**
 	 * @returns {String} the id of the hidden IFrame
 	 */
-	static FRAME_ID = 'page-request-frame';
+	static FRAME_ID = 'osext-page-request-frame';
 
 	/**
 	 * @returns {String} the id of the status element
 	 */
-	static STATUS_ID = 'page-request-status';
+	static STATUS_ID = 'osext-page-request-status';
 	
 	/**
 	 * @returns {String} the id of the form element
 	 */
-	static FORM_ID = 'page-request-form';
+	static FORM_ID = 'osext-page-request-form';
 	
 	/**
 	 * @returns {Requestor} a new instance
@@ -78,18 +78,10 @@ class Requestor {
 	createStatus (doc) {
 		/** @type {Document} */
 		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
-		statusDoc.body.firstElementChild.style.marginTop = "25px"; 
 		/** @type {HTMLElement} */
 		let status = statusDoc.getElementById(Requestor.STATUS_ID) || statusDoc.createElement('div');
 		status.id = Requestor.STATUS_ID;
-		status.style.display = 'block';
-		status.style.padding = '2px 20px';
-		status.style.position = 'fixed';
-		status.style.left = '0px';
-		status.style.right = '0px';
-		status.style.top = '0px';
-		status.style.backgroundColor = '#CCCCFF';
-		status.style.color = '#6666CC';
+		status.classList.remove(STYLE_HIDDEN);
 		statusDoc.body.appendChild(status);
 		return status;
 	}
@@ -106,7 +98,7 @@ class Requestor {
 		frame.id = Requestor.FRAME_ID;
 		frame.name = Requestor.FRAME_ID; // for form target
 		frame.src = 'about:blank';
-		frame.style.display = 'none';
+		frame.className = STYLE_HIDDEN;
 		frame.requestAdditionalPages = (additionalPagesToLoad) => {
 			this.pageQueue = this.pageQueue.concat(additionalPagesToLoad);
 		};
@@ -126,7 +118,7 @@ class Requestor {
 		/** @type {HTMLFormElement} */
 		let form = doc.getElementById(Requestor.FORM_ID) || doc.createElement('form');
 		form.id = Requestor.FORM_ID;
-		form.style.display = 'none';
+		form.className = STYLE_HIDDEN;
 		form.action = page.createUrl();
 		form.method = page.method;
 		form.target = Requestor.FRAME_ID;
@@ -162,8 +154,7 @@ class Requestor {
 				}
 			}
 		} else {
-			this.status.style.display = 'none';
-			this.status.parentElement.firstElementChild.style.marginTop = "0px"; 
+			this.status.classList.add(STYLE_HIDDEN);
 			this.finish();
 		}
 	}

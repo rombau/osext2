@@ -136,8 +136,8 @@ class ShowteamOverviewPage extends ShowteamPage {
 			
 			row.cells[3].textContent = player.age;
 
-			row.cells[10].textContent = (player.moral ? player.moral : '');
-			row.cells[11].textContent = (player.fitness ? player.fitness : '');
+			row.cells[10].textContent = (player.moral != undefined ? player.moral : '');
+			row.cells[11].textContent = (player.fitness != undefined  ? player.fitness : '');
 
 			row.cells[16].textContent = player.injured;
 			
@@ -154,8 +154,9 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells[18].classList.add(STYLE_FORECAST);
 			}
 
+			// TODO: improve zero check
 			Array.from(row.cells).forEach(cell => {
-				if (+cell.textContent === 0) {
+				if (+cell.textContent === 0 && cell.classList.contains(STYLE_FORECAST)) {
 					cell.classList.add(STYLE_ZERO);
 				} else {
 					cell.classList.remove(STYLE_ZERO);
