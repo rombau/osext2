@@ -100,6 +100,16 @@ describe('SquadPlayer', () => {
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 12)).transferLock).toEqual(0);
 	});
 
+	it('should return loan forecast', () => {
+
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11)).loan).toBeUndefined();
+
+		player.loan = new SquadPlayer.Loan('Team1', 'Team2', 10);
+
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 2)).loan.duration).toEqual(1);
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeUndefined();
+	});
+
 	describe('Ban', () => {
 
 		/** @type {SquadPlayer.Ban} */

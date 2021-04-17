@@ -45,6 +45,7 @@
 				"source/content/pages/team.skills.js",
 				"source/content/pages/trainer.js",
 				"source/content/pages/training.js",
+				"source/content/pages/loanview.js",
 				"source/content/handler.js"
 			],
 			"css": [

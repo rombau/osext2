@@ -3,8 +3,8 @@
     opacity: 0.6;
 }
 
-.osext-forecast.osext-zero {
-    opacity: 0;
+.osext-inactive {
+    opacity: 0.3;
 }
 
 .osext-hidden {

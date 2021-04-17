@@ -18,11 +18,17 @@ class SquadPlayer extends Player {
 
 		super();
 		
+		/** @type {Boolean} flag indicating the palyer is active */
+		this.active = true;
+
 		/** @type {String} the name */
 		this.name;
 
-		/** @type {Skill} the position */
+		/** @type {Position} the position */
 		this.pos;
+
+		/** @type {Position} the position at last match */
+		this.posLastMatch;
 
 		/** @type {Number} the moral value */
 		this.moral;
@@ -76,6 +82,7 @@ class SquadPlayer extends Player {
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), this);
 
+		forecastPlayer.posLastMatch = undefined;
 		forecastPlayer.moral = undefined;
 		forecastPlayer.fitness = undefined;
 	
@@ -83,6 +90,18 @@ class SquadPlayer extends Player {
 
 		forecastPlayer.transferLock -= interval;
 		if (forecastPlayer.transferLock < 0) forecastPlayer.transferLock = 0;
+
+		if (forecastPlayer.loan) {
+			forecastPlayer.loan = Object.assign(new SquadPlayer.Loan(), forecastPlayer.loan);
+			forecastPlayer.loan.duration -= interval;
+			if (forecastPlayer.loan.duration <= 0) {
+				if (forecastPlayer.loan.fee < 0) {
+					forecastPlayer.active = false;
+				}
+				forecastPlayer.loan = undefined;
+			}
+		}
+
 
 		// TODO: add option for physio
 		forecastPlayer.injured -= Math.floor(interval * 2);
@@ -99,7 +118,6 @@ class SquadPlayer extends Player {
 
 		return forecastPlayer;
 	}
-	
 }
 
 /**

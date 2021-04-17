@@ -27,7 +27,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			player.nr = +row.cells[0].textContent;
 			player.name = row.cells[2].textContent;
 			player.age = +row.cells[3].textContent;
-			player.pos = row.cells[4].textContent;
+			player.pos = player.pos || row.cells[4].textContent;
 			player.countryCode = row.cells[7].textContent;
 			player.countryName = row.cells[7].firstChild.title;
 			player.uefa = row.cells[8].textContent ? false : true;
@@ -39,7 +39,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			let transferLockCell = row.cells[17];
 			if (transferLockCell.textContent.charAt(0) === 'L') {
 				let matches = /Leihgabe von (.+) an (.+) für (\d+) ZATs/gm.exec(transferLockCell.firstChild.title);
-				player.loan = new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
+				player.loan = player.loan || new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
 				player.transferLock = +transferLockCell.textContent.substring(1);
 			} else {
 				player.transferLock = +transferLockCell.textContent;
@@ -134,32 +134,53 @@ class ShowteamOverviewPage extends ShowteamPage {
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = team.getSquadPlayer(id);
 			
-			row.cells[3].textContent = player.age;
+			if (player.active) {
 
-			row.cells[10].textContent = (player.moral != undefined ? player.moral : '');
-			row.cells[11].textContent = (player.fitness != undefined  ? player.fitness : '');
+				row.cells[3].textContent = player.age;
+				row.cells[4].textContent = player.birthday;
+				row.cells[5].textContent = player.pos;
 
-			row.cells[16].textContent = player.injured;
-			
-			// TODO: combine transferLock with loan
-			row.cells[18].textContent = player.transferLock;
+				row.cells[6].textContent = (player.posLastMatch != undefined ? player.posLastMatch : '');
+				row.cells[10].textContent = (player.moral != undefined ? player.moral : '');
+				row.cells[11].textContent = (player.fitness != undefined  ? player.fitness : '');
 
-			if (current) {
-				row.cells[3].classList.remove(STYLE_FORECAST);
-				row.cells[16].classList.remove(STYLE_FORECAST);
-				row.cells[18].classList.remove(STYLE_FORECAST);
+				row.cells[16].textContent = player.injured;
+				
+				if (player.loan) {
+					Object.setPrototypeOf(player.loan, SquadPlayer.Loan.prototype);
+					row.cells[18].innerHTML = `<abbr title="${player.loan.getText(true)}">${player.loan.getText()}</abbr>`;
+					if (player.loan.fee > 0) row.cells[5].textContent = 'LEI';
+				} else {
+					row.cells[18].textContent = player.transferLock;
+				}
+
 			} else {
-				row.cells[3].classList.add(STYLE_FORECAST);
-				row.cells[16].classList.add(STYLE_FORECAST);
-				row.cells[18].classList.add(STYLE_FORECAST);
+
+				row.cells[3].textContent = '';
+				row.cells[4].textContent = '';
+				row.cells[5].textContent = '';
+				row.cells[6].textContent = '';
+				row.cells[10].textContent = '';
+				row.cells[11].textContent = '';
+				row.cells[16].textContent = '';
+				row.cells[18].textContent = '';
 			}
 
-			// TODO: improve zero check
-			Array.from(row.cells).forEach(cell => {
-				if (+cell.textContent === 0 && cell.classList.contains(STYLE_FORECAST)) {
-					cell.classList.add(STYLE_ZERO);
+			// styling
+			Array.from(row.cells).forEach((cell, i) => {
+				if ((+cell.textContent === 0 || cell.textContent === TransferState.NORMAL) && i > 11) {
+					cell.className = 'BAK';
+				} else if (player.loan && player.loan.fee > 0) {
+					cell.className = 'LEI';
 				} else {
-					cell.classList.remove(STYLE_ZERO);
+					cell.className = player.pos;
+				}
+				if (player.active) {
+					if (!current && (i === 3 || i === 16 || i === 18)) {
+						cell.classList.add(STYLE_FORECAST);
+					}
+				} else {
+					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
 

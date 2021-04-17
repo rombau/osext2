@@ -46,6 +46,7 @@ class MainPage extends Page {
 			initPages.push(new LeagueTablePage());
 			initPages.push(new TrainerPage());
 			initPages.push(new TrainingPage());
+			initPages.push(new LoanViewPage());
 			
 
 			// TODO add all needed pages
