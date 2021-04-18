@@ -22,7 +22,7 @@ class LeagueTablePage extends Page {
 			
 			data.currentTeam.league.size++;
 
-			if (HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href) === data.currentTeam.id) {
+			if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.currentTeam.id) {
 				data.currentTeam.leagueRanking = data.currentTeam.league.size;
 			}
 		});

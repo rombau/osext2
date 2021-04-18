@@ -19,12 +19,14 @@ class LoanViewPage extends Page {
 		/** @type {[HTMLTableRowElement]} */
 		let rows = Array.from(doc.querySelectorAll('table tr'));
 		rows.forEach(row => {
-			if (row.cells[0].firstChild && row.cells[0].firstChild.href) {
-				let id = HtmlUtil.extractIdFromHref(row.cells[0].firstChild.href);
+			LoanViewPage.HEADERS.forEach((header, i) => row.cells[header] = row.cells[i]);
+			let nameCell = row.cells['Name'];
+			if (nameCell.firstChild && nameCell.firstChild.href) {
+				let id = HtmlUtil.extractIdFromHref(nameCell.firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id);
-				player.loan.fee = +row.cells[8].textContent.replace(/\./g, "");
+				player.loan.fee = +row.cells['Leihgebühr'].textContent.replace(/\./g, "");
 				if (player.pos !== 'LEI') player.loan.fee *= -1;
-				player.pos = row.cells[0].className;
+				player.pos = nameCell.className;
 			}
 		});
 

@@ -27,6 +27,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			player.name = row.cells['Name'].textContent;
 			player.age = +row.cells['Alter'].textContent;
 			player.pos = player.pos || row.cells['Pos'].textContent;
+			player.posLastMatch = row.cells['Auf'].textContent;
 			player.countryCode = row.cells['Land'].textContent;
 			player.countryName = row.cells['Land'].firstChild.title;
 			player.uefa = row.cells['U'].textContent ? false : true;
@@ -74,7 +75,6 @@ class ShowteamOverviewPage extends ShowteamPage {
 			row.cells['&Oslash;N'] = row.cells['Nr.'].cloneNode(true);
 			row.cells['&Oslash;U'] = row.cells['Nr.'].cloneNode(true);
 			
-			// TODO move style to css
 			row.cells['&Oslash;P'].style.width = '45px';
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
@@ -91,8 +91,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 	
 			} else {
 	
-				// TODO move style to css
-				row.cells['Opt.Skill'].style.fontWeight = 'bold';
+				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id); 

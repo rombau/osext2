@@ -73,15 +73,4 @@ class HtmlUtil {
 	static extractIdFromHref (href) {
 		return +(/(javascript:.+\(|st\.php\?c=|sp\.php\?s=|faceprev\.php\?sid=)(\d+)/.exec(href))[2];
 	}
-
-	/**
-	 * Clones a table with extended row attributes
-	 * 
-	 * @param {HTMLTableElement} table 
-	 * @returns {HTMLTableElement}
-	 */
-	static cloneTable (table) {
-		let tableClone = table.cloneNode(true);
-		// Array.from(tableClone.rows).forEach((row, i) => Array.from(table.rows[i].cells).forEach(cell => ) );
-	}
 }

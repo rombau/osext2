@@ -31,16 +31,16 @@ class ShowteamSeasonPage extends Page {
 		let season = +doc.querySelector('select[name=saison]').value;
 
 		HtmlUtil.getTableRowsByHeader(doc, ...ShowteamSeasonPage.HEADERS).forEach(row => {
-			let gameInfo = row.cells[1].textContent;
+			let gameInfo = row.cells['Spielart'].textContent;
 			if (gameInfo && !ShowteamSeasonPage.GAMEINFO_NOT_SET.includes(gameInfo)) {
-				let matchday = data.currentTeam.getMatchDay(season, +row.cells[0].textContent);
+				let matchday = data.currentTeam.getMatchDay(season, +row.cells['ZAT'].textContent);
 				matchday.competition = gameInfo.split(' : ')[0];
 				matchday.location = gameInfo.split(' : ')[1];
-				matchday.result = row.cells[3].textContent;
+				matchday.result = row.cells['Ergebnis'].textContent;
 				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
 					matchday.friendlyShare = +row.cells[5].textContent.split('/')[0];
 				}
-				let opponentCell = row.cells[2];
+				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {
 					matchday.opponent = new Team(HtmlUtil.extractIdFromHref(opponentCell.firstChild.href), opponentCell.textContent);
 				}

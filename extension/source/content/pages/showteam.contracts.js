@@ -19,13 +19,13 @@ class ShowteamContractsPage extends ShowteamPage {
 		
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamContractsPage.HEADERS).forEach(row => {
 
-			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
 			
-			player.birthday = +row.cells[4].textContent;
-			player.contractTerm = +row.cells[11].textContent;
-			player.salary = +row.cells[12].textContent.replace(/\./g, '');
-			player.marketValue = +row.cells[13].textContent.replace(/\./g, '');
+			player.birthday = +row.cells['Geb.Tag'].textContent;
+			player.contractTerm = +row.cells['Vertrag'].textContent;
+			player.salary = +row.cells['Monatsgehalt'].textContent.replace(/\./g, '');
+			player.marketValue = +row.cells['Spielerwert'].textContent.replace(/\./g, '');
 
 		});
 	}

@@ -18,20 +18,20 @@ class TrainingPage extends Page {
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...TrainingPage.HEADERS).forEach(row => {
 
-			let injured = row.cells[0].textContent;
-			let trainerNr = +row.cells[4].firstChild.value;
-			let skill = row.cells[5].firstChild.selectedOptions[0].text;
+			let injured = row.cells[''].textContent;
+			let trainerNr = +row.cells['Trainer'].firstChild.value;
+			let skill = row.cells['trainierter Skill'].firstChild.selectedOptions[0].text;
 
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill)) {
 			
-				let id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
+				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id); 
 
 				player.nextTraining = new SquadPlayer.Training();
 				player.nextTraining.trainer = data.currentTeam.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
 
-				let chanceCellText = row.cells[7].textContent;
+				let chanceCellText = row.cells['Chance'].textContent;
 				if (chanceCellText.includes('%')) {
 					player.nextTraining.chance = parseFloat(chanceCellText);
 				}
