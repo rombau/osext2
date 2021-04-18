@@ -148,7 +148,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 				
 				if (player.loan) {
 					Object.setPrototypeOf(player.loan, SquadPlayer.Loan.prototype);
-					row.cells[18].innerHTML = `<abbr title="${player.loan.getText(true)}">${player.loan.getText()}</abbr>`;
+					row.cells[18].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration.toString()}</abbr>`;
 					if (player.loan.fee > 0) row.cells[5].textContent = 'LEI';
 				} else {
 					row.cells[18].textContent = player.transferLock;

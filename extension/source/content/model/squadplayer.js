@@ -151,19 +151,6 @@ SquadPlayer.Ban = class {
 			this.duration = +text.slice(0, -1); 
 		}
 	}
-
-	/**
-	 * Returns the text for the ban in short (e.g. '2L') or long (e.g. '2 Ligaspiele') form.
-	 * 
-	 * @param {Boolean} flag controls the output form; default is the short form
-	 * @returns {String} the text form of the ban
-	 */
-	getText (longForm = false) {
-		if (this.type && this.duration) {
-			return this.duration.toString() + (longForm ? (' ' + this.type.description + (this.duration > 1 ? 'e' : '')) : this.type.abbr);
-		}
-		return '';
-	}
 };
 
 /**
@@ -189,22 +176,6 @@ SquadPlayer.Loan = class {
 
 		/** @type {Number} the monthly fee */
 		this.fee;
-	}
-
-	/**
-	 * Returns the text for the loan in short (e.g. 'L12') or long (e.g. 'Leihgabe von [from] an [to] für [duration] ZATs') form.
-	 * 
-	 * @param {Boolean} flag controls the output form; default is the short form
-	 * @returns {String} the text form of the loan
-	 */
-	getText (longForm = false) {
-		if (this.duration && !longForm) {
-			return 'L' + this.duration.toString();
-		}
-		if (this.duration && this.from && this.to && longForm) {
-			return `Leihgabe von ${this.from} an ${this.to} für ${this.duration} ZATs`;
-		}
-		return '';
 	}
 };
 
