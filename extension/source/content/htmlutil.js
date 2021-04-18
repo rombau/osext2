@@ -15,12 +15,13 @@ class HtmlUtil {
 	 * @returns {HTMLTableElement}
 	 */
 	static getTableByHeader (doc, ...headers) {
-		return Array.from(doc.getElementsByTagName('table')).find((table, t) => {
-			let ok = Array.from(table.rows[0].cells).every((cell, i) => {
+		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
+			return Array.from(table.rows[0].cells).every((cell, i) => {
 				return cell.textContent === headers[i];
 			});
-			return ok;
 		});
+		Array.from(table.rows).forEach(row => headers.forEach((header, i) => row.cells[header] = row.cells[i]));
+		return table;
 	}
 
 	/**
@@ -73,4 +74,14 @@ class HtmlUtil {
 		return +(/(javascript:.+\(|st\.php\?c=|sp\.php\?s=|faceprev\.php\?sid=)(\d+)/.exec(href))[2];
 	}
 
+	/**
+	 * Clones a table with extended row attributes
+	 * 
+	 * @param {HTMLTableElement} table 
+	 * @returns {HTMLTableElement}
+	 */
+	static cloneTable (table) {
+		let tableClone = table.cloneNode(true);
+		// Array.from(tableClone.rows).forEach((row, i) => Array.from(table.rows[i].cells).forEach(cell => ) );
+	}
 }

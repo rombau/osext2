@@ -75,12 +75,15 @@ class SquadPlayer extends Player {
 	 * 
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} targetMatchDay the target match day
+	 * @param {[MatchDay]} matchDaysInRange the match days in the range from lastMatchDay and targetMatchDay
 	 * @returns {SquadPlayer} the forecast of the player
 	 */
-	getForecast (lastMatchDay, targetMatchDay) {
+	getForecast (lastMatchDay, targetMatchDay, matchDaysInRange) {
 		if (lastMatchDay.equals(targetMatchDay)) return this;
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), this);
+		forecastPlayer.bans = [];
+		this.bans.forEach(ban => forecastPlayer.bans.push(Object.assign(new SquadPlayer.Ban(), ban)));
 
 		forecastPlayer.posLastMatch = undefined;
 		forecastPlayer.moral = undefined;
@@ -88,9 +91,59 @@ class SquadPlayer extends Player {
 	
 		let interval = lastMatchDay.intervalTo(targetMatchDay);
 
-		forecastPlayer.transferLock -= interval;
-		if (forecastPlayer.transferLock < 0) forecastPlayer.transferLock = 0;
+		this.forecastTransferLock(forecastPlayer, interval);
 
+		this.forecastLoan(forecastPlayer, interval);
+
+		this.forecastBans(forecastPlayer, matchDaysInRange);
+
+		this.forecastInjury(forecastPlayer, interval);
+
+		this.forecastAge(forecastPlayer, lastMatchDay, targetMatchDay);
+
+		
+		// TODO ...
+
+		return forecastPlayer;
+	}
+
+	forecastAge(forecastPlayer, lastMatchDay, targetMatchDay) {
+		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
+		while (!matchday.add(1).after(targetMatchDay)) {
+			if (forecastPlayer.birthday === matchday.zat)
+				forecastPlayer.age++;
+		}
+	}
+
+	forecastInjury(forecastPlayer, interval) {
+		// TODO: add option for physio
+		forecastPlayer.injured -= Math.floor(interval * 2);
+		if (forecastPlayer.injured < 0)
+			forecastPlayer.injured = 0;
+	}
+
+	forecastBans(forecastPlayer, matchDaysInRange) {
+		if (forecastPlayer.bans.length > 0 && matchDaysInRange) {
+			matchDaysInRange.forEach(matchday => {
+				forecastPlayer.bans.forEach((ban, i, object) => {
+					if (ban.type === BanType.LEAGUE && matchday.competition === Competition.LEAGUE) {
+						ban.duration--;
+					} else if (ban.type === BanType.CUP && matchday.competition === Competition.CUP) {
+						ban.duration--;
+					} else if (ban.type === BanType.INTERNATIONAL &&
+						(matchday.competition === Competition.OSC || matchday.competition === Competition.OSCQ ||
+							matchday.competition === Competition.OSE || matchday.competition === Competition.OSEQ)) {
+						ban.duration--;
+					}
+					if (ban.duration <= 0) {
+						object.splice(i, 1);
+					}
+				});
+			});
+		}
+	}
+
+	forecastLoan(forecastPlayer, interval) {
 		if (forecastPlayer.loan) {
 			forecastPlayer.loan = Object.assign(new SquadPlayer.Loan(), forecastPlayer.loan);
 			forecastPlayer.loan.duration -= interval;
@@ -101,22 +154,12 @@ class SquadPlayer extends Player {
 				forecastPlayer.loan = undefined;
 			}
 		}
+	}
 
-
-		// TODO: add option for physio
-		forecastPlayer.injured -= Math.floor(interval * 2);
-		if (forecastPlayer.injured < 0) forecastPlayer.injured = 0;
-
-		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
-		while (!matchday.add(1).after(targetMatchDay)) {
-			if (forecastPlayer.birthday === matchday.zat) forecastPlayer.age++;
-		}
-
-
-		
-		// TODO ...
-
-		return forecastPlayer;
+	forecastTransferLock(forecastPlayer, interval) {
+		forecastPlayer.transferLock -= interval;
+		if (forecastPlayer.transferLock < 0)
+			forecastPlayer.transferLock = 0;
 	}
 }
 
@@ -125,9 +168,9 @@ class SquadPlayer extends Player {
  * @readonly
  */
  const BanType = Object.freeze({
-	LEAGUE: { abbr: 'L', description: 'Ligaspiel' },
-	CUP: { abbr: 'P', description: 'Pokalspiel' },
-	INTERNATIONAL: { abbr: 'I', description: 'internationale Spiel' }
+	LEAGUE: { abbr: 'L', description: 'Ligaspiel', descriptionPlural: 'Ligaspiele' },
+	CUP: { abbr: 'P', description: 'Pokalspiel', descriptionPlural: 'Pokalspiele' },
+	INTERNATIONAL: { abbr: 'I', description: 'internationales Spiel', descriptionPlural: 'internationale Spiele' }
 });
 
 /**
@@ -136,20 +179,16 @@ class SquadPlayer extends Player {
 SquadPlayer.Ban = class {
 
 	/**
-	 * @param {String} text the short form (e.g. '2L') from the UI
+	 * @param {BanType} type the ban type
+	 * @param {Number} duration the duration in matchdays of type
 	 */
-	constructor(text) {
+	constructor(type, duration) {
 
 		/** @type {BanType} the ban type */
-		this.type;
+		this.type = type;
 
 		/** @type {Number} the duration in matchdays of type */
-		this.duration;
-
-		if (text) {
-			this.type = Object.values(BanType).find((banType) => banType.abbr === text.slice(-1));
-			this.duration = +text.slice(0, -1); 
-		}
+		this.duration = duration;
 	}
 };
 

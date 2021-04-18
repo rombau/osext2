@@ -111,8 +111,12 @@ class Team {
 		targetMatchDay = this.getMatchDay(targetMatchDay.season, targetMatchDay.zat);
 		if (!targetMatchDay.team) {
 			targetMatchDay.team = new Team();
+			let matchDaysInRange = this.matchDays.filter(matchDay => {
+				Object.setPrototypeOf(matchDay, MatchDay.prototype);
+				matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
+			});
 			this.squadPlayers.forEach(player => {
-				targetMatchDay.team.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
+				targetMatchDay.team.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
 			});
 			this.youthPlayers.forEach(player => {
 				// targetMatchDay.team.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));

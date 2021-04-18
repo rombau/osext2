@@ -24,19 +24,18 @@ class ShowteamOverviewPage extends ShowteamPage {
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
 	
-			player.nr = +row.cells[0].textContent;
-			player.name = row.cells[2].textContent;
-			player.age = +row.cells[3].textContent;
-			player.pos = player.pos || row.cells[4].textContent;
-			player.countryCode = row.cells[7].textContent;
-			player.countryName = row.cells[7].firstChild.title;
-			player.uefa = row.cells[8].textContent ? false : true;
-			player.moral = +row.cells[9].textContent;
-			player.fitness = +row.cells[10].textContent;
-			player.injured = +row.cells[15].textContent;
-			player.transferState = row.cells[16].textContent;
+			player.name = row.cells['Name'].textContent;
+			player.age = +row.cells['Alter'].textContent;
+			player.pos = player.pos || row.cells['Pos'].textContent;
+			player.countryCode = row.cells['Land'].textContent;
+			player.countryName = row.cells['Land'].firstChild.title;
+			player.uefa = row.cells['U'].textContent ? false : true;
+			player.moral = +row.cells['MOR'].textContent;
+			player.fitness = +row.cells['FIT'].textContent;
+			player.injured = +row.cells['Verl.'].textContent;
+			player.transferState = row.cells['T'].textContent;
 
-			let transferLockCell = row.cells[17];
+			let transferLockCell = row.cells['TS'];
 			if (transferLockCell.textContent.charAt(0) === 'L') {
 				let matches = /Leihgabe von (.+) an (.+) für (\d+) ZATs/gm.exec(transferLockCell.firstChild.title);
 				player.loan = player.loan || new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
@@ -45,9 +44,14 @@ class ShowteamOverviewPage extends ShowteamPage {
 				player.transferLock = +transferLockCell.textContent;
 			}
 			
-			let banCell = row.cells[14];
+			let banCell = row.cells['Sperre'];
 			if (banCell.textContent.length > 1) {
-				banCell.textContent.split(' ').forEach(shortForm => player.bans.push(new SquadPlayer.Ban(shortForm)));
+				player.bans = [];
+				banCell.textContent.split(' ').forEach(shortForm => {
+					let type = Object.values(BanType).find((banType) => banType.abbr === shortForm.slice(-1));
+					let duration = +shortForm.slice(0, -1); 
+					player.bans.push(new SquadPlayer.Ban(type, duration));
+				});
 			}
 			
 		});
@@ -61,61 +65,52 @@ class ShowteamOverviewPage extends ShowteamPage {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 
-		let table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
-	
-		this.table = table.cloneNode(true);
+		this.table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
 
 		Array.from(this.table.rows).forEach((row, i) => {
 							
-			/** @type {HTMLTableCellElement} */ let cellBirthday = row.cells[0].cloneNode(true);
-			/** @type {HTMLTableCellElement} */ let cellP = row.cells[0].cloneNode(true);
-			/** @type {HTMLTableCellElement} */ let cellN = row.cells[0].cloneNode(true);
-			/** @type {HTMLTableCellElement} */ let cellU = row.cells[0].cloneNode(true);
-	
-			cellBirthday.style.textAlign = 'left';
+			row.cells['Geb.'] = row.cells['#'].cloneNode(true);
+			row.cells['&Oslash;P'] = row.cells['Nr.'].cloneNode(true);
+			row.cells['&Oslash;N'] = row.cells['Nr.'].cloneNode(true);
+			row.cells['&Oslash;U'] = row.cells['Nr.'].cloneNode(true);
 			
-			cellP.style.width = '45px';
-			
-			cellP.style.textAlign = 'right';
-			cellN.style.textAlign = 'right';
-			cellU.style.textAlign = 'right';
+			// TODO move style to css
+			row.cells['&Oslash;P'].style.width = '45px';
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 	
-				row.cells[5].textContent = 'Auf';
-				row.cells[9].textContent = 'Mor';
-				row.cells[10].textContent = 'Fit';
-				row.cells[11].textContent = 'Skillschn.';
-				row.cells[14].textContent = 'Sp.';
+				row.cells['MOR'].textContent = 'Mor';
+				row.cells['FIT'].textContent = 'Fit';
+				row.cells['Skillschnitt'].textContent = 'Skillschn.';
+				row.cells['Sperre'].textContent = 'Sp.';
 	
-				cellBirthday.innerHTML = 'Geb.';
-				
-				cellP.innerHTML = '&Oslash;P';
-				cellN.innerHTML = '&Oslash;N';
-				cellU.innerHTML = '&Oslash;U';
+				row.cells['Geb.'].innerHTML = 'Geb.';
+				row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
+				row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
+				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
 	
 			} else {
 	
-				row.cells[12].style.fontWeight = 'bold';
+				// TODO move style to css
+				row.cells['Opt.Skill'].style.fontWeight = 'bold';
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id); 
 					
-				cellBirthday.textContent = player.birthday;
+				row.cells['Geb.'].textContent = player.birthday;
 				
-				cellP.textContent = player.getAverage(player.getPrimarySkills()).toFixed(2);
-				cellN.textContent = player.getAverage(player.getSecondarySkills()).toFixed(2);
-				cellU.textContent = player.getAverage(player.getUnchangeableSkills()).toFixed(2);
+				row.cells['&Oslash;P'].textContent = player.getAverage(player.getPrimarySkills()).toFixed(2);
+				row.cells['&Oslash;N'].textContent = player.getAverage(player.getSecondarySkills()).toFixed(2);
+				row.cells['&Oslash;U'].textContent = player.getAverage(player.getUnchangeableSkills()).toFixed(2);
 			}
-	
-			row.insertBefore(cellBirthday, row.cells[4]);
-			row.appendChild(cellP);			
-			row.appendChild(cellN);			
-			row.appendChild(cellU);			
+
+			row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
+
+			row.appendChild(row.cells['&Oslash;P']);			
+			row.appendChild(row.cells['&Oslash;N']);			
+			row.appendChild(row.cells['&Oslash;U']);			
 			
 		});
-		
-		table.parentNode.replaceChild(this.table, table);
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 
@@ -123,11 +118,10 @@ class ShowteamOverviewPage extends ShowteamPage {
 	}
 
 	/**
-	 * @param {Document} doc
 	 * @param {Team} team
-	 * @param {Boolean} current
+	 * @param {Boolean} current indicating the current team
 	 */
-	updateWithTeam (doc, team, current) {
+	updateWithTeam (team, current) {
 
 		Array.from(this.table.rows).slice(1, -1).forEach(row => {
 
@@ -136,34 +130,43 @@ class ShowteamOverviewPage extends ShowteamPage {
 			
 			if (player.active) {
 
-				row.cells[3].textContent = player.age;
-				row.cells[4].textContent = player.birthday;
-				row.cells[5].textContent = player.pos;
+				row.cells['Alter'].textContent = player.age;
+				row.cells['Geb.'].textContent = player.birthday;
+				row.cells['Pos'].textContent = player.pos;
 
-				row.cells[6].textContent = (player.posLastMatch != undefined ? player.posLastMatch : '');
-				row.cells[10].textContent = (player.moral != undefined ? player.moral : '');
-				row.cells[11].textContent = (player.fitness != undefined  ? player.fitness : '');
+				row.cells['Auf'].textContent = (player.posLastMatch != undefined ? player.posLastMatch : '');
+				row.cells['MOR'].textContent = (player.moral != undefined ? player.moral : '');
+				row.cells['FIT'].textContent = (player.fitness != undefined  ? player.fitness : '');
 
-				row.cells[16].textContent = player.injured;
+				if (player.bans) {
+					let banText = '';
+					player.bans.forEach(ban => {
+						banText += ` <abbr title="${ban.duration.toString()} ${ban.duration === 1 ? ban.type.description : ban.type.descriptionPlural}">${ban.duration.toString()}${ban.type.abbr}</abbr>`;
+					});
+					row.cells['Sperre'].innerHTML = banText;
+				}
+
+				row.cells['Verl.'].textContent = player.injured;
 				
 				if (player.loan) {
 					Object.setPrototypeOf(player.loan, SquadPlayer.Loan.prototype);
-					row.cells[18].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration.toString()}</abbr>`;
-					if (player.loan.fee > 0) row.cells[5].textContent = 'LEI';
+					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration.toString()}</abbr>`;
+					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
-					row.cells[18].textContent = player.transferLock;
+					row.cells['TS'].textContent = player.transferLock;
 				}
 
 			} else {
 
-				row.cells[3].textContent = '';
-				row.cells[4].textContent = '';
-				row.cells[5].textContent = '';
-				row.cells[6].textContent = '';
-				row.cells[10].textContent = '';
-				row.cells[11].textContent = '';
-				row.cells[16].textContent = '';
-				row.cells[18].textContent = '';
+				row.cells['Alter'].textContent = '';
+				row.cells['Geb.'].textContent = '';
+				row.cells['Pos'].textContent = '';
+				row.cells['Auf'].textContent = '';
+				row.cells['MOR'].textContent = '';
+				row.cells['FIT'].textContent = '';
+				row.cells['Sperre'].textContent = '';
+				row.cells['Verl.'].textContent = '';
+				row.cells['TS'].textContent = '';
 			}
 
 			// styling
@@ -175,15 +178,16 @@ class ShowteamOverviewPage extends ShowteamPage {
 				} else {
 					cell.className = player.pos;
 				}
-				if (player.active) {
-					if (!current && (i === 3 || i === 16 || i === 18)) {
-						cell.classList.add(STYLE_FORECAST);
-					}
-				} else {
+				if (!player.active) {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
-
+			if (player.active && !current) {
+				row.cells['Alter'].classList.add(STYLE_FORECAST);
+				row.cells['Sperre'].classList.add(STYLE_FORECAST);
+				row.cells['Verl.'].classList.add(STYLE_FORECAST);
+				row.cells['TS'].classList.add(STYLE_FORECAST);
+			}
 		});
 	}
 }

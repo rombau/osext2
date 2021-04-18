@@ -55,8 +55,7 @@ class ShowteamPage extends Page {
 			Persistence.updateCachedData(data => {
 				data.options.squadPlayerViewMatchDay = newMatchDay;
 			}).then(data => {
-				page.updateWithTeam(doc, 
-					data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
+				page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
 					data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
 			});
 		});
@@ -65,8 +64,7 @@ class ShowteamPage extends Page {
 		toolbar.appendChild(viewInfo);
 		
 		if (!data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay)) {
-			page.updateWithTeam(doc, 
-				data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
+			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
 				data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
 		}
 
@@ -74,10 +72,9 @@ class ShowteamPage extends Page {
 	}
 
 	/**
-	 * @param {Document} _doc
 	 * @param {Team} _team
 	 * @param {Boolean} _current
 	 */
-	updateWithTeam (_doc, _team, _current) {}
+	updateWithTeam (_team, _current) {}
 
 }

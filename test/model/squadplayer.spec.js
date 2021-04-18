@@ -110,6 +110,55 @@ describe('SquadPlayer', () => {
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeUndefined();
 	});
 
+	it('should return ban forecast', () => {
 
-	
+		player.bans.push(new SquadPlayer.Ban(BanType.LEAGUE, 3));
+		player.bans.push(new SquadPlayer.Ban(BanType.CUP, 2));
+		player.bans.push(new SquadPlayer.Ban(BanType.INTERNATIONAL, 1));
+
+		let matchDayInRange = [];
+		let forecastPlayer;
+		
+		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
+		expect(forecastPlayer.bans[0].duration).toEqual(3);
+		expect(forecastPlayer.bans[1].duration).toEqual(2);
+		expect(forecastPlayer.bans[2].duration).toEqual(1);
+		
+		const createMatchDay = (season, zat, competition) => {
+			let matchDay = new MatchDay(season, zat);
+			matchDay.competition = competition;
+			return matchDay;
+		};
+
+		matchDayInRange.push(createMatchDay(15, 2, Competition.LEAGUE));
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
+		expect(forecastPlayer.bans.length).toEqual(3);
+		expect(forecastPlayer.bans[0].duration).toEqual(2);
+		expect(forecastPlayer.bans[1].duration).toEqual(2);
+		expect(forecastPlayer.bans[2].duration).toEqual(1);
+
+		matchDayInRange.push(createMatchDay(15, 39, Competition.CUP));
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
+		expect(forecastPlayer.bans.length).toEqual(3);
+		expect(forecastPlayer.bans[0].duration).toEqual(2);
+		expect(forecastPlayer.bans[1].duration).toEqual(1);
+		expect(forecastPlayer.bans[2].duration).toEqual(1);
+
+		matchDayInRange.push(createMatchDay(15, 23, Competition.OSE));
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
+		expect(forecastPlayer.bans.length).toEqual(2);
+		expect(forecastPlayer.bans[0].duration).toEqual(2);
+		expect(forecastPlayer.bans[1].duration).toEqual(1);
+
+		matchDayInRange.push(createMatchDay(15, 4, Competition.LEAGUE));
+		matchDayInRange.push(createMatchDay(15, 6, Competition.LEAGUE));
+		matchDayInRange.push(createMatchDay(15, 51, Competition.CUP));
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
+		expect(forecastPlayer.bans.length).toEqual(0);
+	});
+
 });
