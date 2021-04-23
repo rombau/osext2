@@ -91,5 +91,14 @@ class ShowteamSkillsPage extends ShowteamPage {
 		
 		HtmlUtil.appendScript(doc,'sortables_init();');
 	};
+
+	/**
+	 * @param {Team} team
+	 * @param {Boolean} current indicating the current team
+	 */
+	updateWithTeam (team, current) {
+
+		// TODO update with forecast values
+	}
 }
 

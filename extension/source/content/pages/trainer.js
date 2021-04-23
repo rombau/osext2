@@ -18,12 +18,14 @@ class TrainerPage extends Page {
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...TrainerPage.HEADERS).forEach(row => {
 
-			/** @type {Team.Trainer} */
 			let trainer = data.currentTeam.getTrainer(+row.cells['#'].textContent); 
 
 			trainer.salary = +row.cells['Gehalt'].textContent.replace(/\./g, "");
 			trainer.contractTerm = +row.cells['Vertrag'].textContent;
 
+			trainer.legacySkill = Team.Trainer.LIST[row.cells['Skill'].textContent].legacySkill;
+			trainer.upToSkill = Team.Trainer.LIST[row.cells['Skill'].textContent].upToSkill;
+			
 		});
 	}
 	

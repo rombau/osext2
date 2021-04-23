@@ -82,6 +82,7 @@ class SquadPlayer extends Player {
 		if (lastMatchDay.equals(targetMatchDay)) return this;
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), this);
+		forecastPlayer.skills = Object.assign(new Skillset(), this.skills);
 		forecastPlayer.bans = [];
 		this.bans.forEach(ban => forecastPlayer.bans.push(Object.assign(new SquadPlayer.Ban(), ban)));
 
@@ -89,41 +90,71 @@ class SquadPlayer extends Player {
 		forecastPlayer.moral = undefined;
 		forecastPlayer.fitness = undefined;
 	
-		let interval = lastMatchDay.intervalTo(targetMatchDay);
-
-		this.forecastTransferLock(forecastPlayer, interval);
-
-		this.forecastLoan(forecastPlayer, interval);
-
 		this.forecastBans(forecastPlayer, matchDaysInRange);
-
-		this.forecastInjury(forecastPlayer, interval);
-
-		this.forecastAge(forecastPlayer, lastMatchDay, targetMatchDay);
-
 		
-		// TODO ...
+		let day = 1;
+		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
+		while (!matchday.add(1).after(targetMatchDay)) {
+			this.forecastTransferLock(forecastPlayer);
+			this.forecastLoan(forecastPlayer);
+			this.forecastInjury(forecastPlayer);
+			this.forecastTraining(forecastPlayer, day++ % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
+			this.forecastAging(forecastPlayer, matchday);
+		}
+
+		// TODO forecast contract term and salary (based on contract term extension page and loans)
 
 		return forecastPlayer;
 	}
 
-	forecastAge(forecastPlayer, lastMatchDay, targetMatchDay) {
-		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
-		while (!matchday.add(1).after(targetMatchDay)) {
-			if (forecastPlayer.birthday === matchday.zat)
-				forecastPlayer.age++;
+	/**
+	 * Calculates the chance for successful training.
+	 * 
+	 * @param {Skill} skill 
+	 * @param {Team.Trainer} trainer 
+	 * @returns {Number}
+	 */
+	getTrainingChance (skill, trainer) {
+		if (skill >= trainer.upToSkill) return 0;
+		let chance = Math.pow((100 - this.age) / 37, 7) * (100 - (this.skills[skill] + (99 - trainer.legacySkill) / 2)) / (100 - (99 - (this.skills[skill] + (99 - trainer.legacySkill)/ 2 ))) * Math.pow(0.99, 99);
+		return chance > CHANCE_LIMIT ? CHANCE_LIMIT : chance;
+	}
+
+	/**
+	 * @param {SquadPlayer} forecastPlayer 
+	 * @param {SquadPlayer.Training} training 
+	 */
+	forecastTraining (forecastPlayer, training) {
+		if (forecastPlayer.injured > 0 || !training) return;
+
+		let chance = forecastPlayer.getTrainingChance(training.skill, training.trainer);
+		if (chance > 0) {
+			let daysUntilIncrease = 100 / chance;
+			let refObject = (forecastPlayer.lastTraining.skill === forecastPlayer.nextTraining.skill ? forecastPlayer : training);
+			refObject.daysUntilIncrease = (refObject.daysUntilIncrease || 0) - 1 
+				+ daysUntilIncrease - (refObject.daysUntilIncrease > 0 ? (refObject.lastDaysUntilIncrease || 0): 0);
+			if (refObject.daysUntilIncrease <= 0) {
+				forecastPlayer.skills[training.skill]++;
+			}
+			refObject.lastDaysUntilIncrease = daysUntilIncrease;
 		}
 	}
 
-	forecastInjury(forecastPlayer, interval) {
-		// TODO: add option for physio
-		forecastPlayer.injured -= Math.floor(interval * 2);
+	forecastAging (forecastPlayer, matchday) {
+		if (forecastPlayer.birthday === matchday.zat) {
+			forecastPlayer.age++;
+		}
+		// TODO forecast aging (Abwertung)
+	}
+
+	forecastInjury (forecastPlayer) {
+		forecastPlayer.injured -= Options.usePhysio ? 2 : 1;
 		if (forecastPlayer.injured < 0)
 			forecastPlayer.injured = 0;
 	}
 
-	forecastBans(forecastPlayer, matchDaysInRange) {
-		if (forecastPlayer.bans.length > 0 && matchDaysInRange) {
+	forecastBans (forecastPlayer, matchDaysInRange) {
+		if (forecastPlayer.bans.length > 0) {
 			matchDaysInRange.forEach(matchday => {
 				forecastPlayer.bans.forEach((ban, i, object) => {
 					if (ban.type === BanType.LEAGUE && matchday.competition === Competition.LEAGUE) {
@@ -143,10 +174,10 @@ class SquadPlayer extends Player {
 		}
 	}
 
-	forecastLoan(forecastPlayer, interval) {
+	forecastLoan (forecastPlayer) {
 		if (forecastPlayer.loan) {
 			forecastPlayer.loan = Object.assign(new SquadPlayer.Loan(), forecastPlayer.loan);
-			forecastPlayer.loan.duration -= interval;
+			forecastPlayer.loan.duration--;
 			if (forecastPlayer.loan.duration <= 0) {
 				if (forecastPlayer.loan.fee < 0) {
 					forecastPlayer.active = false;
@@ -156,11 +187,10 @@ class SquadPlayer extends Player {
 		}
 	}
 
-	forecastTransferLock(forecastPlayer, interval) {
-		forecastPlayer.transferLock -= interval;
-		if (forecastPlayer.transferLock < 0)
-			forecastPlayer.transferLock = 0;
+	forecastTransferLock(forecastPlayer) {
+		if (forecastPlayer.transferLock > 0) forecastPlayer.transferLock--;
 	}
+
 }
 
 /**
@@ -230,9 +260,6 @@ SquadPlayer.Training = class {
 		
 		/** @type {Skill} the trainings skill */
 		this.skill;
-
-		/** @type {Number} the chance for increasing the skill value */
-		this.chance;
 		
 		/** @type {Number} the match bonus multiplying the chance */
 		this.matchBonus = 1;

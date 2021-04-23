@@ -195,5 +195,30 @@ Team.Trainer = class {
 		/** @type {Number} the monthly salary */
 		this.salary;
 		
+		/** @type {Number} the legacy skill of the trainer */
+		this.legacySkill;
+
+		/** @type {Number} the skill value the trainer can train to */
+		this.upToSkill;
+	}
+
+	static LIST = {
+		'Trainer 01': { legacySkill : 20, upToSkill : 60 },
+		'Trainer 02': { legacySkill : 25, upToSkill : 62 },
+		'Trainer 03': { legacySkill : 30, upToSkill : 65 },
+		'Trainer 04': { legacySkill : 35, upToSkill : 67 },
+		'Trainer 05': { legacySkill : 40, upToSkill : 70 },
+		'Trainer 06': { legacySkill : 45, upToSkill : 72 },
+		'Trainer 07': { legacySkill : 50, upToSkill : 75 },
+		'Trainer 08': { legacySkill : 55, upToSkill : 77 },
+		'Trainer 09': { legacySkill : 60, upToSkill : 80 },
+		'Trainer 10': { legacySkill : 65, upToSkill : 82 },
+		'Trainer 11': { legacySkill : 70, upToSkill : 85 },
+		'Trainer 12': { legacySkill : 75, upToSkill : 87 },
+		'Trainer 13': { legacySkill : 80, upToSkill : 90 },
+		'Trainer 14': { legacySkill : 85, upToSkill : 92 },
+		'Trainer 15': { legacySkill : 90, upToSkill : 95 },
+		'Trainer 16': { legacySkill : 95, upToSkill : 97 },
+		'Trainer 17': { legacySkill : 99, upToSkill : 99 }
 	}
 }

@@ -29,4 +29,22 @@ class ShowteamContractsPage extends ShowteamPage {
 
 		});
 	}
+
+	/**
+	 * @param {Document} doc
+	 * @param {ExtensionData} data
+	 */
+	extend(doc, data) {
+
+		// TODO extend page
+	}
+
+	/**
+	 * @param {Team} team
+	 * @param {Boolean} current indicating the current team
+	 */
+	updateWithTeam (team, current) {
+
+		// TODO update with forecast values
+	}
 }

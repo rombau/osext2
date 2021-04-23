@@ -137,6 +137,8 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells['MOR'].textContent = (player.moral != undefined ? player.moral : '');
 				row.cells['FIT'].textContent = (player.fitness != undefined  ? player.fitness : '');
 
+				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+
 				if (player.bans) {
 					let banText = '';
 					player.bans.forEach(ban => {
@@ -181,6 +183,9 @@ class ShowteamOverviewPage extends ShowteamPage {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
+
+			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+
 			if (player.active && !current) {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
 				row.cells['Sperre'].classList.add(STYLE_FORECAST);

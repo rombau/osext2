@@ -47,20 +47,22 @@ describe('SquadPlayer', () => {
 				'trainer': {
 					'nr': 2,
 					'salary': 507957,
-					'contractTerm': 19
+					'contractTerm': 19,
+					'legacySkill': 99,
+					'upToSkill': 99
 				},
-				'skill': 'ueb',
-				'chance': 23.39
+				'skill': 'ueb'
 			},
 			'lastTraining': {
 				'matchBonus': 1,
 				'trainer': {
 					'nr': 2,
 					'salary': 507957,
-					'contractTerm': 19
+					'contractTerm': 19,
+					'legacySkill': 99,
+					'upToSkill': 99
 				},
-				'skill': 'ueb',
-				'chance': 23.39
+				'skill': 'ueb'
 			}
 		});
 	});
@@ -159,6 +161,34 @@ describe('SquadPlayer', () => {
 
 		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
 		expect(forecastPlayer.bans.length).toEqual(0);
+	});
+
+	it('should return training forecast', () => {
+
+		let start = new MatchDay(15, 1);
+		let end = new MatchDay(15, 72);
+
+		expect(player.skills.ueb).toEqual(79);
+		expect(player.getForecast(start, end).skills.ueb).toEqual(89);
+
+		player.lastTraining.skill = Skill.PAS;
+
+		expect(player.skills.ueb).toEqual(79);
+		expect(player.getForecast(start, end).skills.ueb).toEqual(85);
+		expect(player.skills.pas).toEqual(86);
+		expect(player.getForecast(start, end).skills.pas).toEqual(90);
+
+		player.lastTraining.trainer.legacySkill = 90;
+
+		expect(player.skills.pas).toEqual(86);
+		expect(player.getForecast(start, end).skills.pas).toEqual(88);
+
+		player.lastTraining.skill = Skill.UEB;
+		player.lastTraining.trainer.legacySkill = 75;
+
+		expect(player.skills.ueb).toEqual(79);
+		expect(player.getForecast(start, end).skills.ueb).toEqual(88);
+
 	});
 
 });

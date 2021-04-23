@@ -43,7 +43,7 @@
 
 #osext-toolbar-container input[type=range] {
     width: 200px;
-    height: 7px;
+    height: 6px;
     border-radius: 5px;  
     background: #fbf9b3;
     outline: none;
