@@ -8,15 +8,6 @@ const SPECIAL_SKILL_LIMIT = 75;
 const SAISON_MATCH_DAYS = 72;
 
 
-// TODO move options to local storage
-const Options = {
-    usePhysio: true,
-    ageLimit: 25,
-    primarySkillLimit: 85,
-    secondarySkillLimit: 75
-}
-
-
 
 /** Style constants */
 

@@ -125,7 +125,7 @@ class SquadPlayer extends Player {
 	 * @param {SquadPlayer.Training} training 
 	 */
 	forecastTraining (forecastPlayer, training) {
-		if (forecastPlayer.injured > 0 || !training) return;
+		if (forecastPlayer.injured > 0 || !training || forecastPlayer.skills[training.skill] === SKILL_LIMIT) return;
 
 		let chance = forecastPlayer.getTrainingChance(training.skill, training.trainer);
 		if (chance > 0) {
@@ -135,6 +135,8 @@ class SquadPlayer extends Player {
 				+ daysUntilIncrease - (refObject.daysUntilIncrease > 0 ? (refObject.lastDaysUntilIncrease || 0): 0);
 			if (refObject.daysUntilIncrease <= 0) {
 				forecastPlayer.skills[training.skill]++;
+				// TODO limiting and training switching
+				
 			}
 			refObject.lastDaysUntilIncrease = daysUntilIncrease;
 		}

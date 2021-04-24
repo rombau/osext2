@@ -11,6 +11,7 @@ module.exports = function(config) {
 			{ pattern: 'test/fixtures/**/*', included: false },
 			'test/lib/**/*',
 		    'extension/source/background/cache.js',
+			'extension/source/content/options.js',
 		    'extension/source/content/requestor.js',
 		    'extension/source/content/model/consts.js',
 		    'extension/source/content/model/data.js',

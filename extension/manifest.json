@@ -19,7 +19,7 @@
 				"*://os.ongapo.com/*"
 			],
 			"js": [
-				"source/content/adblock.js",
+				"source/content/options.js",
 				"source/content/model/consts.js",
 				"source/content/model/data.js",
 				"source/content/model/matchday.js",
