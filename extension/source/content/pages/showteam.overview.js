@@ -210,6 +210,12 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells['Sperre'].classList.add(STYLE_FORECAST);
 				row.cells['Verl.'].classList.add(STYLE_FORECAST);
 				row.cells['TS'].classList.add(STYLE_FORECAST);
+				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
+				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
+				row.cells['S'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
 			}
 		});
 	}

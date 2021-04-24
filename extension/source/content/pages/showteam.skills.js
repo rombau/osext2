@@ -21,11 +21,11 @@ class ShowteamSkillsPage extends ShowteamPage {
 
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamSkillsPage.HEADERS).forEach(row => {
 	
-			let id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
 			
 			Object.keys(player.skills).forEach((skillname, s) => {
-				player.skills[skillname] = +row.cells[4 + s].textContent;
+				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
 			});
 		});
 	}
@@ -68,12 +68,12 @@ class ShowteamSkillsPage extends ShowteamPage {
 
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
-				let id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
+				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id);
 					
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Flag'].innerHTML = "<img src=\"images/flaggen/" + player.countryCode + ".gif\"\/>";
+				row.cells['Flag'].innerHTML = `<img src="images/flaggen/${player.countryCode}.gif"\/>`;
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
@@ -86,10 +86,11 @@ class ShowteamSkillsPage extends ShowteamPage {
 			row.insertBefore(row.cells['Geb.'], row.cells[3]);
 			row.appendChild(row.cells['Skillschn.']);			
 			row.appendChild(row.cells['Opt.Skill']);			
-			
 		});
 		
-		HtmlUtil.appendScript(doc,'sortables_init();');
+		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+
+		HtmlUtil.appendScript(doc, 'sortables_init();');
 	};
 
 	/**
@@ -98,7 +99,60 @@ class ShowteamSkillsPage extends ShowteamPage {
 	 */
 	updateWithTeam (team, current) {
 
-		// TODO update with forecast values
+		Array.from(this.table.rows).slice(1, -1).forEach(row => {
+
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
+			let player = team.getSquadPlayer(id);
+			
+			if (player.active) {
+
+				row.cells['Alter'].textContent = player.age;
+				row.cells['Geb.'].textContent = player.birthday;
+
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].textContent = player.skills[skillname];
+				});
+
+				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
+				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+				
+			} else {
+
+				row.cells['Alter'].textContent = '';
+				row.cells['Geb.'].textContent = '';
+
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].textContent = '';
+				});
+
+				row.cells['Skillschn.'].textContent = '';
+				row.cells['Opt.Skill'].textContent = '';
+			}
+
+			// styling
+			Array.from(row.cells).forEach((cell, i) => {
+				if (player.loan && player.loan.fee > 0) {
+					cell.className = 'LEI';
+				} else {
+					cell.className = player.pos;
+				}
+				if (!player.active) {
+					cell.classList.add(STYLE_INACTIVE);
+				}
+			});
+
+			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+
+			if (player.active && !current) {
+				row.cells['Alter'].classList.add(STYLE_FORECAST);
+				row.cells['Skillschn.'].classList.add(STYLE_FORECAST);
+				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
+
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].classList.add(STYLE_FORECAST);
+				});
+			}
+		});
 	}
 }
 
