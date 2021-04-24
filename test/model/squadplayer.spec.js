@@ -167,28 +167,80 @@ describe('SquadPlayer', () => {
 
 		let start = new MatchDay(15, 1);
 		let end = new MatchDay(15, 72);
+		let forecastPlayer;
 
-		expect(player.skills.ueb).toEqual(79);
-		expect(player.getForecast(start, end).skills.ueb).toEqual(89);
+		player.lastTraining.trainer.legacySkill = 99;
+		player.nextTraining.trainer.legacySkill = 99;
 
-		player.lastTraining.skill = Skill.PAS;
+		Options.primarySkillTrainingLimit = 85;
+		Options.ageTrainingLimit = 19;
 
-		expect(player.skills.ueb).toEqual(79);
-		expect(player.getForecast(start, end).skills.ueb).toEqual(85);
-		expect(player.skills.pas).toEqual(86);
-		expect(player.getForecast(start, end).skills.pas).toEqual(90);
-
-		player.lastTraining.trainer.legacySkill = 90;
-
-		expect(player.skills.pas).toEqual(86);
-		expect(player.getForecast(start, end).skills.pas).toEqual(88);
-
+		// one skill and one trainer
+		player.skills.ueb = 79;
+		player.skills.bak = 64;
 		player.lastTraining.skill = Skill.UEB;
-		player.lastTraining.trainer.legacySkill = 75;
+		player.nextTraining.skill = Skill.UEB;
 
-		expect(player.skills.ueb).toEqual(79);
-		expect(player.getForecast(start, end).skills.ueb).toEqual(88);
+		forecastPlayer = player.getForecast(start, end);
 
+		expect(forecastPlayer.skills.ueb).toEqual(84);
+		expect(forecastPlayer.skills.bak).toEqual(78);
+
+		// two skills and one trainer
+		player.skills.ueb = 79;
+		player.skills.bak = 64;
+		player.skills.pas = 86;
+		player.lastTraining.skill = Skill.PAS;
+		player.nextTraining.skill = Skill.UEB;
+		
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.skills.ueb).toEqual(84);
+		expect(forecastPlayer.skills.bak).toEqual(68);
+		expect(forecastPlayer.skills.pas).toEqual(90);
+
+		// two skills and two trainers
+		player.skills.ueb = 79;
+		player.skills.bak = 64;
+		player.skills.pas = 86;
+		player.lastTraining.skill = Skill.PAS;
+		player.nextTraining.skill = Skill.UEB;
+		player.lastTraining.trainer.legacySkill = 80;
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.skills.ueb).toEqual(84);
+		expect(forecastPlayer.skills.bak).toEqual(68);
+		expect(forecastPlayer.skills.pas).toEqual(87);
+
+		// one skill and one trainer reaching limit twice
+		player.skills.ueb = 79;
+		player.skills.bak = 64;
+		player.lastTraining.skill = Skill.UEB;
+		player.nextTraining.skill = Skill.UEB;
+		player.lastTraining.trainer.legacySkill = 99;
+
+		Options.primarySkillTrainingLimit = 80;
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.skills.ueb).toEqual(80);
+		expect(forecastPlayer.skills.bak).toEqual(79);
+		expect(forecastPlayer.skills.dec).toEqual(49);
+
+		// one skill and one trainer different age for trainings limit
+		Options.ageTrainingLimit = 25;
+		Options.primarySkillTrainingLimit = 85;
+
+		player.skills.ueb = 79;
+		player.skills.bak = 64;
+		player.lastTraining.skill = Skill.UEB;
+		player.nextTraining.skill = Skill.UEB;
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.skills.ueb).toEqual(89);
+		expect(forecastPlayer.skills.bak).toEqual(64);
 	});
 
 });

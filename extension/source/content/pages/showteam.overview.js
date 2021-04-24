@@ -98,9 +98,9 @@ class ShowteamOverviewPage extends ShowteamPage {
 					
 				row.cells['Geb.'].textContent = player.birthday;
 				
-				row.cells['&Oslash;P'].textContent = player.getAverage(player.getPrimarySkills()).toFixed(2);
-				row.cells['&Oslash;N'].textContent = player.getAverage(player.getSecondarySkills()).toFixed(2);
-				row.cells['&Oslash;U'].textContent = player.getAverage(player.getUnchangeableSkills()).toFixed(2);
+				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 			}
 
 			row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
@@ -137,7 +137,17 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells['MOR'].textContent = (player.moral != undefined ? player.moral : '');
 				row.cells['FIT'].textContent = (player.fitness != undefined  ? player.fitness : '');
 
+				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+
+				row.cells['S'].textContent = '';
+				player.getSpecialSkills().forEach(special => {
+					row.cells['S'].innerHTML += `<abbr title="${special.description}">${special.abbr}</abbr>`;
+				});
+
+				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
 				if (player.bans) {
 					let banText = '';
@@ -168,6 +178,15 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells['Sperre'].textContent = '';
 				row.cells['Verl.'].textContent = '';
 				row.cells['TS'].textContent = '';
+
+				row.cells['Skillschnitt'].textContent = '';
+				row.cells['Opt.Skill'].textContent = '';
+
+				row.cells['S'].textContent = '';
+
+				row.cells['&Oslash;P'].textContent = '';
+				row.cells['&Oslash;N'].textContent = '';
+				row.cells['&Oslash;U'].textContent = '';
 			}
 
 			// styling

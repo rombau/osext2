@@ -41,10 +41,10 @@ describe('Player', () => {
 			player.skills[skillname] = [68,30,62,53,29,56,0,0,29,24,25,16,95,38,76,26,79][s];
 		});
 
-		expect(player.getAverage()).toEqual(41.53);
-		expect(player.getAverage(player.getPrimarySkills(Position.TOR))).toEqual(50);
-		expect(player.getAverage(player.getSecondarySkills(Position.TOR))).toEqual(24.22);
-		expect(player.getAverage(player.getUnchangeableSkills())).toEqual(72);
+		expect(player.getSkillAverage()).toEqual(41.53);
+		expect(player.getSkillAverage(player.getPrimarySkills(Position.TOR))).toEqual(50);
+		expect(player.getSkillAverage(player.getSecondarySkills(Position.TOR))).toEqual(24.22);
+		expect(player.getSkillAverage(player.getUnchangeableSkills())).toEqual(72);
 		
 		expect(player.getOpti(Position.ABW)).toEqual(51.33);
 		expect(player.getOpti(Position.DMI)).toEqual(40.81);

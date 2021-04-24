@@ -74,7 +74,7 @@ class ShowteamSkillsPage extends ShowteamPage {
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Flag'].innerHTML = "<img src=\"images/flaggen/" + player.countryCode + ".gif\"\/>";
-				row.cells['Skillschn.'].textContent = player.getAverage().toFixed(2);
+				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
 				row.cells['Geb.'].colSpan = 2;

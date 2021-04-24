@@ -111,7 +111,7 @@ class Player {
 	 * 
 	 * @param {Skillset} skills the skills to calculate the average for; if omitted all the current skills are used
 	 */
-	getAverage (skills = this.skills) {
+	getSkillAverage (skills = this.skills) {
 		return Number((Object.values(skills)
 			.reduce((sum, value) => sum + value, 0) / Object.values(skills).length).toFixed(2));
 	}
