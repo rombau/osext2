@@ -83,6 +83,8 @@ class SquadPlayer extends Player {
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), this);
 		forecastPlayer.skills = Object.assign(new Skillset(), this.skills);
+		if (this.lastTraining) forecastPlayer.lastTraining = Object.assign(new SquadPlayer.Training(), this.lastTraining);
+		if (this.nextTraining) forecastPlayer.nextTraining = Object.assign(new SquadPlayer.Training(), this.nextTraining);
 		forecastPlayer.bans = [];
 		this.bans.forEach(ban => forecastPlayer.bans.push(Object.assign(new SquadPlayer.Ban(), ban)));
 
