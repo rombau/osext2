@@ -1,16 +1,17 @@
 # OnlineSoccer Extension
 
-The `OnlineSoccer Extension` extension adds useful details to the pages of [OnlineSoccer](https://os.ongapo.com).
+The `OnlineSoccer Extension` extension adds useful details and forecasts to the pages of [OnlineSoccer](https://os.ongapo.com).
 
 ## Features
 
-- Additional values for players
-- sdfdsfds
+- Forecast of the team players values (loans, bans, skills based on trainings settings, ...)
+- Finance forecast with account balance in the team season view
+- Youth forecast based on the current skills 
 
 
 ## Development with Visual Studio Code
 
-Following entries in your `settings.json` needed to run/debug tests with Karma/Jasmine and TestExplorer:
+You need the following entries in your `settings.json` run/debug tests with Karma/Jasmine and TestExplorer:
 
 <pre>
     "angularKarmaTestExplorer.projectType": "Karma",
@@ -29,5 +30,5 @@ Following entries in your `settings.json` needed to run/debug tests with Karma/J
     "debug.javascript.usePreview": false
 </pre>
 
-For debugging the `coverage` reporter has to be removed by adding in `cleanUpReporters` method of
+For debugging, the `coverage` reporter has to be removed by adding it to the `cleanUpReporters` method of
 `~/.vscode/extensions/raagh.angular-karma-test-explorer-1.2.8/out/config/karma-configurator.js`.
