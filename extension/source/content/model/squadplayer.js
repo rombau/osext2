@@ -158,8 +158,21 @@ class SquadPlayer extends Player {
 	_forecastAging (forecastPlayer, matchday) {
 		if (forecastPlayer.birthday === matchday.zat) {
 			forecastPlayer.age++;
+			let deductionYears = forecastPlayer.age - (forecastPlayer.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD);
+			if (deductionYears >= 0) {
+				let deduction = (deductionYears <= SKILL_DEDUCTION.length - 1 ? SKILL_DEDUCTION[deductionYears] : SKILL_DEDUCTION[SKILL_DEDUCTION.length - 1]);
+				let skills = Object.entries(forecastPlayer.skills).filter(skill => skill[1] > 0).map(skill => {
+					return [skill[0], skill[1] * SKILL_DEDUCTION_WEIGHTING[skill[0].toUpperCase()]];
+				}).sort((s1, s2) => s2[1] - s1[1]);
+				let sum = Object.values(skills).reduce((accu, curr) => accu + curr[1], 0);
+				let remainder = deduction;
+				skills.forEach(skill => {
+					forecastPlayer.skills[skill[0]] -= Math.round(skill[1] / sum * deduction);
+					remainder -= Math.round(skill[1] / sum * deduction);
+				});
+				forecastPlayer.skills[skills[remainder > 0 ? 0 : 4][0]] -= remainder;
+			}
 		}
-		// TODO forecast aging (Abwertung)
 	}
 
 	_forecastInjury (forecastPlayer) {
