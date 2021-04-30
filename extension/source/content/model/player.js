@@ -90,6 +90,9 @@ class Player {
 		/** @type {Number} the age */
 		this.age;
 
+		/** @type {Number} the age as floating point value */
+		this.ageExact;
+
 		/** @type {Number} the brithday ZAT */
 		this.birthday;
 		
@@ -124,7 +127,7 @@ class Player {
 	getOpti (pos = this.pos) {
 		let sumAll = Object.values(this.skills).reduce((sum, value) => sum + value, 0);
 		let sumPrimaries = Object.values(this.getPrimarySkills(pos)).reduce((sum, value) => sum + value, 0);
-		return Number(((sumAll + (sumPrimaries * 4)) / 27).toFixed(2));
+		return ((sumAll + (sumPrimaries * 4)) / 27);
 	}
 
 	/**
@@ -172,7 +175,7 @@ class Player {
 	 * 
 	 * @returns {Skillset} an object with the unchangable skills only
 	 */
-	 getUnchangeableSkills () {
+	getUnchangeableSkills () {
 		return Object.keys(this.skills)
 			.filter(key => {
 				return [Skill.WID, Skill.SEL, Skill.DIS, Skill.EIN].includes(key);
@@ -224,5 +227,22 @@ class Player {
 			specials.push(SpecialSkill.P);
 		}
 		return specials;
+	}
+
+	/**
+	 * Returns the calculated market value, considering the training factor for the current position.
+	 * 
+	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
+	 * @param {Number} factor the training factor; if omitted 1 is used
+	 * @returns 
+	 */
+	getMarketValue (pos = this.pos, factor = 1) {
+
+
+		return Math.round((Math.pow(1 + this.getOpti(pos) / 100, 8.1)) *
+			(Math.pow(1 + this.getSkillAverage() / 100, 5.65)) *
+			(Math.pow(1 + (100 - this.ageExact) / 49, 10)) *
+			(Math.pow(1.025, this.getSpecialSkills().length)) *
+			factor);
 	}
 }

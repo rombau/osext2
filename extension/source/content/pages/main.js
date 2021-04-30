@@ -60,7 +60,30 @@ class MainPage extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extend (_doc, data) { 
+
 		console.log(data); 
+
+		Object.setPrototypeOf(data.currentTeam, Team.prototype);
+
+		let zat = data.lastMatchDay.zat;
+
+		data.currentTeam.squadPlayers.forEach(player => {
+
+			Object.setPrototypeOf(player, SquadPlayer.prototype);
+
+			// init exact age
+			if (zat >= player.birthday) {
+				player.ageExact = player.age + ((zat - player.birthday) / SEASON_MATCH_DAYS);
+			} else {
+				player.ageExact = player.age + ((SEASON_MATCH_DAYS - (player.birthday - zat)) / SEASON_MATCH_DAYS);
+			}
+
+			// init training factor
+			player.trainingFactor = player.marketValue / player.getMarketValue();
+
+			console.log(player.name, player.ageExact, player.trainingFactor); 
+		});
+
 	}
 
 }

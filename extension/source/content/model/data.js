@@ -35,7 +35,7 @@ class ExtensionData {
 	 * @param {Number} zat 
 	 */
 	initNextZat (zat) {
-		this.nextZat = (zat <= 1 || zat > SAISON_MATCH_DAYS) ? 1 : zat;	
+		this.nextZat = (zat <= 1 || zat > SEASON_MATCH_DAYS) ? 1 : zat;	
 	}
 
 	/**
@@ -77,7 +77,7 @@ class ExtensionData {
 	 */
 	get lastMatchDay () {
 		if (this.nextZat === 1) {
-			return this.currentTeam.getMatchDay(this.nextZatSeason - 1, SAISON_MATCH_DAYS);
+			return this.currentTeam.getMatchDay(this.nextZatSeason - 1, SEASON_MATCH_DAYS);
 		}
 		return this.currentTeam.getMatchDay(this.nextZatSeason, this.nextZat - 1);
 	}

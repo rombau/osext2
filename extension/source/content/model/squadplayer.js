@@ -60,7 +60,10 @@ class SquadPlayer extends Player {
 		/** @type {Number} the market value */
 		this.marketValue;
 
-		/** @type {MatchDay} the match day (ZAT) the player should be fastly transfered ('Blitz') */ 
+		/** @type {Number} the training factor considered in the market value */
+		this.trainingFactor;
+
+		/** @type {MatchDay} the match day (ZAT) the player should be fast transfered ('Blitz') */ 
 		this.fastTransfer;
 		
 		/** @type {SquadPlayer.Training} the training setup of the last match day */
@@ -100,11 +103,17 @@ class SquadPlayer extends Player {
 			this._forecastTransferLock(forecastPlayer);
 			this._forecastLoan(forecastPlayer);
 			this._forecastInjury(forecastPlayer);
-			this._forecastTraining(forecastPlayer, day++ % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
+			this._forecastTraining(forecastPlayer, day % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
 			this._forecastAging(forecastPlayer, matchday);
+
+
+			// TODO forecast contract term and salary (based on contract term extension page and loans)
+
+			// forecastPlayer.ageExact = 
+
+			day++;
 		}
 
-		// TODO forecast contract term and salary (based on contract term extension page and loans)
 
 		return forecastPlayer;
 	}

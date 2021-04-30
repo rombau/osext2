@@ -75,7 +75,7 @@ class MatchDay {
 	 * @returns {Boolean}
 	 */
 	before (matchday) {
-		return (this.season * SAISON_MATCH_DAYS + this.zat) < (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+		return (this.season * SEASON_MATCH_DAYS + this.zat) < (matchday.season * SEASON_MATCH_DAYS + matchday.zat);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class MatchDay {
 	 * @returns {Boolean}
 	 */
 	after (matchday) {
-		return (this.season * SAISON_MATCH_DAYS + this.zat) > (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+		return (this.season * SEASON_MATCH_DAYS + this.zat) > (matchday.season * SEASON_MATCH_DAYS + matchday.zat);
 	}
 	
 	/**
@@ -96,9 +96,9 @@ class MatchDay {
 	 */
 	intervalTo (matchday) {
 		if (this.after(matchday)) {
-			return (this.season * SAISON_MATCH_DAYS + this.zat) - (matchday.season * SAISON_MATCH_DAYS + matchday.zat);
+			return (this.season * SEASON_MATCH_DAYS + this.zat) - (matchday.season * SEASON_MATCH_DAYS + matchday.zat);
 		}
-		return (matchday.season * SAISON_MATCH_DAYS + matchday.zat) - (this.season * SAISON_MATCH_DAYS + this.zat);
+		return (matchday.season * SEASON_MATCH_DAYS + matchday.zat) - (this.season * SEASON_MATCH_DAYS + this.zat);
 	}
 
 	/**
@@ -109,8 +109,8 @@ class MatchDay {
 	 */
 	add (zats) {
 		this.zat += zats;
-		while (this.zat > SAISON_MATCH_DAYS) {
-			this.zat -= SAISON_MATCH_DAYS;
+		while (this.zat > SEASON_MATCH_DAYS) {
+			this.zat -= SEASON_MATCH_DAYS;
 			this.season++;
 		}
 		return this;

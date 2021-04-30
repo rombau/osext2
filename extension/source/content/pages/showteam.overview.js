@@ -25,7 +25,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			let player = data.currentTeam.getSquadPlayer(id); 
 	
 			player.name = row.cells['Name'].textContent;
-			player.age = +row.cells['Alter'].textContent;
+			player.age = Math.floor(+row.cells['Alter'].textContent);
 			player.pos = player.pos || row.cells['Pos'].textContent;
 			player.posLastMatch = row.cells['Auf'].textContent;
 			player.countryCode = row.cells['Land'].textContent;
@@ -129,6 +129,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			
 			if (player.active) {
 
+				// TODO handle exact age
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = player.pos;

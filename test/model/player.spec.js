@@ -46,11 +46,11 @@ describe('Player', () => {
 		expect(player.getSkillAverage(player.getSecondarySkills(Position.TOR))).toEqual(24.22);
 		expect(player.getSkillAverage(player.getUnchangeableSkills())).toEqual(72);
 		
-		expect(player.getOpti(Position.ABW)).toEqual(51.33);
-		expect(player.getOpti(Position.DMI)).toEqual(40.81);
-		expect(player.getOpti(Position.MIT)).toEqual(44.37);
-		expect(player.getOpti(Position.OMI)).toEqual(44.81);
-		expect(player.getOpti(Position.STU)).toEqual(61.56);
+		expect(player.getOpti(Position.ABW).toFixed(2)).toEqual('51.33');
+		expect(player.getOpti(Position.DMI).toFixed(2)).toEqual('40.81');
+		expect(player.getOpti(Position.MIT).toFixed(2)).toEqual('44.37');
+		expect(player.getOpti(Position.OMI).toFixed(2)).toEqual('44.81');
+		expect(player.getOpti(Position.STU).toFixed(2)).toEqual('61.56');
 
 	});
 
@@ -75,5 +75,25 @@ describe('Player', () => {
 
 	});
 
+	it('should return calculated market value', () => {
+		
+		player.pos = Position.TOR;
+		player.ageExact = 22.958333333;
+		Object.keys(player.skills).forEach((skillname, s) => {
+			player.skills[skillname] = [18,64,86,85,84,84,0,26,14,29,19,24,46,44,82,29,53][s];
+		});
+
+		expect(player.getMarketValue()).toEqual(12669161);
+
+		expect(player.getMarketValue(player.pos, 0.9)).toEqual(11402245);
+		expect(player.getMarketValue(player.pos, 1.1)).toEqual(13936077);
+
+		expect(player.getMarketValue(Position.ABW)).toEqual(8693691);
+		expect(player.getMarketValue(Position.DMI)).toEqual(4753841);
+		expect(player.getMarketValue(Position.MIT)).toEqual(4789855);
+		expect(player.getMarketValue(Position.OMI)).toEqual(4753841);
+		expect(player.getMarketValue(Position.STU)).toEqual(8045682);
+	
+	});
 
 });

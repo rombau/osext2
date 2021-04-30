@@ -39,15 +39,15 @@ class ShowteamPage extends Page {
 
 		let rangeSlider = doc.createElement('input');
 		rangeSlider.type = 'range';
-		rangeSlider.min = data.lastMatchDay.season * SAISON_MATCH_DAYS + data.lastMatchDay.zat;
-		rangeSlider.max = (data.lastMatchDay.season + 2) * SAISON_MATCH_DAYS;
-		rangeSlider.value = data.options.squadPlayerViewMatchDay.season * SAISON_MATCH_DAYS + data.options.squadPlayerViewMatchDay.zat;
+		rangeSlider.min = data.lastMatchDay.season * SEASON_MATCH_DAYS + data.lastMatchDay.zat;
+		rangeSlider.max = (data.lastMatchDay.season + 2) * SEASON_MATCH_DAYS;
+		rangeSlider.value = data.options.squadPlayerViewMatchDay.season * SEASON_MATCH_DAYS + data.options.squadPlayerViewMatchDay.zat;
 		rangeSlider.addEventListener('input', (event) => {
-			newMatchDay.season = Math.floor(event.target.value / SAISON_MATCH_DAYS);
-			newMatchDay.zat = event.target.value % SAISON_MATCH_DAYS;
+			newMatchDay.season = Math.floor(event.target.value / SEASON_MATCH_DAYS);
+			newMatchDay.zat = event.target.value % SEASON_MATCH_DAYS;
 			if (newMatchDay.zat === 0) {
 				newMatchDay.season--;
-				newMatchDay.zat = SAISON_MATCH_DAYS;
+				newMatchDay.zat = SEASON_MATCH_DAYS;
 			}
 			viewInfo.update(newMatchDay.season, newMatchDay.zat);
 		});
