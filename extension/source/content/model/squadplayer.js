@@ -167,6 +167,12 @@ class SquadPlayer extends Player {
 
 		if (forecastPlayer.skills[training.skill] === limit) {
 			skills = Object.entries(skills).filter(skill => skill[1] < limit).sort((ps1, ps2) => ps2[1] - ps1[1]);
+			if (skills.length === 0 && primary) {
+				skills = Object.entries(forecastPlayer.getSecondarySkills())
+					.filter(skill => skill[1] < (Options.secondarySkillTrainingLimit + Options.ageTrainingLimit - forecastPlayer.age))
+					.sort((ps1, ps2) => ps2[1] - ps1[1]);
+			}
+			if (skills.length === 0) return;
 			training.skill = skills[0][0];
 		}
 		if (onlyOneTraining) {
