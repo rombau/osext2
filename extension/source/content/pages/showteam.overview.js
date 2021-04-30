@@ -7,6 +7,8 @@ class ShowteamOverviewPage extends ShowteamPage {
 
 		/** @type {HTMLTableElement} */
 		this.table;
+
+		this.ageExact = false;
 	}
 
 	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
@@ -21,9 +23,11 @@ class ShowteamOverviewPage extends ShowteamPage {
 		
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...ShowteamOverviewPage.HEADERS).forEach(row => {
 	
-			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = data.currentTeam.getSquadPlayer(id); 
 	
+			this.ageExact = row.cells['Alter'].textContent.includes('.');
+			
 			player.name = row.cells['Name'].textContent;
 			player.age = Math.floor(+row.cells['Alter'].textContent);
 			player.pos = player.pos || row.cells['Pos'].textContent;
@@ -69,11 +73,12 @@ class ShowteamOverviewPage extends ShowteamPage {
 		this.table = HtmlUtil.getTableByHeader(doc, ...ShowteamOverviewPage.HEADERS);
 
 		Array.from(this.table.rows).forEach((row, i) => {
-							
-			row.cells['Geb.'] = row.cells['#'].cloneNode(true);
-			row.cells['&Oslash;P'] = row.cells['Nr.'].cloneNode(true);
-			row.cells['&Oslash;N'] = row.cells['Nr.'].cloneNode(true);
-			row.cells['&Oslash;U'] = row.cells['Nr.'].cloneNode(true);
+
+			if (!this.ageExact) row.cells['Geb.'] = row.cells['Name'].cloneNode(true);
+
+			row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
+			row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
+			row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
 			
 			row.cells['&Oslash;P'].style.width = '45px';
 			
@@ -84,7 +89,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 				row.cells['Skillschnitt'].textContent = 'Skillschn.';
 				row.cells['Sperre'].textContent = 'Sp.';
 	
-				row.cells['Geb.'].innerHTML = 'Geb.';
+				if (!this.ageExact) row.cells['Geb.'].innerHTML = 'Geb.';
 				row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
 				row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
 				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
@@ -96,14 +101,14 @@ class ShowteamOverviewPage extends ShowteamPage {
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.currentTeam.getSquadPlayer(id); 
 					
-				row.cells['Geb.'].textContent = player.birthday;
+				if (!this.ageExact) row.cells['Geb.'].textContent = player.birthday;
 				
 				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 			}
 
-			row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
+			if (!this.ageExact) row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
 
 			row.appendChild(row.cells['&Oslash;P']);			
 			row.appendChild(row.cells['&Oslash;N']);			
@@ -129,9 +134,12 @@ class ShowteamOverviewPage extends ShowteamPage {
 			
 			if (player.active) {
 
-				// TODO handle exact age
-				row.cells['Alter'].textContent = player.age;
-				row.cells['Geb.'].textContent = player.birthday;
+				if (this.ageExact) {
+					row.cells['Alter'].innerHTML = `<abbr title="ZAT ${player.birthday}">${player.ageExact.toFixed(2)}</abbr>`;
+				} else {
+					row.cells['Alter'].textContent = player.age;
+					row.cells['Geb.'].textContent = player.birthday;
+				}
 				row.cells['Pos'].textContent = player.pos;
 
 				row.cells['Auf'].textContent = (player.posLastMatch != undefined ? player.posLastMatch : '');
@@ -171,7 +179,7 @@ class ShowteamOverviewPage extends ShowteamPage {
 			} else {
 
 				row.cells['Alter'].textContent = '';
-				row.cells['Geb.'].textContent = '';
+				if (!this.ageExact) row.cells['Geb.'].textContent = '';
 				row.cells['Pos'].textContent = '';
 				row.cells['Auf'].textContent = '';
 				row.cells['MOR'].textContent = '';

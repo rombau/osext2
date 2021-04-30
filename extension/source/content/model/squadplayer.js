@@ -108,24 +108,22 @@ class SquadPlayer extends Player {
 	
 		this._forecastBans(forecastPlayer, matchDaysInRange);
 		
-		let day = 1;
+		let days = 1;
 		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
 		while (!matchday.add(1).after(targetMatchDay)) {
 			this._forecastTransferLock(forecastPlayer);
 			this._forecastLoan(forecastPlayer);
 			this._forecastInjury(forecastPlayer);
-			this._forecastTraining(forecastPlayer, day % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
+			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
 			this._forecastAging(forecastPlayer, matchday);
 
 
 			// TODO forecast contract term and salary (based on contract term extension page and loans)
 
-			// forecastPlayer.ageExact = 
-
-			day++;
+			
+			days++;
 		}
-
-
+		
 		return forecastPlayer;
 	}
 
@@ -182,6 +180,7 @@ class SquadPlayer extends Player {
 	}
 
 	_forecastAging (forecastPlayer, matchday) {
+		forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
 		if (forecastPlayer.birthday === matchday.zat) {
 			forecastPlayer.age++;
 			let deductionYears = forecastPlayer.age - (forecastPlayer.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD);

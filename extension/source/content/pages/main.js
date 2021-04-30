@@ -59,30 +59,32 @@ class MainPage extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend (_doc, data) { 
+	extend (doc, data) { 
 
-		console.log(data); 
+		Persistence.updateCachedData(data => {
+		
+			Object.setPrototypeOf(data.currentTeam, Team.prototype);
 
-		Object.setPrototypeOf(data.currentTeam, Team.prototype);
+			let zat = data.lastMatchDay.zat;
 
-		let zat = data.lastMatchDay.zat;
+			data.currentTeam.squadPlayers.forEach(player => {
 
-		data.currentTeam.squadPlayers.forEach(player => {
+				Object.setPrototypeOf(player, SquadPlayer.prototype);
 
-			Object.setPrototypeOf(player, SquadPlayer.prototype);
+				// init exact age
+				if (zat >= player.birthday) {
+					player.ageExact = player.age + ((zat - player.birthday) / SEASON_MATCH_DAYS);
+				} else {
+					player.ageExact = player.age + ((SEASON_MATCH_DAYS - (player.birthday - zat)) / SEASON_MATCH_DAYS);
+				}
 
-			// init exact age
-			if (zat >= player.birthday) {
-				player.ageExact = player.age + ((zat - player.birthday) / SEASON_MATCH_DAYS);
-			} else {
-				player.ageExact = player.age + ((SEASON_MATCH_DAYS - (player.birthday - zat)) / SEASON_MATCH_DAYS);
-			}
+				// init training factor
+				player.trainingFactor = player.marketValue / player.getMarketValue(player.pos, 1);
 
-			// init training factor
-			player.trainingFactor = player.marketValue / player.getMarketValue(player.pos, 1);
-
-			console.log(player.name, player.ageExact, player.trainingFactor); 
-		});
+				console.log(player.name, player.ageExact, player.trainingFactor); 
+			});
+			
+		}).then(data => console.log(data), console.error);
 
 	}
 
