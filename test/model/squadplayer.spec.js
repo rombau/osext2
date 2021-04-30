@@ -291,4 +291,23 @@ describe('SquadPlayer', () => {
 			.toEqual('[25,58,37,51,24,0,0,1,23,78,26,79,4,13,46,27,31]');
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(85);
 	});
+
+	it('should return fast transfer value', () => {
+
+		player.age = player.ageExact = 19;
+
+		expect(player.getFastTransferValue()).toEqual(1763937);
+
+		player.age = player.ageExact = 25;
+
+		expect(player.getFastTransferValue()).toEqual(240831);
+
+		player.age = player.ageExact = 33;
+
+		expect(player.getFastTransferValue()).toEqual(0);
+
+		player.contractTerm = 1;
+
+		expect(player.getFastTransferValue()).toEqual(1519080);
+	});
 });

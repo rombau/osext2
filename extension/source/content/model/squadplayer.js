@@ -85,6 +85,22 @@ class SquadPlayer extends Player {
 	}
 
 	/**
+	 * Returns the calculated fast transfer value ('Blitzerlös').
+	 * 
+	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
+	 * @param {Number} factor the training factor; if omitted the current training factor is used
+	 * @returns 
+	 */
+	getFastTransferValue () {
+		if (this.age >= (this.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD)) {
+			return Math.max(Math.round(this.getMarketValue() * 0.9) - (this.contractTerm * this.salary), 0);
+		}
+		let normal = Math.round(this.getMarketValue() * 0.75) - (this.contractTerm * this.salary);
+		let max = 3000000 + 900000 * (this.age - 18);
+		return Math.max(normal > max ? max : normal, 0);
+	}
+
+	/**
 	 * Returns a forecast of the player for the given target match day.
 	 * 
 	 * @param {MatchDay} lastMatchDay the last match day
@@ -119,8 +135,9 @@ class SquadPlayer extends Player {
 
 
 			// TODO forecast contract term and salary (based on contract term extension page and loans)
-
 			
+			// TODO forecast career end
+
 			days++;
 		}
 		
