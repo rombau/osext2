@@ -310,4 +310,30 @@ describe('SquadPlayer', () => {
 
 		expect(player.getFastTransferValue()).toEqual(1519080);
 	});
+
+	it('should return contract term and salary forecast', () => {
+
+		let start = new MatchDay(15, 65);
+		let end = new MatchDay(16, 11);
+		let forecastPlayer;
+
+		player.contractTerm = 67;
+		player.salary = 10000;
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.contractTerm).toEqual(64);
+		expect(forecastPlayer.salary).toEqual(10000);
+
+		player.contractTerm = 1;
+		player.salary = 10000;
+		player.followUpSalary['24'] = 20000;
+		Options.followUpContractTerm = 24;
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.contractTerm).toEqual(22);
+		expect(forecastPlayer.salary).toEqual(20000);
+
+	});
 });

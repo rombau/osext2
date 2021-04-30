@@ -20,7 +20,13 @@ class HtmlUtil {
 				return cell.textContent === headers[i];
 			});
 		});
-		Array.from(table.rows).forEach(row => headers.forEach((header, i) => row.cells[header] = row.cells[i]));
+		Array.from(table.rows).forEach(row => headers.forEach((header, i) => {
+			try {
+				row.cells[header] = row.cells[i];
+			} catch (error) {
+				// Indexed property setter is not supported on HTMLCollection
+			}
+		}));
 		return table;
 	}
 

@@ -13,6 +13,9 @@ const Options = {
     /** @type {Number} the secondary skill limit for training forecast based on the ageTrainingLimit */
     secondarySkillTrainingLimit: 75,
 
+    /** @type {Number} the follow up contract term */
+    followUpContractTerm: 24,
+
 
     initialize : () => {
         chrome.storage.local.get(Options, (data) => {

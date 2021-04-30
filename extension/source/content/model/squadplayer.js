@@ -57,6 +57,9 @@ class SquadPlayer extends Player {
 		/** @type {Number} the monthly salary */
 		this.salary;
 
+		/** @type {Number} the follow up salaries */
+		this.followUpSalary = {};
+
 		/** @type {Number} the market value */
 		this.marketValue;
 
@@ -132,9 +135,8 @@ class SquadPlayer extends Player {
 			this._forecastInjury(forecastPlayer);
 			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
 			this._forecastAging(forecastPlayer, matchday);
+			this._forecastContractAndSalary(forecastPlayer, matchday);
 
-
-			// TODO forecast contract term and salary (based on contract term extension page and loans)
 			
 			// TODO forecast career end
 
@@ -213,6 +215,16 @@ class SquadPlayer extends Player {
 					remainder -= Math.round(skill[1] / sum * deduction);
 				});
 				forecastPlayer.skills[skills[remainder > 0 ? 0 : 4][0]] -= remainder;
+			}
+		}
+	}
+
+	_forecastContractAndSalary (forecastPlayer, matchday) {
+		if (matchday.zat % MONTH_MATCH_DAYS === 0) {
+			forecastPlayer.contractTerm--;
+			if (forecastPlayer.contractTerm === 0) {
+				forecastPlayer.contractTerm = Options.followUpContractTerm;
+				forecastPlayer.salary = forecastPlayer.followUpSalary[forecastPlayer.contractTerm];
 			}
 		}
 	}

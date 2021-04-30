@@ -47,6 +47,7 @@ class MainPage extends Page {
 			initPages.push(new TrainerPage());
 			initPages.push(new TrainingPage());
 			initPages.push(new LoanViewPage());
+			initPages.push(new ContractExtensionPage());
 			
 
 			// TODO add all needed pages
@@ -59,7 +60,9 @@ class MainPage extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend (doc, data) { 
+	extend (doc, _data) { 
+
+		console.log(_data);
 
 		Persistence.updateCachedData(data => {
 		
