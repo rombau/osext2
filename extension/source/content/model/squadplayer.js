@@ -74,6 +74,17 @@ class SquadPlayer extends Player {
 	}
 
 	/**
+	 * Returns the calculated market value, considering the training factor for the current position.
+	 * 
+	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
+	 * @param {Number} factor the training factor; if omitted the current training factor is used
+	 * @returns 
+	 */
+	getMarketValue (pos = this.pos, factor = this.trainingFactor) {
+		return super.getMarketValue(pos, factor);
+	}
+
+	/**
 	 * Returns a forecast of the player for the given target match day.
 	 * 
 	 * @param {MatchDay} lastMatchDay the last match day

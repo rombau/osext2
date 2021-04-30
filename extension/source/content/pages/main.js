@@ -79,7 +79,7 @@ class MainPage extends Page {
 			}
 
 			// init training factor
-			player.trainingFactor = player.marketValue / player.getMarketValue();
+			player.trainingFactor = player.marketValue / player.getMarketValue(player.pos, 1);
 
 			console.log(player.name, player.ageExact, player.trainingFactor); 
 		});

@@ -237,8 +237,6 @@ class Player {
 	 * @returns 
 	 */
 	getMarketValue (pos = this.pos, factor = 1) {
-
-
 		return Math.round((Math.pow(1 + this.getOpti(pos) / 100, 8.1)) *
 			(Math.pow(1 + this.getSkillAverage() / 100, 5.65)) *
 			(Math.pow(1 + (100 - this.ageExact) / 49, 10)) *
