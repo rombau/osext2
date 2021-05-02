@@ -56,6 +56,11 @@ class Requestor {
 	 * @returns {String} the id of the status element
 	 */
 	static STATUS_ID = 'osext-page-request-status';
+
+	/**
+	 * @returns {String} the id of the status element
+	 */
+	static OVERLAY_ID = 'osext-page-request-overlay';
 	
 	/**
 	 * @returns {String} the id of the form element
@@ -76,6 +81,11 @@ class Requestor {
 	 * @returns {HTMLElement} the status element
 	 */
 	createStatus (doc) {
+		Array.from(top.frames).forEach(frame => {
+			let overlay = frame.document.getElementById(Requestor.OVERLAY_ID) || frame.document.createElement('div');
+			overlay.id = Requestor.OVERLAY_ID;
+			frame.document.body.appendChild(overlay);
+		});
 		/** @type {Document} */
 		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
 		/** @type {HTMLElement} */
@@ -146,7 +156,7 @@ class Requestor {
 			if (page.name === this.triggerPage.name) {
 				this.requestNextPage();
 			} else {
-				this.status.textContent = `Initialisiere ${page.name} ...`;
+				this.status.innerHTML = `<i class="fas fa-spinner"></i> Initialisiere ${page.name} ...`;
 				if (page.method === HttpMethod.POST) {
 					this.createForm(this.doc, page).submit();
 				} else {
@@ -155,6 +165,10 @@ class Requestor {
 			}
 		} else {
 			this.status.classList.add(STYLE_HIDDEN);
+			Array.from(top.frames).forEach(frame => {
+				let overlay = frame.document.getElementById(Requestor.OVERLAY_ID);
+				if (overlay) overlay.classList.add(STYLE_HIDDEN);
+			});
 			this.finish();
 		}
 	}

@@ -41,18 +41,18 @@ describe('Requestor', () => {
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
 		expect(requestor.pageQueue.length).toEqual(1);
-		expect(requestor.status.textContent).toEqual('Initialisiere Teamübersicht ...');
+		expect(requestor.status.textContent).toContain('Initialisiere Teamübersicht ...');
 
 		requestor.frame.pageLoaded();
 
 		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toEqual('Initialisiere Einzelskills ...');
+		expect(requestor.status.textContent).toContain('Initialisiere Einzelskills ...');
 
 		requestor.frame.requestAdditionalPages(new ShowPlayerPage(123456, 'Hugo'));
 		requestor.frame.pageLoaded();
 
 		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toEqual('Initialisiere Spieler Hugo ...');
+		expect(requestor.status.textContent).toContain('Initialisiere Spieler Hugo ...');
 
 		requestor.frame.pageLoaded();
 
@@ -72,7 +72,7 @@ describe('Requestor', () => {
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
 		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43) ...');
+		expect(requestor.status.textContent).toContain('Initialisiere ZAT-Report (Saison 15, Zat 43) ...');
 
 		/** @type {HTMLFormElement} */
 		let form = doc.getElementById(Requestor.FORM_ID)

@@ -45,9 +45,27 @@
     border: 2px solid #116;
     background-color: #fbf9b3;
     color: #227;
+    z-index: 3;
 }
 
 #osext-page-request-status.osext-hidden {
+    display: none;
+}
+
+#osext-page-request-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.1);
+    z-index: 2;
+    cursor: progress;
+}
+
+#osext-page-request-overlay.osext-hidden {
     display: none;
 }
 

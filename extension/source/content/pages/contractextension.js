@@ -3,7 +3,7 @@ class ContractExtensionPage extends Page {
 	
 	constructor() {
 
-		super('Verträge verlängern', 'vt.php');
+		super('Vertragsverlängerungen', 'vt.php');
 
 	}
 	
