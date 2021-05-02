@@ -51,10 +51,17 @@
 				"source/content/handler.js"
 			],
 			"css": [
-				"style/classic.css"
+				"style/classic.css",
+				"style/fontawesome.min.css",
+				"style/solid.min.css"
 			],
 			"all_frames": true
 		}
+	],
+	"web_accessible_resources": [
+	   "style/fontawesome.min.css",
+	   "style/solid.min.css",
+	   "webfonts/fa-solid-900.woff2"
 	],
 	"permissions": [
 		"*://os.ongapo.com/*",
