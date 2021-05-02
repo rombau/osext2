@@ -40,7 +40,7 @@ class ShowteamPage extends Page {
 		let rangeSlider = doc.createElement('input');
 		rangeSlider.type = 'range';
 		rangeSlider.min = data.lastMatchDay.season * SEASON_MATCH_DAYS + data.lastMatchDay.zat;
-		rangeSlider.max = (data.lastMatchDay.season + 2) * SEASON_MATCH_DAYS;
+		rangeSlider.max = (data.lastMatchDay.season + Options.forecastSeasons) * SEASON_MATCH_DAYS;
 		rangeSlider.value = data.options.squadPlayerViewMatchDay.season * SEASON_MATCH_DAYS + data.options.squadPlayerViewMatchDay.zat;
 		rangeSlider.addEventListener('input', (event) => {
 			newMatchDay.season = Math.floor(event.target.value / SEASON_MATCH_DAYS);
@@ -56,7 +56,7 @@ class ShowteamPage extends Page {
 				data.options.squadPlayerViewMatchDay = newMatchDay;
 			}).then(data => {
 				page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
-					data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
+					data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay), data.options.squadPlayerViewMatchDay);
 			});
 		});
 		toolbar.appendChild(rangeSlider);
@@ -65,7 +65,7 @@ class ShowteamPage extends Page {
 		
 		if (!data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay)) {
 			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
-				data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay));
+				data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay), data.options.squadPlayerViewMatchDay);
 		}
 
 		return toolbar;
@@ -74,7 +74,8 @@ class ShowteamPage extends Page {
 	/**
 	 * @param {Team} _team
 	 * @param {Boolean} _current
+	 * @param {MatchDay} _matchDay
 	 */
-	updateWithTeam (_team, _current) {}
+	updateWithTeam (_team, _current, _matchDay) {}
 
 }

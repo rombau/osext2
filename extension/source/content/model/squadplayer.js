@@ -115,6 +115,7 @@ class SquadPlayer extends Player {
 		if (lastMatchDay.equals(targetMatchDay)) return this;
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), this);
+		forecastPlayer.origin = this;
 		forecastPlayer.skills = Object.assign(new Skillset(), this.skills);
 		if (this.lastTraining) forecastPlayer.lastTraining = Object.assign(new SquadPlayer.Training(), this.lastTraining);
 		if (this.nextTraining) forecastPlayer.nextTraining = Object.assign(new SquadPlayer.Training(), this.nextTraining);
@@ -136,9 +137,6 @@ class SquadPlayer extends Player {
 			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
 			this._forecastAging(forecastPlayer, matchday);
 			this._forecastContractAndSalary(forecastPlayer, matchday);
-
-			
-			// TODO forecast career end
 
 			days++;
 		}

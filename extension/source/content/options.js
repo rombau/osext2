@@ -1,16 +1,19 @@
 
 const Options = {
 
+    /** @type {Number} the number of seasons that should be forecasted; two means this and the following season */
+    forecastSeasons: 2,
+
     /** @type {Boolean} flag indicating to use a physio for forecasting remaining injury time */
     usePhysio: true,
 
     /** @type {Number} the age limit (base) for training forecast */
     ageTrainingLimit: 25,
 
-    /** @type {Number} the primary skill limit for training forecast based on the ageTrainingLimit */
+    /** @type {Number} the primary skill limit for training forecast (at the ageTrainingLimit) */
     primarySkillTrainingLimit: 85,
 
-    /** @type {Number} the secondary skill limit for training forecast based on the ageTrainingLimit */
+    /** @type {Number} the secondary skill limit for training forecast (at the ageTrainingLimit) */
     secondarySkillTrainingLimit: 75,
 
     /** @type {Number} the follow up contract term */

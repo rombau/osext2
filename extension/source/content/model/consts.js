@@ -20,3 +20,7 @@ const STYLE_FORECAST = 'osext-forecast';
 const STYLE_INACTIVE = 'osext-inactive';
 const STYLE_PRIMARY = 'osext-primary';
 const STYLE_HIDDEN = 'osext-hidden';
+
+const STYLE_FAST_TRANSFER = 'osext-fast-transfer';
+const STYLE_FAST_TRANSFER_ADD = 'add';
+const STYLE_FAST_TRANSFER_DELETE = 'delete';

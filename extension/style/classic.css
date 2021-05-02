@@ -19,6 +19,23 @@
     display: none;
 }
 
+.osext-fast-transfer > * {
+    display: none !important;
+}
+
+.osext-fast-transfer.add > .fa-bolt, .osext-fast-transfer.delete > .fa-trash-alt {
+    cursor: pointer;
+}
+
+.osext-fast-transfer.add > .fa-bolt {
+    display: inline-block !important;
+}
+
+.osext-fast-transfer.delete > .fa-trash-alt, .osext-fast-transfer.delete > span {
+    display: inline-block !important;
+    margin-right: 5px;
+}
+
 #osext-page-request-status {
     display: block;
     padding: 8px 20px;
