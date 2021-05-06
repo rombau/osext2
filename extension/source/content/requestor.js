@@ -84,6 +84,7 @@ class Requestor {
 		Array.from(top.frames).forEach(frame => {
 			let overlay = frame.document.getElementById(Requestor.OVERLAY_ID) || frame.document.createElement('div');
 			overlay.id = Requestor.OVERLAY_ID;
+			overlay.classList.remove(STYLE_HIDDEN);
 			frame.document.body.appendChild(overlay);
 		});
 		/** @type {Document} */
