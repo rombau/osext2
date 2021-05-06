@@ -14,10 +14,10 @@ class ExtensionData {
 		/** @type {Number} the next zat season */ 
 		this.nextZatSeason;
 
-		this.options = {
+		this.viewSettings = {
 
-			/** @type {MatchDay} the current view of squad players match day */
-			squadPlayerViewMatchDay : undefined
+			/** @type {MatchDay} the current match day for squad players views */
+			squadPlayerMatchDay : undefined
 		}
 	}
 
@@ -26,7 +26,7 @@ class ExtensionData {
 	 */
 	clearCurrentTeam () {
 		this.currentTeam = new Team();
-		this.options.squadPlayerViewMatchDay = undefined;
+		this.viewSettings.squadPlayerMatchDay = undefined;
 	}
 
 	/**

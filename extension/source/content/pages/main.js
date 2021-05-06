@@ -62,7 +62,7 @@ class MainPage extends Page {
 	 */
 	extend (doc, _data) { 
 
-		console.log(_data);
+		console.log('Currently used bytes for data:', JSON.stringify(_data).length);
 
 		Persistence.updateCachedData(data => {
 		
@@ -84,7 +84,6 @@ class MainPage extends Page {
 				// init training factor
 				player.trainingFactor = player.marketValue / player.getMarketValue(player.pos, 1);
 
-				console.log(player.name, player.ageExact, player.trainingFactor); 
 			});
 			
 		}).then(data => console.log(data), console.error);

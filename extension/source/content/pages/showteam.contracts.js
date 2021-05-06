@@ -38,7 +38,7 @@ class ShowteamContractsPage extends ShowteamPage {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 		
-		if (!data.options.squadPlayerViewMatchDay) data.options.squadPlayerViewMatchDay = data.lastMatchDay;
+		if (!data.viewSettings.squadPlayerMatchDay) data.viewSettings.squadPlayerMatchDay = data.lastMatchDay;
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...ShowteamContractsPage.HEADERS);
 
@@ -98,7 +98,7 @@ class ShowteamContractsPage extends ShowteamPage {
 				removeButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
 					cell.classList.remove(STYLE_FAST_TRANSFER_DELETE);
-					if (!data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay) && !player.loan && !player.transferLock) {
+					if (!data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay) && !player.loan && !player.transferLock) {
 						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
 					}
 					Persistence.updateCachedData(d => {

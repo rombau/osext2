@@ -19,7 +19,7 @@ class ShowteamPage extends Page {
 		
 		let page = this;
 
-		if (!data.options.squadPlayerViewMatchDay) data.options.squadPlayerViewMatchDay = data.lastMatchDay;
+		if (!data.viewSettings.squadPlayerMatchDay) data.viewSettings.squadPlayerMatchDay = data.lastMatchDay;
 
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';
@@ -33,7 +33,7 @@ class ShowteamPage extends Page {
 		viewInfo.update = (season, zat) => {
 			viewInfo.innerHTML = ` Saison ${season} / Zat ${zat}`;
 		};
-		viewInfo.update(data.options.squadPlayerViewMatchDay.season, data.options.squadPlayerViewMatchDay.zat);
+		viewInfo.update(data.viewSettings.squadPlayerMatchDay.season, data.viewSettings.squadPlayerMatchDay.zat);
 		
 		let newMatchDay = new MatchDay();
 
@@ -41,7 +41,7 @@ class ShowteamPage extends Page {
 		rangeSlider.type = 'range';
 		rangeSlider.min = data.lastMatchDay.season * SEASON_MATCH_DAYS + data.lastMatchDay.zat;
 		rangeSlider.max = (data.lastMatchDay.season + Options.forecastSeasons) * SEASON_MATCH_DAYS;
-		rangeSlider.value = data.options.squadPlayerViewMatchDay.season * SEASON_MATCH_DAYS + data.options.squadPlayerViewMatchDay.zat;
+		rangeSlider.value = data.viewSettings.squadPlayerMatchDay.season * SEASON_MATCH_DAYS + data.viewSettings.squadPlayerMatchDay.zat;
 		rangeSlider.addEventListener('input', (event) => {
 			newMatchDay.season = Math.floor(event.target.value / SEASON_MATCH_DAYS);
 			newMatchDay.zat = event.target.value % SEASON_MATCH_DAYS;
@@ -53,19 +53,19 @@ class ShowteamPage extends Page {
 		});
 		rangeSlider.addEventListener('change', (event) => {
 			Persistence.updateCachedData(data => {
-				data.options.squadPlayerViewMatchDay = newMatchDay;
+				data.viewSettings.squadPlayerMatchDay = newMatchDay;
 			}).then(data => {
-				page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
-					data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay), data.options.squadPlayerViewMatchDay);
+				page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.viewSettings.squadPlayerMatchDay), 
+					data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay), data.viewSettings.squadPlayerMatchDay);
 			});
 		});
 		toolbar.appendChild(rangeSlider);
 
 		toolbar.appendChild(viewInfo);
 		
-		if (!data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay)) {
-			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.options.squadPlayerViewMatchDay), 
-				data.lastMatchDay.equals(data.options.squadPlayerViewMatchDay), data.options.squadPlayerViewMatchDay);
+		if (!data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay)) {
+			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, data.viewSettings.squadPlayerMatchDay), 
+				data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay), data.viewSettings.squadPlayerMatchDay);
 		}
 
 		return toolbar;
