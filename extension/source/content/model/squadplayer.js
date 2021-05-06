@@ -137,6 +137,7 @@ class SquadPlayer extends Player {
 			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
 			this._forecastAging(forecastPlayer, matchday);
 			this._forecastContractAndSalary(forecastPlayer, matchday);
+			this._forecastFastTransfer(forecastPlayer, matchday);
 
 			days++;
 		}
@@ -269,6 +270,12 @@ class SquadPlayer extends Player {
 
 	_forecastTransferLock(forecastPlayer) {
 		if (forecastPlayer.transferLock > 0) forecastPlayer.transferLock--;
+	}
+
+	_forecastFastTransfer(forecastPlayer, matchday) {
+		if (this.fastTransfer && matchday.after(this.fastTransfer)) {
+			forecastPlayer.active = false;
+		}
 	}
 
 }

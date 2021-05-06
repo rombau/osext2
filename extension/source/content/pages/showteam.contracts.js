@@ -82,9 +82,12 @@ class ShowteamContractsPage extends ShowteamPage {
 						cell.firstChild.textContent = `${cell.matchDay.season}/${cell.matchDay.zat}`;
 						cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
 						cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
-						Persistence.updateCachedData(d => {
-							let p = d.currentTeam.getSquadPlayer(id); 
-							p.fastTransfer = cell.matchDay;
+						Persistence.updateCachedData(dataToStore => {
+							let playerToStore = dataToStore.currentTeam.getSquadPlayer(id); 
+							playerToStore.fastTransfer = new MatchDay(cell.matchDay.season, cell.matchDay.zat);
+							dataToStore.currentTeam.matchDays
+								.filter(matchDay => matchDay.after(cell.matchDay))
+								.forEach(matchDay => matchDay.team = undefined);
 
 							// TODO persist fast transfer in local storage and reload it after init
 						});
@@ -101,9 +104,16 @@ class ShowteamContractsPage extends ShowteamPage {
 					if (!data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay) && !player.loan && !player.transferLock) {
 						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
 					}
-					Persistence.updateCachedData(d => {
-						let p = d.currentTeam.getSquadPlayer(id); 
-						p.fastTransfer = undefined;
+					Persistence.updateCachedData(dataToStore => {
+						let playerToStore = dataToStore.currentTeam.getSquadPlayer(id); 
+						playerToStore.fastTransfer = undefined;
+						dataToStore.currentTeam.matchDays
+							.filter(matchDay => matchDay.after(cell.matchDay))
+							.forEach(matchDay => matchDay.team = undefined);
+							
+						let matchDayTeam = data.currentTeam.getMatchDay(cell.matchDay.season, cell.matchDay.zat).team;
+						matchDayTeam.getSquadPlayer(id).active = true;
+						this.updateWithTeam(matchDayTeam, false, cell.matchDay);
 					});
 				});
 
@@ -144,6 +154,11 @@ class ShowteamContractsPage extends ShowteamPage {
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = team.getSquadPlayer(id);
 			
+			if (!current && !player.loan && !player.transferLock) {
+				row.cells['Blitz'].matchDay = matchDay;
+				row.cells['Blitz'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
+			}
+
 			if (player.active) {
 
 				row.cells['Alter'].textContent = player.age;
@@ -167,11 +182,6 @@ class ShowteamContractsPage extends ShowteamPage {
 
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
 
-				if (!current && !player.loan && !player.transferLock && !player.origin.fastTransfer) {
-					row.cells['Blitz'].matchDay = matchDay;
-					row.cells['Blitz'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
-				}
-
 			} else {
 
 				row.cells['Alter'].textContent = '';
@@ -187,7 +197,6 @@ class ShowteamContractsPage extends ShowteamPage {
 				row.cells['Spielerwert'].textContent = '';
 
 				row.cells['Blitzerlös'].textContent = '';
-				row.cells['Blitz'].textContent = '';
 			}
 
 			// styling
