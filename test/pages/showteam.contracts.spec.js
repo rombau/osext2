@@ -5,7 +5,10 @@ describe('ShowteamContractsPage', () => {
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+			modifyData(data);
+			return Promise.resolve(data);
+		});
 
 		data = new ExtensionData();
 		page = new ShowteamContractsPage();
@@ -26,8 +29,22 @@ describe('ShowteamContractsPage', () => {
 			expect(data.currentTeam.squadPlayers[0].marketValue).toEqual(9379453);
 
 			page.extend(doc, data);
-			
-			done();
+
+			let spy = spyOn(page, 'updateWithTeam').and.callFake((team, current, matchDay) => {
+
+				(spy.and.callThrough()).call(page, team, current, matchDay);
+
+				doc.querySelector('.osext-fast-transfer.add > .fas.fa-bolt').dispatchEvent(new Event('click'));
+				doc.querySelector('td.osext-fast-transfer.delete > i.fas.fa-trash-alt').dispatchEvent(new Event('click'));
+
+				done();
+			});
+
+			let slider = doc.querySelector('input[type=range]')
+			slider.value = (+slider.value) + 1;
+			slider.dispatchEvent(new Event('input'));
+			slider.dispatchEvent(new Event('change'));
+
 		});
 	});
 });

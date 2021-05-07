@@ -170,7 +170,7 @@ class Page {
 				if (pagesToRequest && pagesToRequest.length) {
 					win.frameElement.requestAdditionalPages(pagesToRequest);
 				}
-				win.frameElement.pageLoaded();
+				win.frameElement && win.frameElement.pageLoaded();
 			} else if (pagesToRequest && pagesToRequest.length) {
 				let requestor = Requestor.create(doc);
 				pagesToRequest.forEach((page) => requestor.addPage(page));

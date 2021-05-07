@@ -62,8 +62,6 @@ class MainPage extends Page {
 	 */
 	extend (doc, _data) { 
 
-		console.log('Currently used bytes for data:', JSON.stringify(_data).length);
-
 		Persistence.updateCachedData(data => {
 		
 			Object.setPrototypeOf(data.currentTeam, Team.prototype);

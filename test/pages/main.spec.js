@@ -5,7 +5,10 @@ describe('MainPage', () => {
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+			modifyData(data);
+			return Promise.resolve(data);
+		});
 
 		data = new ExtensionData();
 		page = new MainPage();

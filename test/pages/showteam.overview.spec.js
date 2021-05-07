@@ -3,10 +3,13 @@ describe('ShowteamOverviewPage', () => {
 	/** @type {ExtensionData} */ let data;
 	/** @type {ShowteamOverviewPage} */ let page;
 	
-	beforeEach(() => {	
+	beforeEach(() => {		
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
-
+		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+			modifyData(data);
+			return Promise.resolve(data);
+		});
+		
 		data = new ExtensionData();
 		page = new ShowteamOverviewPage();
 	});
@@ -43,7 +46,12 @@ describe('ShowteamOverviewPage', () => {
 			expect(data.currentTeam.squadPlayers[21].loan.duration).toEqual(1);
 
 			page.extend(doc, data);
-			
+		
+			let slider = doc.querySelector('input[type=range]')
+			slider.value += 19; // to test season interval
+			slider.dispatchEvent(new Event('input'));
+			slider.dispatchEvent(new Event('change'));
+		
 			done();
 		});
 	});
