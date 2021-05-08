@@ -48,6 +48,11 @@
 				"source/content/pages/training.js",
 				"source/content/pages/loanview.js",
 				"source/content/pages/contractextension.js",
+				"source/content/pages/youth.base.js",
+				"source/content/pages/youth.overview.js",
+				"source/content/pages/youth.skills.js",
+				"source/content/pages/youth.optskills.js",
+				"source/content/pages/youth.options.js",
 				"source/content/handler.js"
 			],
 			"css": [

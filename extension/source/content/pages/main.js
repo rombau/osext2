@@ -48,6 +48,9 @@ class MainPage extends Page {
 			initPages.push(new TrainingPage());
 			initPages.push(new LoanViewPage());
 			initPages.push(new ContractExtensionPage());
+			initPages.push(new YouthOverviewPage());
+			initPages.push(new YouthSkillsPage());
+			initPages.push(new YouthOptionsPage());
 			
 
 			// TODO add all needed pages

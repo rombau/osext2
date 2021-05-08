@@ -234,7 +234,6 @@ class ShowteamContractsPage extends ShowteamPage {
 					row.cells['Blitzerlös'].classList.remove(STYLE_INACTIVE);
 					if (!player.origin.fastTransfer) {
 						row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_ADD);
-						console.log('style added');
 					}
 				}
 			}

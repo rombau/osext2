@@ -84,9 +84,6 @@ class Player {
 
 	constructor() {
 
-		/** @type {Number} the internal id; generated for youth player */ 
-		this.id;
-
 		/** @type {Number} the age */
 		this.age;
 

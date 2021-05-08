@@ -24,10 +24,10 @@ class Team {
 		/** @type {Number} the current league ranking */ 
 		this.leagueRanking;
 		
-		/** @type {[SquadPlayer]]} the squad players */ 
+		/** @type {[SquadPlayer]} the squad players */ 
 		this.squadPlayers = [];
 		
-		/** @type {[YouthPlayer]]} the youth players */ 
+		/** @type {[YouthPlayer]} the youth players */ 
 		this.youthPlayers = [];
 
 		/** @type {[MatchDay]} the match days (ZATS) of the current (and following) saison(s) */ 
@@ -54,6 +54,18 @@ class Team {
 		player = new SquadPlayer();
 		player.id = id;
 		this.squadPlayers.push(player);
+		return player;
+	}
+
+	/**
+	 * Returns the youth player with the given index. If the player can't be found, a new one is added to the team and returned.
+	 * 
+	 * @param {Number} index the index of the player on the page and the array
+	 * @returns {YouthPlayer} the player
+	 */
+	getYouthPlayer (index) {
+		let player = Object.assign(new YouthPlayer(), this.youthPlayers[index]);
+		this.youthPlayers[index] = player;
 		return player;
 	}
 

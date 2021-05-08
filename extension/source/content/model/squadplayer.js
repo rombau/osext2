@@ -18,6 +18,9 @@ class SquadPlayer extends Player {
 
 		super();
 		
+		/** @type {Number} the internal id */ 
+		this.id;
+
 		/** @type {Boolean} flag indicating the palyer is active */
 		this.active = true;
 
