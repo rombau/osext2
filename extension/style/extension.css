@@ -1,6 +1,5 @@
-
-#TopThema {
-    display: none;
+:root {
+    --main-bg-color: brown;
 }
 
 .osext-forecast {
@@ -42,9 +41,9 @@
     position: fixed;
     bottom: 7px;
     right: 10px;
-    border: 2px solid #116;
-    background-color: #fbf9b3;
-    color: #227;
+    border: 2px solid var(--status-border-color);
+    background-color: var(--status-background-color);
+    color: var(--status-color);
     z-index: 3;
 }
 
@@ -84,7 +83,7 @@
     width: 200px;
     height: 6px;
     border-radius: 5px;  
-    background: #fbf9b3;
+    background: var(--range-background-color);
     outline: none;
     opacity: 0.7;
     transition: opacity .2s;
@@ -99,7 +98,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%; 
-    background: #55c;
+    background: var(--range-thumb-color);
     cursor: pointer;
 }
   
@@ -107,73 +106,6 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #55c;
+    background: var(--range-thumb-color);
     cursor: pointer;
-}
-
-select {
-    padding: 2px 18px 2px 2px;
-    font-size: 1.1em;
-    border: 1px solid #bbb;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    outline: none;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAJtJREFUOMvtkLENwlAMRM/IMV8U7ADz5NNQUSAGSMEcNHQ0bACUQWKbMAfww1FEoAR9QgFlXmf77iQf0PEzUh/CJS8IjL4Yztr34+fca1yJJYCyxR9AZvVFI0Cdz1mFRKFIpm5y+hgAAOb8BoJ1xL4yS7etHbykpITr8QBgWn2GXWLpTET4rtVoUSIk9/NwGwzBe5mYLmLmjj/xAPzQKkwyZOPAAAAAAElFTkSuQmCC);
-    background-position: right;
-    background-repeat: no-repeat;
-    background-color: #227;
-    color: #fbf9b3;
-}
-
-input {
-    border: 1px solid #bbb;
-    font-size: 1em;
-    color: #fbf9b3;
-    background-color: #227;
-    outline: none;
-    padding: 2px;
-}
-
-input[type=image] {
-    border: 0px;
-    background: inherit;
-}
-
-input[type=submit], input[type=button], input[type=reset] {
-    color: #227;
-    padding: 2px 10px;
-    font-weight: bold;
-    margin-left: 2px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-td > input {
-    margin-top: 0px !important;
-    margin-bottom: 0px !important;
-}
-
-input[type=submit]:hover, input[type=reset]:hover {
-    color: #448;
-    cursor: pointer;
-}
-
-input[type=submit], input[type=button] {
-    background-color: #fbf9b3;
-}
-
-input[type=reset] {
-    background-color: #bbb;
-}
-
-input[value="Zugabgabe speichern"] {
-    height: 25px;
-}
-
-hr {
-    border: none;
-    height: 1px;
-    background-color: #fbf9c3;
 }

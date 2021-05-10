@@ -1,0 +1,17 @@
+:root {
+    --input-border-color: #bbb;
+    --input-background-color: #227;
+    --input-color: #fbf9b3;
+    
+    --button-color: #227;
+    --button-hover-color: #448;
+
+    --reset-button-background-color: #bbb;
+
+    --status-background-color: #fbf9b3;
+    --status-border-color: #116;
+    --status-color: #227;
+
+    --range-background-color: #fbf9b3;
+    --range-thumb-color: #55c;
+}

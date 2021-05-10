@@ -56,7 +56,9 @@
 				"source/content/handler.js"
 			],
 			"css": [
-				"style/classic.css",
+				"style/colors.css",
+				"style/darkoverride.css",
+				"style/extension.css",
 				"style/fontawesome.min.css",
 				"style/solid.min.css"
 			],
