@@ -81,20 +81,26 @@ class Requestor {
 	 * @returns {HTMLElement} the status element
 	 */
 	createStatus (doc) {
-		Array.from(top.frames).forEach(frame => {
-			let overlay = frame.document.getElementById(Requestor.OVERLAY_ID) || frame.document.createElement('div');
-			overlay.id = Requestor.OVERLAY_ID;
-			overlay.classList.remove(STYLE_HIDDEN);
-			frame.document.body.appendChild(overlay);
-		});
-		/** @type {Document} */
+		top.addEventListener("load", event => this.addOverlayToFrame(top.frames.os_menu));
+		Array.from(top.frames).forEach(frame => this.addOverlayToFrame(frame));
 		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
-		/** @type {HTMLElement} */
 		let status = statusDoc.getElementById(Requestor.STATUS_ID) || statusDoc.createElement('div');
 		status.id = Requestor.STATUS_ID;
 		status.classList.remove(STYLE_HIDDEN);
 		statusDoc.body.appendChild(status);
 		return status;
+	}
+
+	/**
+	 * Adds a overlay to rthe given frame window.
+	 * 
+	 * @param {Window} frameWindow
+	 */
+	addOverlayToFrame(frameWindow) {
+		let overlay = frameWindow.document.getElementById(Requestor.OVERLAY_ID) || frameWindow.document.createElement('div');
+		overlay.id = Requestor.OVERLAY_ID;
+		overlay.classList.remove(STYLE_HIDDEN);
+		frameWindow.document.body.appendChild(overlay);
 	}
 
 	/**
