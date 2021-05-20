@@ -19,7 +19,7 @@ describe('ExtensionData', () => {
 		data.initNextZat(27);
 		data.viewSettings.squadPlayerMatchDay = new MatchDay(1, 1);
 
-		data.clearCurrentTeam();
+		data.clear();
 
 		expect(data.currentTeam.id).toBeUndefined();
 		expect(data.viewSettings.squadPlayerMatchDay).toBeUndefined();

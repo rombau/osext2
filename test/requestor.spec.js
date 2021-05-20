@@ -8,7 +8,7 @@ describe('Requestor', () => {
 		requestor = new Requestor(doc);
 
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 	});
 
     afterEach(() => {
@@ -30,13 +30,13 @@ describe('Requestor', () => {
 
 	it('should request pages with query parameters', () => {
 		
-		requestor.addPage(new ShowteamOverviewPage());
-		requestor.addPage(new ShowteamSkillsPage());
+		requestor.addPage(new Page.ShowteamOverview());
+		requestor.addPage(new Page.ShowteamSkills());
 		
 		expect(requestor.pageQueue.length).toEqual(2);
 		expect(requestor.status).toBeUndefined();
 		
-		requestor.start(new MainPage());
+		requestor.start(new Page.Main());
 		
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
@@ -48,7 +48,7 @@ describe('Requestor', () => {
 		expect(requestor.pageQueue.length).toEqual(0);
 		expect(requestor.status.textContent).toContain('Initialisiere Einzelskills ...');
 
-		requestor.frame.requestAdditionalPages(new ShowPlayerPage(123456, 'Hugo'));
+		requestor.frame.requestAdditionalPages(new Page.ShowPlayer(123456, 'Hugo'));
 		requestor.frame.pageLoaded();
 
 		expect(requestor.pageQueue.length).toEqual(0);
@@ -62,12 +62,12 @@ describe('Requestor', () => {
 
 	it('should request pages with form parameters', () => {
 		
-		requestor.addPage(new MatchDayReportPage(15, 43));
+		requestor.addPage(new Page.MatchDayReport(15, 43));
 		
 		expect(requestor.pageQueue.length).toEqual(1);
 		expect(requestor.status).toBeUndefined();
 		
-		requestor.start(new MainPage());
+		requestor.start(new Page.Main());
 		
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		

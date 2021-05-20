@@ -1,17 +1,17 @@
-describe('ShowPlayerPage', () => {
+describe('Page.ShowPlayer', () => {
 
 	/** @type {ExtensionData} */ let data;
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
 	});
 
 	it('should extract player birthday', (done) => {
 
-		let page = new ShowPlayerPage(20494, 'Ariel Barlarezo');
+		let page = new Page.ShowPlayer(20494, 'Ariel Barlarezo');
 
 		Fixture.getDocument('sp.php', doc => {
 			

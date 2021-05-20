@@ -1,17 +1,17 @@
-describe('ShowteamContractsPage', () => {
+describe('Page.ShowteamContracts', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {ShowteamContractsPage} */ let page;
+	/** @type {Page.ShowteamContracts} */ let page;
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
 			modifyData(data);
 			return Promise.resolve(data);
 		});
 
 		data = new ExtensionData();
-		page = new ShowteamContractsPage();
+		page = new Page.ShowteamContracts();
 	});
 
 	it('should extract team data and extend page', (done) => {

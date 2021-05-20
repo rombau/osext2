@@ -1,17 +1,17 @@
-describe('ShowteamOverviewPage', () => {
+describe('Page.ShowteamOverview', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {ShowteamOverviewPage} */ let page;
+	/** @type {Page.ShowteamOverview} */ let page;
 	
 	beforeEach(() => {		
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
 			modifyData(data);
 			return Promise.resolve(data);
 		});
 		
 		data = new ExtensionData();
-		page = new ShowteamOverviewPage();
+		page = new Page.ShowteamOverview();
 	});
 
 	it('should extract team data and extend page', (done) => {

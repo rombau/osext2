@@ -1,14 +1,14 @@
-describe('ShowteamSeasonPage', () => {
+describe('Page.ShowteamSeason', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {ShowteamSeasonPage} */ let page;
+	/** @type {Page.ShowteamSeason} */ let page;
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new ShowteamSeasonPage();
+		page = new Page.ShowteamSeason();
 	});
 
 	it('should extract match days', (done) => {
@@ -44,7 +44,7 @@ describe('ShowteamSeasonPage', () => {
 
 		Fixture.getDocument('showteam.php?s=6', doc => {
 			
-			HtmlUtil.getTableRowsByHeader(doc, ...ShowteamSeasonPage.HEADERS).forEach(row => {
+			HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 				row.cells[3].textContent = '';
 			});
 

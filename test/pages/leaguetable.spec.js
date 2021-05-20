@@ -1,14 +1,14 @@
-describe('LeagueTablePage', () => {
+describe('Page.LeagueTable', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {LeagueTablePage} */ let page;
+	/** @type {Page.LeagueTable} */ let page;
 
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new LeagueTablePage();
+		page = new Page.LeagueTable();
 	});
 
 	it('should extract league table and current ranking', (done) => {

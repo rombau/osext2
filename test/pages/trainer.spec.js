@@ -1,14 +1,14 @@
-describe('TrainerPage', () => {
+describe('Page.Trainer', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {TrainerPage} */ let page;
+	/** @type {Page.Trainer} */ let page;
 
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new TrainerPage();
+		page = new Page.Trainer();
 	});
 
 	it('should extract trainers', (done) => {

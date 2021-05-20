@@ -1,14 +1,14 @@
-describe('ContractExtensionPage', () => {
+describe('Page.ContractExtension', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {ContractExtensionPage} */ let page;
+	/** @type {Page.ContractExtension} */ let page;
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new ContractExtensionPage();
+		page = new Page.ContractExtension();
 	});
 
 	it('should extract contract extension data', (done) => {

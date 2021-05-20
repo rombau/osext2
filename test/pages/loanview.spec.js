@@ -1,14 +1,14 @@
-describe('LoanViewPage', () => {
+describe('Page.LoanView', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {LoanViewPage} */ let page;
+	/** @type {Page.LoanView} */ let page;
 
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new LoanViewPage();
+		page = new Page.LoanView();
 	});
 
 	it('should extract loan information', (done) => {

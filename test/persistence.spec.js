@@ -1,193 +1,110 @@
 describe('Persistence', () => {
 	
-	/** @type {ExtensionData} */ let cachedData;
-	/** @type {Team} */ let storedTeam;
+	let storageMock = {};
 	
 	beforeEach(() => {
-		cachedData = new ExtensionData();
-		storedTeam = new Team();
 
-		Persistence.localCachedData = undefined;
+		storageMock = {};
+
 		chrome.runtime.lastError = undefined;
 
-		spyOn(chrome.runtime, 'sendMessage').and.callFake((data, callback) => {
-			setTimeout(callback, 10, cachedData);
-		});
-
 		spyOn(chrome.storage.local, 'get').and.callFake((key, callback) => {
-			let object = {};
-			object[key] = storedTeam;
-			callback(object);
+			callback({[key]: storageMock[key]});
 		});
 		spyOn(chrome.storage.local, 'set').and.callFake((object, callback) => {
-			storedTeam = object[Object.keys(object).find(key => object[key].id)];
+			Object.assign(storageMock, object);
 			callback();
 		});
 	});
    
-	it('should return data from the background cache', (done) => {
+	it('should load data', (done) => {
 
-		cachedData.currentTeam.id = 1;
+		let data = new ExtensionData();
+		data.currentTeam.id = 1;
+		storageMock['FC Cork'] = JSON.stringify(data);
 
-		let firstOkay = false;
-
-		Persistence.getCachedData().then(data => {
+		Persistence.getExtensionData('FC Cork').then(data => {
 			expect(data.currentTeam.id).toEqual(1);
 			expect(data instanceof ExtensionData).toBeTruthy();
-			expect(chrome.runtime.sendMessage).toHaveBeenCalled();
-			firstOkay = true;
-		}, error => {
-			fail(error);
-		});
-
-		Persistence.getCachedData().then(() => {
-			if (firstOkay) done();
+			expect(chrome.storage.local.get).toHaveBeenCalled();
+			done();
 		}, error => {
 			fail(error);
 		});
 	});
 
-	it('should handle error when getting data from the background cache', (done) => {
+	it('should handle error when loading data', (done) => {
 
 		chrome.runtime.lastError = 'Error';
 
-		Persistence.getCachedData().then(() => {
+		Persistence.getExtensionData('FC Cork').then(data => {
 			fail();
 		}, error => {
-			expect(chrome.runtime.sendMessage).toHaveBeenCalled();
-			expect(error).toEqual('Caching failed: Error');
+			expect(chrome.storage.local.get).toHaveBeenCalled();
+			expect(error).toEqual('Loading team data failed: Error');
 			done();
 		});
 	});
 
-	it('should set data to the background cache', (done) => {
+	it('should handle error when loading data without team', (done) => {
 
-		cachedData.currentTeam.id = 1;
+		Persistence.getExtensionData().then(data => {
+			fail();
+		}, error => {
+			expect(chrome.storage.local.get).not.toHaveBeenCalled();
+			expect(error).toEqual('Loading team data failed: No team name given');
+			done();
+		});
+	});
 
-		Persistence.updateCachedData((data) => {
-			data.currentTeam.id = 2;
+	it('should store data', (done) => {
+
+		let data = new ExtensionData();
+		data.currentTeam.name = 'FC Cork';
+		storageMock['FC Cork'] = JSON.stringify(data);
+		storageMock[Persistence.CURRENT_TEAM] = 'FC Cork';
+
+		Persistence.updateExtensionData((data) => {
+			data.currentTeam.name = 'Wanderers';
 		}).then(data => {
-			expect(data.currentTeam.id).toEqual(2);
-			expect(chrome.runtime.sendMessage).toHaveBeenCalled();
+			expect(data.currentTeam.name).toEqual('Wanderers');
+			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('Wanderers');
+			expect(storageMock['Wanderers']).toBeDefined();
+			expect(chrome.storage.local.get).toHaveBeenCalled();
+			expect(chrome.storage.local.set).toHaveBeenCalled();
 			done();
 		}, _error => {
 			fail();
 		});
 	});
 
-	it('should handle error when setting data to the background cache', (done) => {
+	it('should store data not initialized', (done) => {
 
-		cachedData.currentTeam.id = 1;
+		Persistence.updateExtensionData((data) => {
+			data.currentTeam.name = 'Wanderers';
+		}).then(data => {
+			expect(data.currentTeam.name).toEqual('Wanderers');
+			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('Wanderers');
+			expect(storageMock['Wanderers']).toBeDefined();
+			expect(chrome.storage.local.get).toHaveBeenCalled();
+			expect(chrome.storage.local.set).toHaveBeenCalled();
+			done();
+		}, _error => {
+			fail();
+		});
+	});
+
+	it('should handle error when store data', (done) => {
+
 		chrome.runtime.lastError = 'Error';
 
-		Persistence.updateCachedData((data) => {
+		Persistence.updateExtensionData((data) => {
 			data.currentTeam.id = 2;
 		}).then(() => {
 			fail();
 		}, error => {
-			expect(chrome.runtime.sendMessage).toHaveBeenCalled();
-			expect(error).toEqual('Caching failed: Error');
-			done();
-		});
-	});
-
-	it('should use local chache instead of background cache', (done) => {
-
-		Persistence.localCachedData = new ExtensionData();
-		Persistence.localCachedData.currentTeam.id = 1;
-
-		Persistence.getCachedData().then(data => {
-			expect(data.currentTeam.id).toEqual(1);
-			expect(data instanceof ExtensionData).toBeTruthy();
-			expect(chrome.runtime.sendMessage).not.toHaveBeenCalled();
-			Persistence.updateCachedData((data) => {
-				data.currentTeam.id = 2;
-			}).then(data => {
-				expect(data.currentTeam.id).toEqual(2);
-				expect(chrome.runtime.sendMessage).toHaveBeenCalled();
-				done();
-			}, error => {
-				fail(error);
-			});
-		}, error => {
-			fail(error);
-		});
-
-	});
-
-	it('should load team data from the local storage', (done) => {
-
-		storedTeam.id = 1;
-		storedTeam.name = 'Wanderers';
-
-		Persistence.loadData('Wanderers').then((team) => {
-			expect(team.id).toEqual(1);
-			expect(team.name).toEqual('Wanderers');
-			expect(team instanceof Team).toBeTruthy();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
-			done();
-		}, _error => {
-			fail();
-		});
-	});
-
-	it('should handle error when loading team data from the local storage', (done) => {
-
-		chrome.runtime.lastError = 'Error';
-
-		Persistence.loadData('Wanderers').then((_team) => {
-			fail();
-		}, error => {
-			expect(chrome.storage.local.get).toHaveBeenCalled();
-			expect(error).toEqual('Loading failed: Error');
-			done();
-		});
-	});
-
-	it('should handle error when loading team data from the local storage without team name', (done) => {
-
-		Persistence.loadData(null).then((_team) => {
-			fail();
-		}, error => {
-			expect(error).toEqual('Loading failed: Missing team name');
-			done();
-		});
-	});
-
-	it('should persist team data to the local storage', (done) => {
-
-		storedTeam.id = 1;
-		storedTeam.name = 'Wanderers';
-
-		Persistence.persistData(new Team(2, 'Swallows')).then(() => {
-			expect(storedTeam.id).toEqual(2);
-			expect(storedTeam.name).toEqual('Swallows');
-			expect(chrome.storage.local.set).toHaveBeenCalled();
-			done();
-		}, _error => {
-			fail();
-		});
-	});
-
-	it('should handle error when persisting team data to the local storage', (done) => {
-
-		chrome.runtime.lastError = 'Error';
-
-		Persistence.persistData(new Team(2, 'Swallows')).then(() => {
-			fail();
-		}, error => {
-			expect(chrome.storage.local.set).toHaveBeenCalled();
-			expect(error).toEqual('Persisting failed: Error');
-			done();
-		});
-	});
-
-	it('should handle error when persisting team data to the local storage without team name', (done) => {
-
-		Persistence.persistData(new Team()).then(() => {
-			fail();
-		}, error => {
-			expect(error).toEqual('Persisting failed: Missing team name');
+			expect(error).toEqual('Loading team name failed: Error');
 			done();
 		});
 	});

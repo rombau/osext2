@@ -51,7 +51,6 @@ describe('Team', () => {
 		expect(team.getForecast(lastMatchDay, new MatchDay(15,50))).toBe(team);
 		expect(team.getForecast(lastMatchDay, new MatchDay(15,72))).not.toBe(team);
 		expect(team.getForecast(lastMatchDay, new MatchDay(15,72)).squadPlayers.length).toEqual(team.squadPlayers.length);
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,72))).toBe(team.getMatchDay(15,72).team);
 	});
 
 	it('should handle storage data', () => {

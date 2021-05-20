@@ -1,17 +1,17 @@
-describe('YouthOptionsPage', () => {
+describe('Page.YouthOptions', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {YouthOptionsPage} */ let page;
+	/** @type {Page.YouthOptions} */ let page;
 	
 	beforeEach(() => {		
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
 			modifyData(data);
 			return Promise.resolve(data);
 		});
 		
 		data = new ExtensionData();
-		page = new YouthOptionsPage();
+		page = new Page.YouthOptions();
 	});
 
 	it('should extract page data', (done) => {

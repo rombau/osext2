@@ -1,14 +1,14 @@
-describe('TrainingPage', () => {
+describe('Page.Training', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {TrainingPage} */ let page;
+	/** @type {Page.Training} */ let page;
 
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => Promise.resolve());
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 
 		data = new ExtensionData();
-		page = new TrainingPage();
+		page = new Page.Training();
 	});
 
 	it('should extract player training settings', (done) => {

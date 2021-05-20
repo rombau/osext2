@@ -1,17 +1,17 @@
-describe('MainPage', () => {
+describe('Page.Main', () => {
 
 	/** @type {ExtensionData} */ let data;
-	/** @type {MainPage} */ let page;
+	/** @type {Page.Main} */ let page;
 	
 	beforeEach(() => {
 		// for automatic regististration on new page
-		spyOn(Persistence, 'updateCachedData').and.callFake((modifyData) => {
+		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
 			modifyData(data);
 			return Promise.resolve(data);
 		});
 
 		data = new ExtensionData();
-		page = new MainPage();
+		page = new Page.Main();
 	});
 
 	it('should extract team data when not initialized', (done) => {
