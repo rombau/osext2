@@ -124,7 +124,7 @@ class Team {
 
 		let matchDaysInRange = this.matchDays.filter(matchDay => {
 			Object.setPrototypeOf(matchDay, MatchDay.prototype);
-			matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
+			return matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
 		});
 		
 		this.squadPlayers.forEach(player => {
