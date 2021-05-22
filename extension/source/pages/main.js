@@ -37,6 +37,8 @@ Page.Main = class extends Page {
 		if (data.nextZat !== nextZat) {
 			
 			data.initNextZat(nextZat);
+
+			data.viewSettings.squadPlayerMatchDay = undefined; // reset the slider when new zat
 			
 			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
 			
@@ -82,6 +84,8 @@ Page.Main = class extends Page {
 	extend (_doc, data) { 
 
 		Object.setPrototypeOf(data.team, Team.prototype); // needed for lastMatchDay
+
+		// XXX move init logic to ExtensionData and test it 
 
 		data.team.squadPlayers.forEach(player => {
 
