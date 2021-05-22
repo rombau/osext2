@@ -33,11 +33,11 @@ describe('Page.Main', () => {
 			
 			expect(data.nextZat).toEqual(49);
 
-			expect(data.currentTeam.id).toEqual(19);
-			expect(data.currentTeam.name).toEqual('FC Cork');
-			expect(data.currentTeam.emblem).toEqual('00000019.png');
-			expect(data.currentTeam.league.level).toEqual(1);
-			expect(data.currentTeam.league.countryName).toEqual('Irland');
+			expect(data.team.id).toEqual(19);
+			expect(data.team.name).toEqual('FC Cork');
+			expect(data.team.emblem).toEqual('00000019.png');
+			expect(data.team.league.level).toEqual(1);
+			expect(data.team.league.countryName).toEqual('Irland');
 			
 			expect(initPages).toBeDefined();
 

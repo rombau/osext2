@@ -14,10 +14,10 @@ describe('Page.ContractExtension', () => {
 			
 			page.extract(doc, data);
 					
-			expect(data.currentTeam.squadPlayers[0].followUpSalary['24']).toEqual(59597);
-			expect(data.currentTeam.squadPlayers[0].followUpSalary['36']).toEqual(50565);
-			expect(data.currentTeam.squadPlayers[0].followUpSalary['48']).toEqual(42901);
-			expect(data.currentTeam.squadPlayers[0].followUpSalary['60']).toEqual(36400);
+			expect(data.team.squadPlayers[0].followUpSalary['24']).toEqual(59597);
+			expect(data.team.squadPlayers[0].followUpSalary['36']).toEqual(50565);
+			expect(data.team.squadPlayers[0].followUpSalary['48']).toEqual(42901);
+			expect(data.team.squadPlayers[0].followUpSalary['60']).toEqual(36400);
 			
 			done();
 		});

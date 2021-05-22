@@ -40,19 +40,19 @@ Page.Main = class extends Page {
 			
 			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
 			
-			data.currentTeam.id = +matches[2];
-			data.currentTeam.emblem = matches[1];
+			data.team.id = +matches[2];
+			data.team.emblem = matches[1];
 			
 			let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
 
 			matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
 				
-			data.currentTeam.name = matches[1];
+			data.team.name = matches[1];
 
 			matches = /(\d)\. Liga (.+)/gm.exec(titleContainer.childNodes[2].textContent);
 
-			data.currentTeam.league.level = +matches[1];
-			data.currentTeam.league.countryName = matches[2];
+			data.team.league.level = +matches[1];
+			data.team.league.countryName = matches[2];
 
 			let initPages = [];
 			initPages.push(new Page.ShowteamOverview());
@@ -81,9 +81,9 @@ Page.Main = class extends Page {
 	 */
 	extend (_doc, data) { 
 
-		Object.setPrototypeOf(data.currentTeam, Team.prototype); // needed for lastMatchDay
+		Object.setPrototypeOf(data.team, Team.prototype); // needed for lastMatchDay
 
-		data.currentTeam.squadPlayers.forEach(player => {
+		data.team.squadPlayers.forEach(player => {
 
 			Object.setPrototypeOf(player, SquadPlayer.prototype);
 

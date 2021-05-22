@@ -17,14 +17,14 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.fixCountryHeader(doc);
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
 			.filter(row => row.cells['U']).forEach((row, index) => {
 	
-			let player = data.currentTeam.getYouthPlayer(index);
+			let player = data.team.getYouthPlayer(index);
 			
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
@@ -62,7 +62,7 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
 

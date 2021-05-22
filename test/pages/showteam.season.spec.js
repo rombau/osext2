@@ -16,16 +16,16 @@ describe('Page.ShowteamSeason', () => {
 			
 			page.extract(doc, data);
 						
-			expect(data.currentTeam.matchDays.length).toEqual(72);
-			expect(data.currentTeam.matchDays[0].zat).toEqual(1);
-			expect(data.currentTeam.matchDays[0].season).toEqual(10);
-			expect(data.currentTeam.matchDays[0].competition).toEqual(Competition.FRIENDLY);
-			expect(data.currentTeam.matchDays[0].location).toEqual(GameLocation.AWAY);
-			expect(data.currentTeam.matchDays[0].result).toEqual('1 : 0');
-			expect(data.currentTeam.matchDays[0].opponent.id).toEqual(724);
-			expect(data.currentTeam.matchDays[0].opponent.name).toEqual('FC Ferastrau Suceava');
+			expect(data.team.matchDays.length).toEqual(72);
+			expect(data.team.matchDays[0].zat).toEqual(1);
+			expect(data.team.matchDays[0].season).toEqual(10);
+			expect(data.team.matchDays[0].competition).toEqual(Competition.FRIENDLY);
+			expect(data.team.matchDays[0].location).toEqual(GameLocation.AWAY);
+			expect(data.team.matchDays[0].result).toEqual('1 : 0');
+			expect(data.team.matchDays[0].opponent.id).toEqual(724);
+			expect(data.team.matchDays[0].opponent.name).toEqual('FC Ferastrau Suceava');
 
-			expect(data.currentTeam.matchDays[66].friendlyShare).toEqual(50);
+			expect(data.team.matchDays[66].friendlyShare).toEqual(50);
 
 			expect(data.nextMatchDay.season).toEqual(10);
 			expect(data.nextMatchDay.zat).toEqual(49);

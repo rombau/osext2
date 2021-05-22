@@ -15,12 +15,12 @@ Page.ContractExtension = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ContractExtension.HEADERS).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-			let player = data.currentTeam.getSquadPlayer(id); 
+			let player = data.team.getSquadPlayer(id); 
 			
 			player.followUpSalary['24'] = +row.cells[8].textContent.replace(/\./g, '');
 			player.followUpSalary['36'] = +row.cells[10].textContent.replace(/\./g, '');

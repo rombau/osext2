@@ -15,12 +15,12 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamContracts.HEADERS).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-			let player = data.currentTeam.getSquadPlayer(id); 
+			let player = data.team.getSquadPlayer(id); 
 			
 			player.birthday = +row.cells['Geb.Tag'].textContent;
 			player.contractTerm = +row.cells['Vertrag'].textContent;
@@ -36,7 +36,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamContracts.HEADERS);
 
@@ -62,7 +62,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
-				let player = data.currentTeam.getSquadPlayer(id); 
+				let player = data.team.getSquadPlayer(id); 
 
 				if (player.loan || player.transferLock) {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
@@ -81,8 +81,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 						cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
 						cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
 
-						data.currentTeam.getSquadPlayer(id).fastTransfer = new MatchDay(cell.matchDay.season, cell.matchDay.zat);
-						data.currentTeam.matchDays
+						data.team.getSquadPlayer(id).fastTransfer = new MatchDay(cell.matchDay.season, cell.matchDay.zat);
+						data.team.matchDays
 							.filter(matchDay => Object.setPrototypeOf(matchDay, MatchDay.prototype).after(cell.matchDay))
 							.forEach(matchDay => matchDay.team = undefined);
 					}
@@ -98,12 +98,12 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					if (!data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay) && !player.loan && !player.transferLock) {
 						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
 					}
-					data.currentTeam.getSquadPlayer(id).fastTransfer = undefined;
-					data.currentTeam.matchDays
+					data.team.getSquadPlayer(id).fastTransfer = undefined;
+					data.team.matchDays
 						.filter(matchDay => Object.setPrototypeOf(matchDay, MatchDay.prototype).after(cell.matchDay))
 						.forEach(matchDay => matchDay.team = undefined);
 
-					let matchDayTeam = data.currentTeam.getForecast(data.lastMatchDay, cell.matchDay);
+					let matchDayTeam = data.team.getForecast(data.lastMatchDay, cell.matchDay);
 					matchDayTeam.getSquadPlayer(id).active = true;
 					this.updateWithTeam(matchDayTeam, false, cell.matchDay);
 				});

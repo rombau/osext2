@@ -14,11 +14,11 @@ Page.Trainer = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Trainer.HEADERS).forEach(row => {
 
-			let trainer = data.currentTeam.getTrainer(+row.cells['#'].textContent); 
+			let trainer = data.team.getTrainer(+row.cells['#'].textContent); 
 
 			trainer.salary = +row.cells['Gehalt'].textContent.replace(/\./g, "");
 			trainer.contractTerm = +row.cells['Vertrag'].textContent;

@@ -17,10 +17,10 @@ describe('Page.ShowteamContracts', () => {
 			
 			page.extract(doc, data);
 					
-			expect(data.currentTeam.squadPlayers[0].birthday).toEqual(18);
-			expect(data.currentTeam.squadPlayers[0].contractTerm).toEqual(17);
-			expect(data.currentTeam.squadPlayers[0].salary).toEqual(59812);
-			expect(data.currentTeam.squadPlayers[0].marketValue).toEqual(9379453);
+			expect(data.team.squadPlayers[0].birthday).toEqual(18);
+			expect(data.team.squadPlayers[0].contractTerm).toEqual(17);
+			expect(data.team.squadPlayers[0].salary).toEqual(59812);
+			expect(data.team.squadPlayers[0].marketValue).toEqual(9379453);
 
 			page.extend(doc, data);
 

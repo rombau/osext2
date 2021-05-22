@@ -160,7 +160,7 @@ class Page {
 				let requestor = Requestor.create(doc);
 				pagesToRequest.forEach((page) => requestor.addPage(page));
 				requestor.start(page, () => {
-					Persistence.getExtensionData(data.currentTeam.name).then(newdata => {
+					Persistence.getExtensionData(data.team.name).then(newdata => {
 						page.registerSaveOnExitListener(doc, newdata);
 						page.extend(doc, newdata);
 					}, console.error);

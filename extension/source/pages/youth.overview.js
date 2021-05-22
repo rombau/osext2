@@ -17,14 +17,14 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		this.fixCountryHeader(doc);
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS)
 			.filter(row => row.cells['U']).forEach((row, index) => {
 	
-			let player = data.currentTeam.getYouthPlayer(index);
+			let player = data.team.getYouthPlayer(index);
 				
 			player.age = +row.cells['Alter'].textContent;
 			player.birthday = +row.cells['Geb.'].textContent;
@@ -65,7 +65,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOverview.HEADERS);
 

@@ -17,14 +17,14 @@ describe('Page.YouthOverview', () => {
 			
 			page.extract(doc, data);
 					
-			expect(data.currentTeam.youthPlayers.length).toEqual(21);
-			expect(data.currentTeam.youthPlayers[0].pos).toBeUndefined();
-			expect(data.currentTeam.youthPlayers[0].countryCode).toEqual('CYP');
-			expect(data.currentTeam.youthPlayers[0].countryName).toEqual('Zypern');
-			expect(data.currentTeam.youthPlayers[0].uefa).toBeTruthy();
-			expect(data.currentTeam.youthPlayers[0].talent).toEqual(Talent.NORMAL);
+			expect(data.team.youthPlayers.length).toEqual(21);
+			expect(data.team.youthPlayers[0].pos).toBeUndefined();
+			expect(data.team.youthPlayers[0].countryCode).toEqual('CYP');
+			expect(data.team.youthPlayers[0].countryName).toEqual('Zypern');
+			expect(data.team.youthPlayers[0].uefa).toBeTruthy();
+			expect(data.team.youthPlayers[0].talent).toEqual(Talent.NORMAL);
 
-			expect(data.currentTeam.youthPlayers[9].pos).toEqual(Position.TOR);
+			expect(data.team.youthPlayers[9].pos).toEqual(Position.TOR);
 
 			page.extend(doc, data);
 		

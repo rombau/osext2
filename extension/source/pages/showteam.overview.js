@@ -19,7 +19,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		let currentPlayerIds = [];
 
@@ -28,7 +28,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			currentPlayerIds.push(id);
 
-			let player = data.currentTeam.getSquadPlayer(id); 
+			let player = data.team.getSquadPlayer(id); 
 	
 			this.ageExact = row.cells['Alter'].textContent.includes('.');
 			
@@ -65,7 +65,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 		});
 
 		// remove all no longer existing players
-		data.currentTeam.squadPlayers = data.currentTeam.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
+		data.team.squadPlayers = data.team.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
 	}
 	
 	/**
@@ -74,7 +74,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamOverview.HEADERS);
 
@@ -105,7 +105,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
-				let player = data.currentTeam.getSquadPlayer(id); 
+				let player = data.team.getSquadPlayer(id); 
 					
 				if (!this.ageExact) row.cells['Geb.'].textContent = player.birthday;
 				

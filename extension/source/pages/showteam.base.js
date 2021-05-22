@@ -52,7 +52,7 @@ Page.Showteam = class extends Page {
 			viewInfo.update(squadPlayerMatchDay.season, squadPlayerMatchDay.zat);
 		});
 		rangeSlider.addEventListener('change', (event) => {
-			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
+			page.updateWithTeam(data.team.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
 				data.lastMatchDay.equals(squadPlayerMatchDay), squadPlayerMatchDay);
 		});
 		toolbar.appendChild(rangeSlider);
@@ -60,7 +60,7 @@ Page.Showteam = class extends Page {
 		toolbar.appendChild(viewInfo);
 		
 		if (!data.lastMatchDay.equals(squadPlayerMatchDay)) {
-			page.updateWithTeam(data.currentTeam.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
+			page.updateWithTeam(data.team.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
 				data.lastMatchDay.equals(squadPlayerMatchDay), squadPlayerMatchDay);
 		}
 

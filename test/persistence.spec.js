@@ -20,11 +20,11 @@ describe('Persistence', () => {
 	it('should load data', (done) => {
 
 		let data = new ExtensionData();
-		data.currentTeam.id = 1;
+		data.team.id = 1;
 		storageMock['FC Cork'] = data;
 
 		Persistence.getExtensionData('FC Cork').then(data => {
-			expect(data.currentTeam.id).toEqual(1);
+			expect(data.team.id).toEqual(1);
 			expect(data instanceof ExtensionData).toBeTruthy();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			done();
@@ -71,14 +71,14 @@ describe('Persistence', () => {
 	it('should store data', (done) => {
 
 		let data = new ExtensionData();
-		data.currentTeam.name = 'FC Cork';
+		data.team.name = 'FC Cork';
 		storageMock['FC Cork'] = data;
 		storageMock[Persistence.CURRENT_TEAM] = 'FC Cork';
 
 		Persistence.updateExtensionData((data) => {
-			data.currentTeam.name = 'Wanderers';
+			data.team.name = 'Wanderers';
 		}).then(data => {
-			expect(data.currentTeam.name).toEqual('Wanderers');
+			expect(data.team.name).toEqual('Wanderers');
 			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('Wanderers');
 			expect(storageMock['Wanderers']).toBeDefined();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
@@ -92,9 +92,9 @@ describe('Persistence', () => {
 	it('should store data not initialized', (done) => {
 
 		Persistence.updateExtensionData((data) => {
-			data.currentTeam.name = 'Wanderers';
+			data.team.name = 'Wanderers';
 		}).then(data => {
-			expect(data.currentTeam.name).toEqual('Wanderers');
+			expect(data.team.name).toEqual('Wanderers');
 			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('Wanderers');
 			expect(storageMock['Wanderers']).toBeDefined();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
@@ -110,7 +110,7 @@ describe('Persistence', () => {
 		chrome.runtime.lastError = 'Error';
 
 		Persistence.updateExtensionData((data) => {
-			data.currentTeam.id = 2;
+			data.team.id = 2;
 		}).then(() => {
 			fail();
 		}, error => {

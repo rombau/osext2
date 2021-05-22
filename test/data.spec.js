@@ -25,7 +25,7 @@ describe('ExtensionData', () => {
 
 	it('should initializes the next zat after season', () => {
 
-		data.currentTeam.getMatchDay(12, 72).result = '0 : 0';
+		data.team.getMatchDay(12, 72).result = '0 : 0';
 
 		data.initNextZat(73);
 
@@ -47,7 +47,7 @@ describe('ExtensionData', () => {
 
 	it('should return next match day from team match days', () => {
 
-		let teamMatchDay = data.currentTeam.getMatchDay(12, 27);
+		let teamMatchDay = data.team.getMatchDay(12, 27);
 
 		data.initNextZat(27);
 		data.initNextZatSeason(12);
@@ -57,7 +57,7 @@ describe('ExtensionData', () => {
 
 	it('should return last match day from team match days', () => {
 
-		let teamMatchDay = data.currentTeam.getMatchDay(12, 26);
+		let teamMatchDay = data.team.getMatchDay(12, 26);
 
 		data.initNextZat(27);
 		data.initNextZatSeason(12);
@@ -67,7 +67,7 @@ describe('ExtensionData', () => {
 
 	it('should return last match day from team match days over season interval', () => {
 
-		let teamMatchDay = data.currentTeam.getMatchDay(12, 72);
+		let teamMatchDay = data.team.getMatchDay(12, 72);
 		teamMatchDay.result = '0 : 0';
 
 		data.initNextZat(73);

@@ -14,7 +14,7 @@ Page.LoanView = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		/** @type {[HTMLTableRowElement]} */
 		let rows = Array.from(doc.querySelectorAll('table tr'));
@@ -23,7 +23,7 @@ Page.LoanView = class extends Page {
 			let nameCell = row.cells['Name'];
 			if (nameCell.firstChild && nameCell.firstChild.href) {
 				let id = HtmlUtil.extractIdFromHref(nameCell.firstChild.href);
-				let player = data.currentTeam.getSquadPlayer(id);
+				let player = data.team.getSquadPlayer(id);
 				player.loan.fee = +row.cells['Leihgebühr'].textContent.replace(/\./g, "");
 				if (player.pos !== 'LEI') player.loan.fee *= -1;
 				player.pos = nameCell.className;

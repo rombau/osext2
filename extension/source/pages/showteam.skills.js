@@ -17,12 +17,12 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamSkills.HEADERS).forEach(row => {
 	
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-			let player = data.currentTeam.getSquadPlayer(id); 
+			let player = data.team.getSquadPlayer(id); 
 			
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
@@ -36,7 +36,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamSkills.HEADERS);
 
@@ -69,7 +69,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-				let player = data.currentTeam.getSquadPlayer(id);
+				let player = data.team.getSquadPlayer(id);
 					
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;

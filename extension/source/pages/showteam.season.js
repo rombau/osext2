@@ -26,14 +26,14 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	extract(doc, data) {
 		
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 
 		let season = +doc.querySelector('select[name=saison]').value;
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 			let gameInfo = row.cells['Spielart'].textContent;
 			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
-				let matchday = data.currentTeam.getMatchDay(season, +row.cells['ZAT'].textContent);
+				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
 				matchday.competition = gameInfo.split(' : ')[0];
 				matchday.location = gameInfo.split(' : ')[1];
 				matchday.result = row.cells['Ergebnis'].textContent;

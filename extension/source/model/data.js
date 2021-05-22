@@ -6,7 +6,7 @@ class ExtensionData {
 	constructor (dataObject) {
 			
 		/** @type {Team} the current team */ 
-		this.currentTeam = new Team();
+		this.team = new Team();
 		
 		/** @type {Number} the next zat */ 
 		this.nextZat;
@@ -22,7 +22,7 @@ class ExtensionData {
 		
 		if (dataObject) {
 			Object.assign(this, dataObject);
-			Object.setPrototypeOf(this.currentTeam, Team.prototype);
+			Object.setPrototypeOf(this.team, Team.prototype);
 		}
 
 	}
@@ -52,7 +52,7 @@ class ExtensionData {
 	initNextZatSeason (season) {
 		if (!this.nextZatSeason) {
 			if (this.nextZat == 1) {
-				if (this.currentTeam.matchDays.find(matchDay => matchDay.result)) {
+				if (this.team.matchDays.find(matchDay => matchDay.result)) {
 					this.nextZatSeason = season + 1;
 					return true;
 				}
@@ -67,7 +67,7 @@ class ExtensionData {
 	 * @type {MatchDay} the next match day
 	 */
 	get nextMatchDay () {
-		return this.currentTeam.getMatchDay(this.nextZatSeason, this.nextZat);
+		return this.team.getMatchDay(this.nextZatSeason, this.nextZat);
 	}
 
 	/**
@@ -75,9 +75,9 @@ class ExtensionData {
 	 */
 	get lastMatchDay () {
 		if (this.nextZat === 1) {
-			return this.currentTeam.getMatchDay(this.nextZatSeason - 1, SEASON_MATCH_DAYS);
+			return this.team.getMatchDay(this.nextZatSeason - 1, SEASON_MATCH_DAYS);
 		}
-		return this.currentTeam.getMatchDay(this.nextZatSeason, this.nextZat - 1);
+		return this.team.getMatchDay(this.nextZatSeason, this.nextZat - 1);
 	}
 
 }

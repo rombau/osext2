@@ -14,7 +14,7 @@ Page.Training = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.currentTeam = Object.assign(new Team(), data.currentTeam);
+		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Training.HEADERS).forEach(row => {
 
@@ -32,10 +32,10 @@ Page.Training = class extends Page {
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill)) {
 			
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-				let player = data.currentTeam.getSquadPlayer(id); 
+				let player = data.team.getSquadPlayer(id); 
 
 				player.nextTraining = new SquadPlayer.Training();
-				player.nextTraining.trainer = data.currentTeam.getTrainer(trainerNr);
+				player.nextTraining.trainer = data.team.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
 
 				let chanceCellText = row.cells['Chance'].textContent;

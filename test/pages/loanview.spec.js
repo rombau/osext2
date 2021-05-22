@@ -10,11 +10,11 @@ describe('Page.LoanView', () => {
 
 	it('should extract loan information', (done) => {
 
-		let playerFrom = data.currentTeam.getSquadPlayer(11031);
+		let playerFrom = data.team.getSquadPlayer(11031);
 		playerFrom.loan = new SquadPlayer.Loan('Team1', 'Team2', 15);
 		playerFrom.pos = Position.TOR;
 
-		let playerTo = data.currentTeam.getSquadPlayer(81726);
+		let playerTo = data.team.getSquadPlayer(81726);
 		playerTo.loan = new SquadPlayer.Loan('Team3', 'Team4', 51);
 		playerTo.pos = 'LEI';
 

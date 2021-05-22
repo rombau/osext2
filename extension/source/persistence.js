@@ -120,11 +120,11 @@ class Persistence {
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
 	 */
 	static storeExtensionData (data) {
-		if (data.currentTeam.name) {
+		if (data.team.name) {
 			return new Promise((resolve, reject) => {
 				let objectToStore = {
-					[Persistence.CURRENT_TEAM]: data.currentTeam.name,
-					[data.currentTeam.name]: data
+					[Persistence.CURRENT_TEAM]: data.team.name,
+					[data.team.name]: data
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {

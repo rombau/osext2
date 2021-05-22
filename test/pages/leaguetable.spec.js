@@ -12,12 +12,12 @@ describe('Page.LeagueTable', () => {
 
 		Fixture.getDocument('lt.php', doc => {
 			
-			data.currentTeam.id = 19;
+			data.team.id = 19;
 
 			page.extract(doc, data);
 			
-			expect(data.currentTeam.league.size).toEqual(10);
-			expect(data.currentTeam.leagueRanking).toEqual(3);
+			expect(data.team.league.size).toEqual(10);
+			expect(data.team.leagueRanking).toEqual(3);
 
 			page.extend(doc, data);
 
