@@ -3,13 +3,7 @@ describe('Page.YouthOptskills', () => {
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.YouthOptskills} */ let page;
 	
-	beforeEach(() => {		
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
-			modifyData(data);
-			return Promise.resolve(data);
-		});
-		
+	beforeEach(() => {			
 		data = new ExtensionData();
 		page = new Page.YouthOptskills();
 	});

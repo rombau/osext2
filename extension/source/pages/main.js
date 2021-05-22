@@ -7,27 +7,43 @@ Page.Main = class extends Page {
 	}
 
 	/**
+	 * Processes the main page and sets the current team. Then the default processing is triggered.
+	 * 
+	 * @param {Document} doc the document that should be processed
+	 * @param {Window} win the current window
+	 */
+	process (doc, win = window) {
+
+		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
+		let matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
+
+		let page = this;
+		let superProcess = super.process;
+
+		Persistence.updateCurrentTeam(matches[1]).then(() => {
+			superProcess.call(page, doc, win);
+		});
+	}
+
+	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 		
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
 
 		let nextZat = +matches[1];
-		
-		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
-		
-		if (data.currentTeam.id !== +matches[2] || data.nextZat !== nextZat) {
-
+		if (data.nextZat !== nextZat) {
+			
 			data.initNextZat(nextZat);
 			
-			data.clear();
-
+			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
+			
 			data.currentTeam.id = +matches[2];
 			data.currentTeam.emblem = matches[1];
 			
-			let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement
+			let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
 
 			matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
 				

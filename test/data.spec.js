@@ -7,25 +7,6 @@ describe('ExtensionData', () => {
 		data = new ExtensionData();
 	});
 
-	it('should clear team data', () => {
-
-		expect(data.currentTeam.id).toBeUndefined();
-		expect(data.currentTeam.name).toBeUndefined();
-		expect(data.nextZat).toBeUndefined();
-		expect(data.nextZatSeason).toBeUndefined();
-		expect(data.viewSettings.squadPlayerMatchDay).toBeUndefined();
-		
-		data.currentTeam.id = 1;
-		data.initNextZat(27);
-		data.viewSettings.squadPlayerMatchDay = new MatchDay(1, 1);
-
-		data.clear();
-
-		expect(data.currentTeam.id).toBeUndefined();
-		expect(data.viewSettings.squadPlayerMatchDay).toBeUndefined();
-
-	});
-
 	it('should initializes the next zat regularly', () => {
 
 		data.initNextZat(27);

@@ -21,7 +21,7 @@ describe('Persistence', () => {
 
 		let data = new ExtensionData();
 		data.currentTeam.id = 1;
-		storageMock['FC Cork'] = JSON.stringify(data);
+		storageMock['FC Cork'] = data;
 
 		Persistence.getExtensionData('FC Cork').then(data => {
 			expect(data.currentTeam.id).toEqual(1);
@@ -57,11 +57,22 @@ describe('Persistence', () => {
 		});
 	});
 
+
+	it('should store current team name', (done) => {
+
+		Persistence.updateCurrentTeam('FC Cork').then(() => {
+			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('FC Cork');
+			done();
+		}, _error => {
+			fail();
+		});
+	});
+
 	it('should store data', (done) => {
 
 		let data = new ExtensionData();
 		data.currentTeam.name = 'FC Cork';
-		storageMock['FC Cork'] = JSON.stringify(data);
+		storageMock['FC Cork'] = data;
 		storageMock[Persistence.CURRENT_TEAM] = 'FC Cork';
 
 		Persistence.updateExtensionData((data) => {

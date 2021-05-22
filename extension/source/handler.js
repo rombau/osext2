@@ -1,6 +1,4 @@
 
-new Page.Main(); // register main page
-
 let page = Page.byLocation(document.location);
 if (page) {
 	console.log(`Page found for ${document.location}: ${page.name}`);

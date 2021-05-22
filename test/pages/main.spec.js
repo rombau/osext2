@@ -4,17 +4,28 @@ describe('Page.Main', () => {
 	/** @type {Page.Main} */ let page;
 	
 	beforeEach(() => {
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
-			modifyData(data);
-			return Promise.resolve(data);
-		});
-
 		data = new ExtensionData();
 		page = new Page.Main();
 	});
 
-	it('should extract team data when not initialized', (done) => {
+	it('should extract team name', (done) => {
+		
+		Fixture.getDocument('haupt.php', doc => {
+			
+			spyOn(Persistence, 'updateCurrentTeam').and.callFake(() => {
+				return Promise.resolve();
+			});
+			spyOn(Object.getPrototypeOf(Object.getPrototypeOf(page)), 'process').and.callFake(() => {
+				done();
+			});
+			
+			page.process(doc, data);
+			
+			expect(Persistence.updateCurrentTeam).toHaveBeenCalledWith('FC Cork');
+		});
+	});
+
+	it('should extract team data for new match day', (done) => {
 
 		Fixture.getDocument('haupt.php', doc => {
 			

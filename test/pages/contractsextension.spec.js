@@ -4,9 +4,6 @@ describe('Page.ContractExtension', () => {
 	/** @type {Page.ContractExtension} */ let page;
 	
 	beforeEach(() => {
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
-
 		data = new ExtensionData();
 		page = new Page.ContractExtension();
 	});

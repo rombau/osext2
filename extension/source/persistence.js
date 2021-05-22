@@ -7,8 +7,6 @@ class Persistence {
 	
 	static CURRENT_TEAM = 'currentTeam';
 
-	static PAGE_REGISTRY = 'pageRegistry';
-
 	/**
 	 * Returns a promise with the given operation. The new promise always waits for the last 
 	 * requested promise to resolve. This ensures synchronized serial execution.
@@ -43,13 +41,31 @@ class Persistence {
 					if (chrome.runtime.lastError) {
 						reject('Loading team data failed: ' + chrome.runtime.lastError);
 					} else {
-						resolve(new ExtensionData(JSON.parse(storedData[teamName])));
+						resolve(new ExtensionData(storedData[teamName]));
 					}
 				});
 			});
 		} else {
 			return Promise.reject('Loading team data failed: No team name given');
 		}
+	}
+
+	/**
+	 * Updates the current team name in local storage.
+	 * 
+	 * @param {String} teamName the name of the current team
+	 * @returns {Promise}
+	 */
+	static updateCurrentTeam (teamName) {
+		return Persistence.getPromise((resolve, reject) => {
+			chrome.storage.local.set({[Persistence.CURRENT_TEAM]: teamName}, () => {
+				if (chrome.runtime.lastError) {
+					reject('Storing team name failed: ' + chrome.runtime.lastError);
+				} else {
+					resolve();
+				}
+			});
+		});
 	}
 
 	/**
@@ -83,7 +99,7 @@ class Persistence {
 						if (chrome.runtime.lastError) {
 							reject('Loading team data failed: ' + chrome.runtime.lastError);
 						} else {
-							extensionData = new ExtensionData(JSON.parse(storedData[currentTeamName]));
+							extensionData = new ExtensionData(storedData[currentTeamName]);
 							modifyData(extensionData);
 							Persistence.storeExtensionData(extensionData).then(resolve, reject);
 						}
@@ -108,7 +124,7 @@ class Persistence {
 			return new Promise((resolve, reject) => {
 				let objectToStore = {
 					[Persistence.CURRENT_TEAM]: data.currentTeam.name,
-					[data.currentTeam.name]: JSON.stringify(data)
+					[data.currentTeam.name]: data
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {

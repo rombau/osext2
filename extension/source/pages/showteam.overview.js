@@ -21,9 +21,13 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 		data.currentTeam = Object.assign(new Team(), data.currentTeam);
 		
+		let currentPlayerIds = [];
+
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamOverview.HEADERS).forEach(row => {
 	
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
+			currentPlayerIds.push(id);
+
 			let player = data.currentTeam.getSquadPlayer(id); 
 	
 			this.ageExact = row.cells['Alter'].textContent.includes('.');
@@ -57,9 +61,11 @@ Page.ShowteamOverview = class extends Page.Showteam {
 					let duration = +shortForm.slice(0, -1); 
 					player.bans.push(new SquadPlayer.Ban(type, duration));
 				});
-			}
-			
+			}	
 		});
+
+		// remove all no longer existing players
+		data.currentTeam.squadPlayers = data.currentTeam.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
 	}
 	
 	/**

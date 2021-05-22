@@ -28,14 +28,6 @@ class ExtensionData {
 	}
 
 	/**
-	 * Resets all the current team dependent data.
-	 */
-	clear () {
-		this.currentTeam = new Team();
-		this.viewSettings.squadPlayerMatchDay = undefined;
-	}
-
-	/**
 	 * Initializes the next zat. During saison interval the next zat is always set to 1.
 	 * 
 	 * @param {Number} zat 

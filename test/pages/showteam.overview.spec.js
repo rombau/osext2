@@ -4,12 +4,6 @@ describe('Page.ShowteamOverview', () => {
 	/** @type {Page.ShowteamOverview} */ let page;
 	
 	beforeEach(() => {		
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
-			modifyData(data);
-			return Promise.resolve(data);
-		});
-		
 		data = new ExtensionData();
 		page = new Page.ShowteamOverview();
 	});
@@ -18,6 +12,8 @@ describe('Page.ShowteamOverview', () => {
 
 		data.nextZat = 53;
 		data.nextZatSeason = 16;
+
+		data.currentTeam.squadPlayers.push(new SquadPlayer());
 
 		Fixture.getDocument('showteam.php', doc => {
 			

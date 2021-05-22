@@ -6,9 +6,6 @@ describe('Requestor', () => {
 	beforeEach(() => {
 		doc = Fixture.createDocument('');
 		requestor = new Requestor(doc);
-
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => Promise.resolve());
 	});
 
     afterEach(() => {
@@ -36,7 +33,7 @@ describe('Requestor', () => {
 		expect(requestor.pageQueue.length).toEqual(2);
 		expect(requestor.status).toBeUndefined();
 		
-		requestor.start(new Page.Main());
+		requestor.start(new Page());
 		
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		
@@ -67,7 +64,7 @@ describe('Requestor', () => {
 		expect(requestor.pageQueue.length).toEqual(1);
 		expect(requestor.status).toBeUndefined();
 		
-		requestor.start(new Page.Main());
+		requestor.start(new Page());
 		
 		expect(requestor.status.classList).not.toContain('osext-hidden');
 		

@@ -4,12 +4,6 @@ describe('Page.YouthOptions', () => {
 	/** @type {Page.YouthOptions} */ let page;
 	
 	beforeEach(() => {		
-		// for automatic regististration on new page
-		spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
-			modifyData(data);
-			return Promise.resolve(data);
-		});
-		
 		data = new ExtensionData();
 		page = new Page.YouthOptions();
 	});
