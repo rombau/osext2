@@ -92,4 +92,11 @@ class ExtensionData {
 		return true;
 	}
 		
+	/**
+	 * Completes the initialization of the extension data.
+	 */
+	complete () {
+		this.team.complete(this.lastMatchDay);
+	}
+	
 }

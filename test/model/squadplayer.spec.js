@@ -67,6 +67,19 @@ describe('SquadPlayer', () => {
 		});
 	});
 	
+	it('should complete initialization', () => {
+
+		player.complete(new MatchDay(14, 5));
+
+		expect(player.ageExact).toEqual(19.73611111111111);
+		expect(player.trainingFactor).toEqual(1.1612527977729297);
+
+		player.complete(new MatchDay(14, 64));
+
+		expect(player.ageExact).toEqual(19.555555555555557);
+		expect(player.trainingFactor).toEqual(1.1451562706246994);
+	});
+
 	it('should return static forecast values', () => {
 
 		expect(player.getForecast(new MatchDay(15,10), new MatchDay(15,10))).toBe(player);

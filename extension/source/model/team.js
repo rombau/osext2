@@ -185,6 +185,16 @@ class Team {
 		return forecastTeam;
 	}
 		
+			
+	/**
+	 * Completes the initialization of the team data.
+	 * 
+	 * @param {MatchDay} lastMatchDay the last match day
+	 */
+	complete (lastMatchDay) {
+		this.squadPlayers.forEach(player => player.complete(lastMatchDay));
+	}
+
 }
 
 /**

@@ -83,21 +83,7 @@ Page.Main = class extends Page {
 	 */
 	extend (_doc, data) { 
 
-		// XXX move init logic to ExtensionData and test it 
-
-		data.team.squadPlayers.forEach(player => {
-
-			// init exact age
-			if (data.lastMatchDay.zat >= player.birthday) {
-				player.ageExact = player.age + ((data.lastMatchDay.zat - player.birthday) / SEASON_MATCH_DAYS);
-			} else {
-				player.ageExact = player.age + ((SEASON_MATCH_DAYS - (player.birthday - data.lastMatchDay.zat)) / SEASON_MATCH_DAYS);
-			}
-
-			// init training factor
-			player.trainingFactor = player.marketValue / player.getMarketValue(player.pos, 1);
-
-		});
+		data.complete();
 
 	}
 }

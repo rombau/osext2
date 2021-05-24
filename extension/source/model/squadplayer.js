@@ -318,6 +318,24 @@ class SquadPlayer extends Player {
 			forecastPlayer.active = false;
 		}
 	}
+		
+	/**
+	 * Completes the initialization of the player data.
+	 * 
+	 * @param {MatchDay} lastMatchDay the last match day
+	 */
+	complete (lastMatchDay) {
+
+		// initialize exact age
+		if (lastMatchDay.zat >= this.birthday) {
+			this.ageExact = this.age + ((lastMatchDay.zat - this.birthday) / SEASON_MATCH_DAYS);
+		} else {
+			this.ageExact = this.age + ((SEASON_MATCH_DAYS - (this.birthday - lastMatchDay.zat)) / SEASON_MATCH_DAYS);
+		}
+
+		// initialize training factor
+		this.trainingFactor = this.marketValue / this.getMarketValue(this.pos, 1);
+	}
 
 }
 
