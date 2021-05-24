@@ -13,6 +13,8 @@ describe('Page.ShowteamContracts', () => {
 		data.nextZat = 53;
 		data.nextSeason = 16;
 		
+		data.complete();
+		
 		Fixture.getDocument('showteam.php?s=1', doc => {
 			
 			page.extract(doc, data);

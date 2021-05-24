@@ -97,6 +97,7 @@ class ExtensionData {
 	 */
 	complete () {
 		this.team.complete(this.lastMatchDay);
+		this.viewSettings.squadPlayerMatchDay = new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
 	}
 	
 }

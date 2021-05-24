@@ -19,10 +19,7 @@ Page.Showteam = class extends Page {
 		
 		let page = this;
 	
-		if (!data.viewSettings.squadPlayerMatchDay) {
-			data.viewSettings.squadPlayerMatchDay = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat);
-		}
-		let squadPlayerMatchDay = data.viewSettings.squadPlayerMatchDay;
+		let squadPlayerMatchDay = data.viewSettings.squadPlayerMatchDay;	
 
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';

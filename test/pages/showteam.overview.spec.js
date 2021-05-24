@@ -13,6 +13,8 @@ describe('Page.ShowteamOverview', () => {
 		data.nextZat = 53;
 		data.nextSeason = 16;
 
+		data.complete();
+
 		data.team.squadPlayers.push(new SquadPlayer());
 
 		Fixture.getDocument('showteam.php', doc => {

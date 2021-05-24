@@ -72,16 +72,11 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				setButton.classList.add('fa-bolt');
 				setButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
-					if (cell.matchDay) {
-						cell.firstChild.textContent = `${cell.matchDay.season}/${cell.matchDay.zat}`;
-						cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
-						cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
+					cell.firstChild.textContent = `${data.viewSettings.squadPlayerMatchDay.season}/${data.viewSettings.squadPlayerMatchDay.zat}`;
+					cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
+					cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
 
-						data.team.getSquadPlayer(id).fastTransfer = new MatchDay(cell.matchDay.season, cell.matchDay.zat);
-						data.team.matchDays
-							.filter(matchDay => matchDay.after(cell.matchDay))
-							.forEach(matchDay => matchDay.team = undefined);
-					}
+					data.team.getSquadPlayer(id).fastTransfer = new MatchDay(data.viewSettings.squadPlayerMatchDay.season, data.viewSettings.squadPlayerMatchDay.zat);
 				});
 				
 				let removeButton = doc.createElement('i');
@@ -95,13 +90,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
 					}
 					data.team.getSquadPlayer(id).fastTransfer = undefined;
-					data.team.matchDays
-						.filter(matchDay => matchDay.after(cell.matchDay))
-						.forEach(matchDay => matchDay.team = undefined);
 
-					let matchDayTeam = data.team.getForecast(data.lastMatchDay, cell.matchDay);
-					matchDayTeam.getSquadPlayer(id).active = true;
-					this.updateWithTeam(matchDayTeam, false, cell.matchDay);
+					let matchDayTeam = data.team.getForecast(data.lastMatchDay, data.viewSettings.squadPlayerMatchDay);
+					this.updateWithTeam(matchDayTeam, false, data.viewSettings.squadPlayerMatchDay);
 				});
 
 				let fastTransferSpan = doc.createElement('span');
@@ -142,7 +133,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			let player = team.getSquadPlayer(id);
 			
 			if (!current && !player.loan && !player.transferLock) {
-				row.cells['Blitz'].matchDay = matchDay;
 				row.cells['Blitz'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
 			}
 
@@ -223,7 +213,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					}
 				}
 			}
-			if ((current && player.fastTransfer) || (player.origin && player.origin.fastTransfer)) {
+			if (player.origin && player.origin.fastTransfer) {
 				row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_DELETE);
 			}
 

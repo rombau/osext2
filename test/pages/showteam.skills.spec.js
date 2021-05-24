@@ -12,6 +12,8 @@ describe('Page.ShowteamSkills', () => {
 
 		data.nextZat = 53;
 		data.nextSeason = 16;
+
+		data.complete();
 		
 		Fixture.getDocument('showteam.php?s=2', doc => {
 			

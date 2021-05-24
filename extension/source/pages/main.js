@@ -38,8 +38,6 @@ Page.Main = class extends Page {
 			
 			data.initNextZat(nextZat);
 
-			data.viewSettings.squadPlayerMatchDay = undefined; // reset the slider when new zat
-			
 			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
 			
 			data.team.id = +matches[2];
