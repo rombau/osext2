@@ -12,7 +12,6 @@ Page.YouthOptions = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
 
 	}
 	

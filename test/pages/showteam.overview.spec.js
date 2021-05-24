@@ -11,7 +11,7 @@ describe('Page.ShowteamOverview', () => {
 	it('should extract team data and extend page', (done) => {
 
 		data.nextZat = 53;
-		data.nextZatSeason = 16;
+		data.nextSeason = 16;
 
 		data.team.squadPlayers.push(new SquadPlayer());
 

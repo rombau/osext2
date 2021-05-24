@@ -15,8 +15,6 @@ Page.ContractExtension = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-		
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ContractExtension.HEADERS).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);

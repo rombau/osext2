@@ -19,24 +19,76 @@ class Team {
 		this.emblem;
 
 		/** @type {Team.League} the league this team belong to */ 
-		this.league = new Team.League();
+		this._league = new Team.League();
 		
 		/** @type {Number} the current league ranking */ 
 		this.leagueRanking;
 		
-		/** @type {[SquadPlayer]} the squad players */ 
-		this.squadPlayers = [];
+		/** @private @type {[SquadPlayer]} */ 
+		this._squadPlayers = [];
 		
-		/** @type {[YouthPlayer]} the youth players */ 
-		this.youthPlayers = [];
+		/** @private @type {[YouthPlayer]} */ 
+		this._youthPlayers = [];
 
-		/** @type {[MatchDay]} the match days (ZATS) of the current (and following) saison(s) */ 
-		this.matchDays = [];
+		/** @private @type {[MatchDay]} */ 
+		this._matchDays = [];
 
-		/** @type {[Team.Trainer]} the trainers for training the squad player */ 
-		this.trainers = [];
+		/** @private @type {[Team.Trainer]} */ 
+		this._trainers = [];
 	}
 
+	/**
+	 * @type {Team} the current team
+	 */
+	get league () {
+		return ensurePrototype(this._league, Team.League);
+	}
+
+	/**
+	 * @type {[SquadPlayer]} the squad players
+	 */
+	get squadPlayers () {
+		return ensurePrototype(this._squadPlayers, SquadPlayer);
+	}
+
+	set squadPlayers (value) {
+		this._squadPlayers = value;
+	}
+
+	/**
+	 * @type {[YouthPlayer]} the youth players
+	 */
+	get youthPlayers () {
+		return ensurePrototype(this._youthPlayers, YouthPlayer);
+	}
+
+	set youthPlayers (value) {
+		this._youthPlayers = value;
+	}
+
+	/**
+	 * @type {[MatchDay]} the match days (ZATS) of the current (and following) saison(s)
+	 */
+	get matchDays () {
+		return ensurePrototype(this._matchDays, MatchDay);
+	}
+
+	set matchDays (value) {
+		this._matchDays = value;
+	}
+
+	/**
+	 * @type {[Team.Trainer]} the trainers for training the squad player
+	 */
+	get trainers () {
+		return ensurePrototype(this._trainers, Team.Trainer);
+	}
+
+	set trainers (value) {
+		this._trainers = value;
+	}
+
+	
 	/**
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
 	 * 
@@ -46,14 +98,12 @@ class Team {
 	getSquadPlayer (id) {
 		if (!id) return undefined;
 
-		let player = this.squadPlayers.find(trainer => trainer.id === id);
-		if (player) {
-			Object.setPrototypeOf(player, SquadPlayer.prototype);
-			return player;
+		let player = this.squadPlayers.find(player => player.id === id);
+		if (!player) {
+			player = new SquadPlayer();
+			player.id = id;
+			this.squadPlayers.push(player);
 		}
-		player = new SquadPlayer();
-		player.id = id;
-		this.squadPlayers.push(player);
 		return player;
 	}
 
@@ -64,7 +114,10 @@ class Team {
 	 * @returns {YouthPlayer} the player
 	 */
 	getYouthPlayer (index) {
-		let player = Object.assign(new YouthPlayer(), this.youthPlayers[index]);
+		let player = this.youthPlayers[index];
+		if (!player) {
+			player = new YouthPlayer();
+		}
 		this.youthPlayers[index] = player;
 		return player;
 	}
@@ -80,12 +133,10 @@ class Team {
 		if (!season || !zat) return undefined;
 
 		let matchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
-		if (matchDay) {
-			Object.setPrototypeOf(matchDay, MatchDay.prototype);
-			return matchDay;
+		if (!matchDay) {
+			matchDay = new MatchDay(season, zat);
+			this.matchDays.push(matchDay);
 		}
-		matchDay = new MatchDay(season, zat);
-		this.matchDays.push(matchDay);
 		return matchDay;
 	}
 
@@ -99,13 +150,11 @@ class Team {
 		if (!nr) return undefined;
 
 		let trainer = this.trainers.find(trainer => trainer.nr === nr);
-		if (trainer) {
-			Object.setPrototypeOf(trainer, Team.Trainer.prototype);
-			return trainer;
+		if (!trainer) {
+			trainer = new Team.Trainer();
+			trainer.nr = nr;
+			this.trainers.push(trainer);
 		}
-		trainer = new Team.Trainer();
-		trainer.nr = nr;
-		this.trainers.push(trainer);
 		return trainer;
 	}
 
@@ -123,7 +172,6 @@ class Team {
 		let forecastTeam = new Team();
 
 		let matchDaysInRange = this.matchDays.filter(matchDay => {
-			Object.setPrototypeOf(matchDay, MatchDay.prototype);
 			return matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
 		});
 		
@@ -135,35 +183,6 @@ class Team {
 		});
 
 		return forecastTeam;
-	}
-
-	/**
-	 * Returns the data of the team that have to be stored.
-	 * 
-	 * @returns {Team} the team to store
-	 */
-	getStorageData () {
-		let teamToStore = new Team();
-		
-		this.squadPlayers.filter((player) => player.fastTransfer).forEach((player) => {
-			let playerToStore = new SquadPlayer();
-			playerToStore.id = player.id;
-			playerToStore.fastTransfer = player.fastTransfer;
-			teamToStore.squadPlayers.push(playerToStore);
-		});
-		
-		return teamToStore;
-	}
-
-	/**
-	 * Applies stored team data to the current team.
-	 * 
-	 * @param {Team} data the team data to be restored
-	 */
-	applyStorageData (teamToRestore) {
-		if (teamToRestore && teamToRestore.squadPlayers) {
-			teamToRestore.squadPlayers.forEach(player => Object.assign(this.getSquadPlayer(player.id), player));
-		}
 	}
 		
 }

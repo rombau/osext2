@@ -13,9 +13,7 @@ Page.LoanView = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
-		
+	
 		/** @type {[HTMLTableRowElement]} */
 		let rows = Array.from(doc.querySelectorAll('table tr'));
 		rows.forEach(row => {

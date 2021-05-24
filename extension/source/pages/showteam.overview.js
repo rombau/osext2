@@ -19,8 +19,6 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-		
 		let currentPlayerIds = [];
 
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamOverview.HEADERS).forEach(row => {
@@ -73,8 +71,6 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 * @param {ExtensionData} data
 	 */
 	extend(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamOverview.HEADERS);
 
@@ -175,8 +171,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Verl.'].textContent = player.injured;
 				
 				if (player.loan) {
-					Object.setPrototypeOf(player.loan, SquadPlayer.Loan.prototype);
-					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration.toString()}</abbr>`;
+					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
 					row.cells['TS'].textContent = player.transferLock;

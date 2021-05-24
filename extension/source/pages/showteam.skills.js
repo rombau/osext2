@@ -17,8 +17,6 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamSkills.HEADERS).forEach(row => {
 	
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
@@ -35,8 +33,6 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 * @param {ExtensionData} data
 	 */
 	extend(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamSkills.HEADERS);
 

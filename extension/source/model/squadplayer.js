@@ -39,8 +39,8 @@ class SquadPlayer extends Player {
 		/** @type {Number} the fitness value */
 		this.fitness;
 
-		/** @type {[SquadPlayer.Ban]} the bans for upcomming matchdays */
-		this.bans = [];
+		/** @private @type {[SquadPlayer.Ban]} */
+		this._bans = [];
 
 		/** @type {Number} injured for upcomming matchdays */
 		this.injured;
@@ -51,8 +51,8 @@ class SquadPlayer extends Player {
 		/** @type {Number} the games locked for transfer */
 		this.transferLock;
 
-		/** @type {SquadPlayer.Loan} the loan information */
-		this.loan;
+		/** @private @type {SquadPlayer.Loan} */
+		this._loan;
 
 		/** @type {Number} the contract term in month */
 		this.contractTerm;
@@ -72,13 +72,57 @@ class SquadPlayer extends Player {
 		/** @type {MatchDay} the match day (ZAT) the player should be fast transfered ('Blitz') */ 
 		this.fastTransfer;
 		
-		/** @type {SquadPlayer.Training} the training setup of the last match day */
-		this.lastTraining;
+		/** @private @type {SquadPlayer.Training} */
+		this._lastTraining;
 
-		/** @type {SquadPlayer.Training} the training setup of the next match day */
-		this.nextTraining;
+		/** @private @type {SquadPlayer.Training} */
+		this._nextTraining;
 	}
 
+	/**
+	 * @type {[SquadPlayer.Ban]} the bans for upcomming matchdays
+	 */
+	get bans () {
+		return ensurePrototype(this._bans, SquadPlayer.Ban);
+	}
+
+	set bans (value) {
+		this._bans = value;
+	}
+
+	/**
+	 * @type {SquadPlayer.Loan} the loan information
+	 */
+	get loan () {
+		return ensurePrototype(this._loan, SquadPlayer.Loan);
+	}
+
+	set loan (value) {
+		this._loan = value;
+	}
+
+	/**
+	 * @type {SquadPlayer.Training} the training setup of the last match day
+	 */
+	get lastTraining () {
+		return ensurePrototype(this._lastTraining, SquadPlayer.Training);
+	}
+
+	set lastTraining (value) {
+		this._lastTraining = value;
+	}
+
+	/**
+	 * @type {SquadPlayer.Training} the training setup of the next match day
+	 */
+	get nextTraining () {
+		return ensurePrototype(this._nextTraining, SquadPlayer.Training);
+	}
+
+	set nextTraining (value) {
+		this._nextTraining = value;
+	}
+	
 	/**
 	 * Returns the calculated market value, considering the training factor for the current position.
 	 * 
@@ -117,13 +161,8 @@ class SquadPlayer extends Player {
 	getForecast (lastMatchDay, targetMatchDay, matchDaysInRange) {
 		if (lastMatchDay.equals(targetMatchDay)) return this;
 
-		let forecastPlayer = Object.assign(new SquadPlayer(), this);
+		let forecastPlayer = Object.assign(new SquadPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
-		forecastPlayer.skills = Object.assign(new Skillset(), this.skills);
-		if (this.lastTraining) forecastPlayer.lastTraining = Object.assign(new SquadPlayer.Training(), this.lastTraining);
-		if (this.nextTraining) forecastPlayer.nextTraining = Object.assign(new SquadPlayer.Training(), this.nextTraining);
-		forecastPlayer.bans = [];
-		this.bans.forEach(ban => forecastPlayer.bans.push(Object.assign(new SquadPlayer.Ban(), ban)));
 
 		forecastPlayer.posLastMatch = undefined;
 		forecastPlayer.moral = undefined;
@@ -241,11 +280,11 @@ class SquadPlayer extends Player {
 		if (forecastPlayer.bans.length > 0) {
 			matchDaysInRange.forEach(matchday => {
 				forecastPlayer.bans.forEach((ban, i, object) => {
-					if (ban.type === BanType.LEAGUE && matchday.competition === Competition.LEAGUE) {
+					if (ban.type.abbr === BanType.LEAGUE.abbr && matchday.competition === Competition.LEAGUE) {
 						ban.duration--;
-					} else if (ban.type === BanType.CUP && matchday.competition === Competition.CUP) {
+					} else if (ban.type.abbr === BanType.CUP.abbr && matchday.competition === Competition.CUP) {
 						ban.duration--;
-					} else if (ban.type === BanType.INTERNATIONAL &&
+					} else if (ban.type.abbr === BanType.INTERNATIONAL.abbr &&
 						(matchday.competition === Competition.OSC || matchday.competition === Competition.OSCQ ||
 							matchday.competition === Competition.OSE || matchday.competition === Competition.OSEQ)) {
 						ban.duration--;
@@ -260,7 +299,6 @@ class SquadPlayer extends Player {
 
 	_forecastLoan (forecastPlayer) {
 		if (forecastPlayer.loan) {
-			forecastPlayer.loan = Object.assign(new SquadPlayer.Loan(), forecastPlayer.loan);
 			forecastPlayer.loan.duration--;
 			if (forecastPlayer.loan.duration <= 0) {
 				if (forecastPlayer.loan.fee < 0) {
@@ -345,13 +383,22 @@ SquadPlayer.Training = class {
 	
 	constructor() {
 
-		/** @type {Team.Trainer} the team trainer */ 
-		this.trainer;
+		/** @private @type {Team.Trainer} */ 
+		this._trainer;
 		
 		/** @type {Skill} the trainings skill */
 		this.skill;
 		
 		/** @type {Number} the match bonus multiplying the chance */
 		this.matchBonus = 1;
+	}
+
+	/** @type {Team.Trainer} the trainer delegated for this training */
+	get trainer () {
+		return ensurePrototype(this._trainer, Team.Trainer);
+	}
+
+	set trainer(value) {
+		this._trainer = value;
 	}
 };

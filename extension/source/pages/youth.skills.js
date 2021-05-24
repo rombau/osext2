@@ -17,8 +17,6 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-
 		this.fixCountryHeader(doc);
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
@@ -61,8 +59,6 @@ Page.YouthSkills = class extends Page.Youth {
 	 * @param {ExtensionData} data
 	 */
 	extend(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
 

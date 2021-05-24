@@ -13,8 +13,6 @@ Page.Training = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Training.HEADERS).forEach(row => {
 
@@ -43,6 +41,8 @@ Page.Training = class extends Page {
 					player.nextTraining.chance = parseFloat(chanceCellText);
 				}
 
+				// TODO save training when injured 
+				
 				if (!player.lastTraining && !player.injured) {
 					player.lastTraining = new SquadPlayer.Training();
 					player.lastTraining.trainer = player.nextTraining.trainer;

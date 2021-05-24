@@ -14,8 +14,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 		
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamContracts.HEADERS).forEach(row => {
 
@@ -35,8 +33,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 * @param {ExtensionData} data
 	 */
 	extend(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamContracts.HEADERS);
 
@@ -83,7 +79,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 						data.team.getSquadPlayer(id).fastTransfer = new MatchDay(cell.matchDay.season, cell.matchDay.zat);
 						data.team.matchDays
-							.filter(matchDay => Object.setPrototypeOf(matchDay, MatchDay.prototype).after(cell.matchDay))
+							.filter(matchDay => matchDay.after(cell.matchDay))
 							.forEach(matchDay => matchDay.team = undefined);
 					}
 				});
@@ -100,7 +96,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					}
 					data.team.getSquadPlayer(id).fastTransfer = undefined;
 					data.team.matchDays
-						.filter(matchDay => Object.setPrototypeOf(matchDay, MatchDay.prototype).after(cell.matchDay))
+						.filter(matchDay => matchDay.after(cell.matchDay))
 						.forEach(matchDay => matchDay.team = undefined);
 
 					let matchDayTeam = data.team.getForecast(data.lastMatchDay, cell.matchDay);
@@ -160,8 +156,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
 				if (player.loan) {
-					Object.setPrototypeOf(player.loan, SquadPlayer.Loan.prototype);
-					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration.toString()}</abbr>`;
+					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
 					row.cells['TS'].textContent = player.transferLock;

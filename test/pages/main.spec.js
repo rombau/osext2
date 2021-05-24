@@ -41,7 +41,7 @@ describe('Page.Main', () => {
 			
 			expect(initPages).toBeDefined();
 
-			data.nextZatSeason = 12; // initialized before extend
+			data.nextSeason = 12; // initialized before extend
 
 			page.extend(doc, data);
 			

@@ -14,8 +14,6 @@ Page.LeagueTable = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-		
 		data.team.league.size = 0;
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.LeagueTable.HEADERS).forEach(row => {

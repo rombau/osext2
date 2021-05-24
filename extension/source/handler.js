@@ -6,7 +6,7 @@ if (page) {
 		page.check(document);
 		page.process(document);
 	} catch (e) {
-		// TODO improve error handling; replace other console.error occurrences
+		// TODO improve error handling
 		console.error(e);
 	}
 }

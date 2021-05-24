@@ -82,7 +82,6 @@ class Page {
 			pageFound.params.forEach((param, p) => {
 				let paramValue = url.searchParams.get(param.name);
 				param.value = (isNaN(paramValue) ? paramValue : +paramValue);
-				pageFound.params[p] = Object.assign(new Page.Param(), param);
 			});
 		}
 		return pageFound;

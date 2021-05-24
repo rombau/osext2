@@ -3,28 +3,57 @@
  */
 class ExtensionData {
 	
-	constructor (dataObject) {
+	constructor () {
 			
-		/** @type {Team} the current team */ 
-		this.team = new Team();
+		/** @private @type {Team} */
+		this._team = new Team();
 		
 		/** @type {Number} the next zat */ 
 		this.nextZat;
 		
 		/** @type {Number} the next zat season */ 
-		this.nextZatSeason;
+		this.nextSeason;
 		
 		this.viewSettings = {
 			
+			/** @private @type {MatchDay} */
+			_squadPlayerMatchDay : undefined,
+
+
 			/** @type {MatchDay} the current match day for squad players views */
-			squadPlayerMatchDay : undefined
+			get squadPlayerMatchDay () {
+				return ensurePrototype(this._squadPlayerMatchDay, MatchDay);
+			},
+
+			set squadPlayerMatchDay(value) {
+				this._squadPlayerMatchDay = value;
+			}
 		}
 		
-		if (dataObject) {
-			Object.assign(this, dataObject);
-			Object.setPrototypeOf(this.team, Team.prototype);
-		}
+	}
 
+	/**
+	 * @type {MatchDay} the next match day
+ 	 */
+	get nextMatchDay () {
+		return this.team.getMatchDay(this.nextSeason, this.nextZat);
+	}
+
+	/**
+	 * @type {MatchDay} the last match day
+	 */
+	get lastMatchDay () {
+		if (this.nextZat === 1) {
+			return this.team.getMatchDay(this.nextSeason - 1, SEASON_MATCH_DAYS);
+		}
+		return this.team.getMatchDay(this.nextSeason, this.nextZat - 1);
+	}
+
+	/**
+	 * @type {Team} the current team
+	 */
+	get team () {
+		return ensurePrototype(this._team, Team);
 	}
 
 	/**
@@ -49,35 +78,18 @@ class ExtensionData {
 	 * @param {Number} the next zat season
 	 * @returns {Boolean} true if the next zat season can be set and false otherwise
 	 */
-	initNextZatSeason (season) {
-		if (!this.nextZatSeason) {
+	initNextSeason (season) {
+		if (!this.nextSeason) {
 			if (this.nextZat == 1) {
 				if (this.team.matchDays.find(matchDay => matchDay.result)) {
-					this.nextZatSeason = season + 1;
+					this.nextSeason = season + 1;
 					return true;
 				}
 				return false;
 			}
-			this.nextZatSeason = season;
+			this.nextSeason = season;
 		}
 		return true;
 	}
 		
-	/**
-	 * @type {MatchDay} the next match day
-	 */
-	get nextMatchDay () {
-		return this.team.getMatchDay(this.nextZatSeason, this.nextZat);
-	}
-
-	/**
-	 * @type {MatchDay} the last match day
-	 */
-	get lastMatchDay () {
-		if (this.nextZat === 1) {
-			return this.team.getMatchDay(this.nextZatSeason - 1, SEASON_MATCH_DAYS);
-		}
-		return this.team.getMatchDay(this.nextZatSeason, this.nextZat - 1);
-	}
-
 }

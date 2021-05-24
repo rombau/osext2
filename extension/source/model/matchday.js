@@ -44,11 +44,8 @@ class MatchDay {
 		/** @type {GameLocation} the ganme location */
 		this.location;
 
-		/** @type {Team} the current team view at this matchday */ 
-		this.team;
-
-		/** @type {Team} the opponent team */ 
-		this.opponent;
+		/** @private @type {Team} */ 
+		this._opponent;
 
 		/** @type {String} the game result */
 		this.result;
@@ -56,6 +53,17 @@ class MatchDay {
 		/** @type {Number} the friendly share for the team */
 		this.friendlyShare;
 
+	}
+
+	/**
+	 * @type {Team} the opponent team
+	 */
+	get opponent () {
+		return ensurePrototype(this._opponent, Team);
+	}
+
+	set opponent (value) {
+		this._opponent = value;
 	}
 
 	/**

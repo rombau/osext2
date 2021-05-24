@@ -41,8 +41,6 @@ Page.YouthOptskills = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		data.team = Object.assign(new Team(), data.team);
-
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOptskills.HEADERS);
 
 		Array.from(this.table.rows).forEach((row, index) => {

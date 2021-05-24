@@ -11,7 +11,7 @@ describe('Page.ShowteamContracts', () => {
 	it('should extract team data and extend page', (done) => {
 
 		data.nextZat = 53;
-		data.nextZatSeason = 16;
+		data.nextSeason = 16;
 		
 		Fixture.getDocument('showteam.php?s=1', doc => {
 			

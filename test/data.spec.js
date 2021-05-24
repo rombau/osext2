@@ -11,13 +11,13 @@ describe('ExtensionData', () => {
 
 		data.initNextZat(27);
 
-		let ok = data.initNextZatSeason(12);
+		let ok = data.initNextSeason(12);
 
 		expect(ok).toBeTruthy();
 		expect(data.nextMatchDay.zat).toEqual(27);
 		expect(data.nextMatchDay.season).toEqual(12);
 
-		ok = data.initNextZatSeason(13);
+		ok = data.initNextSeason(13);
 
 		expect(ok).toBeTruthy();
 		expect(data.nextMatchDay.season).toEqual(12);
@@ -29,7 +29,7 @@ describe('ExtensionData', () => {
 
 		data.initNextZat(73);
 
-		let ok = data.initNextZatSeason(12);
+		let ok = data.initNextSeason(12);
 
 		expect(ok).toBeTruthy();
 		expect(data.nextMatchDay.zat).toEqual(1);
@@ -40,7 +40,7 @@ describe('ExtensionData', () => {
 
 		data.initNextZat(0);
 
-		let ok = data.initNextZatSeason(12);
+		let ok = data.initNextSeason(12);
 
 		expect(ok).toBeFalsy()
 	});
@@ -50,7 +50,7 @@ describe('ExtensionData', () => {
 		let teamMatchDay = data.team.getMatchDay(12, 27);
 
 		data.initNextZat(27);
-		data.initNextZatSeason(12);
+		data.initNextSeason(12);
 
 		expect(data.nextMatchDay).toEqual(teamMatchDay);
 	});
@@ -60,7 +60,7 @@ describe('ExtensionData', () => {
 		let teamMatchDay = data.team.getMatchDay(12, 26);
 
 		data.initNextZat(27);
-		data.initNextZatSeason(12);
+		data.initNextSeason(12);
 
 		expect(data.lastMatchDay).toEqual(teamMatchDay);
 	});
@@ -71,7 +71,7 @@ describe('ExtensionData', () => {
 		teamMatchDay.result = '0 : 0';
 
 		data.initNextZat(73);
-		data.initNextZatSeason(12);
+		data.initNextSeason(12);
 
 		expect(data.lastMatchDay).toEqual(teamMatchDay);
 	});

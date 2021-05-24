@@ -13,9 +13,7 @@ Page.Trainer = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-
-		data.team = Object.assign(new Team(), data.team);
-		
+	
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Trainer.HEADERS).forEach(row => {
 
 			let trainer = data.team.getTrainer(+row.cells['#'].textContent); 

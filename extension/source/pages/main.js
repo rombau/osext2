@@ -83,13 +83,9 @@ Page.Main = class extends Page {
 	 */
 	extend (_doc, data) { 
 
-		Object.setPrototypeOf(data.team, Team.prototype); // needed for lastMatchDay
-
 		// XXX move init logic to ExtensionData and test it 
 
 		data.team.squadPlayers.forEach(player => {
-
-			Object.setPrototypeOf(player, SquadPlayer.prototype);
 
 			// init exact age
 			if (data.lastMatchDay.zat >= player.birthday) {

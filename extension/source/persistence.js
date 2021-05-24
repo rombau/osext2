@@ -41,7 +41,7 @@ class Persistence {
 					if (chrome.runtime.lastError) {
 						reject('Loading team data failed: ' + chrome.runtime.lastError);
 					} else {
-						resolve(new ExtensionData(storedData[teamName]));
+						resolve(Object.assign(new ExtensionData(), storedData[teamName]));
 					}
 				});
 			});
@@ -99,7 +99,7 @@ class Persistence {
 						if (chrome.runtime.lastError) {
 							reject('Loading team data failed: ' + chrome.runtime.lastError);
 						} else {
-							extensionData = new ExtensionData(storedData[currentTeamName]);
+							extensionData = Object.assign(new ExtensionData(), storedData[currentTeamName]);
 							modifyData(extensionData);
 							Persistence.storeExtensionData(extensionData).then(resolve, reject);
 						}

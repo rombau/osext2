@@ -26,8 +26,6 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	extract(doc, data) {
 		
-		data.team = Object.assign(new Team(), data.team);
-
 		let season = +doc.querySelector('select[name=saison]').value;
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
@@ -47,7 +45,7 @@ Page.ShowteamSeason = class extends Page {
 			}
 		});
 
-		if (!data.initNextZatSeason(season)) {
+		if (!data.initNextSeason(season)) {
 			return [new Page.ShowteamSeason(season - 1)];
 		}
 	}

@@ -102,7 +102,7 @@ class Player {
 		/** @type {boolean} flag indicating UEFA membership */
 		this.uefa;
 		
-		/** the skills of the player */
+		/** @type {Skillset} the skills of the player */
 		this.skills = new Skillset();
 	}
 	
