@@ -79,7 +79,7 @@ class Page {
 		});
 		if (pageFound) {
 			let url = new URL(location, document.location.href);
-			pageFound.params.forEach((param, p) => {
+			pageFound.params.forEach((param) => {
 				let paramValue = url.searchParams.get(param.name);
 				param.value = (isNaN(paramValue) ? paramValue : +paramValue);
 			});

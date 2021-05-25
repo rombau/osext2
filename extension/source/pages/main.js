@@ -54,6 +54,20 @@ Page.Main = class extends Page {
 			data.team.league.level = +matches[1];
 			data.team.league.countryName = matches[2];
 
+			// take over the trainings settings from previous zat
+			data.team.squadPlayers.forEach(player => {
+				if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
+					if (player.nextTraining) {
+						player.lastTraining = new SquadPlayer.Training();
+						player.lastTraining.trainer = player.nextTraining.trainer;
+						player.lastTraining.skill = player.nextTraining.skill;
+					} else {
+						player.lastTraining = undefined;
+					}
+				}
+			});
+
+			// define the pages needed to load for initialization
 			let initPages = [];
 			initPages.push(new Page.ShowteamOverview());
 			initPages.push(new Page.ShowteamSkills());
@@ -68,8 +82,6 @@ Page.Main = class extends Page {
 			initPages.push(new Page.YouthSkills());
 			initPages.push(new Page.YouthOptions());
 			
-
-			// TODO add all needed pages
 
 			return initPages;
 		}

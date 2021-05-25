@@ -32,22 +32,16 @@ Page.Training = class extends Page {
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id); 
 
-				player.nextTraining = new SquadPlayer.Training();
+				if (!player.nextTraining) {
+					player.nextTraining = new SquadPlayer.Training();
+				}
 				player.nextTraining.trainer = data.team.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
 
-				let chanceCellText = row.cells['Chance'].textContent;
-				if (chanceCellText.includes('%')) {
-					player.nextTraining.chance = parseFloat(chanceCellText);
-				}
-
-				// TODO save training when injured 
-				
-				if (!player.lastTraining && !player.injured) {
+				if (!player.lastTraining) {
 					player.lastTraining = new SquadPlayer.Training();
 					player.lastTraining.trainer = player.nextTraining.trainer;
 					player.lastTraining.skill = player.nextTraining.skill;
-					player.lastTraining.chance = player.nextTraining.chance;
 				}
 			}
 		});
