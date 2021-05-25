@@ -193,6 +193,16 @@ class Team {
 	 */
 	complete (lastMatchDay) {
 		this.squadPlayers.forEach(player => player.complete(lastMatchDay));
+
+		// take over the current season league match days to forecast seasons
+		let currentSeasonSchedule = this.matchDays.filter(matchDay => matchDay.season === lastMatchDay.season && matchDay.competition === Competition.LEAGUE);
+		for (let season = lastMatchDay.season + 1; season < lastMatchDay.season + Options.forecastSeasons; season++) {
+			currentSeasonSchedule.forEach(matchDay => {
+				let forecastSeasonMatchDay = this.getMatchDay(season, matchDay.zat);
+				forecastSeasonMatchDay.competition = matchDay.competition;
+				forecastSeasonMatchDay.location = matchDay.location;
+			});
+		}
 	}
 
 }
