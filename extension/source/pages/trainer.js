@@ -14,6 +14,8 @@ Page.Trainer = class extends Page {
 	 */
 	extract(doc, data) {
 	
+		// TODO handle confirmation page (no table) ??
+
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Trainer.HEADERS).forEach(row => {
 
 			let trainer = data.team.getTrainer(+row.cells['#'].textContent); 

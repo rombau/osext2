@@ -27,6 +27,8 @@ Page.Training = class extends Page {
 			else if (skill === 'SPL') skill = 'DEC';
 			else if (skill === 'REF') skill = 'GES';
 
+			// TODO Chance = "Trainerskill zu niedrig!" 
+
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill)) {
 			
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);

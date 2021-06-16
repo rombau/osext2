@@ -64,6 +64,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 		// remove all no longer existing players
 		data.team.squadPlayers = data.team.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
+
+		// TODO what about new players?
 	}
 	
 	/**
