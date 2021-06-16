@@ -154,7 +154,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 				row.cells['Vertrag'].textContent = player.contractTerm;
 				row.cells['Monatsgehalt'].textContent = player.salary.toLocaleString();
-				row.cells['Spielerwert'].textContent = player.marketValue.toLocaleString();
+				row.cells['Spielerwert'].textContent = player.getMarketValue().toLocaleString();
 
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
 
