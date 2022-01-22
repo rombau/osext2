@@ -26,6 +26,7 @@
 				"source/htmlutil.js",
 				"source/persistence.js",
 				"source/page.js",
+				"source/pages/menu.js",
 				"source/pages/main.js",
 				"source/pages/showplayer.js",
 				"source/pages/gamereport.js",
