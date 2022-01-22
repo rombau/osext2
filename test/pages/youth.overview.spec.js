@@ -11,7 +11,7 @@ describe('Page.YouthOverview', () => {
 	it('should extract team data and extend page', (done) => {
 
 		data.nextZat = 53;
-		data.nextSeason = 16;
+		data.nextZatSeason = 16;
 
 		Fixture.getDocument('ju.php', doc => {
 			

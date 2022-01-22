@@ -7,6 +7,7 @@ if (page) {
 		page.process(document);
 	} catch (e) {
 		// TODO improve error handling
+		// TODO log info when 'Anmeldung erforderlich'
 		console.error(e);
 	}
 }

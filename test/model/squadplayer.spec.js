@@ -123,6 +123,14 @@ describe('SquadPlayer', () => {
 
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 2)).loan.duration).toEqual(1);
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeUndefined();
+
+		player.loan.fee = -100000; // lend from other team
+
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).active).toBeFalsy();
+
+		player.loan.fee = 100000; // lend to other team
+
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).active).toBeTruthy();
 	});
 
 	it('should return ban forecast', () => {

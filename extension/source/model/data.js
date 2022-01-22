@@ -12,7 +12,7 @@ class ExtensionData {
 		this.nextZat;
 		
 		/** @type {Number} the next zat season */ 
-		this.nextSeason;
+		this.nextZatSeason;
 		
 		this.viewSettings = {
 			
@@ -36,7 +36,7 @@ class ExtensionData {
 	 * @type {MatchDay} the next match day
  	 */
 	get nextMatchDay () {
-		return this.team.getMatchDay(this.nextSeason, this.nextZat);
+		return this.team.getMatchDay(this.nextZatSeason, this.nextZat);
 	}
 
 	/**
@@ -44,9 +44,9 @@ class ExtensionData {
 	 */
 	get lastMatchDay () {
 		if (this.nextZat === 1) {
-			return this.team.getMatchDay(this.nextSeason - 1, SEASON_MATCH_DAYS);
+			return this.team.getMatchDay(this.nextZatSeason - 1, SEASON_MATCH_DAYS);
 		}
-		return this.team.getMatchDay(this.nextSeason, this.nextZat - 1);
+		return this.team.getMatchDay(this.nextZatSeason, this.nextZat - 1);
 	}
 
 	/**
@@ -79,15 +79,15 @@ class ExtensionData {
 	 * @returns {Boolean} true if the next zat season can be set and false otherwise
 	 */
 	initNextSeason (season) {
-		if (!this.nextSeason) {
+		if (!this.nextZatSeason) {
 			if (this.nextZat == 1) {
 				if (this.team.matchDays.find(matchDay => matchDay.result)) {
-					this.nextSeason = season + 1;
+					this.nextZatSeason = season + 1;
 					return true;
 				}
 				return false;
 			}
-			this.nextSeason = season;
+			this.nextZatSeason = season;
 		}
 		return true;
 	}
