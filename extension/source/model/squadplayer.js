@@ -265,7 +265,9 @@ class SquadPlayer extends Player {
 			forecastPlayer.contractTerm--;
 			if (forecastPlayer.contractTerm === 0) {
 				forecastPlayer.contractTerm = Options.followUpContractTerm;
-				forecastPlayer.salary = forecastPlayer.followUpSalary[forecastPlayer.contractTerm];
+				if (forecastPlayer.followUpSalary) {
+					forecastPlayer.salary = forecastPlayer.followUpSalary[forecastPlayer.contractTerm];
+				}
 			}
 		}
 	}
