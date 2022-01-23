@@ -213,7 +213,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					}
 				}
 			}
-			if (player.origin && player.origin.fastTransfer) {
+			if ((player.origin && player.origin.fastTransfer) || player.fastTransfer) {
 				row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_DELETE);
 			}
 
