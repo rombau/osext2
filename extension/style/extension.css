@@ -22,6 +22,11 @@
     display: none !important;
 }
 
+.osext-refresh {
+    cursor: pointer;
+    margin: 10px 3px;
+}
+
 .osext-fast-transfer.add > .fa-bolt, .osext-fast-transfer.delete > .fa-trash-alt {
     cursor: pointer;
 }

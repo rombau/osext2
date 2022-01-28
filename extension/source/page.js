@@ -139,8 +139,6 @@ class Page {
 	/**
 	 * Processes the given document.
 	 * 
-	 * TODO: errors without a solution (DOM changes, ...) should disable the extension
-	 * 
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */

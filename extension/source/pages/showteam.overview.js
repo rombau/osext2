@@ -66,6 +66,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 		data.team.squadPlayers = data.team.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
 
 		// TODO what about new players?
+		// youth: listen on pull
+		// transfer: listen on finish => refresh all
+		// loan: listen on finish => refresh all
 	}
 	
 	/**

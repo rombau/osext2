@@ -40,6 +40,8 @@ Page.Training = class extends Page {
 				player.nextTraining.trainer = data.team.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
 
+				// last training only undefined when initializing the first time
+				// otherwise it's initialized from the stored next training (main page)
 				if (!player.lastTraining) {
 					player.lastTraining = new SquadPlayer.Training();
 					player.lastTraining.trainer = player.nextTraining.trainer;

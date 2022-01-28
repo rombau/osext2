@@ -1,3 +1,4 @@
+const ZAT_INDICATING_REFRESH = -1;
 
 Page.Main = class extends Page {
 	
@@ -35,7 +36,22 @@ Page.Main = class extends Page {
 
 		let nextZat = +matches[1];
 		if (data.nextZat !== nextZat) {
-			
+
+			// take over the trainings settings from previous zat, except during refresh
+			if (data.nextZat !== ZAT_INDICATING_REFRESH) {
+				data.team.squadPlayers.forEach(player => {
+					if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
+						if (player.nextTraining) {
+							player.lastTraining = new SquadPlayer.Training();
+							player.lastTraining.trainer = player.nextTraining.trainer;
+							player.lastTraining.skill = player.nextTraining.skill;
+						} else {
+							player.lastTraining = undefined;
+						}
+					}
+				});
+			}
+
 			data.initNextZat(nextZat);
 
 			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
@@ -53,19 +69,6 @@ Page.Main = class extends Page {
 
 			data.team.league.level = +matches[1];
 			data.team.league.countryName = matches[2];
-
-			// take over the trainings settings from previous zat
-			data.team.squadPlayers.forEach(player => {
-				if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
-					if (player.nextTraining) {
-						player.lastTraining = new SquadPlayer.Training();
-						player.lastTraining.trainer = player.nextTraining.trainer;
-						player.lastTraining.skill = player.nextTraining.skill;
-					} else {
-						player.lastTraining = undefined;
-					}
-				}
-			});
 
 			// define the pages needed to load for initialization
 			let initPages = [];
@@ -88,13 +91,30 @@ Page.Main = class extends Page {
 	}
 
 	/**
-	 * @param {Document} _doc
+	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend (_doc, data) { 
+	extend (doc, data) { 
 
 		data.complete();
 
+		let refreshButton = doc.createElement('i');
+		refreshButton.textContent = ' Erweiterungsdaten aktualisieren';
+		refreshButton.classList.add(STYLE_REFRESH);
+		refreshButton.classList.add('fas');
+		refreshButton.classList.add('fa-sync-alt');
+		refreshButton.addEventListener('click', (event) => {
+			Persistence.updateExtensionData(data => {
+				data.nextZat = ZAT_INDICATING_REFRESH;
+			}).then(data => {	
+				let requestor = Requestor.create(doc);
+				requestor.addPage(new Page.Main);
+				requestor.start();
+			});
+			return false;
+		});
+
+		doc.body.appendChild(refreshButton);
 	}
 }
 

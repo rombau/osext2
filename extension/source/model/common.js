@@ -25,6 +25,8 @@ const STYLE_FAST_TRANSFER = 'osext-fast-transfer';
 const STYLE_FAST_TRANSFER_ADD = 'add';
 const STYLE_FAST_TRANSFER_DELETE = 'delete';
 
+const STYLE_REFRESH = 'osext-refresh';
+
 
 
 
