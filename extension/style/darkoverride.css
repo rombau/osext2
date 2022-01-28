@@ -3,6 +3,12 @@
     display: none;
 }
 
+a[href^="javascript:os_wiki"], a[href^="javascript:os_hilfe"] {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
 select {
     padding: 2px 18px 2px 2px;
     font-size: 1.1em;
