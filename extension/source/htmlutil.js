@@ -20,14 +20,19 @@ class HtmlUtil {
 				return cell.textContent === headers[i];
 			});
 		});
-		Array.from(table.rows).forEach(row => headers.forEach((header, i) => {
-			try {
-				row.cells[header] = row.cells[i];
-			} catch (error) {
-				// Indexed property setter is not supported on HTMLCollection
-			}
-		}));
-		return table;
+		if (!table) {
+			let resource = doc.URL.substring(doc.URL.lastIndexOf('/') + 1);
+			throw new Error(`Tabelle nicht gefunden (${resource})!`);
+		} else {
+			Array.from(table.rows).forEach(row => headers.forEach((header, i) => {
+				try {
+					row.cells[header] = row.cells[i];
+				} catch (error) {
+					// Indexed property setter is not supported on HTMLCollection
+				}
+			}));
+			return table;
+		}
 	}
 
 	/**

@@ -12,6 +12,10 @@
     --status-border-color: #116;
     --status-color: #227;
 
+    --error-background-color: #fbb3b3;
+    --error-border-color: #600;
+    --error-color: #600;
+
     --range-background-color: #fbf9b3;
     --range-thumb-color: #55c;
 }

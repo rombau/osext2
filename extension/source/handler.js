@@ -6,8 +6,15 @@ if (page) {
 		page.check(document);
 		page.process(document);
 	} catch (e) {
-		// TODO improve error handling
-		// TODO log info when 'Anmeldung erforderlich'
 		console.error(e);
+
+		let parentDoc = top.frames.os_main ? top.frames.os_main.document : doc;
+		let errorDiv = parentDoc.createElement('div');
+		errorDiv.id = 'osext-error';
+		errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${e.message}`;
+		errorDiv.addEventListener('click', (event) => {
+			errorDiv.remove();
+		});
+		parentDoc.body.appendChild(errorDiv);
 	}
 }

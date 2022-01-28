@@ -40,6 +40,18 @@
     margin-right: 5px;
 }
 
+#osext-error {
+    display: block;
+    padding: 8px 20px;
+    position: fixed;
+    bottom: 7px;
+    right: 10px;
+    border: 1px solid var(--error-border-color);
+    background-color: var(--error-background-color);
+    color: var(--error-color);
+    z-index: 3;
+}
+
 #osext-page-request-status {
     display: block;
     padding: 8px 20px;
