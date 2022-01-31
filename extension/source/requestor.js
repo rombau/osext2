@@ -86,6 +86,8 @@ class Requestor {
 		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
 		let status = statusDoc.getElementById(Requestor.STATUS_ID) || statusDoc.createElement('div');
 		status.id = Requestor.STATUS_ID;
+		status.classList.add(STYLE_MESSAGE);
+		status.classList.add(STYLE_STATUS);
 		status.classList.remove(STYLE_HIDDEN);
 		statusDoc.body.appendChild(status);
 		return status;
@@ -163,7 +165,7 @@ class Requestor {
 			if (page.name === this.triggerPage.name) {
 				this.requestNextPage();
 			} else {
-				this.status.innerHTML = `<i class="fas fa-spinner"></i> Initialisiere ${page.name} ...`;
+				this.status.innerHTML = `<i class="fas fa-spinner"></i> Initialisiere ${page.name}`;
 				if (page.method === HttpMethod.POST) {
 					this.createForm(this.doc, page).submit();
 				} else {

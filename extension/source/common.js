@@ -27,6 +27,11 @@ const STYLE_FAST_TRANSFER_DELETE = 'delete';
 
 const STYLE_REFRESH = 'osext-refresh';
 
+const STYLE_MESSAGE = 'osext-message';
+const STYLE_ERROR = 'osext-error';
+const STYLE_WARNING = 'osext-warning';
+const STYLE_STATUS = 'osext-status';
+
 
 
 

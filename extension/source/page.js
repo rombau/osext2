@@ -1,4 +1,14 @@
 /**
+ * Warning implementation
+ */
+class Warning extends Error {
+
+	constructor(message) {
+		super(message);
+	}
+}
+
+/**
  * Enum for http methods.
  * @readonly
  */
@@ -94,11 +104,11 @@ class Page {
 	 */
 	check (doc) {
 		if (doc.body.textContent.search(/F.+r\sdie\sDauer\svon\sZAT\s.+\ssind\sdie\sSeiten\svon\sOS\s2\.0\sgesperrt!/) != -1) {
-			throw new Error('Auswertung läuft!');
+			throw new Warning('Auswertung läuft!');
 		}
 		if (doc.body.textContent.search(/(Willkommen im Managerb.+ro von )*Demo[T|t]eam/) != -1 ||
 			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.+gbar!/) != -1) {
-			throw new Error('Anmeldung erforderlich!');
+			throw new Warning('Anmeldung erforderlich!');
 		}
 	}
 
