@@ -12,7 +12,7 @@ module.exports = function(config) {
 			'test/lib/**/*',
 			'extension/source/options.js',
 		    'extension/source/requestor.js',
-		    'extension/source/model/common.js',
+		    'extension/source/common.js',
 		    'extension/source/model/data.js',
 		    'extension/source/model/player.js',
 			'extension/source/model/squadplayer.js',

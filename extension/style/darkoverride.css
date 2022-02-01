@@ -3,12 +3,6 @@
     display: none;
 }
 
-a[href^="javascript:os_wiki"], a[href^="javascript:os_hilfe"] {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
-
 select {
     padding: 2px 18px 2px 2px;
     font-size: 1.1em;
@@ -24,7 +18,7 @@ select {
     color: var(--input-color);
 }
 
-input {
+input, textarea {
     border: 1px solid var(--input-border-color);
     font-size: 1em;
     color: var(--input-color);
@@ -46,6 +40,10 @@ input[type=submit], input[type=button], input[type=reset] {
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+input[type=checkbox] {
+    vertical-align: middle;
 }
 
 td > input {
@@ -72,6 +70,109 @@ input[value="Zugabgabe speichern"] {
 
 hr {
     border: none;
-    height: 1px;
+    height: 0.5px;
     background-color: var(--input-color);
+}
+
+/* former Stylish parts */
+
+img[src*=flaggen] { 
+    height: 12px !important;
+    width: 20px !important; 
+}
+
+body { 
+    font-family: verdana, arial, helvetica, sans-serif !important;
+    font-size: 9pt !important;
+    text-decoration: none !important; 
+}
+
+body:not(.mediawiki):not(#tplIndex) { 
+    background-color: var(--background-color) !important; 
+}
+
+.ui-tabs-panel, 
+.ui-widget-content, 
+ul.ui-widget-header, 
+li.ui-state-default { 
+    background-color: var(--background-color) !important; 
+    background-image: none !important;
+}
+li.ui-tabs-selected { 
+    background-color:#fbf9b3 !important; 
+}
+    
+body:not(.mediawiki):not(#tplIndex) a, 
+body:not(.mediawiki):not(#tplIndex) td { 
+    font-size: 9pt !important; 
+}
+
+body:not(.mediawiki):not(#tplIndex) td { 
+    padding-right: 3px !important
+}
+td.BAK { 
+    color: var(--background-color) !important; 
+}
+
+table[id^=team] tr:hover,
+table.osext-youth tr:hover,
+table[id^=tm] tr:hover,
+table[style*="width: 850px"] tr:hover { 
+    background-color: var(--row-hover-color); 
+}
+table[id^=team] tr:first-child:hover,
+table[id^=team] tr:last-child:hover,
+table.osext-youth tr:first-child:hover,
+table.osext-youth tr:last-child:hover,
+table[id^=tm] tr:first-child:hover,
+table[style*="width: 850px"] tr:first-child:hover { 
+    background-color: var(--background-color) !important; 
+}
+table.osext-youth td { 
+    padding: 2px !important;
+    vertical-align: top !important; 
+}
+table[id^=team] td,
+table[id^=tm] td,
+table[style*="width: 850px"] td { 
+    padding: 2px !important; 
+}
+
+body:not(.mediawiki):not(#tplIndex) table { 
+    border-spacing: 0px !important; 
+}
+
+blockquote {
+    background-color: var(--background-color) !important; 
+}
+.sceditor-container.ltr iframe, .sceditor-container.ltr textarea, .sceditor-container.ltr {
+    background-color: var(--input-background-color) !important;
+}
+
+a[href^="javascript:os_wiki"], 
+a[href^="javascript:os_hilfe"] {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+a[href^="javascript:os_wiki"] img, 
+a[href^="javascript:os_hilfe"] img {
+    display: none;
+}
+
+a[href^="javascript:os_wiki"]::before, 
+a[href^="javascript:os_hilfe"]::before {
+    font-family: "Font Awesome 5 Free";
+    font-size: larger;
+    content: "\f059";
+    position: absolute;
+    top: 0;
+}
+
+div.osext-youth > br, 
+div.osext-youth > b {
+    display: none;
 }

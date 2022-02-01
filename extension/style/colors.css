@@ -1,10 +1,10 @@
 :root {
     --input-border-color: #bbb;
-    --input-background-color: #227;
+    --input-background-color: #333333;
     --input-color: #fbf9b3;
     
-    --button-color: #227;
-    --button-hover-color: #448;
+    --button-color: #2A2A2A;
+    --button-hover-color: #444;
 
     --reset-button-background-color: #bbb;
 
@@ -18,5 +18,8 @@
     --warning-color: #fff;
 
     --range-background-color: #fbf9b3;
-    --range-thumb-color: #55c;
+    --range-thumb-color: #5c5;
+
+    --background-color: #2A2A2A;
+    --row-hover-color: #333333;
 }

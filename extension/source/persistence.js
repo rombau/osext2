@@ -39,14 +39,14 @@ class Persistence {
 			return Persistence.getPromise((resolve, reject) => {
 				chrome.storage.local.get(teamName, (storedData) => {
 					if (chrome.runtime.lastError) {
-						reject('Loading team data failed: ' + chrome.runtime.lastError);
+						reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 					} else {
 						resolve(Object.assign(new ExtensionData(), storedData[teamName]));
 					}
 				});
 			});
 		} else {
-			return Promise.reject('Loading team data failed: No team name given');
+			return Promise.reject(new Error('Laden der Teamdaten fehlgeschlagen: Name fehlt'));
 		}
 	}
 
@@ -60,7 +60,7 @@ class Persistence {
 		return Persistence.getPromise((resolve, reject) => {
 			chrome.storage.local.set({[Persistence.CURRENT_TEAM]: teamName}, () => {
 				if (chrome.runtime.lastError) {
-					reject('Storing team name failed: ' + chrome.runtime.lastError);
+					reject(new Error('Speichern der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 				} else {
 					resolve();
 				}
@@ -89,18 +89,26 @@ class Persistence {
 				let currentTeamName = stored[Persistence.CURRENT_TEAM];
 				let extensionData;
 				if (chrome.runtime.lastError) {
-					reject('Loading team name failed: ' + chrome.runtime.lastError);
+					reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 				} else if (!currentTeamName) {
 					extensionData = new ExtensionData();
-					modifyData(extensionData);
+					try {
+						modifyData(extensionData);
+					} catch (e) {
+						reject(e);
+					}
 					Persistence.storeExtensionData(extensionData).then(resolve, reject);
 				} else {
 					chrome.storage.local.get(currentTeamName, (storedData) => {
 						if (chrome.runtime.lastError) {
-							reject('Loading team data failed: ' + chrome.runtime.lastError);
+							reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 						} else {
 							extensionData = Object.assign(new ExtensionData(), storedData[currentTeamName]);
-							modifyData(extensionData);
+							try {
+								modifyData(extensionData);
+							} catch (e) {
+								reject(e);
+							}
 							Persistence.storeExtensionData(extensionData).then(resolve, reject);
 						}
 					});
@@ -128,7 +136,7 @@ class Persistence {
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {
-						reject('Storing team data failed: ' + chrome.runtime.lastError);
+						reject(new Error('Speichern der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 					} else {
 						resolve(data);
 					}

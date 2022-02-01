@@ -104,11 +104,11 @@ class Page {
 	 */
 	check (doc) {
 		if (doc.body.textContent.search(/F.+r\sdie\sDauer\svon\sZAT\s.+\ssind\sdie\sSeiten\svon\sOS\s2\.0\sgesperrt!/) != -1) {
-			throw new Warning('Auswertung läuft!');
+			throw new Warning('Auswertung läuft');
 		}
 		if (doc.body.textContent.search(/(Willkommen im Managerb.+ro von )*Demo[T|t]eam/) != -1 ||
 			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.+gbar!/) != -1) {
-			throw new Warning('Anmeldung erforderlich!');
+			throw new Warning('Anmeldung erforderlich');
 		}
 	}
 
@@ -170,13 +170,13 @@ class Page {
 					Persistence.getExtensionData(data.team.name).then(newdata => {
 						page.registerSaveOnExitListener(doc, newdata);
 						page.extend(doc, newdata);
-					}, console.error);
+					}, handleError);
 				});
 			} else {
 				page.registerSaveOnExitListener(doc, data);
 				page.extend(doc, data);	
 			}			
-		}, console.error);
+		}, handleError);
 	}
 }
 

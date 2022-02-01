@@ -215,28 +215,28 @@ describe('Page', () => {
 			
 			let fixture = Fixture.createDocument('Für die Dauer von ZAT 42 sind die Seiten von OS 2.0 gesperrt!');
 	
-			expect(() => page.check(fixture)).toThrowError('Auswertung läuft!');		
+			expect(() => page.check(fixture)).toThrowError('Auswertung läuft');		
 		});
 		
 		it('and throw error if user accessing office without authentication', () => {
 			
 			let fixture = Fixture.createDocument('Willkommen im Managerbüro von DemoTeam');
 	
-			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 	
 		it('and throw error if user accessing team overview without authentication', () => {
 			
 			let fixture = Fixture.createDocument('<b>Demoteam</b>');
 	
-			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 	
 		it('and throw error if user accessing private page without authentication', () => {
 			
 			let fixture = Fixture.createDocument('Diese Seite ist ohne Team nicht verfügbar!');
 	
-			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich!');
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 
 	});

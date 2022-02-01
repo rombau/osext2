@@ -41,7 +41,7 @@ describe('Persistence', () => {
 			fail();
 		}, error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
-			expect(error).toEqual('Loading team data failed: Error');
+			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
 		});
 	});
@@ -52,7 +52,7 @@ describe('Persistence', () => {
 			fail();
 		}, error => {
 			expect(chrome.storage.local.get).not.toHaveBeenCalled();
-			expect(error).toEqual('Loading team data failed: No team name given');
+			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Name fehlt');
 			done();
 		});
 	});
@@ -115,7 +115,7 @@ describe('Persistence', () => {
 			fail();
 		}, error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
-			expect(error).toEqual('Loading team name failed: Error');
+			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
 		});
 	});
