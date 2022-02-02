@@ -115,9 +115,9 @@ td.BAK {
 }
 
 table[id^=team] tr:hover,
-table.osext-youth tr:hover,
 table[id^=tm] tr:hover,
-table[style*="width: 850px"] tr:hover { 
+table[style*="width: 850px"] tr:hover,
+table.osext-youth tr:hover:not(.osext-youth-year-header) { 
     background-color: var(--row-hover-color); 
 }
 table[id^=team] tr:first-child:hover,
@@ -138,9 +138,21 @@ table[style*="width: 850px"] td,
 .osext-trainer table td { 
     padding: 2px !important; 
 }
-table.osext-youth td[colspan="9"],
-table.osext-youth td[colspan="75"] {
-    padding-top: 9px !important;
+
+table.osext-youth td {
+    padding-top: 3px !important;
+}
+table.osext-youth tr.osext-youth-year-header td {
+    padding-top: 6px !important;
+    padding-bottom: 3px !important;
+    border-bottom: 1px var(--input-border-color) solid !important;
+}
+table.osext-youth tr.osext-youth-year-header b {
+    font-size: smaller; 
+    opacity: 0.7;
+}
+table.osext-youth input[type=submit] {
+    margin-top: 10px !important;
 }
 
 body:not(.mediawiki):not(#tplIndex) table { 

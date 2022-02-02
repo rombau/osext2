@@ -61,10 +61,16 @@ Page.YouthSkills = class extends Page.Youth {
 	extend(doc, data) {
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
-
+		this.table.classList.add(STYLE_YOUTH);
+		
 		Array.from(this.table.rows).forEach((row, index) => {
 
-			
+			if (!this.handleYearHeader(row)) {
+
+				// player rows
+
+			}
+		
 		});
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);

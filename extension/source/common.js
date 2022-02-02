@@ -27,6 +27,7 @@ const STYLE_FAST_TRANSFER_DELETE = 'delete';
 
 const STYLE_REFRESH = 'osext-refresh';
 const STYLE_YOUTH = 'osext-youth';
+const STYLE_YOUTH_YEAR_HEADER = 'osext-youth-year-header';
 const STYLE_TRAINER = 'osext-trainer';
 
 const STYLE_MESSAGE = 'osext-message';

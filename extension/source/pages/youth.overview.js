@@ -104,6 +104,11 @@ Page.YouthOverview = class extends Page.Youth {
 
 			Array.from(this.table.rows).forEach((row, i) => {
 
+				if (!this.handleYearHeader(row)) {
+
+					// player rows
+
+				}
 
 			});
 			

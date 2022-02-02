@@ -17,7 +17,7 @@ Page.YouthOptskills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		this.fixCountryHeader(doc);
+		// this.fixCountryHeader(doc);
 	}
 	
 	/**
@@ -46,6 +46,11 @@ Page.YouthOptskills = class extends Page.Youth {
 
 		Array.from(this.table.rows).forEach((row, index) => {
 
+			if (!this.handleYearHeader(row)) {
+
+				// player rows
+
+			}
 			
 		});
 		
