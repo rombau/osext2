@@ -134,8 +134,13 @@ table.osext-youth td {
 }
 table[id^=team] td,
 table[id^=tm] td,
-table[style*="width: 850px"] td { 
+table[style*="width: 850px"] td,
+.osext-trainer table td { 
     padding: 2px !important; 
+}
+table.osext-youth td[colspan="9"],
+table.osext-youth td[colspan="75"] {
+    padding-top: 9px !important;
 }
 
 body:not(.mediawiki):not(#tplIndex) table { 
@@ -175,4 +180,8 @@ a[href^="javascript:os_hilfe"]::before {
 div.osext-youth > br, 
 div.osext-youth > b {
     display: none;
+}
+
+.osext-trainer table { 
+    margin: 5px 0px; 
 }

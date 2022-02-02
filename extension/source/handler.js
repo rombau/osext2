@@ -6,6 +6,6 @@ if (page) {
 		page.check(document);
 		page.process(document);
 	} catch (e) {
-		handleError(e);
+		Page.handleError(e);
 	}
 }

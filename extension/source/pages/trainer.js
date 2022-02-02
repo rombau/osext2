@@ -16,6 +16,8 @@ Page.Trainer = class extends Page {
 	
 		if (!doc.querySelector('input[type="submit"][name="te"]')) {
 
+			doc.getElementsByTagName('div')[0].classList.add(STYLE_TRAINER);
+
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.Trainer.HEADERS).forEach(row => {
 
 				let trainer = data.team.getTrainer(+row.cells['#'].textContent); 

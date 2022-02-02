@@ -59,7 +59,7 @@
     display: block;
     padding: 9px 12px;
     position: fixed;
-    bottom: 9px;
+    bottom: 12px;
     right: 12px;
     z-index: 3;
 }

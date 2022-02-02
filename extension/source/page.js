@@ -141,7 +141,7 @@ class Page {
 	registerSaveOnExitListener (doc, data) {
 		doc.addEventListener('visibilitychange', () => {
 			if (doc.visibilityState === 'hidden') {
-				Persistence.storeExtensionData(data).then(console.log, console.error);
+				Persistence.storeExtensionData(data).then(console.log, Page.handleError);
 			}
 		});
 	}
@@ -169,14 +169,50 @@ class Page {
 				requestor.start(page, () => {
 					Persistence.getExtensionData(data.team.name).then(newdata => {
 						page.registerSaveOnExitListener(doc, newdata);
-						page.extend(doc, newdata);
-					}, handleError);
+						try {
+							page.extend(doc, newdata);
+						} catch (e) {
+							Page.handleError(e);
+						}
+					}, Page.handleError);
 				});
 			} else {
 				page.registerSaveOnExitListener(doc, data);
-				page.extend(doc, data);	
+				try {
+					page.extend(doc, data);	
+				} catch (e) {
+					Page.handleError(e);
+				}
 			}			
-		}, handleError);
+		}, Page.handleError);
+	}
+
+	/**
+	 * Handles errors and should also be used in reject implementation of Promises.
+	 * 
+	 * @param {Error} e 
+	 */
+	static handleError (e) {
+
+		if (e instanceof Warning) {
+			console.warn(e.message);
+		} else {
+			console.error(e);
+		}
+	
+		/** @type {Document} the element with the progress */
+		let parentDoc = top.frames.os_main ? top.frames.os_main.document : doc;
+	
+		/** @type {HTMLElement} the element with the progress */
+		let errorDiv = parentDoc.createElement('div');
+	
+		errorDiv.innerHTML = `<i class="fas fa-frown"></i> ${e.message || e}`;
+		errorDiv.classList.add(STYLE_MESSAGE);
+		errorDiv.classList.add(e instanceof Warning ? STYLE_WARNING : STYLE_ERROR);
+		errorDiv.addEventListener('click', (event) => {
+			errorDiv.remove();
+		});
+		parentDoc.body.appendChild(errorDiv);
 	}
 }
 
