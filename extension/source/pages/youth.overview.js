@@ -17,13 +17,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 	
-		let pullId = this.getPullId(doc);
-
-		if (pullId) {
-
-			// TODO find youth player by internal id and listen on form submit to add the new player to squad
-
-		} else {
+		if (!this.getPullId(doc)) {
 
 			this.fixCountryHeader(doc);
 

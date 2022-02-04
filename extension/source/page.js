@@ -107,7 +107,8 @@ class Page {
 			throw new Warning('Auswertung läuft');
 		}
 		else if (doc.body.textContent.search(/(Willkommen im Managerb.+ro von )*Demo[T|t]eam/) != -1 ||
-			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.+gbar!/) != -1) {
+			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.+gbar!/) != -1 ||
+			doc.body.textContent.search(/.*Als Gast gesperrt.*/) != -1) {
 			throw new Warning('Anmeldung erforderlich');
 		}
 		else if (doc.body.textContent.search(/Diese Funktion ist erst ZAT 1 wieder verf.+gbar/) != -1) {

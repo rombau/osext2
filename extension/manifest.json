@@ -53,18 +53,29 @@
 			],
 			"css": [
 				"style/colors.css",
-				"style/darkoverride.css",
+				"style/override.css",
 				"style/extension.css",
 				"style/fontawesome.min.css",
 				"style/solid.min.css"
 			],
 			"all_frames": true
+		},
+		{
+			"matches": [
+				"*://os.ongapo.com/*"
+			],
+			"js": [
+				"source/start.js"
+			],
+			"all_frames": true,
+			"run_at": "document_start"
 		}
 	],
 	"web_accessible_resources": [
-	   "style/fontawesome.min.css",
-	   "style/solid.min.css",
-	   "webfonts/fa-solid-900.woff2"
+		"style/colors.css",
+		"style/fontawesome.min.css",
+	    "style/solid.min.css",
+	    "webfonts/fa-solid-900.woff2"
 	],
 	"permissions": [
 		"*://os.ongapo.com/*",
