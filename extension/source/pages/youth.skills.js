@@ -9,7 +9,7 @@ Page.YouthSkills = class extends Page.Youth {
 		this.table;
 	}
 	
-	static HEADERS = ['Land', 'U', 'Alter', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
+	static HEADERS = ['|Land|', 'U', 'Alter', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
 	
 	/**
 	 * @param {Document} doc
@@ -17,10 +17,9 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		this.fixCountryHeader(doc);
-
+		// every row with an uefa column is a real player row
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
-			.filter(row => row.cells['U']).forEach((row, index) => {
+			.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 	
 			let player = data.team.getYouthPlayer(index);
 			
@@ -29,31 +28,7 @@ Page.YouthSkills = class extends Page.Youth {
 			});
 		});
 	}
-	
-	/**
-	 * Fix the country header by adding a header cells to the HTML table and the HEADERS.
-	 * 
-	 * @param {Document} doc 
-	 */
-	fixCountryHeader(doc) {
-
-		let headerRow = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS).rows[0];
-
-		headerRow.cells['Flag'] = headerRow.cells['Land'].cloneNode(true);
-		headerRow.cells['Flag'].textContent = 'Flag';
-		headerRow.insertBefore(headerRow.cells['Flag'], headerRow.cells['Land']);
-		Page.YouthSkills.HEADERS.splice(0, 0, 'Flag');
-
-		headerRow.cells[''] = headerRow.cells['Land'].cloneNode(true);
-		headerRow.cells[''].textContent = '';
-		headerRow.insertBefore(headerRow.cells[''], headerRow.cells['U']);
-		Page.YouthSkills.HEADERS.splice(2, 0, '');
-
-		headerRow.cells['Flag'].removeAttribute('colspan');
-		headerRow.cells['Land'].removeAttribute('colspan');
-		headerRow.cells[''].removeAttribute('colspan');
-	}
-	
+		
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data

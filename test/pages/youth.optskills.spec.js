@@ -8,10 +8,17 @@ describe('Page.YouthOptskills', () => {
 		page = new Page.YouthOptskills();
 	});
 
-	it('should extend page', (done) => {
+	it('should extract page', (done) => {
 
-		data.nextZat = 53;
-		data.nextZatSeason = 16;
+		Fixture.getDocument('ju.php?page=3', doc => {
+			
+			page.extract(doc, data);
+		
+			done();
+		});
+	});
+
+	it('should extend page', (done) => {
 
 		Fixture.getDocument('ju.php?page=3', doc => {
 			

@@ -10,6 +10,8 @@ class HtmlUtil {
 	/**
 	 * Returns the HTML table with the specified headers.
 	 * 
+	 * The character '|' stands for a additional column in the following data rows.
+	 * 
 	 * @param  {Document} doc 
 	 * @param  {...String} headers 
 	 * @returns {HTMLTableElement}
@@ -17,20 +19,33 @@ class HtmlUtil {
 	static getTableByHeader (doc, ...headers) {
 		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 			return Array.from(table.rows[0].cells).every((cell, i) => {
-				return cell.textContent === headers[i];
+				return cell.textContent === (headers[i].replaceAll('|', ''));
 			});
 		});
 		if (!table) {
 			let resource = doc.URL.substring(doc.URL.lastIndexOf('/') + 1);
 			throw new Error(`Tabelle nicht gefunden (${resource})!`);
 		} else {
-			Array.from(table.rows).forEach(row => headers.forEach((header, i) => {
-				try {
-					row.cells[header] = row.cells[i];
-				} catch (error) {
-					// Indexed property setter is not supported on HTMLCollection
-				}
-			}));
+			Array.from(table.rows).forEach(row => {
+				let cellIndex = 0;
+				headers.forEach((header) => {
+					try {
+						let realHeader = header.replaceAll('|', '');
+						let isDataRow = (row.textContent.search(realHeader) === -1);
+						if (isDataRow) {
+							cellIndex += header.indexOf(realHeader);
+							header = header.substring(header.indexOf(realHeader));
+						}
+						row.cells[realHeader] = row.cells[cellIndex++];
+						if (isDataRow) {
+							header = header.substring(realHeader.length);
+							cellIndex += header.length;
+						}
+					} catch (error) {
+						// Indexed property setter is not supported on HTMLCollection
+					}
+				});
+			});
 			return table;
 		}
 	}

@@ -32,15 +32,34 @@ Page.Youth = class extends Page {
 	updateWithTeam (_team, _current, _matchDay) {}
 
 	/**
+	 * Checks if the row contains a real player
+	 * 
+	 * @param {HTMLTableRowElement} row the row to handle
+	 * @returns {Boolean}
+	 */
+	isPlayerRow (row) {
+		return row.textContent.trim().length > 0 && !this.isYearHeaderRow(row);
+	}
+
+	/**
+	 * Checks if the row contains a year header
+	 * 
+	 * @param {HTMLTableRowElement} row the row to handle
+	 * @returns {Boolean}
+	 */
+	isYearHeaderRow (row) {
+		return (row.textContent.indexOf('Jahrgang') !== -1);
+	}
+
+	/**
 	 * Adjusts youth table header row to make styling possible.
 	 * 
 	 * @param {HTMLTableRowElement} row the row to handle
-	 * 
 	 * @returns {Boolean} true if it is a year header
 	 */
 	handleYearHeader (row) {
 
-		if (row.textContent.indexOf('Jahrgang') == -1) {
+		if (!this.isYearHeaderRow(row)) {
 			return false;
 		}
 

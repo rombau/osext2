@@ -9,7 +9,7 @@ Page.YouthOverview = class extends Page.Youth {
 		this.table;
 	}
 
-	static HEADERS = ['Alter', 'Geb.', 'Land', 'U', 'Skillschnitt', 'Talent', 'Aktion', 'Aufwertung'];
+	static HEADERS = ['Alter', 'Geb.', '|Land', 'U', 'Skillschnitt', 'Talent', 'Aktion', 'Aufwertung'];
 
 	/**
 	 * @param {Document} doc
@@ -19,10 +19,9 @@ Page.YouthOverview = class extends Page.Youth {
 	
 		if (!this.getPullId(doc)) {
 
-			this.fixCountryHeader(doc);
-
+			// every row with an uefa column is a real player row
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS)
-				.filter(row => row.cells['U']).forEach((row, index) => {
+				.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 		
 				let player = data.team.getYouthPlayer(index);
 					
@@ -39,13 +38,14 @@ Page.YouthOverview = class extends Page.Youth {
 
 				player.talent = row.cells['Talent'].textContent;	
 				
-				// TODO store internal id from radio input for pull
+				let pullInput = row.cells['Aktion'].firstChild;
+				player.pullId = pullInput ? +pullInput.value : null;
 			});
 		}
 	}
 	
 	/**
-	 * Returns the internal id of the player taken from the pull (radio) input value,
+	 * Returns the internal id of the player taken from the hidden pull input value,
 	 * or null if the input is not present (overview page).
 	 * 
 	 * @param {Document} doc 
@@ -55,24 +55,6 @@ Page.YouthOverview = class extends Page.Youth {
 
 		let pullInput = doc.querySelector('input[name="ziehmich"][type="hidden"]');
 		return pullInput ? +pullInput.value : null;
-	}
-
-	/**
-	 * Fix the country header by adding a header cell to the HTML table and the HEADERS.
-	 * 
-	 * @param {Document} doc 
-	 */
-	fixCountryHeader(doc) {
-
-		let headerRow = HtmlUtil.getTableByHeader(doc, ...Page.YouthOverview.HEADERS).rows[0];
-		
-		headerRow.cells['Flag'] = headerRow.cells['Land'].cloneNode(true);
-		headerRow.cells['Flag'].textContent = '';
-		headerRow.insertBefore(headerRow.cells['Flag'], headerRow.cells['Land']);
-		Page.YouthOverview.HEADERS.splice(2, 0, '');
-
-		headerRow.cells['Flag'].removeAttribute('colspan');
-		headerRow.cells['Land'].removeAttribute('colspan');
 	}
 
 	/**

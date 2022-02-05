@@ -10,9 +10,6 @@ describe('Page.YouthOverview', () => {
 
 	it('should extract team data and extend page', (done) => {
 
-		data.nextZat = 53;
-		data.nextZatSeason = 16;
-
 		Fixture.getDocument('ju.php', doc => {
 			
 			page.extract(doc, data);
@@ -23,8 +20,10 @@ describe('Page.YouthOverview', () => {
 			expect(data.team.youthPlayers[0].countryName).toEqual('Zypern');
 			expect(data.team.youthPlayers[0].uefa).toBeTruthy();
 			expect(data.team.youthPlayers[0].talent).toEqual(Talent.NORMAL);
+			expect(data.team.youthPlayers[0].pullId).toEqual(200864);
 
 			expect(data.team.youthPlayers[9].pos).toEqual(Position.TOR);
+			expect(data.team.youthPlayers[9].pullId).toBeNull();
 
 			page.extend(doc, data);
 		

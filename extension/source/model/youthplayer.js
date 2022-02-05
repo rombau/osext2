@@ -19,5 +19,8 @@ class YouthPlayer extends Player {
 
 		/** @type {Talent} the talent */
 		this.talent;
+
+		/** @type {Number} the internal pull id */
+		this.pullId;
 	}
 }

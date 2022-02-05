@@ -9,32 +9,8 @@ Page.YouthOptskills = class extends Page.Youth {
 		this.table;
 	}
 	
-	static HEADERS = ['Land', 'U', 'Alter', 'Skill', 'TOR', 'ABW', 'DMI', 'MIT', 'OMI', 'STU'];
-	
-	/**
-	 * @param {Document} doc
-	 * @param {ExtensionData} data
-	 */
-	extract(doc, data) {
-
-		// this.fixCountryHeader(doc);
-	}
-	
-	/**
-	 * Fix the country header by adding a header cells to the HTML table and the HEADERS.
-	 * 
-	 * @param {Document} doc 
-	 */
-	fixCountryHeader(doc) {
-
-		let headerRow = HtmlUtil.getTableByHeader(doc, ...Page.YouthOptskills.HEADERS).rows[0];
-
-		headerRow.cells['Flag'] = headerRow.cells['Land'].cloneNode(true);
-		headerRow.cells['Flag'].textContent = 'Flag';
-		headerRow.insertBefore(headerRow.cells['Flag'], row.cells['Land']);
-		Page.YouthOptskills.HEADERS.splice(2, 0, 'Flag');
-	}
-	
+	static HEADERS = ['|Land', 'U', 'Alter', 'Skill', 'TOR', 'ABW', 'DMI', 'MIT', 'OMI', 'STU'];
+		
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
