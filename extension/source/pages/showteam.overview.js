@@ -51,9 +51,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				player.transferLock = +transferLockCell.textContent;
 			}
 			
+			player.bans = [];
 			let banCell = row.cells['Sperre'];
 			if (banCell.textContent.length > 1) {
-				player.bans = [];
 				banCell.textContent.split(' ').forEach(shortForm => {
 					let type = Object.values(BanType).find((banType) => banType.abbr === shortForm.slice(-1));
 					let duration = +shortForm.slice(0, -1); 
