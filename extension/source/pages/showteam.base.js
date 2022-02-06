@@ -19,47 +19,17 @@ Page.Showteam = class extends Page {
 		
 		let page = this;
 	
-		let squadPlayerMatchDay = data.viewSettings.squadPlayerMatchDay;	
-
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';
-
+		
 		let toolTitle = doc.createElement('span');
 		toolTitle.innerHTML = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 		
-		let viewInfo = doc.createElement('span');
-		viewInfo.update = (season, zat) => {
-			viewInfo.innerHTML = ` Saison ${season} / Zat ${zat}`;
-		};
-		viewInfo.update(squadPlayerMatchDay.season, squadPlayerMatchDay.zat);
-		
-		let rangeSlider = doc.createElement('input');
-		rangeSlider.type = 'range';
-		rangeSlider.min = data.lastMatchDay.season * SEASON_MATCH_DAYS + data.lastMatchDay.zat;
-		rangeSlider.max = (data.lastMatchDay.season + Options.forecastSeasons) * SEASON_MATCH_DAYS;
-		rangeSlider.value = squadPlayerMatchDay.season * SEASON_MATCH_DAYS + squadPlayerMatchDay.zat;
-		rangeSlider.addEventListener('input', (event) => {
-			squadPlayerMatchDay.season = Math.floor(event.target.value / SEASON_MATCH_DAYS);
-			squadPlayerMatchDay.zat = event.target.value % SEASON_MATCH_DAYS;
-			if (squadPlayerMatchDay.zat === 0) {
-				squadPlayerMatchDay.season--;
-				squadPlayerMatchDay.zat = SEASON_MATCH_DAYS;
-			}
-			viewInfo.update(squadPlayerMatchDay.season, squadPlayerMatchDay.zat);
+		let zatSlider = new ZatSlider(toolbar, data, data.viewSettings.squadPlayerMatchDay, (team, current, matchday) => {
+			page.updateWithTeam(team, current, matchday);
 		});
-		rangeSlider.addEventListener('change', (event) => {
-			page.updateWithTeam(data.team.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
-				data.lastMatchDay.equals(squadPlayerMatchDay), squadPlayerMatchDay);
-		});
-		toolbar.appendChild(rangeSlider);
-
-		toolbar.appendChild(viewInfo);
-		
-		if (!data.lastMatchDay.equals(squadPlayerMatchDay)) {
-			page.updateWithTeam(data.team.getForecast(data.lastMatchDay, squadPlayerMatchDay), 
-				data.lastMatchDay.equals(squadPlayerMatchDay), squadPlayerMatchDay);
-		}
+		toolbar.appendChild(zatSlider.create());
 
 		return toolbar;
 	}

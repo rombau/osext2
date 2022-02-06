@@ -25,6 +25,7 @@
 				"source/requestor.js",
 				"source/htmlutil.js",
 				"source/persistence.js",
+				"source/zatslider.js",
 				"source/page.js",
 				"source/pages/menu.js",
 				"source/pages/main.js",

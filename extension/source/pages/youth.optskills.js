@@ -18,6 +18,7 @@ Page.YouthOptskills = class extends Page.Youth {
 	extend(doc, data) {
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOptskills.HEADERS);
+		
 		this.table.classList.add(STYLE_YOUTH);
 
 		Array.from(this.table.rows).forEach((row, index) => {

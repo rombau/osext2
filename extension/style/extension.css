@@ -85,6 +85,22 @@
     padding: 5px;
 }
 
+#osext-toolbar-container div {
+    display: inline-block;
+    width: 350px;
+}
+
+#osext-toolbar-container .fa-toggle-on,
+#osext-toolbar-container .fa-toggle-off {
+    position: relative;
+    top: 2.5px;
+    font-size: 1.4em;
+    cursor: pointer;
+}
+#osext-toolbar-container .fa-toggle-on {
+    color: #5c5;
+}
+
 #osext-toolbar-container input[type=range] {
     width: 200px;
     height: 6px;

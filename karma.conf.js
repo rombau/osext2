@@ -22,6 +22,7 @@ module.exports = function(config) {
 		    'extension/source/persistence.js',
 		    'extension/source/page.js',
 		    'extension/source/htmlutil.js',
+			'extension/source/zatslider.js',
 			'extension/source/pages/showteam.base.js',
 			'extension/source/pages/youth.base.js',
 		    'extension/source/pages/*.js',

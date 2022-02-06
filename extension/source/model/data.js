@@ -19,6 +19,8 @@ class ExtensionData {
 			/** @private @type {MatchDay} */
 			_squadPlayerMatchDay : undefined,
 
+			/** @private @type {MatchDay} */
+			_youthPlayerMatchDay : undefined,
 
 			/** @type {MatchDay} the current match day for squad players views */
 			get squadPlayerMatchDay () {
@@ -27,6 +29,15 @@ class ExtensionData {
 
 			set squadPlayerMatchDay(value) {
 				this._squadPlayerMatchDay = value;
+			},
+
+			/** @type {MatchDay} the current match day for youth players views */
+			get youthPlayerMatchDay () {
+				return ensurePrototype(this._youthPlayerMatchDay, MatchDay);
+			},
+
+			set youthPlayerMatchDay(value) {
+				this._youthPlayerMatchDay = value;
 			}
 		}
 		
@@ -98,6 +109,7 @@ class ExtensionData {
 	complete () {
 		this.team.complete(this.lastMatchDay);
 		this.viewSettings.squadPlayerMatchDay = new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
+		this.viewSettings.youthPlayerMatchDay = new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
 	}
 	
 }

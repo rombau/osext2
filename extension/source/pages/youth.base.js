@@ -8,7 +8,7 @@ Page.Youth = class extends Page {
 	}
 
 	/**
-	 * Creates the toolbar for the youth player views.
+	 * Creates the toolbar for the squad player (showteam) views.
 	 * 
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -20,9 +20,33 @@ Page.Youth = class extends Page {
 		let page = this;
 
 		let toolbar = doc.createElement('div');
+		toolbar.id = 'osext-toolbar-container';
+
+		let toolTitle = doc.createElement('span');
+		toolTitle.innerHTML = 'Prognose: ';
+		toolbar.appendChild(toolTitle);
+
+		let zatSlider = new ZatSlider(toolbar, data, data.viewSettings.youthPlayerMatchDay, (team, current, matchday) => {
+			page.updateWithTeam(team, current, matchday);
+		});
+		toolbar.appendChild(zatSlider.create());
+		
+		let max = doc.createElement('i');
+		max.classList.add('fas');
+		max.classList.add('fa-toggle-off');
+		max.addEventListener('click', (event) => {
+			event.target.classList.toggle('fa-toggle-off');
+			event.target.classList.toggle('fa-toggle-on');
+		});
+		toolbar.appendChild(max);
+
+		let maxTitle = doc.createElement('span');
+		maxTitle.innerHTML = ' Max.';
+		toolbar.appendChild(maxTitle);
 
 		return toolbar;
 	}
+
 
 	/**
 	 * @param {Team} _team

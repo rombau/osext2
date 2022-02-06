@@ -17,7 +17,6 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
-		// every row with an uefa column is a real player row
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
 			.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 	
@@ -36,6 +35,7 @@ Page.YouthSkills = class extends Page.Youth {
 	extend(doc, data) {
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
+		
 		this.table.classList.add(STYLE_YOUTH);
 		
 		Array.from(this.table.rows).forEach((row, index) => {
