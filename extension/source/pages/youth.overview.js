@@ -19,26 +19,29 @@ Page.YouthOverview = class extends Page.Youth {
 	
 		if (!this.getPullId(doc)) {
 
+			let playerCount = 0;
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS)
 				.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 		
-				let player = data.team.getYouthPlayer(index);
-					
+				// player with pull id?
+				let pullInput = row.cells['Aktion'].firstChild;
+
+				let player = data.team.getYouthPlayer(index, pullInput ? +pullInput.value : undefined);
+				
 				player.age = +row.cells['Alter'].textContent;
 				player.birthday = +row.cells['Geb.'].textContent;
-
-				if (row.cells['Alter'].className && row.cells['Alter'].className == Position.TOR) {
+				
+				if (row.cells['Alter'].className == Position.TOR) {
 					player.pos = Position.TOR;
 				}
-
+				
 				player.countryCode = row.cells['Land'].textContent;
 				player.countryName = row.cells['Land'].firstChild.title;
 				player.uefa = row.cells['U'].textContent ? false : true;
-
-				player.talent = row.cells['Talent'].textContent;	
 				
-				let pullInput = row.cells['Aktion'].firstChild;
-				player.pullId = pullInput ? +pullInput.value : null;
+				player.talent = row.cells['Talent'].textContent;	
+								
+				playerCount++;
 			});
 		}
 	}
@@ -62,7 +65,18 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		if (!this.getPullId(doc)) {
+		if (this.getPullId(doc)) {
+		
+			// TODO add pull listener and refresh at least all youth players data
+
+			/*
+			let requestor = Requestor.create(doc);
+			requestor.addPage(new Page.YouthOverview());
+			requestor.addPage(new Page.YouthSkills());
+			requestor.start();
+			*/
+
+		} else {
 
 			doc.getElementsByTagName('div')[0].classList.add(STYLE_YOUTH);
 

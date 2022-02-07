@@ -25,6 +25,42 @@ describe('Team', () => {
 		expect(team.getSquadPlayer(2)).toBe(team.getSquadPlayer(2));
 	});
 
+	it('should return requested youth player', () => {
+		
+		expect(team.getYouthPlayer(0)).toBeDefined();
+
+		let p1 = team.getYouthPlayer(0);
+		p1.pullId = 33;
+		let p2 = team.getYouthPlayer(1);
+		p2.pullId = 44;
+		let p3 = team.getYouthPlayer(2);
+		p3.pullId = 55;
+		let p4 = team.getYouthPlayer(3); // no pull
+		let p5 = team.getYouthPlayer(4); // no pull
+		
+		expect(team.getYouthPlayer(0, 33)).toBe(p1);
+		expect(team.getYouthPlayer(1, 44)).toBe(p2);
+		expect(team.getYouthPlayer(2, 55)).toBe(p3);
+		expect(team.getYouthPlayer(3)).toBe(p4);
+		expect(team.getYouthPlayer(4)).toBe(p5);
+
+		// p1 pulled
+		expect(team.getYouthPlayer(0, 44)).toBe(p2);
+		expect(team.getYouthPlayer(1, 55)).toBe(p3);
+		expect(team.getYouthPlayer(2)).toBe(p4);
+		expect(team.getYouthPlayer(3)).toBe(p5);
+
+		// p3 pulled, no more players to pull
+		expect(team.getYouthPlayer(0, 44)).toBe(p2);
+		expect(team.getYouthPlayer(1)).toBe(p4);
+		expect(team.getYouthPlayer(2)).toBe(p5);
+
+		// p4 can now be pulled
+		expect(team.getYouthPlayer(0, 44)).toBe(p2);
+		expect(team.getYouthPlayer(1, 66)).toBe(p4);
+		expect(team.getYouthPlayer(2)).toBe(p5);
+	});
+
 	it('should return requested match day', () => {
 		
 		expect(team.getMatchDay()).toBeUndefined();

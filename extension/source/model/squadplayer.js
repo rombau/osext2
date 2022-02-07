@@ -27,9 +27,6 @@ class SquadPlayer extends Player {
 		/** @type {String} the name */
 		this.name;
 
-		/** @type {Position} the position */
-		this.pos;
-
 		/** @type {Position} the position at last match */
 		this.posLastMatch;
 

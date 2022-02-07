@@ -20,7 +20,11 @@ Page.YouthSkills = class extends Page.Youth {
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
 			.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 	
-			let player = data.team.getYouthPlayer(index);
+			let player = data.team.youthPlayers[index];
+			if (!player) {
+				player = new YouthPlayer();
+			}
+			data.team.youthPlayers[index] = player;
 			
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;

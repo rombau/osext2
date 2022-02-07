@@ -28,7 +28,7 @@ describe('Page.YouthOverview', () => {
 			expect(data.team.youthPlayers[0].pullId).toEqual(200864);
 
 			expect(data.team.youthPlayers[9].pos).toEqual(Position.TOR);
-			expect(data.team.youthPlayers[9].pullId).toBeNull();
+			expect(data.team.youthPlayers[9].pullId).toBeUndefined();
 
 			page.extend(doc, data);
 		

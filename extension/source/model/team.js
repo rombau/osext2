@@ -108,16 +108,29 @@ class Team {
 	}
 
 	/**
-	 * Returns the youth player with the given index. If the player can't be found, a new one is added to the team and returned.
+	 * Returns the youth player with the given index and pull id. 
+	 * If the player can't be found, a new one is added to the team (at the given index).
+	 * Otherwise if the pull id of the player doesn't match with the existing player 
+	 * (at the given index), 
 	 * 
 	 * @param {Number} index the index of the player on the page and the array
+	 * @param {Number} pullId the pull id of the player for pull to squad
 	 * @returns {YouthPlayer} the player
 	 */
-	getYouthPlayer (index) {
+	getYouthPlayer (index, pullId) {
 		let player = this.youthPlayers[index];
 		if (!player) {
 			player = new YouthPlayer();
 		}
+		while (player.pullId && player.pullId !== pullId) {
+			this.youthPlayers.splice(index, 1);
+			player = this.youthPlayers[index];
+			if (!player) {
+				player = new YouthPlayer();
+				break;
+			}
+		}
+		if (pullId) player.pullId = pullId;
 		this.youthPlayers[index] = player;
 		return player;
 	}
@@ -179,7 +192,7 @@ class Team {
 			forecastTeam.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
 		});
 		this.youthPlayers.forEach(player => {
-			// forecastTeam.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
+			forecastTeam.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
 		});
 
 		return forecastTeam;
@@ -193,6 +206,7 @@ class Team {
 	 */
 	complete (lastMatchDay) {
 		this.squadPlayers.forEach(player => player.complete(lastMatchDay));
+		this.youthPlayers.forEach(player => player.complete(lastMatchDay));
 
 		// take over the current season league match days to forecast seasons
 		let currentSeasonSchedule = this.matchDays.filter(matchDay => matchDay.season === lastMatchDay.season && matchDay.competition === Competition.LEAGUE);
