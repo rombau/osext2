@@ -70,10 +70,8 @@ class ZatSlider {
 		this.slider.appendChild(rangeSlider);
 		this.slider.appendChild(viewInfo);
 		
-		if (!this.data.lastMatchDay.equals(this.matchday)) {
-			this.callback(this.data.team.getForecast(this.data.lastMatchDay, this.matchday), 
-				this.data.lastMatchDay.equals(this.matchday), this.matchday);
-		}
+		this.callback(this.data.team.getForecast(this.data.lastMatchDay, this.matchday), 
+			this.data.lastMatchDay.equals(this.matchday), this.matchday);
 	
 		return this.slider;
 	}

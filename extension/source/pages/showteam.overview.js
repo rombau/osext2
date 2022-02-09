@@ -87,9 +87,12 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
 			row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
 			
-			row.cells['&Oslash;P'].style.width = '45px';
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
+
+				row.cells['&Oslash;P'].style.width = '3.5em';
+				row.cells['&Oslash;N'].style.width = '3.5em';
+				row.cells['&Oslash;U'].style.width = '3.5em';
 	
 				row.cells['MOR'].textContent = 'Mor';
 				row.cells['FIT'].textContent = 'Fit';

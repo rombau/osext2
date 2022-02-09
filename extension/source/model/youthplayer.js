@@ -36,15 +36,49 @@ class YouthPlayer extends Player {
 
 		if (targetMatchDay && lastMatchDay.equals(targetMatchDay)) return this;
 
+		/** @type {YouthPlayer} */
 		let forecastPlayer = Object.assign(new YouthPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
 	
-		let forecastDays = lastMatchDay.intervalTo(targetMatchDay);
-
-		this._forecastSkills(forecastPlayer, forecastDays);
-		this._forecastAging(forecastPlayer, matchday);
+		this._forecastAging(forecastPlayer, lastMatchDay, targetMatchDay);
+		this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
 		
 		return forecastPlayer;
+	}
+
+	/**
+	 * @param {YouthPlayer} forecastPlayer 
+	 * @param {MatchDay} lastMatchDay 
+	 * @param {MatchDay} targetMatchDay 
+	 */
+	_forecastAging (forecastPlayer, lastMatchDay, targetMatchDay) {
+		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
+		while (!matchday.add(1).after(targetMatchDay)) {
+			if (forecastPlayer.birthday === matchday.zat) {
+				forecastPlayer.age++;
+			}
+			forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
+		}
+	}
+
+	/**
+	 * @param {YouthPlayer} forecastPlayer 
+	 * @param {MatchDay} lastMatchDay 
+	 * @param {MatchDay} targetMatchDay 
+	 */
+	_forecastSkills (forecastPlayer, lastMatchDay, targetMatchDay) {
+		let forecastDays = lastMatchDay.intervalTo(targetMatchDay);
+		let youthDays = forecastPlayer.age < YOUTH_AGE_MIN ? 0 : (((forecastPlayer.age - YOUTH_AGE_MIN) * SEASON_MATCH_DAYS) + lastMatchDay.zat - this.birthday);
+		
+		Object.keys(forecastPlayer.skills)
+			.filter(key => {
+				return !Object.keys(forecastPlayer.getUnchangeableSkills()).includes(key);
+			})
+			.forEach(key => {
+				let change = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
+				forecastPlayer.skills[key] += Math.floor(change);
+				if (forecastPlayer.skills[key] > SKILL_LIMIT) forecastPlayer.skills[key] = SKILL_LIMIT;
+			});
 	}
 
 	/**
@@ -55,11 +89,7 @@ class YouthPlayer extends Player {
 	complete (lastMatchDay) {
 
 		// initialize exact age
-		if (lastMatchDay.zat >= this.birthday) {
-			this.ageExact = this.age + ((lastMatchDay.zat - this.birthday) / SEASON_MATCH_DAYS);
-		} else {
-			this.ageExact = this.age + ((SEASON_MATCH_DAYS - (this.birthday - lastMatchDay.zat)) / SEASON_MATCH_DAYS);
-		}
+		this.initializeExactAge(lastMatchDay);
 
 		// initialize the best fitting position
 		this.initializeBestPosition();
@@ -73,11 +103,9 @@ class YouthPlayer extends Player {
 	 * 
 	 * @returns {Position} the position
 	 */
-	 initializeBestPosition () {
-
+	initializeBestPosition () {
 		let pos, opti, optiTop = 0;
-
-		if (!this.pos) {
+		if (this.pos != Position.TOR) {
 			for (pos in Position) {
 				if (Position[pos] != Position.TOR) {
 					opti = this.getOpti(Position[pos]);
@@ -88,7 +116,6 @@ class YouthPlayer extends Player {
 				}
 			}
 		}
-
 	}
 
 }

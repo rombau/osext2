@@ -243,4 +243,17 @@ class Player {
 			(Math.pow(1.025, this.getSpecialSkills().length)) *
 			factor);
 	}
+
+	/**
+	 * Initializes the exact age.
+	 * 
+	 * @param {MatchDay} lastMatchDay the last match day
+	 */
+	initializeExactAge (lastMatchDay) {
+		if (lastMatchDay.zat >= this.birthday) {
+			this.ageExact = this.age + ((lastMatchDay.zat - this.birthday) / SEASON_MATCH_DAYS);
+		} else {
+			this.ageExact = this.age + ((SEASON_MATCH_DAYS - (this.birthday - lastMatchDay.zat)) / SEASON_MATCH_DAYS);
+		}
+	}
 }

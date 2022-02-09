@@ -76,7 +76,7 @@ Page.Youth = class extends Page {
 	}
 
 	/**
-	 * Adjusts youth table header row to make styling possible.
+	 * Adjusts year table header row to make styling possible.
 	 * 
 	 * @param {HTMLTableRowElement} row the row to handle
 	 * @returns {Boolean} true if it is a year header

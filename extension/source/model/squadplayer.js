@@ -326,11 +326,7 @@ class SquadPlayer extends Player {
 	complete (lastMatchDay) {
 
 		// initialize exact age
-		if (lastMatchDay.zat >= this.birthday) {
-			this.ageExact = this.age + ((lastMatchDay.zat - this.birthday) / SEASON_MATCH_DAYS);
-		} else {
-			this.ageExact = this.age + ((SEASON_MATCH_DAYS - (this.birthday - lastMatchDay.zat)) / SEASON_MATCH_DAYS);
-		}
+		this.initializeExactAge(lastMatchDay);
 
 		// initialize training factor
 		this.trainingFactor = this.marketValue / this.getMarketValue(this.pos, 1);

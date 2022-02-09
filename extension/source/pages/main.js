@@ -96,8 +96,11 @@ Page.Main = class extends Page {
 	 */
 	extend (doc, data) { 
 
-		data.complete();
+		Persistence.updateExtensionData(data => {
+			data.complete();
+		});
 
+		let thisPage = this;
 		let refreshButton = doc.createElement('i');
 		refreshButton.textContent = ' Erweiterungsdaten aktualisieren';
 		refreshButton.classList.add(STYLE_REFRESH);
@@ -105,11 +108,16 @@ Page.Main = class extends Page {
 		refreshButton.classList.add('fa-sync-alt');
 		refreshButton.addEventListener('click', (event) => {
 			Persistence.updateExtensionData(data => {
+				data._team.youthPlayers = []; // temporary
 				data.nextZat = ZAT_INDICATING_REFRESH;
-			}).then(data => {	
+			}).then(() => {	
 				let requestor = Requestor.create(doc);
-				requestor.addPage(new Page.Main);
-				requestor.start();
+				requestor.addPage(new Page.Main());
+				requestor.start(undefined, () => {
+					Persistence.updateExtensionData(data => {
+						data.complete();
+					});
+				});
 			});
 			return false;
 		});

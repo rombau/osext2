@@ -92,14 +92,56 @@ Page.YouthOverview = class extends Page.Youth {
 			
 			this.table.classList.add(STYLE_YOUTH);
 
-			Array.from(this.table.rows).forEach((row, i) => {
+			Array.from(this.table.rows)
+				.filter(row => !this.handleYearHeader(row))
+				.slice(0, -1)
+				.forEach((row, index) => {
+								
+				row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
+				row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
+				row.cells['Marktwert'] = row.cells['Alter'].cloneNode(true);
+				row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
+				row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
+				row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
 
-				if (!this.handleYearHeader(row)) {
+				row.cells['&Oslash;P'].style.width = '45px';
 
-					// player rows
+				if (index === 0) {
 
+					row.cells['Skillschnitt'].textContent = 'Skillschn.';
+					row.cells['Talent'].style.width = '4.5em';
+					row.cells['Marktwert'].style.width = '6em';
+					row.cells['&Oslash;P'].style.width = '3.5em';
+					row.cells['&Oslash;N'].style.width = '3.5em';
+					row.cells['&Oslash;U'].style.width = '3.5em';
+		
+					row.cells['Pos'].textContent = 'Pos';
+					row.cells['Opt.Skill'].textContent = 'Opt.Skill';
+					row.cells['Marktwert'].textContent = 'Marktwert';
+					row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
+					row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
+					row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
+		
+				} else {
+		
+					row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+					
+					let player = data.team.youthPlayers[index - 1];
+						
+					row.cells['Pos'].textContent = player.pos;
+					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+					row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
+					row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+					row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+					row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 				}
-
+	
+				row.insertBefore(row.cells['Pos'], row.cells['Geb.'].nextSibling);
+				row.insertBefore(row.cells['Opt.Skill'], row.cells['Talent']);
+				row.appendChild(row.cells['Marktwert']);
+				row.appendChild(row.cells['&Oslash;P']);	
+				row.appendChild(row.cells['&Oslash;N']);
+				row.appendChild(row.cells['&Oslash;U']);
 			});
 			
 			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
@@ -112,8 +154,21 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	updateWithTeam (team, current) {
 
-		Array.from(this.table.rows).slice(1, -1).forEach(row => {
-
+		Array.from(this.table.rows)
+			.filter(row => this.isPlayerRow(row))
+			.slice(1)
+			.forEach((row, index) => {
+			
+			// styling
+			Array.from(row.cells).forEach((cell) => {
+				if (!cell.innerHTML || cell.innerHTML.length === 0) {
+					//cell.innerHTML = '.';						
+					//cell.className = 'BAK';
+				}
+				if (!Object.keys(Position).includes(cell.className)) {
+					cell.classList.add(row.cells['Pos'].textContent);
+				}
+			});
 
 		});
 	}
