@@ -161,12 +161,9 @@ Page.YouthOverview = class extends Page.Youth {
 			
 			// styling
 			Array.from(row.cells).forEach((cell) => {
-				if (!cell.innerHTML || cell.innerHTML.length === 0) {
-					//cell.innerHTML = '.';						
-					//cell.className = 'BAK';
-				}
-				if (!Object.keys(Position).includes(cell.className)) {
-					cell.classList.add(row.cells['Pos'].textContent);
+				let pos = row.cells['Pos'].textContent;
+				if (!Object.keys(Position).includes(cell.className) && pos) {
+					cell.classList.add(pos);
 				}
 			});
 

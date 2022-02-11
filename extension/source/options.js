@@ -1,6 +1,12 @@
 
 const Options = {
 
+    /** @type {LogLevel} the current log level */
+    logLevel: LogLevel.LOG,
+
+    /** @type {String} the current log extension data element name or null/empty if the whole extension data should be logged */
+    logDataElement: null,
+
     /** @type {Number} the number of seasons that should be forecasted; two means this and the following season */
     forecastSeasons: 2,
 
@@ -19,7 +25,7 @@ const Options = {
     /** @type {Number} the follow up contract term */
     followUpContractTerm: 24,
 
-
+    
     initialize : () => {
         chrome.storage.local.get(Options, (data) => {
             chrome.storage.local.set(data);

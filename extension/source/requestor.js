@@ -75,6 +75,18 @@ class Requestor {
 	}
 
 	/**
+	 * @returns {Requestor} a new instance
+	 */
+	static handleError () {
+		Array.from(top.frames).forEach(frame => {
+			let overlay = frame.document.getElementById(Requestor.OVERLAY_ID);
+			if (overlay) overlay.classList.add(STYLE_HIDDEN);
+			let status = frame.document.getElementById(Requestor.STATUS_ID);
+			if (status) status.classList.add(STYLE_HIDDEN);
+		});
+	}
+
+	/**
 	 * Creates the status bar where the request progress is shown.
 	 * 
 	 * @param {Document} doc the parent document for the status (only used when there is no os_main frame)

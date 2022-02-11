@@ -72,11 +72,12 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				setButton.classList.add('fa-bolt');
 				setButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
-					cell.firstChild.textContent = `${data.viewSettings.squadPlayerMatchDay.season}/${data.viewSettings.squadPlayerMatchDay.zat}`;
+					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
+					cell.firstChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
 					cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
 					cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
 
-					data.team.getSquadPlayer(id).fastTransfer = new MatchDay(data.viewSettings.squadPlayerMatchDay.season, data.viewSettings.squadPlayerMatchDay.zat);
+					data.team.getSquadPlayer(id).fastTransfer = new MatchDay(viewMatchday.season, viewMatchday.zat);
 				});
 				
 				let removeButton = doc.createElement('i');
@@ -85,14 +86,15 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				removeButton.classList.add('fa-trash-alt');
 				removeButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
+					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
 					cell.classList.remove(STYLE_FAST_TRANSFER_DELETE);
-					if (!data.lastMatchDay.equals(data.viewSettings.squadPlayerMatchDay) && !player.loan && !player.transferLock) {
+					if (!data.lastMatchDay.equals(viewMatchday) && !player.loan && !player.transferLock) {
 						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
 					}
 					data.team.getSquadPlayer(id).fastTransfer = undefined;
 
-					let matchDayTeam = data.team.getForecast(data.lastMatchDay, data.viewSettings.squadPlayerMatchDay);
-					this.updateWithTeam(matchDayTeam, false, data.viewSettings.squadPlayerMatchDay);
+					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
+					this.updateWithTeam(matchDayTeam, false, viewMatchday);
 				});
 
 				let fastTransferSpan = doc.createElement('span');

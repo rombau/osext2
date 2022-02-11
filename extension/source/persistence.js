@@ -7,6 +7,8 @@ class Persistence {
 	
 	static CURRENT_TEAM = 'currentTeam';
 
+	static LOGGER = new Logger('Persistence');
+
 	/**
 	 * Returns a promise with the given operation. The new promise always waits for the last 
 	 * requested promise to resolve. This ensures synchronized serial execution.
@@ -38,6 +40,7 @@ class Persistence {
 		if (teamName) {
 			return Persistence.getPromise((resolve, reject) => {
 				chrome.storage.local.get(teamName, (storedData) => {
+					Persistence.LOGGER.log('getExtensionData', storedData[teamName]);
 					if (chrome.runtime.lastError) {
 						reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 					} else {
@@ -93,6 +96,7 @@ class Persistence {
 				} else if (!currentTeamName) {
 					extensionData = new ExtensionData();
 					try {
+						Persistence.LOGGER.log('updateExtensionData', extensionData);
 						modifyData(extensionData);
 					} catch (e) {
 						reject(e);
@@ -103,8 +107,9 @@ class Persistence {
 						if (chrome.runtime.lastError) {
 							reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 						} else {
-							extensionData = Object.assign(new ExtensionData(), storedData[currentTeamName]);
+							extensionData = ensurePrototype(storedData[currentTeamName], ExtensionData) || new ExtensionData();
 							try {
+								Persistence.LOGGER.log('updateExtensionData', extensionData);
 								modifyData(extensionData);
 							} catch (e) {
 								reject(e);
@@ -128,6 +133,7 @@ class Persistence {
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
 	 */
 	static storeExtensionData (data) {
+		Persistence.LOGGER.log('storeExtensionData', data);
 		if (data.team.name) {
 			return new Promise((resolve, reject) => {
 				let objectToStore = {

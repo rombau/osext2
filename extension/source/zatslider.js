@@ -25,7 +25,7 @@ class ZatSlider {
 		this.data = data;
 
 		/** @type {MatchDay} the match day reference adjusted by slider */ 
-		this.matchday = matchday;
+		this.matchday = ensurePrototype(matchday, MatchDay);
 
 		/** @type {changeCallback} the callback method called on slider change */ 
 		this.callback = callback;

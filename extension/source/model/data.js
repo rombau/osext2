@@ -16,29 +16,11 @@ class ExtensionData {
 		
 		this.viewSettings = {
 			
-			/** @private @type {MatchDay} */
-			_squadPlayerMatchDay : undefined,
+			/** @type {MatchDay} */
+			squadPlayerMatchDay : null,
 
-			/** @private @type {MatchDay} */
-			_youthPlayerMatchDay : undefined,
-
-			/** @type {MatchDay} the current match day for squad players views */
-			get squadPlayerMatchDay () {
-				return ensurePrototype(this._squadPlayerMatchDay, MatchDay);
-			},
-
-			set squadPlayerMatchDay(value) {
-				this._squadPlayerMatchDay = value;
-			},
-
-			/** @type {MatchDay} the current match day for youth players views */
-			get youthPlayerMatchDay () {
-				return ensurePrototype(this._youthPlayerMatchDay, MatchDay);
-			},
-
-			set youthPlayerMatchDay(value) {
-				this._youthPlayerMatchDay = value;
-			}
+			/** @type {MatchDay} */
+			youthPlayerMatchDay : null,
 		}
 		
 	}

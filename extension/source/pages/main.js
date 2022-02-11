@@ -96,27 +96,32 @@ Page.Main = class extends Page {
 	 */
 	extend (doc, data) { 
 
-		Persistence.updateExtensionData(data => {
-			data.complete();
-		});
+		let page = this;
 
-		let thisPage = this;
+		data.complete();
+
+		Persistence.storeExtensionData(data).then(data => {
+			page.logger.log('completed', data);
+		}, page.logger.error);
+
 		let refreshButton = doc.createElement('i');
 		refreshButton.textContent = ' Erweiterungsdaten aktualisieren';
 		refreshButton.classList.add(STYLE_REFRESH);
 		refreshButton.classList.add('fas');
 		refreshButton.classList.add('fa-sync-alt');
 		refreshButton.addEventListener('click', (event) => {
+			// possibly store of completed data not finished?
 			Persistence.updateExtensionData(data => {
+				data._team.squadPlayers = []; // temporary
 				data._team.youthPlayers = []; // temporary
 				data.nextZat = ZAT_INDICATING_REFRESH;
 			}).then(() => {	
 				let requestor = Requestor.create(doc);
 				requestor.addPage(new Page.Main());
 				requestor.start(undefined, () => {
-					Persistence.updateExtensionData(data => {
-						data.complete();
-					});
+					Persistence.storeExtensionData(data).then(data => {
+						page.logger.log('completed', data);
+					}, page.logger.error);
 				});
 			});
 			return false;

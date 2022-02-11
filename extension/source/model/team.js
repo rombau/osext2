@@ -104,14 +104,15 @@ class Team {
 			player.id = id;
 			this.squadPlayers.push(player);
 		}
-		return player;
+		return ensurePrototype(player, SquadPlayer);
 	}
 
 	/**
 	 * Returns the youth player with the given index and pull id. 
 	 * If the player can't be found, a new one is added to the team (at the given index).
 	 * Otherwise if the pull id of the player doesn't match with the existing player 
-	 * (at the given index), 
+	 * (at the given index), the one at the index was already pulled to squad and will 
+	 * be removed from the list.
 	 * 
 	 * @param {Number} index the index of the player on the page and the array
 	 * @param {Number} pullId the pull id of the player for pull to squad
@@ -132,7 +133,7 @@ class Team {
 		}
 		if (pullId) player.pullId = pullId;
 		this.youthPlayers[index] = player;
-		return player;
+		return ensurePrototype(player, YouthPlayer);
 	}
 
 	/**
@@ -205,8 +206,8 @@ class Team {
 	 * @param {MatchDay} lastMatchDay the last match day
 	 */
 	complete (lastMatchDay) {
-		this.squadPlayers.forEach(player => player.complete(lastMatchDay));
-		this.youthPlayers.forEach(player => player.complete(lastMatchDay));
+		this.squadPlayers.forEach(player => ensurePrototype(player, SquadPlayer).complete(lastMatchDay));
+		this.youthPlayers.forEach(player => ensurePrototype(player, YouthPlayer).complete(lastMatchDay));
 
 		// take over the current season league match days to forecast seasons
 		let currentSeasonSchedule = this.matchDays.filter(matchDay => matchDay.season === lastMatchDay.season && matchDay.competition === Competition.LEAGUE);

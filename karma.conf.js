@@ -10,6 +10,7 @@ module.exports = function(config) {
 		files : [
 			{ pattern: 'test/fixtures/**/*', included: false },
 			'test/lib/**/*',
+			'extension/source/logger.js',
 			'extension/source/options.js',
 		    'extension/source/requestor.js',
 		    'extension/source/common.js',

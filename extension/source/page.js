@@ -12,7 +12,7 @@ class Warning extends Error {
  * Enum for http methods.
  * @readonly
  */
- const HttpMethod = Object.freeze({
+const HttpMethod = Object.freeze({
 	GET: 'GET',
 	POST: 'POST'
 });
@@ -40,6 +40,9 @@ class Page {
 
 		/** @type {[Page.Param]} the parameters this page can handle */
 		this.params = params;
+
+		/** @type {Logger} the logger of the page */
+		this.logger = new Logger(name);
 	}
 
 	/**
@@ -136,6 +139,21 @@ class Page {
 	extend (_doc, _data) {}
 
 	/**
+	 * Extends the current page. Changes to the given extension data reference will take effect.
+	 * 
+	 * @param {Document} doc the current document
+	 * @param {ExtensionData} data the extension data
+	 */
+	extendPage (doc, data) {
+		try {
+			this.logger.log('extend', data);
+			this.extend(doc, data);
+		} catch (e) {
+			Page.handleError(e);
+		}
+	}
+
+	/**
 	 * Registers a visibility change listener to update the background cache
 	 * when leaving the current page (document).
 	 * 
@@ -143,9 +161,11 @@ class Page {
 	 * @param {ExtensionData} data the extension data
 	 */
 	registerSaveOnExitListener (doc, data) {
+		let page = this;
 		doc.addEventListener('visibilitychange', () => {
 			if (doc.visibilityState === 'hidden') {
-				Persistence.storeExtensionData(data).then(console.log, Page.handleError);
+				page.logger.log('visibilitychange', data);
+				Persistence.storeExtensionData(data).then(() => {}, Page.handleError);
 			}
 		});
 	}
@@ -160,6 +180,7 @@ class Page {
 		let page = this;
 		let pagesToRequest;
 		Persistence.updateExtensionData(data => {
+			page.logger.log('extract', data);
 			pagesToRequest = page.extract(doc, data);
 		}).then(data => {
 			if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
@@ -172,21 +193,13 @@ class Page {
 				pagesToRequest.forEach((page) => requestor.addPage(page));
 				requestor.start(page, () => {
 					Persistence.getExtensionData(data.team.name).then(newdata => {
-						page.registerSaveOnExitListener(doc, newdata);
-						try {
-							page.extend(doc, newdata);
-						} catch (e) {
-							Page.handleError(e);
-						}
+						page.extendPage.call(page, doc, newdata);
+						page.registerSaveOnExitListener.call(page, doc, newdata);
 					}, Page.handleError);
 				});
 			} else {
-				page.registerSaveOnExitListener(doc, data);
-				try {
-					page.extend(doc, data);	
-				} catch (e) {
-					Page.handleError(e);
-				}
+				page.extendPage.call(page, doc, data);
+				page.registerSaveOnExitListener.call(page, doc, data);
 			}			
 		}, Page.handleError);
 	}
@@ -198,10 +211,12 @@ class Page {
 	 */
 	static handleError (e) {
 
+		Requestor.handleError();
+
 		if (e instanceof Warning) {
-			console.warn(e.message);
+			new Logger('Warning').warn(e.message);
 		} else {
-			console.error(e);
+			new Logger('Error').error(e);
 		}
 	
 		/** @type {Document} the element with the progress */
