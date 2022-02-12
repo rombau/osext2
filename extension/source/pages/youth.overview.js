@@ -39,7 +39,8 @@ Page.YouthOverview = class extends Page.Youth {
 				player.countryName = row.cells['Land'].firstChild.title;
 				player.uefa = row.cells['U'].textContent ? false : true;
 				
-				player.talent = row.cells['Talent'].textContent;	
+				player.talent = row.cells['Talent'].textContent;
+				player.increase = row.cells['Aufwertung'].textContent;
 								
 				playerCount++;
 			});
@@ -110,6 +111,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 					row.cells['Skillschnitt'].textContent = 'Skillschn.';
 					row.cells['Talent'].style.width = '4.5em';
+					row.cells['Aufwertung'].style.width = '9em';
 					row.cells['Marktwert'].style.width = '6em';
 					row.cells['&Oslash;P'].style.width = '3.5em';
 					row.cells['&Oslash;N'].style.width = '3.5em';
@@ -181,6 +183,17 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['&Oslash;P'].textContent = '';
 				row.cells['&Oslash;N'].textContent = '';
 				row.cells['&Oslash;U'].textContent = '';
+			}
+
+			if (current) {
+				if (player.pullId) {
+					row.cells['Aktion'].innerHTML = `<input name="ziehmich" value="${player.pullId}" type="radio">`;
+				}
+				row.cells['Aufwertung'].textContent = player.increase;
+			}
+			else {
+				row.cells['Aktion'].textContent = '';
+				row.cells['Aufwertung'].textContent = '';
 			}
 
 			// styling

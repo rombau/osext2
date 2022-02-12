@@ -22,6 +22,9 @@ class YouthPlayer extends Player {
 
 		/** @type {Number} the internal pull id */
 		this.pullId;
+
+		/** @type {String} the last increased skill(s) */
+		this.increase;
 	}
 
 	/**

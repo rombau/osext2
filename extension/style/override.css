@@ -46,6 +46,11 @@ input[type=checkbox] {
     vertical-align: middle;
 }
 
+input[type=radio] {
+    height: 12px;
+    vertical-align: middle;
+}
+
 td > input {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
