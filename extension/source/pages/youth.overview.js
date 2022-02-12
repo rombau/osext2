@@ -159,14 +159,55 @@ Page.YouthOverview = class extends Page.Youth {
 			.slice(1)
 			.forEach((row, index) => {
 			
+			let player = team.youthPlayers[index];
+
+			if (player.active) {
+
+				row.cells['Alter'].textContent = player.age;
+				row.cells['Geb.'].textContent = player.birthday;
+				row.cells['Pos'].textContent = player.pos;
+				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
+				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+				row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
+				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
+
+			} else {
+
+				row.cells['Skillschnitt'].textContent = '';
+				row.cells['Opt.Skill'].textContent = '';
+				row.cells['Marktwert'].textContent = '';
+				row.cells['&Oslash;P'].textContent = '';
+				row.cells['&Oslash;N'].textContent = '';
+				row.cells['&Oslash;U'].textContent = '';
+			}
+
 			// styling
 			Array.from(row.cells).forEach((cell) => {
 				let pos = row.cells['Pos'].textContent;
 				if (!Object.keys(Position).includes(cell.className) && pos) {
 					cell.classList.add(pos);
 				}
+				cell.classList.remove(STYLE_FORECAST);
+				if (player.active) {
+					cell.classList.remove(STYLE_INACTIVE);
+				} else {
+					cell.classList.add(STYLE_INACTIVE);
+				}
 			});
 
+			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+
+			if (player.active && !current) {
+				row.cells['Alter'].classList.add(STYLE_FORECAST);
+				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
+				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
+				row.cells['Marktwert'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
+			}
 		});
 	}
 }

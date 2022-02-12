@@ -112,16 +112,16 @@ Page.Main = class extends Page {
 		refreshButton.addEventListener('click', (event) => {
 			// possibly store of completed data not finished?
 			Persistence.updateExtensionData(data => {
-				data._team.squadPlayers = []; // temporary
-				data._team.youthPlayers = []; // temporary
+				page.logger.log('reset', data);
+				data._team._squadPlayers = []; // temporary
+				data._team._youthPlayers = []; // temporary
 				data.nextZat = ZAT_INDICATING_REFRESH;
 			}).then(() => {	
 				let requestor = Requestor.create(doc);
 				requestor.addPage(new Page.Main());
 				requestor.start(undefined, () => {
-					Persistence.storeExtensionData(data).then(data => {
-						page.logger.log('completed', data);
-					}, page.logger.error);
+					doc.removeEventListener('visibilitychange', page.visibilitychangeListener);
+					page.logger.log('refresh completed');
 				});
 			});
 			return false;

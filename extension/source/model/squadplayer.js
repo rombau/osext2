@@ -21,9 +21,6 @@ class SquadPlayer extends Player {
 		/** @type {Number} the internal id */ 
 		this.id;
 
-		/** @type {Boolean} flag indicating the palyer is active */
-		this.active = true;
-
 		/** @type {String} the name */
 		this.name;
 

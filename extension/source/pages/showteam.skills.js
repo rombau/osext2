@@ -128,11 +128,14 @@ Page.ShowteamSkills = class extends Page.Showteam {
 			// styling
 			Array.from(row.cells).forEach((cell, i) => {
 				if (player.loan && player.loan.fee > 0) {
-					cell.className = 'LEI';
+					cell.classList.add('LEI');
 				} else {
-					cell.className = player.pos;
+					cell.classList.add(player.pos);
 				}
-				if (!player.active) {
+				cell.classList.remove(STYLE_FORECAST);
+				if (player.active) {
+					cell.classList.remove(STYLE_INACTIVE);
+				} else {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});

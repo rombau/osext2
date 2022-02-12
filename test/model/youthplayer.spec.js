@@ -55,6 +55,9 @@ describe('YouthPlayer', () => {
 		expect(player.getForecast(new MatchDay(15, 25), new MatchDay(15, 72)).age).toEqual(15);
 		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(15, 72)).age).toEqual(16);
 		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(16, 72)).age).toEqual(17);
+		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(17, 72)).age).toEqual(18);
+		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(18, 24)).age).toEqual(19);
+		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(18, 24)).active).toBeFalsy();
 	});
 
 	it('should return skill forecast based on current skills and past time', () => {

@@ -84,6 +84,9 @@ class Player {
 
 	constructor() {
 
+		/** @type {Boolean} flag indicating the palyer is active */
+		this.active = true;
+
 		/** @type {Number} the age */
 		this.age;
 

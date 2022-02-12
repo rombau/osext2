@@ -162,12 +162,13 @@ class Page {
 	 */
 	registerSaveOnExitListener (doc, data) {
 		let page = this;
-		doc.addEventListener('visibilitychange', () => {
+		page.visibilitychangeListener = () => {
 			if (doc.visibilityState === 'hidden') {
 				page.logger.log('visibilitychange', data);
 				Persistence.storeExtensionData(data).then(() => {}, Page.handleError);
 			}
-		});
+		};
+		doc.addEventListener('visibilitychange', page.visibilitychangeListener);
 	}
 
 	/**

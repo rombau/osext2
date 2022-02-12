@@ -105,8 +105,6 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
 	
 			} else {
-	
-				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 				
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.team.getSquadPlayer(id); 
@@ -210,13 +208,16 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			// styling
 			Array.from(row.cells).forEach((cell, i) => {
 				if ((+cell.textContent === 0 || cell.textContent === TransferState.NORMAL) && i > 11) {
-					cell.className = 'BAK';
+					cell.classList.add('BAK');
 				} else if (player.loan && player.loan.fee > 0) {
-					cell.className = 'LEI';
+					cell.classList.add('LEI');
 				} else {
-					cell.className = player.pos;
+					cell.classList.add(player.pos);
 				}
-				if (!player.active) {
+				cell.classList.remove(STYLE_FORECAST);
+				if (player.active) {
+					cell.classList.remove(STYLE_INACTIVE);
+				} else {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});

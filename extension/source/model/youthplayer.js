@@ -58,6 +58,9 @@ class YouthPlayer extends Player {
 				forecastPlayer.age++;
 			}
 			forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
+			if (forecastPlayer.age > YOUTH_AGE_MAX) {
+				forecastPlayer.active = false;
+			}
 		}
 	}
 
