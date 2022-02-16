@@ -29,7 +29,8 @@ Page.Youth = class extends Page {
 		let zatSlider = new ZatSlider(toolbar, data, data.viewSettings.youthPlayerMatchDay, (team, current, matchday) => {
 			page.updateWithTeam(team, current, matchday);
 		});
-		toolbar.appendChild(zatSlider.create());
+		let zatSliderElement = zatSlider.create();
+		toolbar.appendChild(zatSliderElement);
 		
 		let max = doc.createElement('i');
 		max.classList.add('fas');
@@ -37,6 +38,12 @@ Page.Youth = class extends Page {
 		max.addEventListener('click', (event) => {
 			event.target.classList.toggle('fa-toggle-off');
 			event.target.classList.toggle('fa-toggle-on');
+			zatSliderElement.classList.toggle(STYLE_INACTIVE);
+			if (zatSliderElement.classList.contains(STYLE_INACTIVE)) {
+				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay), false);
+			} else {
+				zatSlider.triggerCallback.call(zatSlider);
+			}
 		});
 		toolbar.appendChild(max);
 

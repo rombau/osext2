@@ -44,8 +44,10 @@ class YouthPlayer extends Player {
 		forecastPlayer.origin = this;
 	
 		this._forecastAging(forecastPlayer, lastMatchDay, targetMatchDay);
-		this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
-		
+
+		let days = this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
+		forecastPlayer.averageIncreasePerDay = forecastPlayer.getAverageIncreasePerDay(days);
+
 		return forecastPlayer;
 	}
 
@@ -56,7 +58,9 @@ class YouthPlayer extends Player {
 	 */
 	_forecastAging (forecastPlayer, lastMatchDay, targetMatchDay) {
 		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
-		while (!matchday.add(1).after(targetMatchDay)) {
+		let forecastDays = forecastPlayer.getForecastDays(lastMatchDay, targetMatchDay);
+		while (matchday.add(1) && --forecastDays >= 0) {
+			if (targetMatchDay && matchday.after(targetMatchDay)) break;
 			if (forecastPlayer.birthday === matchday.zat) {
 				forecastPlayer.age++;
 			}
@@ -71,20 +75,73 @@ class YouthPlayer extends Player {
 	 * @param {YouthPlayer} forecastPlayer 
 	 * @param {MatchDay} lastMatchDay 
 	 * @param {MatchDay} targetMatchDay 
+	 * @returns {Number} sum of days
 	 */
 	_forecastSkills (forecastPlayer, lastMatchDay, targetMatchDay) {
-		let forecastDays = lastMatchDay.intervalTo(targetMatchDay);
-		let youthDays = forecastPlayer.age < YOUTH_AGE_MIN ? 0 : (((forecastPlayer.age - YOUTH_AGE_MIN) * SEASON_MATCH_DAYS) + lastMatchDay.zat - this.birthday);
-		
-		Object.keys(forecastPlayer.skills)
+		let forecastDays = forecastPlayer.getForecastDays(lastMatchDay, targetMatchDay);
+		let youthDays = forecastPlayer.getYouthDays(lastMatchDay);
+	
+		Object.keys(forecastPlayer.getTrainableSkills()).forEach(key => {
+			let change = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
+			forecastPlayer.skills[key] += Math.round(change);
+			if (forecastPlayer.skills[key] > SKILL_LIMIT) forecastPlayer.skills[key] = SKILL_LIMIT;
+		});
+		return youthDays + forecastDays;
+	}
+
+	/**
+	 * Returns the trainable (primary and secondary) skills.
+	 * 
+	 * @returns {Skillset} an object with the trainable skills only
+	 */
+	getTrainableSkills () {
+		return Object.keys(this.skills)
 			.filter(key => {
-				return !Object.keys(forecastPlayer.getUnchangeableSkills()).includes(key);
+				return !Object.keys(this.getUnchangeableSkills()).includes(key);
 			})
-			.forEach(key => {
-				let change = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
-				forecastPlayer.skills[key] += Math.floor(change);
-				if (forecastPlayer.skills[key] > SKILL_LIMIT) forecastPlayer.skills[key] = SKILL_LIMIT;
-			});
+			.reduce((obj, key) => {
+				obj[key] = this.skills[key];
+				return obj;
+			}, {});
+	}
+
+	/**
+	 * Returns the days the player will be trained until given match day.
+	 * If match day is omitted, the days until max age are returned.
+	 * 
+	 * @param {MatchDay} lastMatchDay 
+	 * @param {MatchDay} targetMatchDay 
+	 * @returns {Number} forecast days
+	 */
+	getForecastDays (lastMatchDay, targetMatchDay) {
+		if (targetMatchDay) {
+			return lastMatchDay.intervalTo(targetMatchDay);
+		}
+		let age = (this.origin && this.origin.age) ? this.origin.age : this.age;
+		let seasons = (YOUTH_AGE_MAX + 1) - (age + (this.birthday > lastMatchDay.zat ? 1 : 0));
+		return age < YOUTH_AGE_MIN ? 0 : (seasons * SEASON_MATCH_DAYS - lastMatchDay.zat + this.birthday - 1);
+	}
+
+	/**
+	 * Returns the days the player was trained until given match day.
+	 * 
+	 * @param {MatchDay} matchday
+	 * @returns {Number} days trained
+	 */
+	getYouthDays (matchday) {
+		let age = (this.origin && this.origin.age) ? this.origin.age : this.age;
+		let seasons = age - YOUTH_AGE_MIN + (this.birthday > matchday.zat ? 1 : 0);
+		return age < YOUTH_AGE_MIN ? 0 : (seasons * SEASON_MATCH_DAYS + matchday.zat - this.birthday);
+	}
+
+	/**
+	 * Returns the average increase per day.
+	 * 
+	 * @param {Number} days
+	 * @returns {Number} average increase
+	 */
+	getAverageIncreasePerDay (days) {
+		return Object.values(this.getTrainableSkills()).reduce((sum, value) => sum + value, 0) / days;
 	}
 
 	/**

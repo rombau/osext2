@@ -67,7 +67,7 @@ describe('YouthPlayer', () => {
 		let forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
 
 		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[20,36,27,28,38,20,0,0,25,37,27,40,15,5,95,23,29]');
+			.toEqual('[21,36,27,29,38,21,0,0,25,37,27,41,15,5,95,23,29]');
 
 	});
 });

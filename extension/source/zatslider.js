@@ -62,27 +62,24 @@ class ZatSlider {
 			viewInfo.update(this.matchday.season, this.matchday.zat);
 		});
 		rangeSlider.addEventListener('change', (event) => {
-			this.callback(this.data.team.getForecast(this.data.lastMatchDay, this.matchday), 
-				this.data.lastMatchDay.equals(this.matchday), this.matchday);
+			this.triggerCallback();
 		});
 
 		this.slider = this.containerElement.ownerDocument.createElement('div');
 		this.slider.appendChild(rangeSlider);
 		this.slider.appendChild(viewInfo);
 		
-		this.callback(this.data.team.getForecast(this.data.lastMatchDay, this.matchday), 
-			this.data.lastMatchDay.equals(this.matchday), this.matchday);
+		this.triggerCallback();
 	
 		return this.slider;
 	}
 
 	/**
 	 * Sets the slider active or inactive.
-	 * 
-	 * @param {Boolean} active 
 	 */
-	setActive (active) {
-
+	triggerCallback () {
+		this.callback(this.data.team.getForecast(this.data.lastMatchDay, this.matchday), 
+			this.data.lastMatchDay.equals(this.matchday), this.matchday);
 	}
 
 }

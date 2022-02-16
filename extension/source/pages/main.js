@@ -98,10 +98,10 @@ Page.Main = class extends Page {
 
 		let page = this;
 
-		data.complete();
-
-		Persistence.storeExtensionData(data).then(data => {
-			page.logger.log('completed', data);
+		Persistence.updateExtensionData(dataToComplete => {
+			dataToComplete.complete();
+		}).then(() => {
+			page.logger.log('refresh completed');
 		}, page.logger.error);
 
 		let refreshButton = doc.createElement('i');
@@ -111,19 +111,23 @@ Page.Main = class extends Page {
 		refreshButton.classList.add('fa-sync-alt');
 		refreshButton.addEventListener('click', (event) => {
 			// possibly store of completed data not finished?
-			Persistence.updateExtensionData(data => {
-				page.logger.log('reset', data);
-				data._team._squadPlayers = []; // temporary
-				data._team._youthPlayers = []; // temporary
-				data.nextZat = ZAT_INDICATING_REFRESH;
-			}).then(() => {	
+			Persistence.updateExtensionData(dataToReset => {
+				page.logger.log('reset', dataToReset);
+				dataToReset._team._squadPlayers = []; // temporary
+				dataToReset._team._youthPlayers = []; // temporary
+				dataToReset.nextZat = ZAT_INDICATING_REFRESH;
+			}).then((updatedData) => {	
 				let requestor = Requestor.create(doc);
 				requestor.addPage(new Page.Main());
 				requestor.start(undefined, () => {
 					doc.removeEventListener('visibilitychange', page.visibilitychangeListener);
-					page.logger.log('refresh completed');
+					Persistence.updateExtensionData(refreshedData => {
+						refreshedData.complete();
+					}).then(() => {
+						page.logger.log('refresh completed');
+					}, page.logger.error);
 				});
-			});
+			}, page.logger.error);
 			return false;
 		});
 

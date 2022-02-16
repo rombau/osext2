@@ -8,7 +8,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 		/** @type {HTMLTableElement} */
 		this.table;
 
-		this.ageExact = false;
+		this.showExactAge = false;
 	}
 
 	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
@@ -28,7 +28,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 			let player = data.team.getSquadPlayer(id); 
 	
-			this.ageExact = row.cells['Alter'].textContent.includes('.');
+			this.showExactAge = row.cells['Alter'].textContent.includes('.');
 			
 			player.name = row.cells['Name'].textContent;
 			player.age = Math.floor(+row.cells['Alter'].textContent);
@@ -81,7 +81,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 		Array.from(this.table.rows).forEach((row, i) => {
 
-			if (!this.ageExact) row.cells['Geb.'] = row.cells['Name'].cloneNode(true);
+			if (!this.showExactAge) row.cells['Geb.'] = row.cells['Name'].cloneNode(true);
 
 			row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
 			row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
@@ -90,6 +90,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 
+				row.cells['Auf'].style.width = '2em';
+				row.cells['TS'].style.width = '1.9em';
 				row.cells['&Oslash;P'].style.width = '3.5em';
 				row.cells['&Oslash;N'].style.width = '3.5em';
 				row.cells['&Oslash;U'].style.width = '3.5em';
@@ -99,7 +101,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Skillschnitt'].textContent = 'Skillschn.';
 				row.cells['Sperre'].textContent = 'Sp.';
 	
-				if (!this.ageExact) row.cells['Geb.'].innerHTML = 'Geb.';
+				if (!this.showExactAge) row.cells['Geb.'].innerHTML = 'Geb.';
 				row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
 				row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
 				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
@@ -109,14 +111,14 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.team.getSquadPlayer(id); 
 					
-				if (!this.ageExact) row.cells['Geb.'].textContent = player.birthday;
+				if (!this.showExactAge) row.cells['Geb.'].textContent = player.birthday;
 				
 				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 			}
 
-			if (!this.ageExact) row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
+			if (!this.showExactAge) row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
 
 			row.appendChild(row.cells['&Oslash;P']);			
 			row.appendChild(row.cells['&Oslash;N']);			
@@ -142,7 +144,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			
 			if (player.active) {
 
-				if (this.ageExact) {
+				if (this.showExactAge) {
 					row.cells['Alter'].innerHTML = `<abbr title="ZAT ${player.birthday}">${player.ageExact.toFixed(2)}</abbr>`;
 				} else {
 					row.cells['Alter'].textContent = player.age;
@@ -186,7 +188,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			} else {
 
 				row.cells['Alter'].textContent = '';
-				if (!this.ageExact) row.cells['Geb.'].textContent = '';
+				if (!this.showExactAge) row.cells['Geb.'].textContent = '';
 				row.cells['Pos'].textContent = '';
 				row.cells['Auf'].textContent = '';
 				row.cells['MOR'].textContent = '';
@@ -207,6 +209,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 			// styling
 			Array.from(row.cells).forEach((cell, i) => {
+				cell.classList.remove('BAK');
+				cell.classList.remove('LEI');
+				cell.classList.remove(STYLE_FORECAST);
 				if ((+cell.textContent === 0 || cell.textContent === TransferState.NORMAL) && i > 11) {
 					cell.classList.add('BAK');
 				} else if (player.loan && player.loan.fee > 0) {
@@ -214,7 +219,6 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				} else {
 					cell.classList.add(player.pos);
 				}
-				cell.classList.remove(STYLE_FORECAST);
 				if (player.active) {
 					cell.classList.remove(STYLE_INACTIVE);
 				} else {

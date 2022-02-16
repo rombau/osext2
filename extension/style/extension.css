@@ -5,6 +5,7 @@
 
 .osext-inactive {
     opacity: 0.3;
+    pointer-events: none;
 }
 
 .osext-primary {
@@ -96,6 +97,7 @@
     top: 2.5px;
     font-size: 1.4em;
     cursor: pointer;
+    color: #5c5;
 }
 #osext-toolbar-container .fa-toggle-on {
     color: #5c5;

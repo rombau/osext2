@@ -47,7 +47,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Geb.Tag'].align = 'left';
 
 				row.cells['Skillschnitt'].textContent = 'Skillschn.';
-	
+				row.cells['TS'].style.width = '1.9em';
+
 				row.cells['Blitzerlös'].textContent = 'Blitzerlös';
 				row.cells['Blitzerlös'].align = 'right';
 
@@ -179,6 +180,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			// styling
 			Array.from(row.cells).forEach((cell, i) => {
+				cell.classList.remove('BAK');
+				cell.classList.remove('LEI');
+				cell.classList.remove(STYLE_FORECAST);
 				if (+cell.textContent === 0 && i === 14) {
 					cell.classList.add('BAK');
 				} else if (player.loan && player.loan.fee > 0) {
@@ -186,7 +190,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				} else {
 					cell.classList.add(player.pos);
 				}
-				cell.classList.remove(STYLE_FORECAST);
 				if (player.active) {
 					cell.classList.remove(STYLE_INACTIVE);
 				} else {

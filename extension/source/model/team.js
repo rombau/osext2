@@ -181,17 +181,20 @@ class Team {
 	 * @returns {Team} the forecast of the team
 	 */
 	getForecast (lastMatchDay, targetMatchDay) {
-		if (lastMatchDay.equals(targetMatchDay)) return this;
-
 		let forecastTeam = new Team();
-
-		let matchDaysInRange = this.matchDays.filter(matchDay => {
-			return matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
-		});
 		
-		this.squadPlayers.forEach(player => {
-			forecastTeam.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
-		});
+		if (targetMatchDay) {
+			if (lastMatchDay.equals(targetMatchDay)) return this;
+			
+			let matchDaysInRange = this.matchDays.filter(matchDay => {
+				return matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
+			});
+
+			this.squadPlayers.forEach(player => {
+				forecastTeam.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
+			});
+		}
+
 		this.youthPlayers.forEach(player => {
 			forecastTeam.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
 		});

@@ -100,6 +100,7 @@ Page.YouthOverview = class extends Page.Youth {
 								
 				row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
 				row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
+				row.cells['&Oslash;/Zat'] = row.cells['Alter'].cloneNode(true);
 				row.cells['Marktwert'] = row.cells['Alter'].cloneNode(true);
 				row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
 				row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
@@ -119,6 +120,7 @@ Page.YouthOverview = class extends Page.Youth {
 		
 					row.cells['Pos'].textContent = 'Pos';
 					row.cells['Opt.Skill'].textContent = 'Opt.Skill';
+					row.cells['&Oslash;/Zat'].innerHTML = '&Oslash;/Zat';
 					row.cells['Marktwert'].textContent = 'Marktwert';
 					row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
 					row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
@@ -140,6 +142,7 @@ Page.YouthOverview = class extends Page.Youth {
 	
 				row.insertBefore(row.cells['Pos'], row.cells['Geb.'].nextSibling);
 				row.insertBefore(row.cells['Opt.Skill'], row.cells['Talent']);
+				row.appendChild(row.cells['&Oslash;/Zat']);
 				row.appendChild(row.cells['Marktwert']);
 				row.appendChild(row.cells['&Oslash;P']);	
 				row.appendChild(row.cells['&Oslash;N']);
@@ -154,7 +157,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 * @param {Team} team
 	 * @param {Boolean} current indicating the current team
 	 */
-	updateWithTeam (team, current) {
+	updateWithTeam (team, current, matchDay) {
 
 		Array.from(this.table.rows)
 			.filter(row => this.isPlayerRow(row))
@@ -163,9 +166,10 @@ Page.YouthOverview = class extends Page.Youth {
 			
 			let player = team.youthPlayers[index];
 
+			row.cells['Alter'].textContent = player.age;
+
 			if (player.active) {
 
-				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = player.pos;
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
@@ -174,11 +178,18 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
-
+				
+				if (current) {
+					row.cells['&Oslash;/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
+				} else {
+					row.cells['&Oslash;/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
+				}
+				
 			} else {
 
 				row.cells['Skillschnitt'].textContent = '';
 				row.cells['Opt.Skill'].textContent = '';
+				row.cells['&Oslash;/Zat'].textContent = '';
 				row.cells['Marktwert'].textContent = '';
 				row.cells['&Oslash;P'].textContent = '';
 				row.cells['&Oslash;N'].textContent = '';
@@ -216,6 +227,7 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
 				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
 				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
+				row.cells['&Oslash;/Zat'].classList.add(STYLE_FORECAST);
 				row.cells['Marktwert'].classList.add(STYLE_FORECAST);
 				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
 				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
