@@ -46,6 +46,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			if (transferLockCell.textContent.charAt(0) === 'L') {
 				let matches = /Leihgabe von (.+) an (.+) für (\d+) ZATs/gm.exec(transferLockCell.firstChild.title);
 				player.loan = player.loan || new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
+				player.loan.duration = +matches[3];
 				player.transferLock = +transferLockCell.textContent.substring(1);
 			} else {
 				player.transferLock = +transferLockCell.textContent;
