@@ -97,7 +97,7 @@ Page.YouthOverview = class extends Page.Youth {
 				.filter(row => !this.handleYearHeader(row))
 				.slice(0, -1)
 				.forEach((row, index) => {
-								
+
 				row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
 				row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
 				row.cells['&Oslash;/Zat'] = row.cells['Alter'].cloneNode(true);

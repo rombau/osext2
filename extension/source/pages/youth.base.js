@@ -33,18 +33,25 @@ Page.Youth = class extends Page {
 		toolbar.appendChild(zatSliderElement);
 		
 		let max = doc.createElement('i');
-		max.classList.add('fas');
-		max.classList.add('fa-toggle-off');
-		max.addEventListener('click', (event) => {
-			event.target.classList.toggle('fa-toggle-off');
-			event.target.classList.toggle('fa-toggle-on');
-			zatSliderElement.classList.toggle(STYLE_INACTIVE);
-			if (zatSliderElement.classList.contains(STYLE_INACTIVE)) {
+		max.update = (season, zat) => {
+			if (data.viewSettings.youthMax) {
+				max.classList.add('fa-toggle-on');
+				max.classList.remove('fa-toggle-off');
+				zatSliderElement.classList.add(STYLE_INACTIVE);
 				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay), false);
 			} else {
+				max.classList.add('fa-toggle-off');
+				max.classList.remove('fa-toggle-on');
+				zatSliderElement.classList.remove(STYLE_INACTIVE);
 				zatSlider.triggerCallback.call(zatSlider);
 			}
+		};
+		max.classList.add('fas');
+		max.addEventListener('click', (event) => {
+			data.viewSettings.youthMax = !data.viewSettings.youthMax;
+			max.update();
 		});
+		max.update();
 		toolbar.appendChild(max);
 
 		let maxTitle = doc.createElement('span');

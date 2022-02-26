@@ -21,6 +21,9 @@ class ExtensionData {
 
 			/** @type {MatchDay} */
 			youthPlayerMatchDay : null,
+
+			/** @type {Boolean} */
+			youthMax : false
 		}
 		
 	}

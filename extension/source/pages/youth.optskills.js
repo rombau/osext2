@@ -21,14 +21,13 @@ Page.YouthOptskills = class extends Page.Youth {
 		
 		this.table.classList.add(STYLE_YOUTH);
 
-		Array.from(this.table.rows).forEach((row, index) => {
+		Array.from(this.table.rows)
+			.filter(row => !this.handleYearHeader(row))
+			.slice(0, -1)
+			.forEach((row, index) => {
 
-			if (!this.handleYearHeader(row)) {
-
-				// player rows
-
-			}
-			
+			// player rows
+		
 		});
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
@@ -37,10 +36,16 @@ Page.YouthOptskills = class extends Page.Youth {
 	/**
 	 * @param {Team} team
 	 * @param {Boolean} current indicating the current team
+	 * @param {MatchDay} matchDay
 	 */
-	updateWithTeam (team, current) {
+	updateWithTeam (team, current, matchDay) {
 
-		Array.from(this.table.rows).slice(1, -1).forEach((row, index) => {
+		Array.from(this.table.rows)
+			.filter(row => this.isPlayerRow(row))
+			.slice(1)
+			.forEach((row, index) => {
+			
+			let player = team.youthPlayers[index];
 
 
 		});
