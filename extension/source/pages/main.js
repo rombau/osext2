@@ -96,42 +96,8 @@ Page.Main = class extends Page {
 	 */
 	extend (doc, data) { 
 
-		let page = this;
+		data.complete(); // completed data will be saved when page gets invisbible
 
-		Persistence.updateExtensionData(dataToComplete => {
-			dataToComplete.complete();
-		}).then(() => {
-			page.logger.log('refresh completed');
-		}, page.logger.error);
-
-		let refreshButton = doc.createElement('i');
-		refreshButton.textContent = ' Erweiterungsdaten aktualisieren';
-		refreshButton.classList.add(STYLE_REFRESH);
-		refreshButton.classList.add('fas');
-		refreshButton.classList.add('fa-sync-alt');
-		refreshButton.addEventListener('click', (event) => {
-			// possibly store of completed data not finished?
-			Persistence.updateExtensionData(dataToReset => {
-				page.logger.log('reset', dataToReset);
-				dataToReset._team._squadPlayers = []; // temporary
-				dataToReset._team._youthPlayers = []; // temporary
-				dataToReset.nextZat = ZAT_INDICATING_REFRESH;
-			}).then((updatedData) => {	
-				let requestor = Requestor.create(doc);
-				requestor.addPage(new Page.Main());
-				requestor.start(undefined, () => {
-					doc.removeEventListener('visibilitychange', page.visibilitychangeListener);
-					Persistence.updateExtensionData(refreshedData => {
-						refreshedData.complete();
-					}).then(() => {
-						page.logger.log('refresh completed');
-					}, page.logger.error);
-				});
-			}, page.logger.error);
-			return false;
-		});
-
-		doc.body.appendChild(refreshButton);
 	}
 }
 
