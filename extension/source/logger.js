@@ -19,55 +19,37 @@ class Logger {
 	 */
 	constructor (className) {
 		
-		/** @type {String} the class this logger is related */ 
-		this.className = '[' + className + '] ';
-	}
+		let msgTemplate = '[' + className + '] %s';
 
-	/**
-	 * Prints to console (type LOG).
-	 * 
-	 * @param {String} message the log message
-	 * @param {ExtensionData} data the data to log
-	 */
-	log (message, data) {
-		if (Options.logLevel <= LogLevel.LOG) {
-			console.log(this.className + message, this.prepareData(data));
-		}
-	}
-	
-	/**
-	 * Prints to console (type INFO).
-	 * 
-	 * @param {String} message the log message
-	 * @param {ExtensionData} data the data to log
-	 */
-	info (message, data) {
-		if (Options.logLevel <= LogLevel.INFO) {
-			console.info(this.className + message, this.prepareData(data));
-		}
-	}
+		/**
+		 * Prints to console (type LOG).
+		 * 
+		 * @param {String} message the log message
+		 * @param {ExtensionData} data the data to log
+		 */
+		this.log = Options.logLevel <= LogLevel.LOG ? console.log.bind(console, msgTemplate + ': %o') : () => {};
 
-	/**
-	 * Prints to console (type WARN).
-	 * 
-	 * @param {String} message the log message
-	 * @param {ExtensionData} data the data to log
-	 */
-	warn (message, data) {
-		if (Options.logLevel <= LogLevel.WARN) {
-			console.warn(this.className + message, this.prepareData(data));
-		}
-	}
+		/**
+		 * Prints to console (type INFO).
+		 * 
+		 * @param {String} message the log message
+		 */
+		 this.info = Options.logLevel <= LogLevel.INFO ? console.info.bind(console, msgTemplate) : () => {};
 
-	/**
-	 * Prints to console (type ERROR).
-	 * 
-	 * @param {Error} error the error to log
-	 */
-	error (error) {
-		if (Options.logLevel <= LogLevel.ERROR) {
-			console.error(error);
-		}
+		/**
+		 * Prints to console (type WARN).
+		 * 
+		 * @param {String} message the log message
+		 */
+		this.warn = Options.logLevel <= LogLevel.WARN ? console.warn.bind(console, msgTemplate) : () => {};
+
+		/**
+		 * Prints to console (type ERROR).
+		 * 
+		 * @param {Error} error the error to log
+		 */
+		this.error = Options.logLevel <= LogLevel.ERROR ? console.error.bind(console) : () => {};
+
 	}
 
 	/**
@@ -76,10 +58,13 @@ class Logger {
 	 * @param {ExtensionData} data the data to log
 	 * @returns {any}
 	 */
-	prepareData (data) {
+	static prepare (data) {
 		if (!data) return 'no data';
 		else if (data instanceof ExtensionData && Options.logDataElement) {
-			return data[Options.logDataElement] || data;
+			Options.logDataElement.split('.').forEach(attr => {
+				data = data[attr];
+			});
+			return data;
 		}
 		return data;
 	}

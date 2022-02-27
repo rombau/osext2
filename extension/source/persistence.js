@@ -40,7 +40,7 @@ class Persistence {
 		if (teamName) {
 			return Persistence.getPromise((resolve, reject) => {
 				chrome.storage.local.get(teamName, (storedData) => {
-					Persistence.LOGGER.log('getExtensionData', storedData[teamName]);
+					Persistence.LOGGER.log('getExtensionData', Logger.prepare(storedData[teamName]));
 					if (chrome.runtime.lastError) {
 						reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
 					} else {
@@ -96,7 +96,7 @@ class Persistence {
 				} else if (!currentTeamName) {
 					extensionData = new ExtensionData();
 					try {
-						Persistence.LOGGER.log('updateExtensionData', extensionData);
+						Persistence.LOGGER.log('updateExtensionData', Logger.prepare(extensionData));
 						modifyData(extensionData);
 					} catch (e) {
 						reject(e);
@@ -109,7 +109,7 @@ class Persistence {
 						} else {
 							extensionData = ensurePrototype(storedData[currentTeamName], ExtensionData) || new ExtensionData();
 							try {
-								Persistence.LOGGER.log('updateExtensionData', extensionData);
+								Persistence.LOGGER.log('updateExtensionData', Logger.prepare(extensionData));
 								modifyData(extensionData);
 							} catch (e) {
 								reject(e);
@@ -133,7 +133,7 @@ class Persistence {
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
 	 */
 	static storeExtensionData (data) {
-		Persistence.LOGGER.log('storeExtensionData', data);
+		Persistence.LOGGER.log('storeExtensionData', Logger.prepare(data));
 		if (data.team.name) {
 			return new Promise((resolve, reject) => {
 				let objectToStore = {

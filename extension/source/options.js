@@ -5,7 +5,7 @@ const Options = {
     logLevel: LogLevel.LOG,
 
     /** @type {String} the current log extension data element name or null/empty if the whole extension data should be logged */
-    logDataElement: '_team',
+    logDataElement: '_team._youthPlayers.0.skills',
 
     /** @type {Number} the number of seasons that should be forecasted; two means this and the following season */
     forecastSeasons: 2,

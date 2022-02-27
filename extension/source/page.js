@@ -146,7 +146,7 @@ class Page {
 	 */
 	extendPage (doc, data) {
 		try {
-			this.logger.log('extend', data);
+			this.logger.log('extend', Logger.prepare(data));
 			this.extend(doc, data);
 		} catch (e) {
 			Page.handleError(e);
@@ -164,7 +164,7 @@ class Page {
 		let page = this;
 		page.visibilitychangeListener = () => {
 			if (doc.visibilityState === 'hidden') {
-				page.logger.log('visibilitychange', data);
+				page.logger.log('visibilitychange', Logger.prepare(data));
 				Persistence.storeExtensionData(data).then(() => {}, Page.handleError);
 			}
 		};
@@ -181,7 +181,7 @@ class Page {
 		let page = this;
 		let pagesToRequest;
 		Persistence.updateExtensionData(data => {
-			page.logger.log('extract', data);
+			page.logger.log('extract', Logger.prepare(data));
 			pagesToRequest = page.extract(doc, data);
 		}).then(data => {
 			if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
