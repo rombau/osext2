@@ -200,7 +200,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
 			row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER);
-			
+			row.cells['Blitz'].classList.remove(STYLE_FAST_TRANSFER_ADD);
+			row.cells['Blitz'].classList.remove(STYLE_FAST_TRANSFER_DELETE);
+
 			if (player.active && !current) {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
 				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
