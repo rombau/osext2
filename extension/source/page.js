@@ -121,7 +121,11 @@ class Page {
 
 	/**
 	 * The extract method used when processing the page. 
-	 * This method is intended be overridden!
+	 * 
+	 * The given extension data is the current persisted state.
+	 * Modifications during extract will be stored immediatly after return.
+	 * 
+	 * This method is intended be overridden.
 	 * 
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
@@ -131,7 +135,11 @@ class Page {
 
 	/**
 	 * The extend method used when processing the page. 
-	 * This method is intended be overridden!
+	 * 
+ 	 * The given extension data is the current persisted state.
+	 * Modifications during extend will be stored when the page visibility changes to hidden.
+	 * 
+	 * This method is intended be overridden.
 	 * 
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
@@ -154,7 +162,7 @@ class Page {
 	}
 
 	/**
-	 * Registers a visibility change listener to update the background cache
+	 * Registers a visibility change listener to persist the extension data
 	 * when leaving the current page (document).
 	 * 
 	 * @param {Document} doc the current document
