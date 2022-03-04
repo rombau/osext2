@@ -18,8 +18,6 @@ describe('Page.YouthOptskills', () => {
 		Fixture.getDocument('ju.php?page=3', doc => {
 			
 			page.extract(doc, data);
-
-			page.extend(doc, data);
 		
 			done();
 		});
