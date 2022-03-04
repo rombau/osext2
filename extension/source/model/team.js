@@ -186,10 +186,8 @@ class Team {
 		if (targetMatchDay) {
 			if (lastMatchDay.equals(targetMatchDay)) return this;
 			
-			let matchDaysInRange = this.matchDays.filter(matchDay => {
-				return matchDay.after(lastMatchDay) && !matchDay.after(targetMatchDay);
-			});
-
+			let matchDaysInRange = this.getMatchDaysInRange(lastMatchDay, targetMatchDay).slice(1);
+			
 			this.squadPlayers.forEach(player => {
 				forecastTeam.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
 			});
@@ -201,7 +199,31 @@ class Team {
 
 		return forecastTeam;
 	}
-		
+	
+	/**
+	 * Returns a list of match days in a range. 
+	 * 
+	 * The list is generated based on the teams season match days. If the range exceeds the
+	 * season, the list is filled up with similar match days of the season before.
+	 * 
+	 * @param {MatchDay} firstMatchDay the first match day
+	 * @param {MatchDay} lastMatchDay the last target match day
+	 * @returns {[MatchDay]} list of match days
+	 */
+	getMatchDaysInRange (firstMatchDay, lastMatchDay) {
+		let matchDaysInRange = [];
+		let targetMatchDay = new MatchDay(firstMatchDay.season, firstMatchDay.zat);
+		do {
+			let newMatchDay = new MatchDay(targetMatchDay.season, targetMatchDay.zat);
+			let seasonMatchDay = this.matchDays.find(matchDay => matchDay.zat === targetMatchDay.zat);
+			if (seasonMatchDay) {
+				newMatchDay.competition = seasonMatchDay.competition;
+				newMatchDay.location = seasonMatchDay.location;
+				matchDaysInRange.push(newMatchDay);
+			}
+		} while (!targetMatchDay.add(1).after(lastMatchDay)) 
+		return matchDaysInRange;
+	}
 			
 	/**
 	 * Completes the initialization of the team data.
@@ -211,16 +233,6 @@ class Team {
 	complete (lastMatchDay) {
 		this.squadPlayers.forEach(player => ensurePrototype(player, SquadPlayer).complete(lastMatchDay));
 		this.youthPlayers.forEach(player => ensurePrototype(player, YouthPlayer).complete(lastMatchDay));
-
-		// take over the current season league match days to forecast seasons
-		let currentSeasonSchedule = this.matchDays.filter(matchDay => matchDay.season === lastMatchDay.season && matchDay.competition === Competition.LEAGUE);
-		for (let season = lastMatchDay.season + 1; season < lastMatchDay.season + Options.forecastSeasons; season++) {
-			currentSeasonSchedule.forEach(matchDay => {
-				let forecastSeasonMatchDay = this.getMatchDay(season, matchDay.zat);
-				forecastSeasonMatchDay.competition = matchDay.competition;
-				forecastSeasonMatchDay.location = matchDay.location;
-			});
-		}
 	}
 
 }

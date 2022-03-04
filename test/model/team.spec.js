@@ -81,42 +81,58 @@ describe('Team', () => {
 	it('should return forecast', () => {
 
 		team.squadPlayers.push(new SquadPlayer());
+		team.matchDays.push(new MatchDay(15,50));
+		team.matchDays.push(new MatchDay(15,51));
 
 		let lastMatchDay = new MatchDay(15,50);
 
 		expect(team.getForecast(lastMatchDay, new MatchDay(15,50))).toBe(team);
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,72))).not.toBe(team);
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,72)).squadPlayers.length).toEqual(team.squadPlayers.length);
+		expect(team.getForecast(lastMatchDay, new MatchDay(15,51))).not.toBe(team);
+		expect(team.getForecast(lastMatchDay, new MatchDay(15,51)).squadPlayers.length).toEqual(team.squadPlayers.length);
 	});
 
-	it('should complete initialization', () => {
+	it('should return match days in range', () => {
 
-		let leagueMatchDay = new MatchDay(15,65);
-		leagueMatchDay.competition = Competition.LEAGUE;
-		leagueMatchDay.location = GameLocation.HOME;
-		team.matchDays.push(leagueMatchDay);
-
-		let friendlyMatchDay = new MatchDay(15,63);
-		friendlyMatchDay.competition = Competition.FRIENDLY;
-		friendlyMatchDay.location = GameLocation.HOME;
-		team.matchDays.push(friendlyMatchDay);
-
-		let intMatchDay = new MatchDay(15,61);
-		intMatchDay.competition = Competition.OSC;
-		intMatchDay.location = GameLocation.HOME;
-		team.matchDays.push(intMatchDay);
+		for (let zat = 1; zat < SEASON_MATCH_DAYS + 1; zat++) {
+			let matchDay = new MatchDay(15, zat);
+			switch (zat % 10) {
+				case 1:
+					matchDay.competition = Competition.LEAGUE;
+					break;
+				case 2:
+					matchDay.competition = Competition.CUP;
+					break;
+				case 3:
+					matchDay.competition = Competition.OSC;
+					break;
+				case 4:
+					matchDay.competition = Competition.OSCQ;
+					break;
+				case 5:
+					matchDay.competition = Competition.OSE;
+					break;
+				case 6:
+					matchDay.competition = Competition.OSEQ;
+					break;
+				default:
+					matchDay.competition = Competition.FRIENDLY;
+					break;
+			}
+			team.matchDays.push(matchDay);
+		}
 
 		Options.forecastSeasons = 2;
 
-		team.complete(new MatchDay(15,50));
+		let matchDaysInRange = team.getMatchDaysInRange(new MatchDay(15,50), new MatchDay(16,40));
 
-		expect(team.getMatchDay(16,65).competition).toEqual(Competition.LEAGUE);
-		expect(team.getMatchDay(16,63).competition).toBeUndefined();
-		expect(team.getMatchDay(16,61).competition).toBeUndefined();
-
-		expect(team.getMatchDay(17,65).competition).toBeUndefined();
-		expect(team.getMatchDay(17,63).competition).toBeUndefined();
-		expect(team.getMatchDay(17,61).competition).toBeUndefined();
+		expect(matchDaysInRange.length).toEqual(63);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.FRIENDLY).length).toEqual(25);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.LEAGUE).length).toEqual(7);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.CUP).length).toEqual(7);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSC).length).toEqual(6);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSCQ).length).toEqual(6);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSE).length).toEqual(6);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSEQ).length).toEqual(6);
 
 	});
 });
