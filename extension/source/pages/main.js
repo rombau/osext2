@@ -45,6 +45,7 @@ Page.Main = class extends Page {
 							player.lastTraining = new SquadPlayer.Training();
 							player.lastTraining.trainer = player.nextTraining.trainer;
 							player.lastTraining.skill = player.nextTraining.skill;
+							player.lastTraining.chance = player.nextTraining.chance;
 						} else {
 							player.lastTraining = undefined;
 						}

@@ -399,8 +399,12 @@ SquadPlayer.Training = class {
 		/** @type {Skill} the trainings skill */
 		this.skill;
 		
+		/** @type {Number} the chance to increase the skill */
+		this.chance;
+
 		/** @type {Number} the match bonus multiplying the chance */
 		this.matchBonus = 1;
+
 	}
 
 	/** @type {Team.Trainer} the trainer delegated for this training */
