@@ -153,14 +153,34 @@ describe('Page', () => {
 	
 	describe('should return page by location', () => {
 
+		beforeEach(() => { 
+			jasmine.addMatchers({ 
+				toEqualWithoutLogger: (matchersUtil) => {
+					return {    
+						compare: function(actual, expected) {
+							delete actual.logger;
+							delete expected.logger;
+							let result = {};
+							result.pass = matchersUtil.equals(actual, expected);
+							if (!result.pass) {
+								result.message = `Expected ${actual} to equal ${expected}`;
+							}
+							return result;
+						}   
+					};   
+				}    
+			});    
+		});
+		
 		it('with query params', () => {
 
 			let showteamOverview = new Page.ShowteamOverview();
 			let showteamSkills = new Page.ShowteamSkills();
 
 			expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/showteam.php')).toEqual(showteamOverview);
-			expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqual(showteamSkills);
+
+			expect(Page.byLocation('http://www.any.com/showteam.php')).toEqualWithoutLogger(showteamOverview);
+			expect(Page.byLocation('http://www.any.com/showteam.php?s=2')).toEqualWithoutLogger(showteamSkills);
 			expect(Page.byLocation('http://www.any.com/showteam.php?s=4711')).toBeUndefined();
 		});
 
@@ -170,8 +190,8 @@ describe('Page', () => {
 			let playerPage2 = new Page.ShowPlayer(2);
 			
 			expect(Page.byLocation('http://www.any.com/sp.php')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/sp.php?s=1')).toEqual(playerPage1);
-			expect(Page.byLocation('http://www.any.com/sp.php?s=2')).toEqual(playerPage2);
+			expect(Page.byLocation('http://www.any.com/sp.php?s=1')).toEqualWithoutLogger(playerPage1);
+			expect(Page.byLocation('http://www.any.com/sp.php?s=2')).toEqualWithoutLogger(playerPage2);
 		});
 			
 		it('with post params', () => {
@@ -180,8 +200,8 @@ describe('Page', () => {
 			let matchDayReportWithParams = new Page.MatchDayReport(15, 42);
 
 			expect(Page.byLocation('http://www.any.com/test.php')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/zar.php')).toEqual(matchDayReport);
-			expect(Page.byLocation('http://www.any.com/zar.php')).not.toEqual(matchDayReportWithParams);
+			expect(Page.byLocation('http://www.any.com/zar.php')).toEqualWithoutLogger(matchDayReport);
+			expect(Page.byLocation('http://www.any.com/zar.php')).not.toEqualWithoutLogger(matchDayReportWithParams);
 		});
 
 		// TODO fix path param matching
@@ -191,7 +211,7 @@ describe('Page', () => {
 
 			expect(Page.byLocation('http://www.any.com/rep/saison')).toBeUndefined();
 			expect(Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html')).toEqual(reportPage);
+			expect(Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html')).toEqualWithoutLogger(reportPage);
 		});
 	});
 

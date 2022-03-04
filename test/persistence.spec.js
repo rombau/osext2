@@ -6,6 +6,8 @@ describe('Persistence', () => {
 
 		storageMock = {};
 
+		Options.logDataElement = null;
+
 		chrome.runtime.lastError = undefined;
 
 		spyOn(chrome.storage.local, 'get').and.callFake((key, callback) => {
