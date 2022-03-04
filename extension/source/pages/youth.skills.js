@@ -44,11 +44,47 @@ Page.YouthSkills = class extends Page.Youth {
 		
 		Array.from(this.table.rows)
 			.filter(row => !this.handleYearHeader(row))
-			.slice(0, -1)
 			.forEach((row, index) => {
 
-			// player rows
+			let oldAgeColumn = row.cells['Alter'];
+			let newAgeColumn = oldAgeColumn.cloneNode(true);
+			row.cells['Alter'] = newAgeColumn;
+
+			row.cells['Geb.'] = row.cells['Alter'].cloneNode(true);
+			row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
+			row.cells['Skillschn.'] = row.cells['Alter'].cloneNode(true);
+			row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
+
+			row.cells['Skillschn.'].style.paddingLeft = '10px';
 		
+			if (index === 0) {
+
+				row.cells['Geb.'].textContent = 'Geb.';
+				row.cells['Pos'].textContent = 'Pos';
+				row.cells['Skillschn.'].textContent = 'Skillschn.';
+				row.cells['Opt.Skill'].textContent = 'Opt.Skill';
+				
+			} else {
+
+				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+					
+				let player = data.team.youthPlayers[index - 1];
+					
+				row.cells['Geb.'].textContent = player.birthday;
+				row.cells['Pos'].textContent = player.pos;
+				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
+				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+			}
+
+			row.insertBefore(row.cells['Pos'], row.cells[0]);
+			row.insertBefore(row.cells['Geb.'], row.cells[0]);
+			row.insertBefore(newAgeColumn, row.cells[0]);
+
+			row.appendChild(row.cells['Skillschn.']);			
+			row.appendChild(row.cells['Opt.Skill']);	
+
+			row.removeChild(oldAgeColumn);
+			
 		});
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
@@ -67,8 +103,56 @@ Page.YouthSkills = class extends Page.Youth {
 			.forEach((row, index) => {
 			
 			let player = team.youthPlayers[index];
+			
+			if (player.active) {
+				
+				row.cells['Alter'].textContent = player.age;
+				row.cells['Geb.'].textContent = player.birthday;
 
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].textContent = player.skills[skillname];
+				});
 
+				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
+				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+				
+			} else {
+
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].textContent = '';
+				});
+
+				row.cells['Skillschn.'].textContent = '';
+				row.cells['Opt.Skill'].textContent = '';
+			}
+
+			// styling
+			Array.from(row.cells).forEach((cell) => {
+				let pos = row.cells['Pos'].textContent;
+				if (!Object.keys(Position).includes(cell.className) && pos) {
+					cell.classList.add(pos);
+				}
+				cell.classList.remove(STYLE_FORECAST);
+				if (player.active) {
+					cell.classList.remove(STYLE_INACTIVE);
+				} else {
+					cell.classList.add(STYLE_INACTIVE);
+				}
+			});
+
+			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
+
+			if (player.active && !current) {
+				row.cells['Alter'].classList.add(STYLE_FORECAST);
+				row.cells['Skillschn.'].classList.add(STYLE_FORECAST);
+				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
+				Object.keys(player.skills).forEach((skillname, s) => {
+					row.cells[skillname.toUpperCase()].classList.add(STYLE_FORECAST);
+				});
+			}
+			Object.keys(player.getPrimarySkills()).forEach((skillname, s) => {
+				row.cells[skillname.toUpperCase()].classList.add(STYLE_PRIMARY);
+			});
 		});
 	}
 }

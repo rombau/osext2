@@ -200,9 +200,11 @@ Page.YouthOverview = class extends Page.Youth {
 				if (player.pullId) {
 					row.cells['Aktion'].innerHTML = `<input name="ziehmich" value="${player.pullId}" type="radio">`;
 				}
+				row.cells['Talent'].textContent = player.talent;
 				row.cells['Aufwertung'].textContent = player.increase;
 			}
 			else {
+				row.cells['Talent'].textContent = '';
 				row.cells['Aktion'].textContent = '';
 				row.cells['Aufwertung'].textContent = '';
 			}

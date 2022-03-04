@@ -39,6 +39,7 @@ input[type=submit], input[type=button], input[type=reset] {
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 1em !important;
 }
 
 input[type=checkbox] {
@@ -76,6 +77,10 @@ hr {
     border: none;
     height: 0.5px;
     background-color: var(--input-color);
+}
+
+abbr {
+    text-decoration-color: inherit;
 }
 
 /* former Stylish parts */
@@ -157,6 +162,10 @@ table.osext-youth tr.osext-youth-year-header b {
 }
 table.osext-youth input[type=submit] {
     margin-top: 10px !important;
+}
+
+table.jugend.osext-youth tr td:nth-child(odd) {
+    opacity: 1;
 }
 
 body:not(.mediawiki):not(#tplIndex) table { 
