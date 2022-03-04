@@ -96,12 +96,11 @@ class Persistence {
 				} else if (!currentTeamName) {
 					extensionData = new ExtensionData();
 					try {
-						Persistence.LOGGER.log('updateExtensionData', Logger.prepare(extensionData));
 						modifyData(extensionData);
 					} catch (e) {
 						reject(e);
 					}
-					Persistence.storeExtensionData(extensionData).then(resolve, reject);
+					Persistence.storeExtensionData(extensionData, false).then(resolve, reject);
 				} else {
 					chrome.storage.local.get(currentTeamName, (storedData) => {
 						if (chrome.runtime.lastError) {
@@ -109,12 +108,11 @@ class Persistence {
 						} else {
 							extensionData = ensurePrototype(storedData[currentTeamName], ExtensionData) || new ExtensionData();
 							try {
-								Persistence.LOGGER.log('updateExtensionData', Logger.prepare(extensionData));
 								modifyData(extensionData);
 							} catch (e) {
 								reject(e);
 							}
-							Persistence.storeExtensionData(extensionData).then(resolve, reject);
+							Persistence.storeExtensionData(extensionData, false).then(resolve, reject);
 						}
 					});
 				}
@@ -123,19 +121,17 @@ class Persistence {
 	}
 
 	/**
-	 * Stores the given extension data and set the current team name.
-	 * 
-	 * This method is not synchronized and data can be overridden by pending async calls!
-	 * Use the synchronized Persistence.updateExtensionData instead, to avoid data loss.
+	 * Stores the given extension data only with a current team name.
 	 * 
 	 * @async
 	 * @param {ExtensionData} data the data to store
+	 * @param {Boolean} synchronized flag indicating synchronization (default = true)
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
 	 */
-	static storeExtensionData (data) {
+	static storeExtensionData (data, synchronized = true) {
 		Persistence.LOGGER.log('storeExtensionData', Logger.prepare(data));
 		if (data.team.name) {
-			return new Promise((resolve, reject) => {
+			let storeFunction = (resolve, reject) => {
 				let objectToStore = {
 					[Persistence.CURRENT_TEAM]: data.team.name,
 					[data.team.name]: data
@@ -147,7 +143,8 @@ class Persistence {
 						resolve(data);
 					}
 				});
-			});
+			};
+			return synchronized ? Persistence.getPromise(storeFunction) : new Promise(storeFunction);
 		} else {
 			return Promise.resolve(data);
 		}
