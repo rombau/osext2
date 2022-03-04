@@ -108,6 +108,8 @@ Page.YouthOverview = class extends Page.Youth {
 
 				row.cells['&Oslash;P'].style.width = '45px';
 
+				// TODO add column to fix pull zat
+
 				if (index === 0) {
 
 					row.cells['Skillschnitt'].textContent = 'Skillschn.';
@@ -187,6 +189,7 @@ Page.YouthOverview = class extends Page.Youth {
 				
 			} else {
 
+				row.cells['Talent'].textContent = '';
 				row.cells['Skillschnitt'].textContent = '';
 				row.cells['Opt.Skill'].textContent = '';
 				row.cells['&Oslash;/Zat'].textContent = '';
@@ -204,7 +207,6 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['Aufwertung'].textContent = player.increase;
 			}
 			else {
-				row.cells['Talent'].textContent = '';
 				row.cells['Aktion'].textContent = '';
 				row.cells['Aufwertung'].textContent = '';
 			}
