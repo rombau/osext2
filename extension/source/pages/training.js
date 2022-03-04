@@ -110,6 +110,7 @@ Page.Training = class extends Page {
 				} else {
 					row.cells['zuletzt'].textContent = '';
 				}
+				row.cells['mögl. MW+'].classList.add(STYLE_FORECAST);
 				row.cells['zuletzt'].classList.add(STYLE_FORECAST);
 			}
 
