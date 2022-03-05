@@ -183,6 +183,8 @@ class Team {
 	getForecast (lastMatchDay, targetMatchDay) {
 		let forecastTeam = new Team();
 		
+		forecastTeam.origin = this;
+
 		if (targetMatchDay) {
 			if (lastMatchDay.equals(targetMatchDay)) return this;
 			

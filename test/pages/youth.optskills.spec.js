@@ -15,11 +15,17 @@ describe('Page.YouthOptskills', () => {
 
 		data.complete();
 
-		Fixture.getDocument('ju.php?page=3', doc => {
+		Fixture.getDocument('ju.php', doc => {
 			
-			page.extract(doc, data);
-		
-			done();
+			new Page.YouthOverview().extract(doc, data);
+
+			Fixture.getDocument('ju.php?page=3', doc => {
+			
+				page.extend(doc, data);
+	
+				done();
+			});
 		});
+
 	});
 });

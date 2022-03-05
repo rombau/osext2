@@ -5,6 +5,8 @@
 
 .osext-inactive {
     opacity: 0.3 !important;
+}
+.osext-inactive:not(.delete) {
     pointer-events: none;
 }
 
@@ -12,12 +14,14 @@
     font-weight: bold;
 }
 
-.osext-message.osext-hidden, .osext-hidden {
+.osext-message.osext-hidden, .osext-hidden:not(.osext-set-zat) {
     display: none;
 }
-
-.osext-fast-transfer > * {
-    display: none !important;
+.osext-set-zat.osext-hidden, .TOR.osext-hidden {
+    visibility: hidden;
+    pointer-events: none;
+    cursor: initial;
+    display: table-cell;
 }
 
 .osext-refresh {
@@ -25,15 +29,16 @@
     margin: 10px 3px;
 }
 
-.osext-fast-transfer.add > .fa-bolt, .osext-fast-transfer.delete > .fa-trash-alt {
+.osext-set-zat > * {
+    display: none !important;
+}
+.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-level-up-alt, .osext-set-zat.delete > .fa-trash-alt {
     cursor: pointer;
 }
-
-.osext-fast-transfer.add > .fa-bolt {
+.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-level-up-alt {
     display: inline-block !important;
 }
-
-.osext-fast-transfer.delete > .fa-trash-alt, .osext-fast-transfer.delete > span {
+.osext-set-zat.delete > .fa-trash-alt, .osext-set-zat.delete > span {
     display: inline-block !important;
     margin-right: 5px;
 }

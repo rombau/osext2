@@ -40,6 +40,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			row.cells['Blitzerlös'] = row.cells['Spielerwert'].cloneNode(true);
 			row.cells['Blitz'] = row.cells['Name'].cloneNode(true);
+			row.cells['Blitz'].style.setProperty('padding-left', '1em', 'important');
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 	
@@ -74,11 +75,11 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				setButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
-					cell.firstChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
-					cell.classList.remove(STYLE_FAST_TRANSFER_ADD);
-					cell.classList.add(STYLE_FAST_TRANSFER_DELETE);
+					cell.lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
+					cell.classList.remove(STYLE_ADD);
+					cell.classList.add(STYLE_DELETE);
 
-					data.team.getSquadPlayer(id).fastTransfer = new MatchDay(viewMatchday.season, viewMatchday.zat);
+					data.team.getSquadPlayer(id).fastTransferMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
 				});
 				
 				let removeButton = doc.createElement('i');
@@ -88,32 +89,32 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				removeButton.addEventListener('click', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
-					cell.classList.remove(STYLE_FAST_TRANSFER_DELETE);
+					cell.classList.remove(STYLE_DELETE);
 					if (!data.lastMatchDay.equals(viewMatchday) && !player.loan && !player.transferLock) {
-						cell.classList.add(STYLE_FAST_TRANSFER_ADD);
+						cell.classList.add(STYLE_ADD);
 					}
-					data.team.getSquadPlayer(id).fastTransfer = undefined;
+					data.team.getSquadPlayer(id).fastTransferMatchDay = undefined;
 
 					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
 					this.updateWithTeam(matchDayTeam, false, viewMatchday);
 				});
 
 				let fastTransferSpan = doc.createElement('span');
-				if (player.fastTransfer) {
-					fastTransferSpan.textContent = `${player.fastTransfer.season}/${player.fastTransfer.zat}`;
-					row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_DELETE);
+				if (player.fastTransferMatchDay) {
+					fastTransferSpan.textContent = `${player.fastTransferMatchDay.season}/${player.fastTransferMatchDay.zat}`;
+					row.cells['Blitz'].classList.add(STYLE_DELETE);
 				}
 				
-				row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER);
+				row.cells['Blitz'].classList.add(STYLE_SET_ZAT);
 
-				row.cells['Blitz'].appendChild(fastTransferSpan);
 				row.cells['Blitz'].appendChild(setButton);
 				row.cells['Blitz'].appendChild(removeButton);
+				row.cells['Blitz'].appendChild(fastTransferSpan);
 				
 			}
 
-			row.appendChild(row.cells['Blitzerlös']);			
-			row.appendChild(row.cells['Blitz']);				
+			row.appendChild(row.cells['Blitzerlös']);
+			row.appendChild(row.cells['Blitz']);
 			
 		});
 
@@ -199,9 +200,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
-			row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER);
-			row.cells['Blitz'].classList.remove(STYLE_FAST_TRANSFER_ADD);
-			row.cells['Blitz'].classList.remove(STYLE_FAST_TRANSFER_DELETE);
+			row.cells['Blitz'].classList.add(STYLE_SET_ZAT);
+			row.cells['Blitz'].classList.remove(STYLE_ADD);
+			row.cells['Blitz'].classList.remove(STYLE_DELETE);
 
 			if (player.active && !current) {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
@@ -218,13 +219,13 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
 				} else {
 					row.cells['Blitzerlös'].classList.remove(STYLE_INACTIVE);
-					if (!player.origin.fastTransfer) {
-						row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_ADD);
+					if (!player.origin.fastTransferMatchDay) {
+						row.cells['Blitz'].classList.add(STYLE_ADD);
 					}
 				}
 			}
-			if ((player.origin && player.origin.fastTransfer) || player.fastTransfer) {
-				row.cells['Blitz'].classList.add(STYLE_FAST_TRANSFER_DELETE);
+			if ((player.origin && player.origin.fastTransferMatchDay) || player.fastTransferMatchDay) {
+				row.cells['Blitz'].classList.add(STYLE_DELETE);
 			}
 
 		});

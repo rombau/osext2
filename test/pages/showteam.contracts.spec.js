@@ -30,8 +30,8 @@ describe('Page.ShowteamContracts', () => {
 
 				(spy.and.callThrough()).call(page, team, current, matchDay);
 
-				doc.querySelector('.osext-fast-transfer.add > .fas.fa-bolt').dispatchEvent(new Event('click'));
-				doc.querySelector('td.osext-fast-transfer.delete > i.fas.fa-trash-alt').dispatchEvent(new Event('click'));
+				doc.querySelector('.osext-set-zat.add > .fas.fa-bolt').dispatchEvent(new Event('click'));
+				doc.querySelector('td.osext-set-zat.delete > i.fas.fa-trash-alt').dispatchEvent(new Event('click'));
 
 				done();
 			});

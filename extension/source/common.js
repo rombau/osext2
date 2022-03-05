@@ -24,9 +24,9 @@ const STYLE_INACTIVE = 'osext-inactive';
 const STYLE_PRIMARY = 'osext-primary';
 const STYLE_HIDDEN = 'osext-hidden';
 
-const STYLE_FAST_TRANSFER = 'osext-fast-transfer';
-const STYLE_FAST_TRANSFER_ADD = 'add';
-const STYLE_FAST_TRANSFER_DELETE = 'delete';
+const STYLE_SET_ZAT = 'osext-set-zat';
+const STYLE_ADD = 'add';
+const STYLE_DELETE = 'delete';
 
 const STYLE_REFRESH = 'osext-refresh';
 const STYLE_YOUTH = 'osext-youth';

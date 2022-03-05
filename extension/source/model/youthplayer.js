@@ -25,6 +25,12 @@ class YouthPlayer extends Player {
 
 		/** @type {String} the last increased skill(s) */
 		this.increase;
+
+		/** @type {MatchDay} the match day (ZAT) the player should be pulled ('Ziehtermin') */ 
+		this.pullMatchDay;
+
+		/** @type {Position} the position the player should be pulled ('Ziehposition') */ 
+		this.pullPosition;
 	}
 
 	/**
@@ -65,7 +71,7 @@ class YouthPlayer extends Player {
 				forecastPlayer.age++;
 			}
 			forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
-			if (forecastPlayer.age > YOUTH_AGE_MAX) {
+			if (forecastPlayer.age > YOUTH_AGE_MAX || (targetMatchDay && this.pullMatchDay && matchday.after(this.pullMatchDay))) {
 				forecastPlayer.active = false;
 			}
 		}

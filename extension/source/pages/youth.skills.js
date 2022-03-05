@@ -103,6 +103,8 @@ Page.YouthSkills = class extends Page.Youth {
 			.forEach((row, index) => {
 			
 			let player = team.youthPlayers[index];
+
+			row.cells['Alter'].textContent = player.age;
 			
 			if (player.active) {
 				

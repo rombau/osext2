@@ -171,9 +171,9 @@ Page.YouthOverview = class extends Page.Youth {
 			row.cells['Alter'].textContent = player.age;
 
 			if (player.active) {
-
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = player.pos;
+				row.cells['Talent'].textContent = player.talent;
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 				row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
@@ -203,7 +203,6 @@ Page.YouthOverview = class extends Page.Youth {
 				if (player.pullId) {
 					row.cells['Aktion'].innerHTML = `<input name="ziehmich" value="${player.pullId}" type="radio">`;
 				}
-				row.cells['Talent'].textContent = player.talent;
 				row.cells['Aufwertung'].textContent = player.increase;
 			}
 			else {

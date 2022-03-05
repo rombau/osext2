@@ -273,6 +273,8 @@ describe('Page', () => {
 			data = new ExtensionData();
 			requestor = new Requestor();
 
+			Options.logDataElement = null;
+
 			spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
 				modifyData(data);
 				return Promise.resolve(data);

@@ -64,7 +64,7 @@ class SquadPlayer extends Player {
 		this.trainingFactor;
 
 		/** @type {MatchDay} the match day (ZAT) the player should be fast transfered ('Blitz') */ 
-		this.fastTransfer;
+		this.fastTransferMatchDay;
 		
 		/** @private @type {SquadPlayer.Training} */
 		this._lastTraining;
@@ -310,7 +310,7 @@ class SquadPlayer extends Player {
 	}
 
 	_forecastFastTransfer(forecastPlayer, matchday) {
-		if (this.fastTransfer && matchday.after(this.fastTransfer)) {
+		if (this.fastTransferMatchDay && matchday.after(this.fastTransferMatchDay)) {
 			forecastPlayer.active = false;
 		}
 	}
