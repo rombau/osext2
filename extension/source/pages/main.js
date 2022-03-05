@@ -34,7 +34,7 @@ Page.Main = class extends Page {
 		
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
 
-		let nextZat = +matches[1];
+		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];	
 		if (data.nextZat !== nextZat) {
 
 			// take over the trainings settings from previous zat, except during refresh
