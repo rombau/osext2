@@ -99,4 +99,27 @@ class HtmlUtil {
 	static extractIdFromHref (href) {
 		return +(/(javascript:.+\(|st\.php\?c=|sp\.php\?s=|faceprev\.php\?sid=)(\d+)/.exec(href))[2];
 	}
+
+	static createSlider () {
+	}
+
+	static createZatSlider () {
+	}
+
+	/**
+	 * Returns a new element with Fontawesome style.
+	 * 
+	 * @param {Document} doc document for element creation
+	 * @param {String} styleClass Fontawesome class name
+	 * @param {Function} listener default click listener
+	 * @returns {HTMLElement}
+	 */
+	static createAwesomeButton (doc, styleClass, listener) {
+		let button = doc.createElement('i');
+		button.classList.add('fas');
+		button.classList.add(styleClass);
+		button.addEventListener('click', listener);
+		return button;
+	}
+
 }

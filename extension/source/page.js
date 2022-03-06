@@ -229,7 +229,7 @@ class Page {
 		}
 	
 		/** @type {Document} the element with the progress */
-		let parentDoc = top.frames.os_main ? top.frames.os_main.document : doc;
+		let parentDoc = top.frames.os_main ? top.frames.os_main.document : document;
 	
 		/** @type {HTMLElement} the element with the progress */
 		let errorDiv = parentDoc.createElement('div');

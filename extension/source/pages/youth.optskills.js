@@ -48,11 +48,8 @@ Page.YouthOptskills = class extends Page.Youth {
 				
 				if (index === 0) {
 					row.cells['Pull' + pos].textContent = '';
-				} else if ((pos === Position.TOR && player.pos === Position.TOR) || (pos !== Position.TOR && player.pos !== Position.TOR)) {
-					let setButton = doc.createElement('i');
-					setButton.classList.add('fas');
-					setButton.classList.add('fa-level-up-alt');
-					setButton.addEventListener('click', (event) => {
+				} else if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
+					let setButton = HtmlUtil.createAwesomeButton(doc, 'fa-level-up-alt', (event) => {
 						let viewMatchday = data.viewSettings.youthPlayerMatchDay;
 						row.cells['Pull'].lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
 						player.pullMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
@@ -78,20 +75,12 @@ Page.YouthOptskills = class extends Page.Youth {
 				row.cells['Pos'].textContent = player.pos;
 				row.cells['Pull'].textContent = '';
 
-				let removeButton = doc.createElement('i');
-				removeButton.title = 'Termin entfernen';
-				removeButton.classList.add('fas');
-				removeButton.classList.add('fa-trash-alt');
-				removeButton.addEventListener('click', (event) => {
+				let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.youthPlayerMatchDay, MatchDay);
 					cell.classList.remove(STYLE_DELETE);
-					if (!data.lastMatchDay.equals(viewMatchday) && player.age >= (YOUTH_AGE_MAX - data.team.league.level + 1)) { // is adding possible?
-						Object.keys(Position).forEach(pos => {
-							if ((pos === Position.TOR && player.pos === Position.TOR) || (pos !== Position.TOR && player.pos !== Position.TOR)) {
-								row.cells['Pull' + pos].classList.add(STYLE_ADD);
-							}
-						});
+					if (!data.lastMatchDay.equals(viewMatchday)) {
+						this._addPullClass(player, row, data.team.league.level);
 					}
 					player.pullMatchDay = undefined;
 					player.pullPosition = undefined;
@@ -146,13 +135,9 @@ Page.YouthOptskills = class extends Page.Youth {
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Skill'].textContent = player.getSkillAverage().toFixed(2);
 
-				if (player.pos === Position.TOR) {
-					row.cells['TOR'].textContent = player.getOpti().toFixed(2);
-				} else {
-					Object.keys(Position).filter(pos => pos !== Position.TOR).forEach(pos => {
-						row.cells[pos].textContent = player.getOpti(pos).toFixed(2);
-					})
-				}
+				this._handlePosition(player, pos => {
+					row.cells[pos].textContent = player.getOpti(pos).toFixed(2);
+				})
 				
 			} else {
 
@@ -173,7 +158,6 @@ Page.YouthOptskills = class extends Page.Youth {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
-
 			
 			Object.keys(Position).forEach(pos => {
 				if (matchDay) {
@@ -185,7 +169,12 @@ Page.YouthOptskills = class extends Page.Youth {
 				}
 				row.cells['Pull' + pos].classList.remove(STYLE_ADD);
 			});
-			row.cells['Pull'].classList.remove(STYLE_DELETE);
+			
+			if ((player.origin && player.origin.pullMatchDay) || player.pullMatchDay) {
+				row.cells['Pull'].classList.add(STYLE_DELETE);
+			} else {
+				row.cells['Pull'].classList.remove(STYLE_DELETE);
+			}
 
 			if (player.active && !current) {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
@@ -193,18 +182,26 @@ Page.YouthOptskills = class extends Page.Youth {
 				Object.keys(Position).forEach(pos => {
 					row.cells[pos].classList.add(STYLE_FORECAST);
 				});
-				if (!player.origin.pullMatchDay && player.age >= (YOUTH_AGE_MAX - team.origin.league.level + 1)) {
-					Object.keys(Position).forEach(pos => {
-						if ((pos === Position.TOR && player.pos === Position.TOR) || (pos !== Position.TOR && player.pos !== Position.TOR)) {
-							row.cells['Pull' + pos].classList.add(STYLE_ADD);
-						}
-					});
-				}
-			}
-			if ((player.origin && player.origin.pullMatchDay) || player.pullMatchDay) {
-				row.cells['Pull'].classList.add(STYLE_DELETE);
+				this._addPullClass(player, row, team.origin.league.level);
 			}
 
+		});
+
+	};
+
+	_addPullClass (player, row, leagueLevel) {
+		if (!player.origin.pullMatchDay && player.age >= (YOUTH_AGE_MAX - leagueLevel + 1)) {
+			this._handlePosition(player, pos => {
+				row.cells['Pull' + pos].classList.add(STYLE_ADD);
+			});
+		}
+	};
+
+	_handlePosition (player, callback) {
+		Object.keys(Position).forEach(pos => {
+			if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
+				callback(pos);
+			}
 		});
 	}
 }

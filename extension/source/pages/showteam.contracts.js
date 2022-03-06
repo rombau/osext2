@@ -69,12 +69,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
 				row.cells['Blitz'].textContent = '';
 
-				let setButton = doc.createElement('i');
-				setButton.classList.add('fas');
-				setButton.classList.add('fa-bolt');
-				setButton.addEventListener('click', (event) => {
+				let setButton = HtmlUtil.createAwesomeButton(doc, 'fa-bolt', (event) => {
 					let cell = event.target.parentNode;
-					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
+					let viewMatchday = data.viewSettings.squadPlayerMatchDay;
 					cell.lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
 					cell.classList.remove(STYLE_ADD);
 					cell.classList.add(STYLE_DELETE);
@@ -82,11 +79,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					data.team.getSquadPlayer(id).fastTransferMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
 				});
 				
-				let removeButton = doc.createElement('i');
-				removeButton.title = 'Termin entfernen';
-				removeButton.classList.add('fas');
-				removeButton.classList.add('fa-trash-alt');
-				removeButton.addEventListener('click', (event) => {
+				let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
 					cell.classList.remove(STYLE_DELETE);
