@@ -26,24 +26,25 @@ Page.Youth = class extends Page {
 		toolTitle.innerHTML = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 
-		let zatSlider = new ZatSlider(toolbar, data, data.viewSettings.youthPlayerMatchDay, (team, current, matchday) => {
-			page.updateWithTeam(team, current, matchday);
-		});
-		let zatSliderElement = zatSlider.create();
-		toolbar.appendChild(zatSliderElement);
+		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.youthPlayerMatchDay, 
+			matchday => {
+				page.updateWithTeam(data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);
+			});
+		toolbar.appendChild(matchdaySlider);
 		
 		let max = doc.createElement('i');
 		max.update = (season, zat) => {
 			if (data.viewSettings.youthMax) {
 				max.classList.add('fa-toggle-on');
 				max.classList.remove('fa-toggle-off');
-				zatSliderElement.classList.add(STYLE_INACTIVE);
+				matchdaySlider.classList.add(STYLE_INACTIVE);
 				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay), false);
 			} else {
 				max.classList.add('fa-toggle-off');
 				max.classList.remove('fa-toggle-on');
-				zatSliderElement.classList.remove(STYLE_INACTIVE);
-				zatSlider.triggerCallback.call(zatSlider);
+				matchdaySlider.classList.remove(STYLE_INACTIVE);
+				let matchday = data.viewSettings.youthPlayerMatchDay;
+				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);
 			}
 		};
 		max.classList.add('fas');

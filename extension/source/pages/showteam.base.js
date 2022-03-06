@@ -26,10 +26,11 @@ Page.Showteam = class extends Page {
 		toolTitle.innerHTML = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 		
-		let zatSlider = new ZatSlider(toolbar, data, data.viewSettings.squadPlayerMatchDay, (team, current, matchday) => {
-			page.updateWithTeam(team, current, matchday);
-		});
-		toolbar.appendChild(zatSlider.create());
+		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.squadPlayerMatchDay, 
+			matchday => {
+				page.updateWithTeam(data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);
+			});
+		toolbar.appendChild(matchdaySlider);
 
 		return toolbar;
 	}

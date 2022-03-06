@@ -26,7 +26,6 @@
 				"source/requestor.js",
 				"source/htmlutil.js",
 				"source/persistence.js",
-				"source/zatslider.js",
 				"source/page.js",
 				"source/pages/menu.js",
 				"source/pages/main.js",
@@ -61,16 +60,6 @@
 				"style/solid.min.css"
 			],
 			"all_frames": true
-		},
-		{
-			"matches": [
-				"*://os.ongapo.com/*"
-			],
-			"js": [
-				"source/start.js"
-			],
-			"all_frames": true,
-			"run_at": "document_start"
 		}
 	],
 	"web_accessible_resources": [

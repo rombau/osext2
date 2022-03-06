@@ -51,7 +51,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				} else if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
 					let setButton = HtmlUtil.createAwesomeButton(doc, 'fa-level-up-alt', (event) => {
 						let viewMatchday = data.viewSettings.youthPlayerMatchDay;
-						row.cells['Pull'].lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
+						row.cells['Pull'].lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat} als ${pos}`;
 						player.pullMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
 						player.pullPosition = pos;
 						Object.keys(Position).forEach(pos => {
@@ -91,7 +91,7 @@ Page.YouthOptskills = class extends Page.Youth {
 
 				let pullSpan = doc.createElement('span');
 				if (player.pullMatchDay) {
-					pullSpan.textContent = `${player.pullMatchDay.season}/${player.pullMatchDay.zat}`;
+					pullSpan.textContent = `${player.pullMatchDay.season}/${player.pullMatchDay.zat} als ${player.pullPosition}`;
 					row.cells['Pull'].classList.add(STYLE_DELETE);
 				}
 
@@ -190,7 +190,8 @@ Page.YouthOptskills = class extends Page.Youth {
 	};
 
 	_addPullClass (player, row, leagueLevel) {
-		if (!player.origin.pullMatchDay && player.age >= (YOUTH_AGE_MAX - leagueLevel + 1)) {
+		let pullMatchDay = player.origin ? player.origin.pullMatchDay : player.pullMatchDay;
+		if (!pullMatchDay && player.age >= (YOUTH_AGE_MAX - leagueLevel + 1)) {
 			this._handlePosition(player, pos => {
 				row.cells['Pull' + pos].classList.add(STYLE_ADD);
 			});

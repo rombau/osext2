@@ -100,10 +100,48 @@ class HtmlUtil {
 		return +(/(javascript:.+\(|st\.php\?c=|sp\.php\?s=|faceprev\.php\?sid=)(\d+)/.exec(href))[2];
 	}
 
-	static createSlider () {
-	}
+	/**
+	 * Returns a element (div) containing the matchday slider and the view (span) showing the current matchday.
+	 * 
+	 * @param {HTMLElement} containerElement the container element where the slider should be created in
+	 * @param {ExtensionData} data the extension data
+	 * @param {MatchDay} matchday the match day reference adjusted by slider
+	 * @param {*} changeCallback the callback method called on slider change
+	 * @returns {HTMLElement} slider element (container)
+	 */
+	 static createMatchDaySlider (containerElement, lastMatchDay, matchday, changeCallback = () => {}) {
 
-	static createZatSlider () {
+		let viewInfo = containerElement.ownerDocument.createElement('span');
+		viewInfo.update = (season, zat) => {
+			viewInfo.innerHTML = ` Saison ${season} / Zat ${zat}`;
+		};
+		viewInfo.update(matchday.season, matchday.zat);
+		
+		let rangeSlider = containerElement.ownerDocument.createElement('input');
+		rangeSlider.type = 'range';
+		rangeSlider.min = lastMatchDay.season * SEASON_MATCH_DAYS + lastMatchDay.zat;
+		rangeSlider.max = (lastMatchDay.season + Options.forecastSeasons) * SEASON_MATCH_DAYS;
+		rangeSlider.value = matchday.season * SEASON_MATCH_DAYS + matchday.zat;
+		rangeSlider.addEventListener('input', (event) => {
+			matchday.season = Math.floor(event.target.value / SEASON_MATCH_DAYS);
+			matchday.zat = event.target.value % SEASON_MATCH_DAYS;
+			if (matchday.zat === 0) {
+				matchday.season--;
+				matchday.zat = SEASON_MATCH_DAYS;
+			}
+			viewInfo.update(matchday.season, matchday.zat);
+		});
+		rangeSlider.addEventListener('change', (event) => {
+			changeCallback(matchday);
+		});
+
+		let slider = containerElement.ownerDocument.createElement('div');
+		slider.appendChild(rangeSlider);
+		slider.appendChild(viewInfo);
+		
+		changeCallback(matchday);
+	
+		return slider;
 	}
 
 	/**
