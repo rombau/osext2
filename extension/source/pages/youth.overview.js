@@ -136,8 +136,13 @@ Page.YouthOverview = class extends Page.Youth {
 						
 					row.cells['Pos'].textContent = player.pos;
 					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
-					row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
-					row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+					if (player.pos) {
+						row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
+						row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+					} else {
+						row.cells['Marktwert'].textContent = '0';
+						row.cells['&Oslash;P'].textContent = '0.00';
+					}
 					row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 					row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 				}
@@ -176,17 +181,22 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['Talent'].textContent = player.talent;
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
-				row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
-				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+				if (player.pos) {
+					row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
+					row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+					if (current) {
+						row.cells['&Oslash;/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
+					} else {
+						row.cells['&Oslash;/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
+					}	
+				} else {
+					row.cells['Marktwert'].textContent = '0';
+					row.cells['&Oslash;P'].textContent = '0.00';
+					row.cells['&Oslash;/Zat'].textContent = '0.00';
+				}
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
-				
-				if (current) {
-					row.cells['&Oslash;/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
-				} else {
-					row.cells['&Oslash;/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
-				}
-				
+								
 			} else {
 
 				row.cells['Talent'].textContent = '';
