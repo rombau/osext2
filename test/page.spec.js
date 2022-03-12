@@ -282,7 +282,7 @@ describe('Page', () => {
 			});
 		});
 
-		it('should handle warning', () => {
+		it('warning', () => {
 			
 			Page.handleError(new Warning('test'));
 
@@ -293,7 +293,7 @@ describe('Page', () => {
 			expect(messageBox.lastChild.textContent).toEqual('test');
 		});
 
-		it('should handle error', () => {
+		it('error', () => {
 			
 			Page.handleError(new Error('test'));
 
@@ -412,6 +412,23 @@ describe('Page', () => {
 			spyOn(requestor, 'requestPage').and.callFake((page) => {
 				expect(page).toBe(lastPage);
 				done();
+			});
+
+			firstPage.process(document);
+		});
+
+		it('by continue requesting further pages with warning', (done) => {
+		
+			requestor = Requestor.create(document);
+
+			let firstPage = new Page('Test1', 'test1.html');
+			let lastPage = new Page('Test2', 'test2.html');
+
+			data.pagesToRequest.push(firstPage);
+			data.pagesToRequest.push(lastPage);
+			
+			spyOn(firstPage, 'check').and.callFake(() => {
+				throw new Warning('TheWarning');
 			});
 
 			firstPage.process(document);

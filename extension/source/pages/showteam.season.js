@@ -47,7 +47,7 @@ Page.ShowteamSeason = class extends Page {
 
 		if (!data.initNextSeason(season)) {
 			this.logger.info(`Initiate loading of previous season (${season-1}) matchday schedule`);
-			data.pagesToRequest.push(new Page.ShowteamSeason(season - 1));
+			data.pagesToRequest.unshift(new Page.ShowteamSeason(season - 1));
 		}
 	}
 }

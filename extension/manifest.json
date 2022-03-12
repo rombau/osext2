@@ -51,6 +51,7 @@
 				"source/pages/youth.skills.js",
 				"source/pages/youth.optskills.js",
 				"source/pages/youth.options.js",
+				"source/pages/accountstatement.js",
 				"source/handler.js"
 			],
 			"css": [

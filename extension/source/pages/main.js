@@ -81,6 +81,7 @@ Page.Main = class extends Page {
 			data.pagesToRequest.push(new Page.ShowteamSkills());
 			data.pagesToRequest.push(new Page.ShowteamContracts());
 			data.pagesToRequest.push(new Page.ShowteamSeason());
+			data.pagesToRequest.push(new Page.ShowteamInfo());
 			data.pagesToRequest.push(new Page.LeagueTable());
 			data.pagesToRequest.push(new Page.Trainer()); // error during season interval
 			data.pagesToRequest.push(new Page.Training()); // error during season interval
@@ -89,6 +90,7 @@ Page.Main = class extends Page {
 			data.pagesToRequest.push(new Page.YouthOverview());
 			data.pagesToRequest.push(new Page.YouthSkills());
 			data.pagesToRequest.push(new Page.YouthOptions());
+			data.pagesToRequest.push(new Page.AccountStatement());
 			
 		}
 	}
