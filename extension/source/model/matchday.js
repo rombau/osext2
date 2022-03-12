@@ -53,6 +53,8 @@ class MatchDay {
 		/** @type {Number} the friendly share for the team */
 		this.friendlyShare;
 
+		/** @type {Number} the account balance after this match day */ 
+		this.accountBalance;
 	}
 
 	/**

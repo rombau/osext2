@@ -26,9 +26,28 @@ class ExtensionData {
 			youthPlayerMatchDay : null,
 
 			/** @type {Boolean} */
-			youthMax : false
-		}
-		
+			youthMax : false,
+
+			/** @type {Number} */
+			youthSupportPerDay : 500,
+
+			ticketPrice : {
+
+				/** @type {Number} */
+				league : 0,
+
+				/** @type {Number} */
+				cup : 0,
+
+				/** @type {Number} */
+				international : 0
+			}
+
+		};
+
+		/** @type {Stadium} the stadium data */ 
+		this.stadium = new Stadium();
+
 	}
 
 	/**

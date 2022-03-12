@@ -20,6 +20,7 @@ module.exports = function(config) {
 		    'extension/source/model/youthplayer.js',
 		    'extension/source/model/team.js',
 		    'extension/source/model/matchday.js',
+			'extension/source/model/stadium.js',
 		    'extension/source/persistence.js',
 		    'extension/source/page.js',
 		    'extension/source/htmlutil.js',

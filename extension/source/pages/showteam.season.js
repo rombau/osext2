@@ -22,7 +22,6 @@ Page.ShowteamSeason = class extends Page {
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
-	 * @returns {[Page]}
 	 */
 	extract(doc, data) {
 		

@@ -23,6 +23,7 @@
 				"source/model/squadplayer.js",
 				"source/model/youthplayer.js",
 				"source/model/team.js",
+				"source/model/stadium.js",
 				"source/requestor.js",
 				"source/htmlutil.js",
 				"source/persistence.js",

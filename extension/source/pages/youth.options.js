@@ -15,14 +15,5 @@ Page.YouthOptions = class extends Page {
 		
 	};
 
-	/**
-	 * @param {Document} doc
-	 * @param {ExtensionData} data
-	 */
-	extend(doc, data) {
-
-
-	};
-	
 }
 
