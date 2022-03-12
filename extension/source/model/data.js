@@ -108,8 +108,8 @@ class ExtensionData {
 	 */
 	complete () {
 		this.team.complete(this.lastMatchDay);
-		this.viewSettings.squadPlayerMatchDay = new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
-		this.viewSettings.youthPlayerMatchDay = new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
+		this.viewSettings.squadPlayerMatchDay = this.viewSettings.squadPlayerMatchDay || new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
+		this.viewSettings.youthPlayerMatchDay = this.viewSettings.youthPlayerMatchDay || new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
 	}
 	
 }

@@ -50,6 +50,7 @@ Page.Youth = class extends Page {
 		max.classList.add('fas');
 		max.addEventListener('click', (event) => {
 			data.viewSettings.youthMax = !data.viewSettings.youthMax;
+			Persistence.storeExtensionData(data);
 			max.update();
 		});
 		max.update();

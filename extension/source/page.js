@@ -163,40 +163,6 @@ class Page {
 	extend (_doc, _data) {}
 
 	/**
-	 * Extends the current page. Changes to the given extension data reference will take effect.
-	 * 
-	 * @param {Document} doc the current document
-	 * @param {ExtensionData} data the extension data
-	 */
-	extendIt (doc, data) {
-		try {
-			this.logger.log('extend', Logger.prepare(data));
-			this.extend(doc, data);
-			this.registerSaveOnExitListener(doc, data);
-		} catch (e) {
-			Page.handleError(e);
-		}
-	}
-
-	/**
-	 * Registers a visibility change listener to persist the extension data
-	 * when leaving the current page (document).
-	 * 
-	 * @param {Document} doc the current document
-	 * @param {ExtensionData} data the extension data
-	 */
-	registerSaveOnExitListener (doc, data) {
-		let page = this;
-		page.visibilitychangeListener = () => {
-			if (doc.visibilityState === 'hidden') {
-				page.logger.log('visibilitychange', Logger.prepare(data));
-				Persistence.storeExtensionData(data).then(() => {}, Page.handleError);
-			}
-		};
-		doc.addEventListener('visibilitychange', page.visibilitychangeListener);
-	}
-
-	/**
 	 * Processes the given document.
 	 * 
 	 * @param {Document} doc the document that should be processed
@@ -204,11 +170,11 @@ class Page {
 	 */
 	process (doc) {
 		let page = this;
+		page.logger = Object.assign(new Logger(page.name), page.logger);
 		Persistence.updateExtensionData(data => {
 			page.logger.log('extract', Logger.prepare(data));
 			page.extract(doc, data);
 			// filter after extract to consider all POST parameters
-			console.log(page.name, page.path, page.method, page.params);
 			data.pagesToRequest = data.pagesToRequest.filter(pageToRequest => !page.equals(pageToRequest));
 		}).then(updatedData => {
 			try {
@@ -220,7 +186,8 @@ class Page {
 								if (newdata.pagesToRequest.length > 0) {
 									throw new Warning('Initialisierung unterbrochen');
 								} else {
-									page.extendIt(doc, newdata);
+									page.logger.log('extend', Logger.prepare(newdata));
+									page.extend(doc, newdata);
 								}
 							}).catch(e => {
 								Page.handleError(e);
@@ -232,7 +199,8 @@ class Page {
 					if (requestor) {
 						requestor.finish();
 					} else {
-						page.extendIt(doc, updatedData);
+						page.logger.log('extend', Logger.prepare(updatedData));
+						page.extend(doc, updatedData);
 					}
 				}	
 			} catch (e) {

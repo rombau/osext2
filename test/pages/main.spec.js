@@ -6,6 +6,10 @@ describe('Page.Main', () => {
 	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.Main();
+
+		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+			return Promise.resolve();
+		});
 	});
 
 	it('should extract team name', (done) => {

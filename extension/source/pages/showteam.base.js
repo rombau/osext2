@@ -28,6 +28,7 @@ Page.Showteam = class extends Page {
 		
 		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.squadPlayerMatchDay, 
 			matchday => {
+				Persistence.storeExtensionData(data);
 				page.updateWithTeam(data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);
 			});
 		toolbar.appendChild(matchdaySlider);

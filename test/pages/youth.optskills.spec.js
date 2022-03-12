@@ -6,6 +6,10 @@ describe('Page.YouthOptskills', () => {
 	beforeEach(() => {			
 		data = new ExtensionData();
 		page = new Page.YouthOptskills();
+
+		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+			return Promise.resolve();
+		});
 	});
 
 	it('should extract and extend page', (done) => {

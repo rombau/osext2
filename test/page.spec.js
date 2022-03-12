@@ -1,3 +1,4 @@
+
 describe('Page', () => {
 	
 	describe('should return URL for request', () => {
@@ -309,12 +310,11 @@ describe('Page', () => {
 		/** @type {Page} */ let page
 		/** @type {Requestor} */ let requestor;
 		/** @type {ExtensionData} */ let data;
-		/** @type {Document} */ let doc
 		
 		beforeEach(() => {
 			data = new ExtensionData();
-			requestor = Requestor.create(document);
-			
+			requestor = null;
+						
 			Options.logDataElement = null;
 
 			spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
@@ -325,17 +325,22 @@ describe('Page', () => {
 					return Promise.reject(e.message);
 				}
 			});
+			spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+				return Promise.resolve();
+			});
 			spyOn(Requestor, 'cleanUp').and.callFake(() => {});
 			
 			page = new Page();
 		});
 
 		afterEach(() => {
-			requestor.finish();
+			if (requestor) requestor.finish();
 		});
 	    		
 		it('by extracting and extending single page', (done) => {
 			
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+
 			spyOn(page, 'extract');
 			spyOn(page, 'extend').and.callFake(done);
 			
@@ -347,6 +352,8 @@ describe('Page', () => {
 
 		it('with warning on extracting', (done) => {
 			
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+
 			spyOn(page, 'extract').and.callFake(() => {
 				throw new Warning('TheWarning');
 			});
@@ -359,6 +366,8 @@ describe('Page', () => {
 
 		it('with error on extending', (done) => {
 			
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+
 			spyOn(page, 'extend').and.callFake(() => {
 				throw new Error('TheError');
 			});
@@ -370,6 +379,8 @@ describe('Page', () => {
 		});
 	
 		it('by start requesting further pages', (done) => {
+
+			requestor = Requestor.create(document);
 
 			let firstPage = new Page('Test1', 'test1.html');
 
@@ -388,6 +399,8 @@ describe('Page', () => {
 
 		it('by continue requesting further pages', (done) => {
 		
+			requestor = Requestor.create(document);
+
 			let firstPage = new Page('Test1', 'test1.html');
 			let lastPage = new Page('Test2', 'test2.html');
 
@@ -401,11 +414,13 @@ describe('Page', () => {
 				done();
 			});
 
-			firstPage.process(requestor.frame.contentDocument);
+			firstPage.process(document);
 		});
 
 		it('by finish requesting further pages', (done) => {
 		
+			requestor = Requestor.create(document);
+
 			let lastPage = new Page('Test2', 'test2.html');
 
 			data.pagesToRequest.push(lastPage);
@@ -417,7 +432,7 @@ describe('Page', () => {
 				done();
 			});
 
-			lastPage.process(requestor.frame.contentDocument);
+			lastPage.process(document);
 		});
 	});
 

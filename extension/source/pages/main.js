@@ -37,6 +37,10 @@ Page.Main = class extends Page {
 		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];	
 		if (data.nextZat !== nextZat) {
 
+			// reset view setting to avoid old matchday
+			data.viewSettings.squadPlayerMatchDay = null;
+			data.viewSettings.youthPlayerMatchDay = null;
+
 			// take over the trainings settings from previous zat, except during refresh
 			if (data.nextZat !== ZAT_INDICATING_REFRESH) {
 				data.team.squadPlayers.forEach(player => {
@@ -95,7 +99,9 @@ Page.Main = class extends Page {
 	 */
 	extend (doc, data) { 
 
-		data.complete(); // completed data will be saved when page gets invisbible
+		data.complete();
+
+		Persistence.storeExtensionData(data);
 
 		doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
 			Persistence.updateExtensionData(dataToReset => {

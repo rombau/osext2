@@ -2,6 +2,11 @@ describe('Requestor', () => {
 	
 	/** @type {Requestor} */ let requestor;
 	
+	beforeEach(() => {
+		spyOn(XMLHttpRequest.prototype, 'open').and.callThrough();
+		spyOn(XMLHttpRequest.prototype, 'send');
+    });
+
     afterEach(() => {
 		if (requestor) Requestor.cleanUp();
     });
@@ -10,21 +15,9 @@ describe('Requestor', () => {
 
 		requestor = Requestor.create(document);
 
-		expect(requestor.frame.id).toEqual(Requestor.FRAME_ID);
-		expect(requestor.frame.src).toEqual('about:blank');
-		expect(requestor.frame.className).toEqual(STYLE_HIDDEN);
-
 		expect(requestor.status.id).toEqual(Requestor.STATUS_ID);
 		expect(requestor.status.className).toContain(STYLE_STATUS);
 		expect(requestor.status.className).toContain(STYLE_MESSAGE);
-	});
-
-	it('should be found from within the iframe', () => {
-		
-		requestor = Requestor.create(document);
-		
-		expect(Requestor.getCurrent(document)).toBeNull();
-		expect(Requestor.getCurrent(requestor.frame.contentDocument)).toBeDefined();
 	});
 
 	it('should request page with query parameters', () => {
@@ -33,8 +26,9 @@ describe('Requestor', () => {
 
 		requestor.requestPage(new Page.ShowPlayer(123456, 'Hugo'));
 
-		expect(requestor.frame.src).toMatch(/sp\.php\?s=123456/);
 		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spieler Hugo');
+		expect(XMLHttpRequest.prototype.open).toHaveBeenCalled();
+		expect(XMLHttpRequest.prototype.send).toHaveBeenCalled();
 	});
 
 	it('should request page with form parameters', () => {
@@ -44,14 +38,8 @@ describe('Requestor', () => {
 		requestor.requestPage(new Page.MatchDayReport(15, 43));
 
 		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
-
-		let form = requestor.frame.ownerDocument.getElementById(Requestor.FORM_ID);
-
-		expect(form.firstElementChild.name).toEqual('saison');
-		expect(form.firstElementChild.value).toEqual('15');
-		expect(form.lastElementChild.name).toEqual('zat');
-		expect(form.lastElementChild.value).toEqual('43');
-
+		expect(XMLHttpRequest.prototype.open).toHaveBeenCalled();
+		expect(XMLHttpRequest.prototype.send).toHaveBeenCalled();
 	});
 
 	it('should use callback after finsihing and clean up', (done) => {
@@ -62,9 +50,8 @@ describe('Requestor', () => {
 	
 		requestor.finish();
 
-		expect(requestor.frame).toBeNull();
 		expect(requestor.status).toBeNull();
-		expect(() => requestor.requestPage(new Page('Testseite'))).toThrowError('Testseite kann nicht initialisiert werden.');
+		expect(() => requestor.requestPage(new Page('Testseite'))).toThrowError('Testseite kann nicht initialisiert werden');
 		expect(Requestor.getCurrent(document)).toBeNull();
 	});
 
