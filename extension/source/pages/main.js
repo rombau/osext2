@@ -72,22 +72,20 @@ Page.Main = class extends Page {
 			data.team.league.countryName = matches[2];
 
 			// define the pages needed to load for initialization
-			let initPages = [];
-			initPages.push(new Page.ShowteamOverview());
-			initPages.push(new Page.ShowteamSkills());
-			initPages.push(new Page.ShowteamContracts());
-			initPages.push(new Page.ShowteamSeason());
-			initPages.push(new Page.LeagueTable());
-			initPages.push(new Page.Trainer());
-			initPages.push(new Page.Training());
-			initPages.push(new Page.LoanView());
-			initPages.push(new Page.ContractExtension());
-			initPages.push(new Page.YouthOverview());
-			initPages.push(new Page.YouthSkills());
-			initPages.push(new Page.YouthOptions());
+			data.pagesToRequest = [];
+			data.pagesToRequest.push(new Page.ShowteamOverview());
+			data.pagesToRequest.push(new Page.ShowteamSkills());
+			data.pagesToRequest.push(new Page.ShowteamContracts());
+			data.pagesToRequest.push(new Page.ShowteamSeason());
+			data.pagesToRequest.push(new Page.LeagueTable());
+			data.pagesToRequest.push(new Page.Trainer()); // error during season interval
+			data.pagesToRequest.push(new Page.Training()); // error during season interval
+			data.pagesToRequest.push(new Page.LoanView());
+			data.pagesToRequest.push(new Page.ContractExtension()); // error during season interval
+			data.pagesToRequest.push(new Page.YouthOverview());
+			data.pagesToRequest.push(new Page.YouthSkills());
+			data.pagesToRequest.push(new Page.YouthOptions());
 			
-
-			return initPages;
 		}
 	}
 
@@ -98,6 +96,16 @@ Page.Main = class extends Page {
 	extend (doc, data) { 
 
 		data.complete(); // completed data will be saved when page gets invisbible
+
+		doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
+			Persistence.updateExtensionData(dataToReset => {
+				data.nextZat = ZAT_INDICATING_REFRESH;
+				dataToReset.nextZat = ZAT_INDICATING_REFRESH;
+			}).then(data => {	
+				window.location.reload();
+			});
+			return false;
+		}))
 
 	}
 }

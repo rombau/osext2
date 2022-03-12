@@ -45,10 +45,10 @@ describe('Page.ShowteamSeason', () => {
 				row.cells[3].textContent = '';
 			});
 
-			let pagesToLoad = page.extract(doc, data);
+			page.extract(doc, data);
 						
-			expect(pagesToLoad.length).toEqual(1);
-			expect(pagesToLoad[0].name).toEqual('Saisonplan (Saison 9)');
+			expect(data.pagesToRequest.length).toEqual(1);
+			expect(data.pagesToRequest[0].name).toEqual('Saisonplan (Saison 9)');
 
 			expect(data.nextMatchDay).toBeUndefined();
 

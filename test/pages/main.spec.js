@@ -29,7 +29,7 @@ describe('Page.Main', () => {
 
 		Fixture.getDocument('haupt.php', doc => {
 			
-			let initPages = page.extract(doc, data);
+			page.extract(doc, data);
 			
 			expect(data.nextZat).toEqual(49);
 
@@ -39,7 +39,7 @@ describe('Page.Main', () => {
 			expect(data.team.league.level).toEqual(1);
 			expect(data.team.league.countryName).toEqual('Irland');
 			
-			expect(initPages).toBeDefined();
+			expect(data.pagesToRequest.length).toBeGreaterThan(0);
 
 			data.nextZatSeason = 12; // initialized before extend
 

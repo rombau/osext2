@@ -27,8 +27,8 @@ Page.Menu = class extends Page {
 		// mobileMenuFrame.contentDocument.body.appendChild(doc.createElement('div'));
 
 
-		mainFrameSet.rows = "0,*";
-		mainFrameSet.insertBefore(mobileMenuFrame, mainFrameSet.firstElementChild);
+		// mainFrameSet.rows = "0,*";
+		// mainFrameSet.insertBefore(mobileMenuFrame, mainFrameSet.firstElementChild);
 
 
 		// to be defined; e.g. tablets with a width of 1024px will show the menu
@@ -36,9 +36,9 @@ Page.Menu = class extends Page {
 
 		mql.addEventListener('change', () => {
 			if (mql.matches) { 
-				doc.querySelector('frameset[onload]').cols='0,*' 
+				// doc.querySelector('frameset[onload]').cols='0,*' 
 			} else { 
-				doc.querySelector('frameset[onload]').cols='180,*' 
+				// doc.querySelector('frameset[onload]').cols='180,*' 
 			} 
 		});
 		// mql.onchange();

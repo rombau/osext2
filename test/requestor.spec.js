@@ -1,87 +1,71 @@
 describe('Requestor', () => {
 	
-	/** @type {Document} */ let doc;
 	/** @type {Requestor} */ let requestor;
 	
-	beforeEach(() => {
-		doc = Fixture.createDocument('');
-		requestor = new Requestor(doc);
-	});
-
     afterEach(() => {
-    	if (requestor.frame) requestor.frame.parentNode.removeChild(requestor.frame);
-		if (requestor.status) requestor.status.parentNode.removeChild(requestor.status);
+		if (requestor) Requestor.cleanUp();
     });
     
-	it('should be created with hidden iframe', () => {
-		
-		expect(requestor.doc).toEqual(doc);
-		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.frame).not.toBeNull();
+	it('should be created with hidden iframe and status', () => {
+
+		requestor = Requestor.create(document);
+
 		expect(requestor.frame.id).toEqual(Requestor.FRAME_ID);
 		expect(requestor.frame.src).toEqual('about:blank');
-		expect(requestor.frame.className).toEqual('osext-hidden');
-		expect(requestor.frame.requestAdditionalPages).toBeDefined();
-		expect(requestor.frame.pageLoaded).toBeDefined();
+		expect(requestor.frame.className).toEqual(STYLE_HIDDEN);
+
+		expect(requestor.status.id).toEqual(Requestor.STATUS_ID);
+		expect(requestor.status.className).toContain(STYLE_STATUS);
+		expect(requestor.status.className).toContain(STYLE_MESSAGE);
 	});
 
-	it('should request pages with query parameters', () => {
+	it('should be found from within the iframe', () => {
 		
-		requestor.addPage(new Page.ShowteamOverview());
-		requestor.addPage(new Page.ShowteamSkills());
+		requestor = Requestor.create(document);
 		
-		expect(requestor.pageQueue.length).toEqual(2);
-		expect(requestor.status).toBeUndefined();
-		
-		requestor.start(new Page());
-		
-		expect(requestor.status.classList).not.toContain('osext-hidden');
-		
-		expect(requestor.pageQueue.length).toEqual(1);
-		expect(requestor.status.textContent).toContain('Initialisiere Teamübersicht');
-
-		requestor.frame.pageLoaded();
-
-		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toContain('Initialisiere Einzelskills');
-
-		requestor.frame.requestAdditionalPages(new Page.ShowPlayer(123456, 'Hugo'));
-		requestor.frame.pageLoaded();
-
-		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toContain('Initialisiere Spieler Hugo');
-
-		requestor.frame.pageLoaded();
-
-		expect(requestor.status.classList).toContain('osext-hidden');
-		
+		expect(Requestor.getCurrent(document)).toBeNull();
+		expect(Requestor.getCurrent(requestor.frame.contentDocument)).toBeDefined();
 	});
 
-	it('should request pages with form parameters', () => {
+	it('should request page with query parameters', () => {
 		
-		requestor.addPage(new Page.MatchDayReport(15, 43));
-		
-		expect(requestor.pageQueue.length).toEqual(1);
-		expect(requestor.status).toBeUndefined();
-		
-		requestor.start(new Page());
-		
-		expect(requestor.status.classList).not.toContain('osext-hidden');
-		
-		expect(requestor.pageQueue.length).toEqual(0);
-		expect(requestor.status.textContent).toContain('Initialisiere ZAT-Report (Saison 15, Zat 43)');
+		requestor = Requestor.create(document);
 
-		/** @type {HTMLFormElement} */
-		let form = doc.getElementById(Requestor.FORM_ID)
+		requestor.requestPage(new Page.ShowPlayer(123456, 'Hugo'));
+
+		expect(requestor.frame.src).toMatch(/sp\.php\?s=123456/);
+		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spieler Hugo');
+	});
+
+	it('should request page with form parameters', () => {
+		
+		requestor = Requestor.create(document);
+
+		requestor.requestPage(new Page.MatchDayReport(15, 43));
+
+		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
+
+		let form = requestor.frame.ownerDocument.getElementById(Requestor.FORM_ID);
 
 		expect(form.firstElementChild.name).toEqual('saison');
 		expect(form.firstElementChild.value).toEqual('15');
 		expect(form.lastElementChild.name).toEqual('zat');
 		expect(form.lastElementChild.value).toEqual('43');
 
-		requestor.frame.pageLoaded();
-
-		expect(requestor.status.classList).toContain('osext-hidden');
-		
 	});
+
+	it('should use callback after finsihing and clean up', (done) => {
+		
+		requestor = Requestor.create(document, () => {
+			done();
+		});
+	
+		requestor.finish();
+
+		expect(requestor.frame).toBeNull();
+		expect(requestor.status).toBeNull();
+		expect(() => requestor.requestPage(new Page('Testseite'))).toThrowError('Testseite kann nicht initialisiert werden.');
+		expect(Requestor.getCurrent(document)).toBeNull();
+	});
+
 });

@@ -28,7 +28,11 @@ const Options = {
     
     initialize : () => {
         chrome.storage.local.get(Options, (data) => {
-            chrome.storage.local.set(data);
+            chrome.storage.local.set(JSON.parse(JSON.stringify(data)), () => {
+                if (chrome.runtime.lastError) {
+                    new Logger('Options').error('Error when storing options ' + chrome.runtime.lastError);
+                }
+            });
         });
         chrome.storage.onChanged.addListener((changed) => {
             Object.keys(changed).forEach((key) => Options[key] = changed[key].newValue);

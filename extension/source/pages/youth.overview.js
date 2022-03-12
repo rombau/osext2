@@ -17,6 +17,8 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 	
+		this.params[0].value = 1; // to ensure the correct value for this param
+
 		if (!this.getPullId(doc)) {
 
 			let playerCount = 0;
@@ -69,13 +71,6 @@ Page.YouthOverview = class extends Page.Youth {
 		if (this.getPullId(doc)) {
 		
 			// TODO add pull listener and refresh at least all youth players data
-
-			/*
-			let requestor = Requestor.create(doc);
-			requestor.addPage(new Page.YouthOverview());
-			requestor.addPage(new Page.YouthSkills());
-			requestor.start();
-			*/
 
 		} else {
 

@@ -31,7 +31,7 @@ describe('Page', () => {
 					
 			let page = new Page('Testseite', 'xyz.php', new Page.Param('s'));
 			
-			expect(() => { page.createUrl(); }).toThrowError(/Value for s \(url: .+\) is missing/);
+			expect(() => { page.createUrl(); }).toThrowError(/Parameter s fehlt \(url: .+\)/);
 		});
 			
 		it('with path param', () => {
@@ -68,7 +68,7 @@ describe('Page', () => {
 		
 		it('with one optional query param', () => {
 			
-			let page = new Page('Testseite', 'test.php', new Page.Param('s', '0', true));
+			let page = new Page('Testseite', 'test.php', new Page.Param('s', '1', true));
 			
 			expect(page.match('http://www.any.com')).toBeFalsy();
 			expect(page.match('http://www.any.com/showit.php')).toBeFalsy();
@@ -76,10 +76,10 @@ describe('Page', () => {
 			expect(page.match('http://www.any.com/test.php?any')).toBeTruthy();
 			expect(page.match('http://www.any.com/test.php?s')).toBeTruthy();
 			expect(page.match('http://www.any.com/test.php?s=')).toBeTruthy();
-			expect(page.match('http://www.any.com/test.php?s=0')).toBeTruthy();
-			expect(page.match('http://www.any.com/test.php?any&s=0&any')).toBeTruthy();
-			expect(page.match('http://www.any.com/test.php?s=1')).toBeFalsy();
-			expect(page.match('http://www.any.com/test.php?xyz=xyz&s=1&all=true')).toBeFalsy();
+			expect(page.match('http://www.any.com/test.php?s=0')).toBeFalsy();
+			expect(page.match('http://www.any.com/test.php?any&s=0&any')).toBeFalsy();
+			expect(page.match('http://www.any.com/test.php?s=1')).toBeTruthy();
+			expect(page.match('http://www.any.com/test.php?xyz=xyz&s=1&all=true')).toBeTruthy();
 		});
 
 		it('with one mandatory query param', () => {
@@ -259,83 +259,165 @@ describe('Page', () => {
 			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 
+		it('and throw error if user accessing page during season interval', () => {
+			
+			let fixture = Fixture.createDocument('Diese Funktion ist erst ZAT 1 wieder verfügbar!');
+	
+			expect(() => page.check(fixture)).toThrowError('Saisonwechsel läuft');
+		});
 	});
 	
+	describe('should handle', () => {
+
+		/** @type {ExtensionData} */ let data;
+
+		beforeEach(() => {
+			data = new ExtensionData();
+
+			spyOn(Requestor, 'cleanUp').and.callFake(() => {});
+			spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
+				modifyData(data);
+				return Promise.resolve(data);
+			});
+		});
+
+		it('should handle warning', () => {
+			
+			Page.handleError(new Warning('test'));
+
+			let messageBox = document.querySelector('.' + STYLE_WARNING);
+
+			expect(data.nextZat).toBeUndefined();
+			expect(messageBox).toBeDefined();
+			expect(messageBox.lastChild.textContent).toEqual('test');
+		});
+
+		it('should handle error', () => {
+			
+			Page.handleError(new Error('test'));
+
+			let messageBox = document.querySelector('.' + STYLE_ERROR);
+
+			expect(data.nextZat).toEqual(-1);
+			expect(messageBox).toBeDefined();
+			expect(messageBox.lastChild.textContent).toEqual('test');
+		});
+	});
+
 	describe('should be processed', () => {
 		
 		/** @type {Page} */ let page
 		/** @type {Requestor} */ let requestor;
 		/** @type {ExtensionData} */ let data;
-		/** @type {HTMLElement} */ let frame;
 		/** @type {Document} */ let doc
 		
 		beforeEach(() => {
 			data = new ExtensionData();
-			requestor = new Requestor();
-
+			requestor = Requestor.create(document);
+			
 			Options.logDataElement = null;
 
 			spyOn(Persistence, 'updateExtensionData').and.callFake((modifyData) => {
-				modifyData(data);
-				return Promise.resolve(data);
+				try {
+					modifyData(data);
+					return Promise.resolve(data);
+				} catch (e) {
+					return Promise.reject(e.message);
+				}
 			});
-			spyOn(Requestor, 'create').and.callFake(() => requestor);
-
+			spyOn(Requestor, 'cleanUp').and.callFake(() => {});
+			
 			page = new Page();
-			doc = Fixture.createDocument('test'); 
-
-			frame = document.getElementById(Requestor.FRAME_ID);
-
 		});
 
-	    afterEach(() => {
-	    	frame.parentNode.removeChild(frame);
-	    });
+		afterEach(() => {
+			requestor.finish();
+		});
 	    		
-		it('by extracting and extending simple page', (done) => {
+		it('by extracting and extending single page', (done) => {
 			
 			spyOn(page, 'extract');
 			spyOn(page, 'extend').and.callFake(done);
 			
-			page.process(doc);
+			page.process(document);
 			
 			expect(Persistence.updateExtensionData).toHaveBeenCalled();
 			expect(page.extract).toHaveBeenCalled();
 		});
 
-		it('by notifying the embedding frame if page is loaded from request queue', (done) => {
-
-			spyOn(page, 'extract');
-			spyOn(frame, 'pageLoaded').and.callFake(done);
+		it('with warning on extracting', (done) => {
 			
-			page.process(frame.contentDocument, frame.contentWindow);
-		});
-
-		it('by notifying the embedding frame if page is loaded from request queue with additional pages to load', (done) => {
-
-			let pagesToRequest = [new Page()];
-			
-			spyOn(page, 'extract').and.returnValue(pagesToRequest);
-			spyOn(frame, 'requestAdditionalPages').and.callFake(pages => {
-				expect(pages).toEqual(pagesToRequest);
-				done();
+			spyOn(page, 'extract').and.callFake(() => {
+				throw new Warning('TheWarning');
 			});
-
-			page.process(frame.contentDocument, frame.contentWindow);
-		});
-
-		it('by starting and finishing a new request queue', (done) => {
-			
-			let pagesToRequest = [new Page()];
-			
-			spyOn(page, 'extract').and.returnValue(pagesToRequest);
-			spyOn(requestor, 'addPage').and.callThrough();
-			spyOn(requestor, 'start').and.callFake((triggerPage, _callback) => {
-				expect(triggerPage).toEqual(page);
+			spyOn(Page, 'handleError').and.callFake(() => {
 				done();
 			});
 			
-			page.process(doc);			
+			page.process(document);
+		});
+
+		it('with error on extending', (done) => {
+			
+			spyOn(page, 'extend').and.callFake(() => {
+				throw new Error('TheError');
+			});
+			spyOn(Page, 'handleError').and.callFake(() => {
+				done();
+			});
+			
+			page.process(document);
+		});
+	
+		it('by start requesting further pages', (done) => {
+
+			let firstPage = new Page('Test1', 'test1.html');
+
+			data.pagesToRequest.push(firstPage);
+			
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+			spyOn(Requestor, 'create').and.returnValue(requestor);
+
+			spyOn(requestor, 'requestPage').and.callFake((page) => {
+				expect(page).toBe(firstPage);
+				done();
+			});
+
+			page.process(document);			
+		});
+
+		it('by continue requesting further pages', (done) => {
+		
+			let firstPage = new Page('Test1', 'test1.html');
+			let lastPage = new Page('Test2', 'test2.html');
+
+			data.pagesToRequest.push(firstPage);
+			data.pagesToRequest.push(lastPage);
+			
+			spyOn(Requestor, 'getCurrent').and.returnValue(requestor);
+
+			spyOn(requestor, 'requestPage').and.callFake((page) => {
+				expect(page).toBe(lastPage);
+				done();
+			});
+
+			firstPage.process(requestor.frame.contentDocument);
+		});
+
+		it('by finish requesting further pages', (done) => {
+		
+			let lastPage = new Page('Test2', 'test2.html');
+
+			data.pagesToRequest.push(lastPage);
+			
+			spyOn(Requestor, 'getCurrent').and.returnValue(requestor);
+
+			spyOn(requestor, 'finish').and.callFake(() => {
+				expect(data.pagesToRequest.length).toEqual(0);
+				done();
+			});
+
+			lastPage.process(requestor.frame.contentDocument);
 		});
 	});
 

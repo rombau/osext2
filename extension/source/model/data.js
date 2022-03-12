@@ -4,7 +4,10 @@
 class ExtensionData {
 	
 	constructor () {
-			
+		
+		/** @type {[Page]} the queue with the pages to request */
+		this._pagesToRequest = [];
+
 		/** @private @type {Team} */
 		this._team = new Team();
 		
@@ -53,6 +56,17 @@ class ExtensionData {
 	}
 
 	/**
+	 * @type {[Page]} the pages to request
+	 */
+	get pagesToRequest () {
+		return this._pagesToRequest || [];
+	}
+
+	set pagesToRequest (value) {
+		return this._pagesToRequest = value;
+	}
+
+	/**
 	 * Initializes the next zat. During saison interval the next zat is always set to 1.
 	 * 
 	 * @param {Number} zat 
@@ -77,8 +91,9 @@ class ExtensionData {
 	initNextSeason (season) {
 		if (!this.nextZatSeason) {
 			if (this.nextZat == 1) {
-				if (this.team.matchDays.find(matchDay => matchDay.result)) {
-					this.nextZatSeason = season + 1;
+				let lastPlayedMatchDay = this.team.matchDays.slice().reverse().find(matchDay => matchDay.result);
+				if (lastPlayedMatchDay) {
+					this.nextZatSeason = lastPlayedMatchDay.season + 1;
 					return true;
 				}
 				return false;

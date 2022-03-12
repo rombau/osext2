@@ -74,11 +74,28 @@ class Page {
 				if (param.value) {
 					url.searchParams.append(param.name, param.value);
 				} else {
-					throw new Error(`Value for ${param.name} (url: ${url}) is missing.`);
+					throw new Error(`Parameter ${param.name} fehlt (url: ${url}).`);
 				}
 			}
 		});
 		return url;
+	}
+
+	/**
+	 * Returns true if the page is the same as the the given one.
+	 * 
+	 * All parameters of the given page must be present and equal in this page.
+	 *  
+	 * @param {Page} page the page to compare
+	 * @returns {Boolean} the result
+	 */
+	equals (page) {
+		if (!page.name.includes(this.name)) return false;
+		if (page.path !== this.path) return false;
+		let thisPage = this;
+		return page.params.every(p1 => {
+			return thisPage.params.find(p2 => p2.name === p1.name && p2.optional === p1.optional && p2.value === p1.value);
+		});
 	}
 
 	/**
@@ -129,7 +146,6 @@ class Page {
 	 * 
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
-	 * @returns {[Page]} additional pages to load on initialization
 	 */
 	extract (_doc, _data) {}
 
@@ -152,10 +168,11 @@ class Page {
 	 * @param {Document} doc the current document
 	 * @param {ExtensionData} data the extension data
 	 */
-	extendPage (doc, data) {
+	extendIt (doc, data) {
 		try {
 			this.logger.log('extend', Logger.prepare(data));
 			this.extend(doc, data);
+			this.registerSaveOnExitListener(doc, data);
 		} catch (e) {
 			Page.handleError(e);
 		}
@@ -185,32 +202,45 @@ class Page {
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */
-	process (doc, win = window) {
+	process (doc) {
 		let page = this;
-		let pagesToRequest;
 		Persistence.updateExtensionData(data => {
 			page.logger.log('extract', Logger.prepare(data));
-			pagesToRequest = page.extract(doc, data);
-		}).then(data => {
-			if (win.frameElement && win.frameElement.id === Requestor.FRAME_ID) {
-				if (pagesToRequest && pagesToRequest.length) {
-					win.frameElement.requestAdditionalPages(pagesToRequest);
-				}
-				win.frameElement && win.frameElement.pageLoaded();
-			} else if (pagesToRequest && pagesToRequest.length) {
-				let requestor = Requestor.create(doc);
-				pagesToRequest.forEach((page) => requestor.addPage(page));
-				requestor.start(page, () => {
-					Persistence.getExtensionData(data.team.name).then(newdata => {
-						page.extendPage.call(page, doc, newdata);
-						page.registerSaveOnExitListener.call(page, doc, newdata);
-					}, Page.handleError);
-				});
-			} else {
-				page.extendPage.call(page, doc, data);
-				page.registerSaveOnExitListener.call(page, doc, data);
-			}			
-		}, Page.handleError);
+			page.extract(doc, data);
+			// filter after extract to consider all POST parameters
+			console.log(page.name, page.path, page.method, page.params);
+			data.pagesToRequest = data.pagesToRequest.filter(pageToRequest => !page.equals(pageToRequest));
+		}).then(updatedData => {
+			try {
+				let requestor = Requestor.getCurrent(doc);
+				if (updatedData.pagesToRequest.length > 0) {
+					if (!requestor) {
+						requestor = Requestor.create(doc, () => {
+							Persistence.getExtensionData(updatedData.team.name).then(newdata => {
+								if (newdata.pagesToRequest.length > 0) {
+									throw new Warning('Initialisierung unterbrochen');
+								} else {
+									page.extendIt(doc, newdata);
+								}
+							}).catch(e => {
+								Page.handleError(e);
+							});
+						});
+					}
+					requestor.requestPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+				} else {
+					if (requestor) {
+						requestor.finish();
+					} else {
+						page.extendIt(doc, updatedData);
+					}
+				}	
+			} catch (e) {
+				Page.handleError(e);
+			}		
+		}).catch(e => {
+			Page.handleError(e);
+		});
 	}
 
 	/**
@@ -220,27 +250,21 @@ class Page {
 	 */
 	static handleError (e) {
 
-		Requestor.handleError();
+		Requestor.cleanUp();
 
 		if (e instanceof Warning) {
 			new Logger('Warning').warn(e.message);
 		} else {
 			new Logger('Error').error(e);
+			Persistence.updateExtensionData(data => {
+				data.nextZat = ZAT_INDICATING_REFRESH;
+			});
 		}
 	
-		/** @type {Document} the element with the progress */
 		let parentDoc = top.frames.os_main ? top.frames.os_main.document : document;
-	
-		/** @type {HTMLElement} the element with the progress */
-		let errorDiv = parentDoc.createElement('div');
-	
-		errorDiv.innerHTML = `<i class="fas fa-frown"></i> ${e.message || e}`;
-		errorDiv.classList.add(STYLE_MESSAGE);
-		errorDiv.classList.add(e instanceof Warning ? STYLE_WARNING : STYLE_ERROR);
-		errorDiv.addEventListener('click', (event) => {
-			errorDiv.remove();
-		});
-		parentDoc.body.appendChild(errorDiv);
+		let messageBox = HtmlUtil.createMessageBox(parentDoc, e instanceof Warning ? STYLE_WARNING : STYLE_ERROR, e.message || e);
+
+		parentDoc.body.appendChild(messageBox);
 	}
 }
 

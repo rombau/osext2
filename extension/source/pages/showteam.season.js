@@ -27,6 +27,7 @@ Page.ShowteamSeason = class extends Page {
 	extract(doc, data) {
 		
 		let season = +doc.querySelector('select[name=saison]').value;
+		this.params.push(new Page.Param('saison', season, true));
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 			let gameInfo = row.cells['Spielart'].textContent;
@@ -46,7 +47,8 @@ Page.ShowteamSeason = class extends Page {
 		});
 
 		if (!data.initNextSeason(season)) {
-			return [new Page.ShowteamSeason(season - 1)];
+			this.logger.info(`Initiate loading of previous season (${season-1}) matchday schedule`);
+			data.pagesToRequest.push(new Page.ShowteamSeason(season - 1));
 		}
 	}
 }

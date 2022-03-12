@@ -4,137 +4,152 @@
 class Requestor {
 	
 	/**
-	 * @param {Document} doc the HTML document where to create the hidden IFrame.
+	 * @param {HTMLIFrameElement} the IFrame for page loading
+	 * @param {HTMLElement} the element with the progress
 	 */
-	constructor (doc = document) {
+	constructor (frame, status) {
 
-		/** @type {Document} the document */
-		this.doc = doc;
-
-		/** @type {[Page]} the queue with the pages to request */
-		this.pageQueue = [];
-
-		/** @type {HTMLFrameElement} the IFrame where the pages are loaded in */
-		this.frame = this.createHiddenFrame(this.doc);
+		/** @type {HTMLIFrameElement} the IFrame for page loading */
+		this.frame = frame;
 
 		/** @type {HTMLElement} the element with the progress */
-		this.status;
-
-		/** the method called after the last page was loaded */
-		this.finish = () => {};
+		this.status = status;
 	}
 
-	/**
-	 * Adds a page to the queue.
-	 * 
-	 * @param {Page} page
-	 */
-	addPage (page) {
-		this.pageQueue.push(page);
-	}
-
-	/**
-	 * Starts requesting pages from the queue. Until the last page is loaded,
-	 * the given callback funktion is called.
-	 * 
-	 * @param {Page} triggerPage the page where the requests are started
-	 * @param finish the callback funktion
-	 */
-	start (triggerPage = new Page(), finish = () => {}) {
-		this.triggerPage = triggerPage;
-		this.finish = finish;
-		this.status = this.createStatus(this.doc);
-		this.requestNextPage();
-	}
-	
 	/**
 	 * @returns {String} the id of the hidden IFrame
 	 */
-	static FRAME_ID = 'osext-page-request-frame';
+	static ID_PREFIX = 'osext-page-request-';
+
+	/**
+	 * @returns {String} the id of the hidden IFrame
+	 */
+	static FRAME_ID = Requestor.ID_PREFIX + 'frame';
 
 	/**
 	 * @returns {String} the id of the status element
 	 */
-	static STATUS_ID = 'osext-page-request-status';
+	static STATUS_ID = Requestor.ID_PREFIX + 'status';
 
 	/**
 	 * @returns {String} the id of the status element
 	 */
-	static OVERLAY_ID = 'osext-page-request-overlay';
+	static OVERLAY_ID = Requestor.ID_PREFIX + 'overlay';
 	
 	/**
 	 * @returns {String} the id of the form element
 	 */
-	static FORM_ID = 'osext-page-request-form';
+	static FORM_ID = Requestor.ID_PREFIX + 'form';
 	
 	/**
-	 * @returns {Requestor} a new instance
+	 * Returns the current requestor instance. Therefore a new requestor object is created
+	 * with the hidden frame and the message box found in the DOM.
+	 * 
+	 * @param {Document} doc the current document
+	 * @returns {Requestor} the current requestor
 	 */
-	static create () {
-		return new Requestor();
+	static getCurrent (doc) {
+		if (doc.defaultView && doc.defaultView.frameElement && doc.defaultView.frameElement.id === Requestor.FRAME_ID) {
+			let status = doc.defaultView.frameElement.parentElement.querySelector('#' + Requestor.STATUS_ID);
+			if (status) {
+				return new Requestor(doc.defaultView.frameElement, status);
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * @returns {Requestor} a new instance
+	 * @callback finishCallback
 	 */
-	static handleError () {
+
+	/**
+	 * Creates a requestor instance with the a new hidden frame and the message box.
+	 * The finish callback is added to the message box click listener (closing the box).
+	 * 
+	 * @param {Document} doc the current document
+	 * @param {finishCallback} finished the method called when requests finished
+	 * @returns {Requestor} the new requestor
+	 */
+	static create (doc, finished = () => {} ) {
+
+		Requestor.addOverlays();
+
+		let frame = Requestor.createHiddenFrame(doc);
+		doc.body.appendChild(frame);
+		let status = HtmlUtil.createMessageBox(doc, STYLE_STATUS, null, Requestor.STATUS_ID, finished);
+		doc.body.appendChild(status);
+
+		return new Requestor(frame, status);
+	}
+
+	/**
+	 * Requests the given page. 
+	 * 
+	 * For pages with POST parameters a FORM is created and submitted to the frame.
+	 * 
+	 * @param {Page} page the page to request
+	 */
+	requestPage (page) {
+		if (this.frame && this.status) {
+			this.status.lastChild.textContent = `Initialisiere ${page.name}`;
+			if (page.method === HttpMethod.POST) {
+				Requestor.createForm(this.frame.ownerDocument, page).submit();
+			} else {
+				this.frame.src = page.createUrl();
+			}
+		} else {
+			throw new Error(`${page.name} kann nicht initialisiert werden.`);
+		}
+	}
+
+	/**
+	 * Finishes the page requests by dispatching a click event to the status message box.
+	 * Therefore the message box is closed and a registered callback is called.
+	 * 
+	 * Additionally all requestor elements (status, frame, form and overlays) removed from the DOM.
+	 */
+	finish () {
+		this.status.dispatchEvent(new Event('click'));
+		this.status = null;
+		this.frame = null;
+		Requestor.cleanUp();
+	}
+
+	/**
+	 * Removes status, frame, form and overlays.
+	 */
+	static cleanUp () {
 		Array.from(top.frames).forEach(frame => {
-			let overlay = frame.document.getElementById(Requestor.OVERLAY_ID);
-			if (overlay) overlay.classList.add(STYLE_HIDDEN);
-			let status = frame.document.getElementById(Requestor.STATUS_ID);
-			if (status) status.classList.add(STYLE_HIDDEN);
+			Array.from(frame.document.querySelectorAll('[id^=' + Requestor.ID_PREFIX + ']')).forEach(element => element.remove());
 		});
 	}
 
 	/**
-	 * Creates the status bar where the request progress is shown.
-	 * 
-	 * @param {Document} doc the parent document for the status (only used when there is no os_main frame)
-	 * @returns {HTMLElement} the status element
-	 */
-	createStatus (doc) {
-		top.addEventListener("load", event => this.addOverlayToFrame(top.frames.os_menu));
-		Array.from(top.frames).forEach(frame => this.addOverlayToFrame(frame));
-		let statusDoc = top.frames.os_main ? top.frames.os_main.document : doc;
-		let status = statusDoc.getElementById(Requestor.STATUS_ID) || statusDoc.createElement('div');
-		status.id = Requestor.STATUS_ID;
-		status.classList.add(STYLE_MESSAGE);
-		status.classList.add(STYLE_STATUS);
-		status.classList.remove(STYLE_HIDDEN);
-		statusDoc.body.appendChild(status);
-		return status;
-	}
-
-	/**
 	 * Adds a overlay to rthe given frame window.
-	 * 
-	 * @param {Window} frameWindow
 	 */
-	addOverlayToFrame(frameWindow) {
-		let overlay = frameWindow.document.getElementById(Requestor.OVERLAY_ID) || frameWindow.document.createElement('div');
-		overlay.id = Requestor.OVERLAY_ID;
-		overlay.classList.remove(STYLE_HIDDEN);
-		frameWindow.document.body.appendChild(overlay);
+	static addOverlays() {
+		let addOverlay = (frameWindow) => {
+			let overlay = frameWindow.document.createElement('div');
+			overlay.id = Requestor.OVERLAY_ID;
+			frameWindow.document.body.appendChild(overlay);
+		};
+		top.addEventListener("load", (event) => addOverlay(top.frames.os_menu));
+		Array.from(top.frames).forEach(frame => addOverlay(frame));
 	}
 
 	/**
 	 * Creates the hidden frame element where the pages are loaded in.
 	 * 
 	 * @param {Document} doc the parent document for the status (only used when there is no os_main frame)
-	 * @returns {HTMLFrameElement} the frame element
+	 * @returns {HTMLIFrameElement} the frame element
 	 */
-	createHiddenFrame (doc) {
-		/** @type {HTMLFrameElement} */
+	static createHiddenFrame (doc) {
+		/** @type {HTMLIFrameElement} */
 		let frame = doc.getElementById(Requestor.FRAME_ID) || doc.createElement('iframe');
 		frame.id = Requestor.FRAME_ID;
-		frame.name = Requestor.FRAME_ID; // for form target
+		frame.name = Requestor.FRAME_ID; // for FORM target
 		frame.src = 'about:blank';
 		frame.className = STYLE_HIDDEN;
-		frame.requestAdditionalPages = (additionalPagesToLoad) => {
-			this.pageQueue = this.pageQueue.concat(additionalPagesToLoad);
-		};
-		frame.pageLoaded = () => this.requestNextPage();
-		doc.body.appendChild(frame);
 		return frame;
 	}
 
@@ -145,7 +160,7 @@ class Requestor {
 	 * @param {Page} page the page with the form parameters
 	 * @returns {HTMLFormElement} the form element
 	 */
-	createForm (doc, page) {
+	static createForm (doc, page) {
 		/** @type {HTMLFormElement} */
 		let form = doc.getElementById(Requestor.FORM_ID) || doc.createElement('form');
 		form.id = Requestor.FORM_ID;
@@ -166,31 +181,4 @@ class Requestor {
 		return form;
 	}
 		
-	/**
-	 * Requests the next page from the queue. 
-	 * 
-	 * If no more pages to load, the triggering page is notified with the finish callback.
-	 */
-	requestNextPage () {
-		if (this.pageQueue.length > 0) {
-			let page = this.pageQueue.shift();
-			if (page.name === this.triggerPage.name) {
-				this.requestNextPage();
-			} else {
-				this.status.innerHTML = `<i class="fas fa-spinner"></i> Initialisiere ${page.name}`;
-				if (page.method === HttpMethod.POST) {
-					this.createForm(this.doc, page).submit();
-				} else {
-					this.frame.src = page.createUrl();
-				}
-			}
-		} else {
-			this.status.classList.add(STYLE_HIDDEN);
-			Array.from(top.frames).forEach(frame => {
-				let overlay = frame.document.getElementById(Requestor.OVERLAY_ID);
-				if (overlay) overlay.classList.add(STYLE_HIDDEN);
-			});
-			this.finish();
-		}
-	}
 }

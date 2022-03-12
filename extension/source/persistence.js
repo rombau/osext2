@@ -134,7 +134,7 @@ class Persistence {
 			let storeFunction = (resolve, reject) => {
 				let objectToStore = {
 					[Persistence.CURRENT_TEAM]: data.team.name,
-					[data.team.name]: data
+					[data.team.name]: JSON.parse(JSON.stringify(data))
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {

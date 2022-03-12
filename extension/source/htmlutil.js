@@ -160,4 +160,55 @@ class HtmlUtil {
 		return button;
 	}
 
+	/**
+	 * @callback closeCallback
+	 */
+
+	/**
+	 * Returns a new message box element (status, warning, error).
+	 * 
+	 * @param {Document} doc the document for element creation
+	 * @param {String} styleClass message box class name, e.g. STYLE_STATUS
+	 * @param {String} message the message to show
+	 * @param {String} id the id of the message box element
+	 * @param {closeCallback} closed the method called when message box is closed
+	 * @returns {HTMLElement}
+	 */
+	static createMessageBox (doc, styleClass, message, id, closed = () => {}) {
+
+		doc.querySelectorAll('.' + STYLE_MESSAGE).forEach(message => message.remove());
+
+		let container = doc.createElement('div');
+		if (id) container.id = id;
+		container.classList.add(STYLE_MESSAGE);
+		container.classList.add(styleClass);
+		container.addEventListener('click', (event) => {
+			container.remove();
+			closed();
+		});
+
+		let icon = doc.createElement('i');
+		switch (styleClass) {
+			case STYLE_STATUS:
+				icon.className = 'fas fa-spinner';
+				break;
+			case STYLE_WARNING:
+				icon.className = 'fas fa-frown';
+				break;
+			case STYLE_ERROR:
+				icon.className = 'fas fa-frown';
+				break;
+			default:
+				break;
+		}
+
+		let text = doc.createElement('span');
+		text.style.paddingLeft = '7px';
+		if (message) text.textContent = message;
+
+		container.appendChild(icon);
+		container.appendChild(text);
+
+		return container;
+	}
 }
