@@ -70,7 +70,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 		if (this.getPullId(doc)) {
 		
-			// TODO add pull listener and refresh at least all youth players data
+			// TODO add pull listener and refresh all youth players data
 
 		} else {
 
@@ -102,8 +102,6 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
 
 				row.cells['&Oslash;P'].style.width = '45px';
-
-				// TODO add column to fix pull zat
 
 				if (index === 0) {
 

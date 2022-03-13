@@ -51,8 +51,6 @@ Page.Training = class extends Page {
 	 */
 	extend(doc, data) {
 
-		// TODO extend with last training, and skill select listener for chance and market value increase
-
 		Array.from(HtmlUtil.getTableByHeader(doc, ...Page.Training.HEADERS).rows).forEach((row, index) => {
 
 			row.cells['zuletzt'] = row.cells['Name'].cloneNode(true);
