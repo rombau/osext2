@@ -139,8 +139,12 @@ class Page {
 	/**
 	 * The extract method used when processing the page. 
 	 * 
-	 * The given extension data is the current persisted state.
-	 * Modifications during extract will be stored immediatly after return.
+	 * Modifications to the given extension data during extract are stored 
+	 * immediatly after return.
+	 * 
+	 * In the extract implementation optional and POST parameter values
+	 * should be set in the page params array for the use in a initialization 
+	 * process, so that the requested page can be found and removed from the queue. 
 	 * 
 	 * This method is intended be overridden.
 	 * 
@@ -152,8 +156,9 @@ class Page {
 	/**
 	 * The extend method used when processing the page. 
 	 * 
- 	 * The given extension data is the current persisted state.
-	 * Modifications during extend will be stored when the page visibility changes to hidden.
+	 * Modifications to the given extension data during extend are NOT stored 
+	 * automatically. Use the synchronized version of Persistence.storeExtensionData() 
+	 * to store modified data.
 	 * 
 	 * This method is intended be overridden.
 	 * 
@@ -170,8 +175,9 @@ class Page {
 	 */
 	process (doc) {
 		let page = this;
-		page.logger = Object.assign(new Logger(page.name), page.logger);
+		page.check(document);
 		Persistence.updateExtensionData(data => {
+			page.logger = Object.assign(new Logger(page.name), page.logger);
 			page.logger.log('extract', Logger.prepare(data));
 			page.extract(doc, data);
 			// filter after extract to consider all POST parameters
