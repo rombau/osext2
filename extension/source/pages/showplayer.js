@@ -21,6 +21,15 @@ Page.ShowPlayer = class extends Page {
 
 
 	};
+
+	/**
+	 * @param {Document} doc
+	 * @param {ExtensionData} data
+	 */
+	extend(doc, data) {
+	
+		document.defaultView.resizeTo(840, 550);
+
+
+	};
 }
-
-
