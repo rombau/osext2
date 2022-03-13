@@ -417,23 +417,6 @@ describe('Page', () => {
 			firstPage.process(document);
 		});
 
-		it('by continue requesting further pages with warning', (done) => {
-		
-			requestor = Requestor.create(document);
-
-			let firstPage = new Page('Test1', 'test1.html');
-			let lastPage = new Page('Test2', 'test2.html');
-
-			data.pagesToRequest.push(firstPage);
-			data.pagesToRequest.push(lastPage);
-			
-			spyOn(firstPage, 'check').and.callFake(() => {
-				throw new Warning('TheWarning');
-			});
-
-			firstPage.process(document);
-		});
-
 		it('by finish requesting further pages', (done) => {
 		
 			requestor = Requestor.create(document);

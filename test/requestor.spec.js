@@ -27,8 +27,8 @@ describe('Requestor', () => {
 		requestor.requestPage(new Page.ShowPlayer(123456, 'Hugo'));
 
 		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spieler Hugo');
-		expect(XMLHttpRequest.prototype.open).toHaveBeenCalled();
-		expect(XMLHttpRequest.prototype.send).toHaveBeenCalled();
+		expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith('GET', jasmine.stringMatching(/sp\.php\?s=123456/), true);
+		expect(XMLHttpRequest.prototype.send).toHaveBeenCalledWith(null);
 	});
 
 	it('should request page with form parameters', () => {
@@ -38,8 +38,10 @@ describe('Requestor', () => {
 		requestor.requestPage(new Page.MatchDayReport(15, 43));
 
 		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
-		expect(XMLHttpRequest.prototype.open).toHaveBeenCalled();
-		expect(XMLHttpRequest.prototype.send).toHaveBeenCalled();
+		expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith('POST', jasmine.stringMatching(/zar\.php/), true);
+		expect(XMLHttpRequest.prototype.send).toHaveBeenCalledWith(jasmine.any(FormData));
+		expect(XMLHttpRequest.prototype.send.calls.mostRecent().args[0].get('saison')).toEqual('15');
+		expect(XMLHttpRequest.prototype.send.calls.mostRecent().args[0].get('zat')).toEqual('43');
 	});
 
 	it('should use callback after finsihing and clean up', (done) => {
