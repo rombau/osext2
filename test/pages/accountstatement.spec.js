@@ -17,7 +17,7 @@ describe('Page.AccountStatement', () => {
 			
 			page.extract(doc, data);
 			
-			expect(data.lastMatchDay.accountBalance).toEqual(32221833);
+			expect(data.team.accountBalance).toEqual(32221833);
 
 			done();
 		});

@@ -16,11 +16,11 @@ describe('Page.ShowteamInfo', () => {
 			
 			page.extract(doc, data);
 						
-			expect(data.stadium.places).toEqual(10000);
-			expect(data.stadium.coveredPlaces).toEqual(0);
-			expect(data.stadium.seats).toEqual(3000);
-			expect(data.stadium.coveredSeats).toEqual(30000);
-			expect(data.stadium.pitchHeating).toEqual(false);
+			expect(data.team.stadium.places).toEqual(10000);
+			expect(data.team.stadium.coveredPlaces).toEqual(0);
+			expect(data.team.stadium.seats).toEqual(3000);
+			expect(data.team.stadium.coveredSeats).toEqual(30000);
+			expect(data.team.stadium.pitchHeating).toEqual(false);
 
 			done();
 		});

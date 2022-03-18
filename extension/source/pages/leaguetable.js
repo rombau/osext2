@@ -21,7 +21,7 @@ Page.LeagueTable = class extends Page {
 			data.team.league.size++;
 
 			if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.team.id) {
-				data.team.leagueRanking = data.team.league.size;
+				data.viewSettings.leagueRanking = data.team.league.size;
 			}
 		});
 	};

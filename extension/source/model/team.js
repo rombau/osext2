@@ -20,10 +20,7 @@ class Team {
 
 		/** @type {Team.League} the league this team belong to */ 
 		this._league = new Team.League();
-		
-		/** @type {Number} the current league ranking */ 
-		this.leagueRanking;
-		
+			
 		/** @private @type {[SquadPlayer]} */ 
 		this._squadPlayers = [];
 		
@@ -35,6 +32,9 @@ class Team {
 
 		/** @private @type {[Team.Trainer]} */ 
 		this._trainers = [];
+
+		/** @type {Stadium} the stadium data */ 
+		this.stadium = new Stadium();
 
 		/** @type {Number} the current account balance */ 
 		this.accountBalance;
@@ -205,6 +205,46 @@ class Team {
 		return forecastTeam;
 	}
 	
+	/**
+	 * Returns a (new) list of the season match days with calculated balance.
+	 * 
+	 * @param {Number} seaeson the season
+	 * @returns {[MatchDay]} list of match days
+	 */
+	getMatchDaysWithBalance (selectedSeason, lastMatchDay, viewSettings) {
+		let balancedMatchDays = [];
+		let stadium = this.stadium;
+		let accountBalance = this.accountBalance;
+		for (let season = selectedSeason; season < (selectedSeason + Options.forecastSeasons); season++) {
+			for (let zat = 1; zat < SEASON_MATCH_DAYS; zat++) {
+				let newMatchDay = new MatchDay(season, zat);
+				let seasonMatchDay = this.matchDays.find(matchDay => matchDay.zat === zat);
+				if (seasonMatchDay) {
+					newMatchDay.competition = seasonMatchDay.competition;
+					newMatchDay.location = seasonMatchDay.location;
+					if (seasonMatchDay.stadium) stadium = seasonMatchDay.stadium;
+				} else {
+					newMatchDay.competition = Competition.FRIENDLY;
+				}
+				if (newMatchDay.after(lastMatchDay)) {
+					let forecastedTeam = this.getForecast(lastMatchDay, newMatchDay);
+					accountBalance += newMatchDay.calculateStadiumIncome(stadium, viewSettings);
+					accountBalance += newMatchDay.calculatePremium(this.league, viewSettings);
+					accountBalance += newMatchDay.calculateYouthSupport(forecastedTeam.youthPlayers, viewSettings);
+					if (newMatchDay.zat % MONTH_MATCH_DAYS === 0) {
+						accountBalance += newMatchDay.calculateSquadSalary(forecastedTeam.squadPlayers);
+						accountBalance += newMatchDay.calculateLoan(forecastedTeam.squadPlayers);
+						accountBalance += newMatchDay.calculateTrainerSalary(this.trainers);
+					}
+					accountBalance += newMatchDay.calculateFastTransferIncome(forecastedTeam.squadPlayers);
+					newMatchDay.accountBalance = accountBalance;		
+				}
+				balancedMatchDays.push(newMatchDay);
+			}
+		}
+		return balancedMatchDays;
+	}
+
 	/**
 	 * Returns a list of match days in a range. 
 	 * 

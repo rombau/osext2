@@ -26,11 +26,11 @@ Page.ShowteamInfo = class extends Page {
 			throw new Error(`Tabelle nicht gefunden (${resource})!`);
 		}
 
-		data.stadium.coveredSeats = +table.rows[2].cells[3].textContent.replace(/\./g, '');
-		data.stadium.seats = +table.rows[2].cells[1].textContent.replace(/\./g, '') - data.stadium.coveredSeats;
-		data.stadium.coveredPlaces = +table.rows[3].cells[3].textContent.replace(/\./g, '');
-		data.stadium.places = +table.rows[3].cells[1].textContent.replace(/\./g, '') - data.stadium.coveredPlaces;
-		data.stadium.pitchHeating = (table.rows[4].cells[3].textContent == 'Ja');
+		data.team.stadium.coveredSeats = +table.rows[2].cells[3].textContent.replace(/\./g, '');
+		data.team.stadium.seats = +table.rows[2].cells[1].textContent.replace(/\./g, '') - data.team.stadium.coveredSeats;
+		data.team.stadium.coveredPlaces = +table.rows[3].cells[3].textContent.replace(/\./g, '');
+		data.team.stadium.places = +table.rows[3].cells[1].textContent.replace(/\./g, '') - data.team.stadium.coveredPlaces;
+		data.team.stadium.pitchHeating = (table.rows[4].cells[3].textContent == 'Ja');
 
 	}
 }

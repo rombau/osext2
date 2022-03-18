@@ -27,9 +27,12 @@ class ExtensionData {
 
 			/** @type {Boolean} */
 			youthMax : false,
-
+			
 			/** @type {Number} */
 			youthSupportPerDay : 500,
+
+			/** @type {Number} */
+			leagueRanking : 1,
 
 			ticketPrice : {
 
@@ -41,13 +44,11 @@ class ExtensionData {
 
 				/** @type {Number} */
 				international : 0
-			}
+			},
 
+			/** @type {Number} */
+			stadiumLoad : 100
 		};
-
-		/** @type {Stadium} the stadium data */ 
-		this.stadium = new Stadium();
-
 	}
 
 	/**

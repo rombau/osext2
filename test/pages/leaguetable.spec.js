@@ -17,7 +17,7 @@ describe('Page.LeagueTable', () => {
 			page.extract(doc, data);
 			
 			expect(data.team.league.size).toEqual(10);
-			expect(data.team.leagueRanking).toEqual(3);
+			expect(data.viewSettings.leagueRanking).toEqual(3);
 
 			page.extend(doc, data);
 
