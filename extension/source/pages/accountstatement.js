@@ -28,7 +28,7 @@ Page.AccountStatement = class extends Page {
 
 		let matches = /Kontoauszug - Kontostand : ([\d\.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
 			
-		data.lastMatchDay.accountBalance = +matches[1].replace(/\./g, '');
+		data.team.accountBalance = +matches[1].replace(/\./g, '');
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.AccountStatement.HEADERS).forEach(row => {
 			

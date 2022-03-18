@@ -59,22 +59,6 @@ Page.Main = class extends Page {
 
 			data.initNextZat(nextZat);
 
-			matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
-			
-			data.team.id = +matches[2];
-			data.team.emblem = matches[1];
-			
-			let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
-
-			matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
-				
-			data.team.name = matches[1];
-
-			matches = /(\d)\. Liga (.+)/gm.exec(titleContainer.childNodes[2].textContent);
-
-			data.team.league.level = +matches[1];
-			data.team.league.countryName = matches[2];
-
 			// define the pages needed to load for initialization
 			data.pagesToRequest = [];
 			data.pagesToRequest.push(new Page.ShowteamOverview());
@@ -93,6 +77,28 @@ Page.Main = class extends Page {
 			data.pagesToRequest.push(new Page.ContractExtension()); // error during season interval
 			
 		}
+
+		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
+			
+		data.team.id = +matches[2];
+		data.team.emblem = matches[1];
+		
+		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
+
+		matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
+			
+		data.team.name = matches[1];
+
+		matches = /(\d)\. Liga (.+)/gm.exec(titleContainer.childNodes[2].textContent);
+
+		data.team.league.level = +matches[1];
+		data.team.league.countryName = matches[2];
+		
+		let accountBalanceElement = doc.querySelector('a[href="ka.php"]');
+		if (accountBalanceElement) {
+			data.team.accountBalance = +accountBalanceElement.textContent.replace(/\./g, '').replace(' Euro', '');
+		}
+
 	}
 
 	/**

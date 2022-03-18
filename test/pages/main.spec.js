@@ -42,6 +42,7 @@ describe('Page.Main', () => {
 			expect(data.team.emblem).toEqual('00000019.png');
 			expect(data.team.league.level).toEqual(1);
 			expect(data.team.league.countryName).toEqual('Irland');
+			expect(data.team.accountBalance).toEqual(42300545);
 			
 			expect(data.pagesToRequest.length).toBeGreaterThan(0);
 

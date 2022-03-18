@@ -35,6 +35,9 @@ class Team {
 
 		/** @private @type {[Team.Trainer]} */ 
 		this._trainers = [];
+
+		/** @type {Number} the current account balance */ 
+		this.accountBalance;
 	}
 
 	/**
