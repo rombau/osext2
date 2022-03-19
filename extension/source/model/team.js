@@ -41,7 +41,7 @@ class Team {
 	}
 
 	/**
-	 * @type {Team} the current team
+	 * @type {Team.League} the current team league
 	 */
 	get league () {
 		return ensurePrototype(this._league, Team.League);
@@ -202,6 +202,9 @@ class Team {
 			forecastTeam.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
 		});
 
+		// TODO forecast trainers?
+		forecastTeam.trainers = this.trainers;
+
 		return forecastTeam;
 	}
 	
@@ -217,32 +220,58 @@ class Team {
 		let accountBalance = this.accountBalance;
 		for (let season = selectedSeason; season < (selectedSeason + Options.forecastSeasons); season++) {
 			for (let zat = 1; zat < SEASON_MATCH_DAYS; zat++) {
-				let newMatchDay = new MatchDay(season, zat);
-				let seasonMatchDay = this.matchDays.find(matchDay => matchDay.zat === zat);
-				if (seasonMatchDay) {
-					newMatchDay.competition = seasonMatchDay.competition;
-					newMatchDay.location = seasonMatchDay.location;
-					if (seasonMatchDay.stadium) stadium = seasonMatchDay.stadium;
-				} else {
-					newMatchDay.competition = Competition.FRIENDLY;
-				}
+				let newMatchDay = this.copyScheduledMatchDay(season, zat);
+				stadium = newMatchDay.stadium || stadium;
 				if (newMatchDay.after(lastMatchDay)) {
 					let forecastedTeam = this.getForecast(lastMatchDay, newMatchDay);
-					accountBalance += newMatchDay.calculateStadiumIncome(stadium, viewSettings);
+					accountBalance += newMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 					accountBalance += newMatchDay.calculatePremium(this.league, viewSettings);
-					accountBalance += newMatchDay.calculateYouthSupport(forecastedTeam.youthPlayers, viewSettings);
+					accountBalance += this.calculateYouthSupport(forecastedTeam.youthPlayers, viewSettings); // TODO youth barrier?
 					if (newMatchDay.zat % MONTH_MATCH_DAYS === 0) {
-						accountBalance += newMatchDay.calculateSquadSalary(forecastedTeam.squadPlayers);
-						accountBalance += newMatchDay.calculateLoan(forecastedTeam.squadPlayers);
-						accountBalance += newMatchDay.calculateTrainerSalary(this.trainers);
+						accountBalance += this.calculateSquadSalary(forecastedTeam.squadPlayers);
+						accountBalance += this.calculateLoan(forecastedTeam.squadPlayers);
+						accountBalance += this.calculateTrainerSalary(forecastedTeam.trainers);
 					}
-					accountBalance += newMatchDay.calculateFastTransferIncome(forecastedTeam.squadPlayers);
-					newMatchDay.accountBalance = accountBalance;		
+					accountBalance += this.calculateFastTransferIncome(forecastedTeam.squadPlayers);
+					newMatchDay.accountBalance = accountBalance;
 				}
 				balancedMatchDays.push(newMatchDay);
 			}
 		}
 		return balancedMatchDays;
+	}
+
+	/**
+	 * Returns the youth support costs for a match day.
+	 * 
+	 * @param {[YouthPlayer]} players the list of youth players
+	 * @param {*} viewSettings the settings the season
+	 * @returns {Number} the costs
+	 */
+	calculateYouthSupport (players, viewSettings) {
+
+	}
+
+	calculateSquadSalary (players) {
+
+	}
+
+	calculateLoan (players) {
+
+	}
+
+	/** 
+	 * @private @type {[Team.Trainer]} 
+	 */ 
+	calculateTrainerSalary (trainers) {
+
+	}
+
+	/** 
+	 * @private @type {[SquadPlayer]} 
+	 */ 
+	calculateFastTransferIncome (players) {
+
 	}
 
 	/**
@@ -259,15 +288,31 @@ class Team {
 		let matchDaysInRange = [];
 		let targetMatchDay = new MatchDay(firstMatchDay.season, firstMatchDay.zat);
 		do {
-			let newMatchDay = new MatchDay(targetMatchDay.season, targetMatchDay.zat);
-			let seasonMatchDay = this.matchDays.find(matchDay => matchDay.zat === targetMatchDay.zat);
-			if (seasonMatchDay) {
-				newMatchDay.competition = seasonMatchDay.competition;
-				newMatchDay.location = seasonMatchDay.location;
-				matchDaysInRange.push(newMatchDay);
-			}
+			matchDaysInRange.push(this.copyScheduledMatchDay(targetMatchDay.season, targetMatchDay.zat));
 		} while (!targetMatchDay.add(1).after(lastMatchDay)) 
 		return matchDaysInRange;
+	}
+
+	/**
+	 * Returns a new match day copy with the given season and zat, with the referenced attributes 
+	 * of the scheduled match day.
+	 * 
+	 * @param {Number} season the match day season
+	 * @param {Number} zat the match day zat 
+	 * @returns new match day
+	 */
+	copyScheduledMatchDay (season, zat) {
+		let copyMatchDay = new MatchDay(season, zat);
+		let scheduledMatchDay = this.matchDays.find(matchDay => matchDay.zat === zat);
+		if (scheduledMatchDay) {
+			copyMatchDay.competition = scheduledMatchDay.competition;
+			copyMatchDay.location = scheduledMatchDay.location;
+			copyMatchDay.stadium = scheduledMatchDay.stadium;
+			copyMatchDay.accountBalance = scheduledMatchDay.accountBalance;
+		} else {
+			copyMatchDay.competition = Competition.FRIENDLY;
+		}
+		return copyMatchDay;
 	}
 			
 	/**
