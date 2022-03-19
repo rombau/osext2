@@ -307,8 +307,9 @@ class Team {
 		if (scheduledMatchDay) {
 			copyMatchDay.competition = scheduledMatchDay.competition;
 			copyMatchDay.location = scheduledMatchDay.location;
-			copyMatchDay.stadium = scheduledMatchDay.stadium;
 			copyMatchDay.accountBalance = scheduledMatchDay.accountBalance;
+			scheduledMatchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat) || scheduledMatchDay;
+			copyMatchDay.stadium = scheduledMatchDay.stadium;
 		} else {
 			copyMatchDay.competition = Competition.FRIENDLY;
 		}
