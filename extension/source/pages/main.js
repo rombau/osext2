@@ -72,9 +72,12 @@ Page.Main = class extends Page {
 			data.pagesToRequest.push(new Page.YouthSkills());
 			data.pagesToRequest.push(new Page.YouthOptions());
 			data.pagesToRequest.push(new Page.AccountStatement());
-			data.pagesToRequest.push(new Page.Trainer()); // error during season interval
-			data.pagesToRequest.push(new Page.Training()); // error during season interval
-			data.pagesToRequest.push(new Page.ContractExtension()); // error during season interval
+
+			// error during season interval
+			data.pagesToRequest.push(new Page.Trainer());
+			data.pagesToRequest.push(new Page.Training());
+			data.pagesToRequest.push(new Page.ContractExtension());
+			data.pagesToRequest.push(new Page.MatchDayOptions());
 			
 		}
 

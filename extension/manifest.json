@@ -32,6 +32,7 @@
 				"source/pages/main.js",
 				"source/pages/showplayer.js",
 				"source/pages/gamereport.js",
+				"source/pages/matchdayoptions.js",
 				"source/pages/matchdayreport.js",
 				"source/pages/showteam.base.js",
 				"source/pages/showteam.overview.js",
