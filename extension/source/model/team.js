@@ -34,7 +34,7 @@ class Team {
 		this._trainers = [];
 
 		/** @type {Stadium} the stadium data */ 
-		this.stadium = new Stadium();
+		this.stadium;
 
 		/** @type {Number} the current account balance */ 
 		this.accountBalance;

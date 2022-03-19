@@ -26,6 +26,7 @@ Page.ShowteamInfo = class extends Page {
 			throw new Error(`Tabelle nicht gefunden (${resource})!`);
 		}
 
+		data.team.stadium = Object.assign(new Stadium(), data.team.stadium);
 		data.team.stadium.coveredSeats = +table.rows[2].cells[3].textContent.replace(/\./g, '');
 		data.team.stadium.seats = +table.rows[2].cells[1].textContent.replace(/\./g, '') - data.team.stadium.coveredSeats;
 		data.team.stadium.coveredPlaces = +table.rows[3].cells[3].textContent.replace(/\./g, '');
