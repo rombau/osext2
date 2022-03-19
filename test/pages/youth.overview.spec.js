@@ -28,9 +28,11 @@ describe('Page.YouthOverview', () => {
 			expect(data.team.youthPlayers[0].countryCode).toEqual('CYP');
 			expect(data.team.youthPlayers[0].countryName).toEqual('Zypern');
 			expect(data.team.youthPlayers[0].uefa).toBeTruthy();
+			expect(data.team.youthPlayers[0].season).toEqual(11);
 			expect(data.team.youthPlayers[0].talent).toEqual(Talent.NORMAL);
 			expect(data.team.youthPlayers[0].pullId).toEqual(200864);
 
+			expect(data.team.youthPlayers[9].season).toEqual(14);
 			expect(data.team.youthPlayers[9].pos).toEqual(Position.TOR);
 			expect(data.team.youthPlayers[9].pullId).toBeUndefined();
 

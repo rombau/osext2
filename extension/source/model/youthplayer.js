@@ -17,6 +17,9 @@ class YouthPlayer extends Player {
 
 		super();
 
+		/** @type {Number} the season of birth */
+		this.season;
+
 		/** @type {Talent} the talent */
 		this.talent;
 
