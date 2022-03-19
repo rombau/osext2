@@ -12,7 +12,7 @@ const Fixture = {
 		if (path.indexOf('.html') < 0) {
 			path += '.html';
 		}
-		path = path.replace(/\?/, '_');
+		path = path.replace(/\?/, '_').replace(/\//, '.');
 		
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", Fixture._base + path, true);
@@ -22,12 +22,12 @@ const Fixture = {
 				if (xhr.status === 200) {
 					callback(xhr.responseXML);
 				} else {
-					throw new Error(`Cannot find ${path} in ${Fixture.base}.`);
+					throw new Error(`Cannot find ${path} in ${Fixture._base}.`);
 				}
 			}
 		};
 		xhr.onerror = function (e) {
-			throw new Error(`Error when loading ${path} from ${Fixture.base}.`);
+			throw new Error(`Error when loading ${path} from ${Fixture._base}.`);
 		};
 		xhr.send(null);
 	}

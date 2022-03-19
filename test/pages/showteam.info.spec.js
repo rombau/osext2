@@ -11,16 +11,27 @@ describe('Page.ShowteamInfo', () => {
 	it('should extract stadium', (done) => {
 
 		data.nextZat = 49;
+		data.nextZatSeason = 5;
 
 		Fixture.getDocument('showteam.php?s=5', doc => {
 			
 			page.extract(doc, data);
 						
-			expect(data.team.stadium.places).toEqual(10000);
+			expect(data.team.stadium.places).toEqual(7500);
 			expect(data.team.stadium.coveredPlaces).toEqual(0);
-			expect(data.team.stadium.seats).toEqual(3000);
-			expect(data.team.stadium.coveredSeats).toEqual(30000);
+			expect(data.team.stadium.seats).toEqual(2250);
+			expect(data.team.stadium.coveredSeats).toEqual(22500);
 			expect(data.team.stadium.pitchHeating).toEqual(false);
+
+			expect(data.team.getMatchDay(5,48).stadium).toBeUndefined();
+
+			expect(data.team.getMatchDay(5,49).stadium.places).toEqual(10000);
+			expect(data.team.getMatchDay(5,49).stadium.coveredPlaces).toEqual(0);
+			expect(data.team.getMatchDay(5,49).stadium.seats).toEqual(3000);
+			expect(data.team.getMatchDay(5,49).stadium.coveredSeats).toEqual(31000);
+			expect(data.team.getMatchDay(5,49).stadium.pitchHeating).toEqual(false);
+
+			expect(data.team.getMatchDay(5,50).stadium).toBeUndefined();
 
 			done();
 		});
