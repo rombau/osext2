@@ -26,13 +26,17 @@ Page.AccountStatement = class extends Page {
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
 
-		let matches = /Kontoauszug - Kontostand : ([\d\.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
-			
-		data.team.accountBalance = +matches[1].replace(/\./g, '');
+		let matches = /Kontoauszug - Kontostand : ([\d\.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);	
+		if (matches) {	
+			data.team.accountBalance = +matches[1].replace(/\./g, '');
+		}
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.AccountStatement.HEADERS).forEach(row => {
 			
-
+			matches = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
+			if (matches) {
+				data.team.getMatchDay(season, +matches[1]).accountBalance = +row.cells['Kontostand nach Buchung'].textContent.replace(/\./g, '');
+			}
 		});
 
 	}
