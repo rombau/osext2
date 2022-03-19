@@ -32,6 +32,12 @@ class ExtensionData {
 			youthSupportPerDay : 500,
 
 			/** @type {Number} */
+			youthSupportBarrierSeason : 0, // TODO init with ju
+
+			/** @type {Number} */
+			youthSupportBarrierType : 0, // TODO init with ju
+
+			/** @type {Number} */
 			leagueRanking : 1,
 
 			ticketPrice : {

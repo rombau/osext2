@@ -226,13 +226,13 @@ class Team {
 					let forecastedTeam = this.getForecast(lastMatchDay, newMatchDay);
 					accountBalance += newMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 					accountBalance += newMatchDay.calculatePremium(this.league, viewSettings);
-					accountBalance += this.calculateYouthSupport(forecastedTeam.youthPlayers, viewSettings); // TODO youth barrier?
+					accountBalance += this.calculateYouthSupport(newMatchDay, forecastedTeam.youthPlayers, viewSettings); // TODO youth barrier?
 					if (newMatchDay.zat % MONTH_MATCH_DAYS === 0) {
-						accountBalance += this.calculateSquadSalary(forecastedTeam.squadPlayers);
-						accountBalance += this.calculateLoan(forecastedTeam.squadPlayers);
-						accountBalance += this.calculateTrainerSalary(forecastedTeam.trainers);
+						accountBalance += this.calculateSquadSalary(newMatchDay, forecastedTeam.squadPlayers);
+						accountBalance += this.calculateLoan(newMatchDay, forecastedTeam.squadPlayers);
+						accountBalance += this.calculateTrainerSalary(newMatchDay, forecastedTeam.trainers);
 					}
-					accountBalance += this.calculateFastTransferIncome(forecastedTeam.squadPlayers);
+					accountBalance += this.calculateFastTransferIncome(newMatchDay, forecastedTeam.squadPlayers);
 					newMatchDay.accountBalance = accountBalance;
 				}
 				balancedMatchDays.push(newMatchDay);
@@ -244,33 +244,28 @@ class Team {
 	/**
 	 * Returns the youth support costs for a match day.
 	 * 
+	 * @param {MatchDay} matchDay the match day
 	 * @param {[YouthPlayer]} players the list of youth players
 	 * @param {*} viewSettings the settings the season
 	 * @returns {Number} the costs
 	 */
-	calculateYouthSupport (players, viewSettings) {
+	calculateYouthSupport (matchDay, players, viewSettings) {
 
 	}
 
-	calculateSquadSalary (players) {
+	calculateSquadSalary (matchDay, players) {
 
 	}
 
-	calculateLoan (players) {
+	calculateLoan (matchDay, players) {
 
 	}
 
-	/** 
-	 * @private @type {[Team.Trainer]} 
-	 */ 
-	calculateTrainerSalary (trainers) {
+	calculateTrainerSalary (matchDay, trainers) {
 
 	}
 
-	/** 
-	 * @private @type {[SquadPlayer]} 
-	 */ 
-	calculateFastTransferIncome (players) {
+	calculateFastTransferIncome (matchDay, players) {
 
 	}
 

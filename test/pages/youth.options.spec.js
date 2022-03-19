@@ -13,6 +13,8 @@ describe('Page.YouthOptions', () => {
 		Fixture.getDocument('ju.php?page=4', doc => {
 			
 			page.extract(doc, data);
+
+			expect(data.viewSettings.youthSupportPerDay).toEqual(10000);
 		
 			done();
 		});

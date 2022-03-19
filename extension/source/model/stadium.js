@@ -28,7 +28,7 @@ class Stadium {
 	 * @return {Number} number of all places
 	 */
 	getPlaces () {
-		return this.places + this.seats + this.coveredPlaces + this.coveredSeats;
+		return (this.places || 0) + (this.seats || 0) + (this.coveredPlaces || 0) + (this.coveredSeats || 0);
 	}
 		
 	/**
@@ -40,9 +40,9 @@ class Stadium {
 	 */		
 	calculateIncome (ticketPrice, load) {
 		return this.getPlaces() * load / 100 * ticketPrice +
-			this.coveredPlaces * load / 100 * STADIUM_ADDITION_COVERED_PLACE +
-			this.seats * load / 100 * STADIUM_ADDITION_SEAT +
-			this.coveredSeats * load / 100 * STADIUM_ADDITION_COVERED_SEAT;
+			(this.coveredPlaces || 0) * load / 100 * STADIUM_ADDITION_COVERED_PLACE +
+			(this.seats || 0) * load / 100 * STADIUM_ADDITION_SEAT +
+			(this.coveredSeats || 0) * load / 100 * STADIUM_ADDITION_COVERED_SEAT;
 	}
 	
 	/**

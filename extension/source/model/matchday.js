@@ -53,6 +53,23 @@ class MatchDay {
 		/** @type {Number} the friendly share for the team */
 		this.friendlyShare;
 
+		// the follwing attributes only calculated and not persisted
+
+		/** @type {Number} the stadium income */ 
+		this.stadiumIncome;
+
+		/** @type {Number} the stadium costs */ 
+		this.stadiumCosts;
+
+		/** @type {Number} the fiendly income */ 
+		this.fiendlyIncome;
+
+		/** @type {Number} the advertising (tv) income */ 
+		this.advertisingIncome;
+
+		/** @type {Number} the merchandising income */ 
+		this.merchandisingIncome;
+
 		/** @type {Number} the account balance after this match day */ 
 		this.accountBalance;
 	}
@@ -126,4 +143,59 @@ class MatchDay {
 		return this;
 	}
 
+	/**
+	 * Returns the match day income based on the available stadium.
+	 * 
+	 * @param {Stadium} stadium the available stadium at this match day
+	 * @param {*} viewSettings the view settings inluding ticket prices and load factor
+	 * @returns {Number}
+	 */
+	calculateMatchDayIncome (stadium, viewSettings) {
+		if (this.competition === Competition.LEAGUE && this.opponent) {
+			if (this.location == GameLocation.HOME) {
+				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.league, viewSettings.stadiumLoad);
+				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad);
+				return this.stadiumIncome - this.stadiumCosts;
+			}
+			return 0;
+		} else if (this.competition === Competition.CUP && this.opponent) {
+			this.stadiumIncome = Math.round(stadium.calculateIncome(viewSettings.ticketPrice.cup, viewSettings.stadiumLoad) / 2);
+			this.stadiumCosts = Math.round(stadium.calculateCosts(viewSettings.stadiumLoad) / 2);
+			return this.stadiumIncome - this.stadiumCosts;
+		} else if ((this.competition === Competition.OSEQ || this.competition === Competition.OSE || this.competition === Competition.OSCQ || this.competition === Competition.OSC) && this.opponent) {
+			if (this.location == GameLocation.HOME) {
+				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.international, viewSettings.stadiumLoad);
+				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad);
+				return this.stadiumIncome - this.stadiumCosts;
+			}
+			return 0;
+		} else {
+			this.fiendlyIncome = STADIUM_FRIENDLY_INCOME * (this.friendlyShare || 50) / 100;
+			return this.fiendlyIncome;
+		}
+	}
+
+	/**
+	 * Returns the match day premium amount based on the competition.
+	 * 
+	 * @param {Team.League} league the league attributes for premium
+	 * @param {*} viewSettings the view settings inluding current league ranking
+	 * @returns {Number}
+	 */
+	calculatePremium (league, viewSettings) {
+		if ((this.competition === Competition.LEAGUE && this.location == GameLocation.HOME) || this.zat === SEASON_MATCH_DAYS) {
+			let ranking = viewSettings.leagueRanking;
+			if (league.size == 10) {
+				ranking = ranking * 2 - 1;
+			}
+			this.advertisingIncome = Math.round(PREMIUM_ADVERTISING[ranking - 1] * PREMIUM_LEAGUE_FACTOR[league.level - 1]); 
+			this.merchandisingIncome = Math.round(PREMIUM_MERCHANDISING[ranking - 1] * PREMIUM_LEAGUE_FACTOR[league.level - 1]);
+			if (this.zat === SEASON_MATCH_DAYS) {
+				this.advertisingIncome *= PREMIUM_END_OF_SEASON_FACTOR; 
+				this.merchandisingIncome *= PREMIUM_END_OF_SEASON_FACTOR;
+			}
+			return this.advertisingIncome + this.merchandisingIncome;
+		}
+		return 0;
+	}
 }

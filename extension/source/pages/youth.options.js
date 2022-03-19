@@ -12,6 +12,7 @@ Page.YouthOptions = class extends Page {
 	 */
 	extract(doc, data) {
 
+		data.viewSettings.youthSupportPerDay = +doc.getElementsByName("foerderung")[0].value;	
 		
 	};
 
