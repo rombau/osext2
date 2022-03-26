@@ -99,7 +99,7 @@ class Team {
 	 * @returns {SquadPlayer} the player
 	 */
 	getSquadPlayer (id) {
-		if (!id) return undefined;
+		if (!id) return null;
 
 		let player = this.squadPlayers.find(player => player.id === id);
 		if (!player) {
@@ -147,7 +147,7 @@ class Team {
 	 * @returns {MatchDay} the match day
 	 */
 	getMatchDay (season, zat) {
-		if (!season || !zat) return undefined;
+		if (!season || !zat) return null;
 
 		let matchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
 		if (!matchDay) {
@@ -164,7 +164,7 @@ class Team {
 	 * @returns {Team.Trainer} the trainer
 	 */
 	getTrainer (nr) {
-		if (!nr) return undefined;
+		if (!nr) return null;
 
 		let trainer = this.trainers.find(trainer => trainer.nr === nr);
 		if (!trainer) {
@@ -226,7 +226,7 @@ class Team {
 					let forecastedTeam = this.getForecast(lastMatchDay, newMatchDay);
 					accountBalance += newMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 					accountBalance += newMatchDay.calculatePremium(this.league, viewSettings);
-					accountBalance += this.calculateYouthSupport(newMatchDay, forecastedTeam.youthPlayers, viewSettings); // TODO youth barrier?
+					accountBalance += this.calculateYouthSupport(newMatchDay, forecastedTeam.youthPlayers, viewSettings);
 					if (newMatchDay.zat % MONTH_MATCH_DAYS === 0) {
 						accountBalance += this.calculateSquadSalary(newMatchDay, forecastedTeam.squadPlayers);
 						accountBalance += this.calculateLoan(newMatchDay, forecastedTeam.squadPlayers);
@@ -250,6 +250,7 @@ class Team {
 	 * @returns {Number} the costs
 	 */
 	calculateYouthSupport (matchDay, players, viewSettings) {
+
 
 	}
 

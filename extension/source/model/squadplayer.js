@@ -200,9 +200,9 @@ class SquadPlayer extends Player {
 		let forecastPlayer = Object.assign(new SquadPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
 
-		forecastPlayer.posLastMatch = undefined;
-		forecastPlayer.moral = undefined;
-		forecastPlayer.fitness = undefined;
+		forecastPlayer.posLastMatch = null;
+		forecastPlayer.moral = null;
+		forecastPlayer.fitness = null;
 	
 		this._forecastBans(forecastPlayer, matchDaysInRange);
 		
@@ -345,7 +345,7 @@ class SquadPlayer extends Player {
 				if (forecastPlayer.loan.fee < 0) {
 					forecastPlayer.active = false;
 				}
-				forecastPlayer.loan = undefined;
+				forecastPlayer.loan = null;
 			}
 		}
 	}
@@ -375,11 +375,11 @@ class SquadPlayer extends Player {
 
 		// remove past fast transfer and contract extension settings
 		if (this.fastTransferMatchDay && lastMatchDay.after(this.fastTransferMatchDay)) {
-			this.fastTransferMatchDay = undefined;
+			this.fastTransferMatchDay = null;
 		}
 		if (this.contractExtensionMatchDay && lastMatchDay.after(this.contractExtensionMatchDay)) {
-			this.contractExtensionMatchDay = undefined;
-			this.contractExtensionTerm = undefined;
+			this.contractExtensionMatchDay = null;
+			this.contractExtensionTerm = null;
 		}
 	}
 

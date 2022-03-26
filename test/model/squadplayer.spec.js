@@ -86,8 +86,8 @@ describe('SquadPlayer', () => {
 
 		let forecastPlayer = player.getForecast(new MatchDay(15,10), new MatchDay(15,72));
 
-		expect(forecastPlayer.moral).toBeUndefined();
-		expect(forecastPlayer.fitness).toBeUndefined();
+		expect(forecastPlayer.moral).toBeNull();
+		expect(forecastPlayer.fitness).toBeNull();
 	});
 
 	it('should return salary', () => {
@@ -130,7 +130,7 @@ describe('SquadPlayer', () => {
 		player.loan = new SquadPlayer.Loan('Team1', 'Team2', 10);
 
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 2)).loan.duration).toEqual(1);
-		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeUndefined();
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeNull();
 
 		player.loan.fee = -100000; // lend from other team
 

@@ -89,9 +89,9 @@ Page.YouthOptskills = class extends Page.Youth {
 					if (!data.lastMatchDay.equals(viewMatchday)) {
 						this._addPullClass(player, row, data.team.league.level);
 					}
-					player.pullMatchDay = undefined;
-					player.pullPosition = undefined;
-					player.pullContractTerm = undefined;
+					player.pullMatchDay = null;
+					player.pullPosition = null;
+					player.pullContractTerm = null;
 					Persistence.storeExtensionData(data);
 					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
 					this.updateWithTeam(matchDayTeam, false, viewMatchday);

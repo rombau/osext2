@@ -51,7 +51,7 @@ Page.Main = class extends Page {
 							player.lastTraining.skill = player.nextTraining.skill;
 							player.lastTraining.chance = player.nextTraining.chance;
 						} else {
-							player.lastTraining = undefined;
+							player.lastTraining = null;
 						}
 					}
 				});

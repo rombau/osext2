@@ -102,9 +102,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 						cell.classList.add(STYLE_ADD);
 					}
 					let squadPlayer = data.team.getSquadPlayer(id);
-					squadPlayer.fastTransferMatchDay = undefined;
-					squadPlayer.contractExtensionMatchDay = undefined;
-					squadPlayer.contractExtensionTerm = undefined;
+					squadPlayer.fastTransferMatchDay = null;
+					squadPlayer.contractExtensionMatchDay = null;
+					squadPlayer.contractExtensionTerm = null;
 					Persistence.storeExtensionData(data);
 
 					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);

@@ -192,9 +192,9 @@ class YouthPlayer extends Player {
 
 		// remove past pull settings
 		if (this.pullMatchDay && lastMatchDay.after(this.pullMatchDay)) {
-			this.pullMatchDay = undefined;
-			this.pullPosition = undefined;
-			this.pullContractTerm = undefined;
+			this.pullMatchDay = null;
+			this.pullPosition = null;
+			this.pullContractTerm = null;
 		}
 		
 	}

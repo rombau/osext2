@@ -153,9 +153,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				}
 				row.cells['Pos'].textContent = player.pos;
 
-				row.cells['Auf'].textContent = (player.posLastMatch != undefined ? player.posLastMatch : '');
-				row.cells['MOR'].textContent = (player.moral != undefined ? player.moral : '');
-				row.cells['FIT'].textContent = (player.fitness != undefined  ? player.fitness : '');
+				row.cells['Auf'].textContent = player.posLastMatch || '';
+				row.cells['MOR'].textContent = player.moral || '';
+				row.cells['FIT'].textContent = player.fitness || '';
 
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);

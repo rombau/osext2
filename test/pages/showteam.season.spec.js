@@ -50,7 +50,7 @@ describe('Page.ShowteamSeason', () => {
 			expect(data.pagesToRequest.length).toEqual(1);
 			expect(data.pagesToRequest[0].name).toEqual('Saisonplan (Saison 9)');
 
-			expect(data.nextMatchDay).toBeUndefined();
+			expect(data.nextMatchDay).toBeNull();
 
 			done();
 		});

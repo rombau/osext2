@@ -19,7 +19,7 @@ describe('Team', () => {
 
 	it('should return requested squad player', () => {
 		
-		expect(team.getSquadPlayer()).toBeUndefined();
+		expect(team.getSquadPlayer()).toBeNull();
 		expect(team.getSquadPlayer(1)).toBeDefined();
 		expect(team.getSquadPlayer(1).id).toEqual(1);
 		expect(team.getSquadPlayer(2)).toBe(team.getSquadPlayer(2));
@@ -63,7 +63,7 @@ describe('Team', () => {
 
 	it('should return requested match day', () => {
 		
-		expect(team.getMatchDay()).toBeUndefined();
+		expect(team.getMatchDay()).toBeNull();
 		expect(team.getMatchDay(5,34)).toBeDefined();
 		expect(team.getMatchDay(5,34).zat).toEqual(34);
 		expect(team.getMatchDay(5,34).season).toEqual(5);
@@ -72,7 +72,7 @@ describe('Team', () => {
 
 	it('should return requested trainer', () => {
 		
-		expect(team.getTrainer()).toBeUndefined();
+		expect(team.getTrainer()).toBeNull();
 		expect(team.getTrainer(1)).toBeDefined();
 		expect(team.getTrainer(1).nr).toEqual(1);
 		expect(team.getTrainer(2)).toBe(team.getTrainer(2));
