@@ -32,15 +32,29 @@
 .osext-set-zat > * {
     display: none !important;
 }
-.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-level-up-alt, .osext-set-zat.delete > .fa-trash-alt {
+.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-plus-circle, .osext-set-zat.add > .fa-level-up-alt, .osext-set-zat.delete > .fa-trash-alt {
     cursor: pointer;
 }
-.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-level-up-alt {
+.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-plus-circle, .osext-set-zat.add > .fa-level-up-alt {
     display: inline-block !important;
+    margin-right: 5px;
 }
 .osext-set-zat.delete > .fa-trash-alt, .osext-set-zat.delete > span {
     display: inline-block !important;
     margin-right: 5px;
+}
+
+.osext-set-contract {
+    border: 0.5px solid;
+    border-radius: 8px;
+    background-color: var(--input-background-color);
+    font-size: 0.6em;
+    padding: 0.25em;
+    vertical-align: top;
+    cursor: pointer;
+}
+.osext-set-zat.delete > span.osext-set-contract:empty {
+    display: none !important;
 }
 
 .osext-error {
@@ -102,10 +116,10 @@
     top: 2.5px;
     font-size: 1.4em;
     cursor: pointer;
-    color: #5c5;
+    color: var(--range-thumb-color);
 }
 #osext-toolbar-container .fa-toggle-on {
-    color: #5c5;
+    color: var(--range-thumb-color);
 }
 
 #osext-toolbar-container input[type=range] {

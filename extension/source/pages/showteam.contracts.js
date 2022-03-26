@@ -39,8 +39,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 		Array.from(this.table.rows).forEach((row, i) => {
 
 			row.cells['Blitzerlös'] = row.cells['Spielerwert'].cloneNode(true);
-			row.cells['Blitz'] = row.cells['Name'].cloneNode(true);
-			row.cells['Blitz'].style.setProperty('padding-left', '1em', 'important');
+			row.cells['Aktion'] = row.cells['Name'].cloneNode(true);
+			row.cells['Aktion'].style.setProperty('padding-left', '0.5em', 'important');
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 	
@@ -53,7 +53,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Blitzerlös'].textContent = 'Blitzerlös';
 				row.cells['Blitzerlös'].align = 'right';
 
-				row.cells['Blitz'].textContent = 'Blitztermin';
+				row.cells['Aktion'].textContent = '';
 	
 			} else {
 	
@@ -67,18 +67,33 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				}
 
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
-				row.cells['Blitz'].textContent = '';
+				row.cells['Aktion'].textContent = '';
 
 				let setButton = HtmlUtil.createAwesomeButton(doc, 'fa-bolt', (event) => {
+					let cell = event.target.parentNode;
+					let viewMatchday = data.viewSettings.squadPlayerMatchDay;
+					cell.lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
+					cell.lastChild.previousSibling.textContent = '';
+					cell.classList.remove(STYLE_ADD);
+					cell.classList.add(STYLE_DELETE);
+					data.team.getSquadPlayer(id).fastTransferMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
+					Persistence.storeExtensionData(data);
+				});
+
+				let extendContractButton = HtmlUtil.createAwesomeButton(doc, 'fa-plus-circle', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = data.viewSettings.squadPlayerMatchDay;
 					cell.lastChild.textContent = `${viewMatchday.season}/${viewMatchday.zat}`;
 					cell.classList.remove(STYLE_ADD);
 					cell.classList.add(STYLE_DELETE);
 
-					data.team.getSquadPlayer(id).fastTransferMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
+					let squadPlayer = data.team.getSquadPlayer(id);
+					squadPlayer.contractExtensionMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
+					squadPlayer.contractExtensionTerm = CONTRACT_LENGTHS[0];
+					cell.lastChild.previousSibling.textContent = squadPlayer.contractExtensionTerm;
+					Persistence.storeExtensionData(data);
 				});
-				
+
 				let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
@@ -86,28 +101,48 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					if (!data.lastMatchDay.equals(viewMatchday) && !player.loan && !player.transferLock) {
 						cell.classList.add(STYLE_ADD);
 					}
-					data.team.getSquadPlayer(id).fastTransferMatchDay = undefined;
+					let squadPlayer = data.team.getSquadPlayer(id);
+					squadPlayer.fastTransferMatchDay = undefined;
+					squadPlayer.contractExtensionMatchDay = undefined;
+					squadPlayer.contractExtensionTerm = undefined;
+					Persistence.storeExtensionData(data);
 
 					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
 					this.updateWithTeam(matchDayTeam, false, viewMatchday);
 				});
 
+				let extendContractSpan = doc.createElement('span');
+				extendContractSpan.addEventListener('click', () => {
+					player.contractExtensionTerm = CONTRACT_LENGTHS.slice(0, -1).find(length => length > player.contractExtensionTerm);
+					if (!player.contractExtensionTerm) player.contractExtensionTerm = CONTRACT_LENGTHS[0];
+					Persistence.storeExtensionData(data);
+					extendContractSpan.textContent = player.contractExtensionTerm;
+				});
+				extendContractSpan.style.float = 'right';
+				extendContractSpan.classList.add(STYLE_SET_CONTRACT);
+				if (player.contractExtensionTerm) {
+					extendContractSpan.textContent = player.contractExtensionTerm;
+				}
+
 				let fastTransferSpan = doc.createElement('span');
-				if (player.fastTransferMatchDay) {
-					fastTransferSpan.textContent = `${player.fastTransferMatchDay.season}/${player.fastTransferMatchDay.zat}`;
-					row.cells['Blitz'].classList.add(STYLE_DELETE);
+				if (player.fastTransferMatchDay || player.contractExtensionMatchDay) {
+					let viewDay = player.fastTransferMatchDay || player.contractExtensionMatchDay;
+					fastTransferSpan.textContent = `${viewDay.season}/${viewDay.zat}`;
+					row.cells['Aktion'].classList.add(STYLE_DELETE);
 				}
 				
-				row.cells['Blitz'].classList.add(STYLE_SET_ZAT);
+				row.cells['Aktion'].classList.add(STYLE_SET_ZAT);
 
-				row.cells['Blitz'].appendChild(setButton);
-				row.cells['Blitz'].appendChild(removeButton);
-				row.cells['Blitz'].appendChild(fastTransferSpan);
+				row.cells['Aktion'].appendChild(setButton);
+				row.cells['Aktion'].appendChild(extendContractButton);
+				row.cells['Aktion'].appendChild(removeButton);
+				row.cells['Aktion'].appendChild(extendContractSpan);
+				row.cells['Aktion'].appendChild(fastTransferSpan);
 				
 			}
 
 			row.appendChild(row.cells['Blitzerlös']);
-			row.appendChild(row.cells['Blitz']);
+			row.appendChild(row.cells['Aktion']);
 			
 		});
 
@@ -130,7 +165,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			let player = team.getSquadPlayer(id);
 			
 			if (!current && !player.loan && !player.transferLock) {
-				row.cells['Blitz'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
+				row.cells['Aktion'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
 			}
 
 			if (player.active) {
@@ -146,7 +181,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
-					row.cells['TS'].textContent = player.transferLock;
+					row.cells['TS'].textContent = player.transferLock || '';
 				}
 
 				row.cells['Vertrag'].textContent = player.contractTerm;
@@ -193,9 +228,9 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
-			row.cells['Blitz'].classList.add(STYLE_SET_ZAT);
-			row.cells['Blitz'].classList.remove(STYLE_ADD);
-			row.cells['Blitz'].classList.remove(STYLE_DELETE);
+			row.cells['Aktion'].classList.add(STYLE_SET_ZAT);
+			row.cells['Aktion'].classList.remove(STYLE_ADD);
+			row.cells['Aktion'].classList.remove(STYLE_DELETE);
 
 			if (player.active && !current) {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
@@ -212,15 +247,15 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
 				} else {
 					row.cells['Blitzerlös'].classList.remove(STYLE_INACTIVE);
-					if (!player.origin.fastTransferMatchDay) {
-						row.cells['Blitz'].classList.add(STYLE_ADD);
+					if (!player.origin.fastTransferMatchDay && !player.origin.contractExtensionMatchDay) {
+						row.cells['Aktion'].classList.add(STYLE_ADD);
 					}
 				}
 			}
-			if ((player.origin && player.origin.fastTransferMatchDay) || player.fastTransferMatchDay) {
-				row.cells['Blitz'].classList.add(STYLE_DELETE);
+			if ((player.origin && (player.origin.fastTransferMatchDay || player.origin.contractExtensionMatchDay)) 
+				|| player.fastTransferMatchDay || player.contractExtensionMatchDay) {
+				row.cells['Aktion'].classList.add(STYLE_DELETE);
 			}
-
 		});
 	}
 }

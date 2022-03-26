@@ -13,6 +13,8 @@ const SKILL_DEDUCTION_FIELD = 33;
 const SKILL_DEDUCTION = [34, 51, 68, 85, 102];
 const SKILL_DEDUCTION_WEIGHTING = {SCH: 1, BAK: 0.5, KOB: 1, ZWK: 1, DEC: 1, GES: 2, FUQ: 0, ERF: 0, AGG: 2, PAS: 0.5, AUS: 1, UEB: 0, WID: 2, SEL: 1, DIS: 0, ZUV: 1, EIN: 1}
 
+const CONTRACT_LENGTHS = [24, 36, 48, 60, 72];
+
 const YOUTH_AGE_MIN = 13;
 const YOUTH_AGE_MAX = 18;
 
@@ -30,6 +32,7 @@ const PREMIUM_LEAGUE_FACTOR = [1, 0.85, 0.72];
 const PREMIUM_END_OF_SEASON_FACTOR = 2;
 
 
+
 /** Style constants */
 
 const STYLE_FORECAST = 'osext-forecast';
@@ -40,6 +43,8 @@ const STYLE_HIDDEN = 'osext-hidden';
 const STYLE_SET_ZAT = 'osext-set-zat';
 const STYLE_ADD = 'add';
 const STYLE_DELETE = 'delete';
+
+const STYLE_SET_CONTRACT = 'osext-set-contract';
 
 const STYLE_REFRESH = 'osext-refresh';
 const STYLE_YOUTH = 'osext-youth';

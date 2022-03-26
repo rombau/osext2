@@ -32,8 +32,11 @@ class YouthPlayer extends Player {
 		/** @type {MatchDay} the match day (ZAT) the player should be pulled ('Ziehtermin') */ 
 		this.pullMatchDay;
 
-		/** @type {Position} the position the player should be pulled ('Ziehposition') */ 
+		/** @type {Position} the position of the pulled player ('Ziehposition') */ 
 		this.pullPosition;
+
+		/** @type {Number} the initial contract length of the pulled player */
+		this.pullContractTerm;
 	}
 
 	/**
@@ -154,6 +157,29 @@ class YouthPlayer extends Player {
 	}
 
 	/**
+	 * Returns the salary for the youth player.
+	 * 
+	 * @param {Number} month the contract length
+	 * @returns the salary
+	 */
+	getSalary (month = 24) {
+		let salary = Math.round(174.251414282062 * Math.pow(this.getSkillAverage(), 0.124814683));
+		if (month >= 36) {
+			salary *= 1.2;
+		}
+		if (month >= 48) {
+			salary *= 1.15;
+		}
+		if (month >= 60) {
+			salary *= 1.15;
+		}
+		if (month >= 72) {
+			salary *= 1.126;
+		}
+		return salary;
+	}
+
+	/**
 	 * Completes the initialization of the player data.
 	 * 
 	 * @param {MatchDay} lastMatchDay the last match day
@@ -168,6 +194,14 @@ class YouthPlayer extends Player {
 
 		// initialize training factor
 		this.trainingFactor = 1;
+
+		// remove past pull settings
+		if (this.pullMatchDay && lastMatchDay.after(this.pullMatchDay)) {
+			this.pullMatchDay = undefined;
+			this.pullPosition = undefined;
+			this.pullContractTerm = undefined;
+		}
+		
 	}
 
 	/**

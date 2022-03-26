@@ -71,6 +71,12 @@ class SquadPlayer extends Player {
 
 		/** @private @type {SquadPlayer.Training} */
 		this._nextTraining;
+
+		/** @type {MatchDay} the match day (ZAT) the player contract term should be extended */ 
+		this.contractExtensionMatchDay;
+
+		/** @type {Number} the new contract length on extension */
+		this.contractExtensionTerm;
 	}
 
 	/**
@@ -126,6 +132,41 @@ class SquadPlayer extends Player {
 	 */
 	getMarketValue (pos = this.pos, factor = this.trainingFactor) {
 		return super.getMarketValue(pos, factor);
+	}
+
+
+	/**
+	 * Returns the salary based on the contract term.
+	 * 
+	 * If available the salary is used from contract extension page. 
+	 * Otherwise the formula from Michael Bertram is used for calculating the salary (currently only for minimal term).
+	 * 
+	 * @param {Number} term the contract term
+	 * @returns 
+	 */
+	getSalary (term = this.contractTerm) {
+		if (this.followUpSalary[term]) {
+			return this.followUpSalary[term];
+		} else if (term == CONTRACT_LENGTHS[0]) {
+			let age = this.ageExact;
+			let skill = this.getSkillAverage();
+			let opti = this.getOpti();
+			let skills = this.getSpecialSkills().length;
+			let salary24 = Math.exp(43.4141558006601 - age * 5.54570281665499 + skill * 0.158961589662974 + opti * 0.0621816258155144 
+				+ Math.pow(age, 2) * 0.291391890680615 - Math.pow(skill, 2) * 0.00156875101235568 - Math.pow(opti, 2) * 0.000708828068471812 
+				- Math.pow(age, 3) * 0.00690374205734566 + Math.pow(skill, 3) * 0.0000185915532095852 + Math.pow(opti, 3) * 7.30138929949129 * Math.pow(10, -6) 
+				+ Math.pow(age, 4) * 0.0000608351611664875 - Math.pow(skill, 4) * 8.52842263501928 * Math.pow(10, -8) - Math.pow(opti,4) * 3.00334542939177 * Math.pow(10, -8) + skills * 0.0271361133643198);
+			if (age >= 32) {
+				salary24 = salary24 * (0.0274395216316261 * Math.pow(age, 2) - 2.01524742754527 * age + 37.4122435618068);
+			}
+			if (age >= 34) {
+				salary24 = salary24 * (-0.0198800496146543 * Math.pow(age, 3) + 2.04301602810751 * Math.pow(age, 2) - 69.7080244628458 * age + 790.697075521611);
+			}
+			if (age <= 19) {
+				salary24 = salary24 * (-0.0170976054342162 * Math.pow(age, 2) + 0.685685015055667 * age - 5.85066297399492);
+			}
+			return Math.round(salary24);
+		}
 	}
 
 	/**
@@ -255,13 +296,16 @@ class SquadPlayer extends Player {
 	}
 
 	_forecastContractAndSalary (forecastPlayer, matchday) {
-		if (matchday.zat % MONTH_MATCH_DAYS === 0) {
+		if (forecastPlayer.contractExtensionMatchDay && forecastPlayer.contractExtensionTerm
+			&& matchday.equals(forecastPlayer.contractExtensionMatchDay)) {
+			forecastPlayer.contractTerm = forecastPlayer.contractExtensionTerm;
+			forecastPlayer.salary = forecastPlayer.getSalary();
+		}
+		else if (matchday.zat % MONTH_MATCH_DAYS === 0) {
 			forecastPlayer.contractTerm--;
 			if (forecastPlayer.contractTerm === 0) {
 				forecastPlayer.contractTerm = Options.followUpContractTerm;
-				if (forecastPlayer.followUpSalary[forecastPlayer.contractTerm]) {
-					forecastPlayer.salary = forecastPlayer.followUpSalary[forecastPlayer.contractTerm];
-				}
+				forecastPlayer.salary = forecastPlayer.getSalary();
 			}
 		}
 	}
@@ -327,6 +371,15 @@ class SquadPlayer extends Player {
 
 		// initialize training factor
 		this.trainingFactor = this.marketValue / this.getMarketValue(this.pos, 1);
+
+		// remove past fast transfer and contract extension settings
+		if (this.fastTransferMatchDay && lastMatchDay.after(this.fastTransferMatchDay)) {
+			this.fastTransferMatchDay = undefined;
+		}
+		if (this.contractExtensionMatchDay && lastMatchDay.after(this.contractExtensionMatchDay)) {
+			this.contractExtensionMatchDay = undefined;
+			this.contractExtensionTerm = undefined;
+		}
 	}
 
 }
