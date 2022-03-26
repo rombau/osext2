@@ -158,25 +158,20 @@ class YouthPlayer extends Player {
 
 	/**
 	 * Returns the salary for the youth player.
+	 * The formula was provided by Michael Bertram.
 	 * 
-	 * @param {Number} month the contract length
+	 * @param {Number} term the contract length
 	 * @returns the salary
 	 */
-	getSalary (month = 24) {
-		let salary = Math.round(174.251414282062 * Math.pow(this.getSkillAverage(), 0.124814683));
-		if (month >= 36) {
-			salary *= 1.2;
-		}
-		if (month >= 48) {
-			salary *= 1.15;
-		}
-		if (month >= 60) {
-			salary *= 1.15;
-		}
-		if (month >= 72) {
-			salary *= 1.126;
-		}
-		return salary;
+	getSalary (term = 24) {
+		let skill = this.getSkillAverage();
+		let age = this.age;
+		let salary = Math.exp(8.6352890923681 + term * 0.0705668514584682 + skill * 0.028080430507765 
+			+ Math.pow(term, 2) * -0.00174150326033113 + Math.pow(skill, 2) * 0.00498240336698239 
+			+ Math.pow(term, 3) * 0.000023430692218106 + Math.pow(skill, 3) * -0.000101781463829049 + Math.pow(age, 3) * -0.00148099883935323 
+			+ Math.pow(term, 4) * -1.18310348021728 * Math.pow(10, -7) + Math.pow(skill, 4) * 7.18208724536507 * Math.pow(10, -7) + Math.pow(age, 4) * 0.000044797822229757);
+
+		return Math.round(salary);
 	}
 
 	/**

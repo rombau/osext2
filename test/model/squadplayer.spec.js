@@ -90,6 +90,14 @@ describe('SquadPlayer', () => {
 		expect(forecastPlayer.fitness).toBeUndefined();
 	});
 
+	it('should return salary', () => {
+
+		player.complete(new MatchDay(14, 5));
+
+		expect(player.getSalary(24)).toEqual(43721);
+
+	});
+
 	it('should return age forecast', () => {
 
 		player.age = 19;

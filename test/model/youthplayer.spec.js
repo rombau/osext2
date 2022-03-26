@@ -47,6 +47,16 @@ describe('YouthPlayer', () => {
 		expect(player.trainingFactor).toEqual(1);
 	});
 
+	it('should return salary', () => {
+
+		expect(player.getSalary()).toEqual(6036);
+		expect(player.getSalary(24)).toEqual(6036);
+		expect(player.getSalary(36)).toEqual(7392);
+		expect(player.getSalary(48)).toEqual(8676);
+		expect(player.getSalary(60)).toEqual(10124);
+		expect(player.getSalary(72)).toEqual(11489);
+	});
+
 	it('should return age forecast', () => {
 
 		player.age = 15;

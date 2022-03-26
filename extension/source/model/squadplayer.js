@@ -137,9 +137,10 @@ class SquadPlayer extends Player {
 
 	/**
 	 * Returns the salary based on the contract term.
+	 * The formula was provided by Michael Bertram.
 	 * 
 	 * If available the salary is used from contract extension page. 
-	 * Otherwise the formula from Michael Bertram is used for calculating the salary (currently only for minimal term).
+	 * Otherwise salary is calculated (currently only for minimal term).
 	 * 
 	 * @param {Number} term the contract term
 	 * @returns 
