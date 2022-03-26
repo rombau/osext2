@@ -1,4 +1,13 @@
 /**
+ * Enum for transfer states.
+ * @readonly
+ */
+const YouthSupportBarrierType = Object.freeze({
+	AND_OLDER: '<=',
+	AND_YOUNGER: '>=',
+});
+
+/**
  * Extension data
  */
 class ExtensionData {
@@ -32,10 +41,10 @@ class ExtensionData {
 			youthSupportPerDay : 500,
 
 			/** @type {Number} */
-			youthSupportBarrierSeason : 0, // TODO init with ju
+			youthSupportBarrierSeason : null,
 
-			/** @type {Number} */
-			youthSupportBarrierType : 0, // TODO init with ju
+			/** @type {YouthSupportBarrierType} */
+			youthSupportBarrierType : null,
 
 			/** @type {Number} */
 			leagueRanking : 1,

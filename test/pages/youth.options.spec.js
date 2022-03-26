@@ -15,6 +15,8 @@ describe('Page.YouthOptions', () => {
 			page.extract(doc, data);
 
 			expect(data.viewSettings.youthSupportPerDay).toEqual(10000);
+			expect(data.viewSettings.youthSupportBarrierSeason).toEqual(14);
+			expect(data.viewSettings.youthSupportBarrierType).toEqual(YouthSupportBarrierType.AND_YOUNGER);
 		
 			done();
 		});
