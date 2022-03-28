@@ -38,7 +38,7 @@ class ExtensionData {
 			youthMax : false,
 			
 			/** @type {Number} */
-			youthSupportPerDay : 500,
+			youthSupportPerDay : YOUTH_SUPPORT_MIN,
 
 			/** @type {Number} */
 			youthSupportBarrierSeason : null,

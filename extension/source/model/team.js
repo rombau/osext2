@@ -250,8 +250,18 @@ class Team {
 	 * @returns {Number} the costs
 	 */
 	calculateYouthSupport (matchDay, players, viewSettings) {
-
-
+		let activePlayers = players.filter(player => player.active && (!player.pullMatchDay || player.pullMatchDay.after(matchDay)));
+		let minimumPlayers = viewSettings.youthSupportBarrierType ? activePlayers.filter(player => {
+			if (viewSettings.youthSupportBarrierType === YouthSupportBarrierType.AND_OLDER) {
+				return player.season <= viewSettings.youthSupportBarrierSeason;
+			} else if (viewSettings.youthSupportBarrierType === YouthSupportBarrierType.AND_YOUNGER) {
+				return player.season >= viewSettings.youthSupportBarrierSeason;
+			} else {
+				return true;
+			}
+		}) : [];
+		matchDay.youthSupport = minimumPlayers.length * YOUTH_SUPPORT_MIN + (activePlayers.length - minimumPlayers.length) * viewSettings.youthSupportPerDay;
+		return -matchDay.youthSupport;
 	}
 
 	calculateSquadSalary (matchDay, players) {

@@ -135,4 +135,42 @@ describe('Team', () => {
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSEQ).length).toEqual(6);
 
 	});
+
+	it('should calculate youth support', () => {
+
+		let matchDay = new MatchDay(15, 51);
+		let viewSettings = {
+			youthSupportPerDay : 1000,
+		}
+		team.youthPlayers.push(new YouthPlayer());
+		team.youthPlayers.push(new YouthPlayer());
+		team.youthPlayers.push(new YouthPlayer());
+		team.youthPlayers.push(new YouthPlayer());
+		team.youthPlayers.push(new YouthPlayer());
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-5000);
+
+		team.youthPlayers[0].active = false;
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-4000);
+
+		team.youthPlayers[1].season = 13;
+		team.youthPlayers[2].season = 14;
+		team.youthPlayers[3].season = 15;
+		team.youthPlayers[4].season = 16;
+
+		viewSettings.youthSupportBarrierSeason = 15;
+		viewSettings.youthSupportBarrierType = YouthSupportBarrierType.AND_OLDER;
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-2500);
+
+		viewSettings.youthSupportBarrierType = YouthSupportBarrierType.AND_YOUNGER;
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-3000);
+
+		team.youthPlayers[2].pullMatchDay = new MatchDay(15, 51);
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-2000);
+		expect(matchDay.youthSupport).toEqual(2000);
+	});
 });

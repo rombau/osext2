@@ -70,6 +70,9 @@ class MatchDay {
 		/** @type {Number} the merchandising income */ 
 		this.merchandisingIncome;
 
+		/** @type {Number} the youth support */ 
+		this.youthSupport;
+
 		/** @type {Number} the account balance after this match day */ 
 		this.accountBalance;
 	}
