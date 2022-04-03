@@ -163,7 +163,8 @@ Page.YouthOverview = class extends Page.Youth {
 				row.appendChild(row.cells['&Oslash;U']);
 			});
 			
-			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+			let form = doc.querySelector('form');
+			form.parentNode.insertBefore(this.createToolbar(doc, data), form);
 		}
 	}
 

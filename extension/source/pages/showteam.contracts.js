@@ -78,7 +78,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					cell.classList.add(STYLE_DELETE);
 					data.team.getSquadPlayer(id).fastTransferMatchDay = new MatchDay(viewMatchday.season, viewMatchday.zat);
 					Persistence.storeExtensionData(data);
-				});
+				}, 'Schnelltransfer');
 
 				let extendContractButton = HtmlUtil.createAwesomeButton(doc, 'fa-plus-circle', (event) => {
 					let cell = event.target.parentNode;
@@ -92,7 +92,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					squadPlayer.contractExtensionTerm = CONTRACT_LENGTHS[0];
 					cell.lastChild.previousSibling.textContent = squadPlayer.contractExtensionTerm;
 					Persistence.storeExtensionData(data);
-				});
+				}, 'Vertragsverlängerung');
 
 				let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
 					let cell = event.target.parentNode;
@@ -118,6 +118,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					Persistence.storeExtensionData(data);
 					extendContractSpan.textContent = player.contractExtensionTerm;
 				});
+				extendContractSpan.title = 'Vetragslänge';
 				extendContractSpan.style.float = 'right';
 				extendContractSpan.classList.add(STYLE_SET_CONTRACT);
 				if (player.contractExtensionTerm) {
@@ -164,10 +165,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = team.getSquadPlayer(id);
 			
-			if (!current && !player.loan && !player.transferLock) {
-				row.cells['Aktion'].querySelector('i.fa-bolt').title = `Saison ${matchDay.season} / Zat ${matchDay.zat}`;
-			}
-
 			if (player.active) {
 
 				row.cells['Alter'].textContent = player.age;

@@ -17,6 +17,8 @@ Page.Showteam = class extends Page {
 	 */
 	createToolbar (doc, data) {
 		
+		HtmlUtil.allowStickyToolbar(doc);
+		
 		let page = this;
 	
 		let toolbar = doc.createElement('div');

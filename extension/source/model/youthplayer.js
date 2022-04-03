@@ -55,10 +55,14 @@ class YouthPlayer extends Player {
 		let forecastPlayer = Object.assign(new YouthPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
 	
-		this._forecastAging(forecastPlayer, lastMatchDay, targetMatchDay);
+		if (forecastPlayer.age >= YOUTH_AGE_MIN) {
+			this._forecastAging(forecastPlayer, lastMatchDay, targetMatchDay);
 
-		let days = this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
-		forecastPlayer.averageIncreasePerDay = forecastPlayer.getAverageIncreasePerDay(days);
+			let days = this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
+			forecastPlayer.averageIncreasePerDay = forecastPlayer.getAverageIncreasePerDay(days);
+		} else {
+			forecastPlayer.active = false;
+		}
 
 		return forecastPlayer;
 	}

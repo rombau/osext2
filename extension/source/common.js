@@ -58,6 +58,8 @@ const STYLE_ERROR = 'osext-error';
 const STYLE_WARNING = 'osext-warning';
 const STYLE_STATUS = 'osext-status';
 
+const STYLE_MONTH = 'osext-month';
+
 
 
 

@@ -91,6 +91,16 @@ class HtmlUtil {
 	}
 	
 	/**
+	 * Adds script element with the given code.
+	 * 
+	 * @param {Document} doc 
+	 * @param {String} text
+	 */
+	static allowStickyToolbar (doc) {
+		doc.querySelector('body > div').style.display = 'inline-block';
+	}
+
+	/**
 	 * Returns the id extracted from a href.
 	 * 
 	 * @param {String} href 
@@ -101,15 +111,59 @@ class HtmlUtil {
 	}
 
 	/**
+	 * @callback changeCallback
+	 * @param {*} value changed numeric value
+	 */
+
+	/**
+	 * Returns a element (div) containing the numeric slider and the view (span) showing the current value.
+	 * 
+	 * @param {HTMLElement} containerElement the container element where the slider should be created in
+	 * @param {Number} width the width of the slider in pixel
+	 * @param {Number} min the min value
+	 * @param {Number} max the max value
+	 * @param {Number} inital the inital value
+	 * @param {changeCallback} changeCallback the callback method called on slider change
+	 * @returns {HTMLElement} slider element (container)
+	 */
+	static createNumericSlider (containerElement, width, min, max, inital, changeCallback = (value) => {}) {
+
+		let viewInfo = containerElement.ownerDocument.createElement('span');
+		viewInfo.update = (value) => {
+			viewInfo.innerHTML = ` ${value}`;
+		};
+		viewInfo.update(inital);
+		
+		let rangeSlider = containerElement.ownerDocument.createElement('input');
+		rangeSlider.type = 'range';
+		rangeSlider.min = min;
+		rangeSlider.max = max;
+		rangeSlider.value = inital;
+		rangeSlider.addEventListener('input', (event) => {
+			viewInfo.update(event.target.value);
+		});
+		rangeSlider.addEventListener('change', (event) => {
+			changeCallback(event.target.value);
+		});
+		
+		let slider = containerElement.ownerDocument.createElement('div');
+		slider.style.width = (width + 'px');
+		slider.appendChild(rangeSlider);
+		slider.appendChild(viewInfo);
+
+		return slider;
+	}
+
+	/**
 	 * Returns a element (div) containing the matchday slider and the view (span) showing the current matchday.
 	 * 
 	 * @param {HTMLElement} containerElement the container element where the slider should be created in
-	 * @param {ExtensionData} data the extension data
+	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} matchday the match day reference adjusted by slider
-	 * @param {*} changeCallback the callback method called on slider change
+	 * @param {changeCallback} changeCallback the callback method called on slider change
 	 * @returns {HTMLElement} slider element (container)
 	 */
-	 static createMatchDaySlider (containerElement, lastMatchDay, matchday, changeCallback = () => {}) {
+	static createMatchDaySlider (containerElement, lastMatchDay, matchday, changeCallback = () => {}) {
 
 		let viewInfo = containerElement.ownerDocument.createElement('span');
 		viewInfo.update = (season, zat) => {
@@ -152,11 +206,12 @@ class HtmlUtil {
 	 * @param {Function} listener default click listener
 	 * @returns {HTMLElement}
 	 */
-	static createAwesomeButton (doc, styleClass, listener) {
+	static createAwesomeButton (doc, styleClass, listener, title) {
 		let button = doc.createElement('i');
 		button.classList.add('fas');
 		button.classList.add(styleClass);
 		button.addEventListener('click', listener);
+		if (title) button.title = title;
 		return button;
 	}
 

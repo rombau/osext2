@@ -29,10 +29,18 @@
     margin: 10px 3px;
 }
 
+.osext-month {
+    background-color: var(--row-hover-color);
+}
+
 .osext-set-zat > * {
     display: none !important;
 }
-.osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-plus-circle, .osext-set-zat.add > .fa-level-up-alt, .osext-set-zat.delete > .fa-trash-alt {
+.osext-set-zat.add > .fa-bolt, 
+.osext-set-zat.add > .fa-plus-circle, 
+.osext-set-zat.add > .fa-level-up-alt, 
+.osext-set-zat.delete > .fa-trash-alt,
+form > .fa-arrow-alt-circle-down {
     cursor: pointer;
 }
 .osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-plus-circle, .osext-set-zat.add > .fa-level-up-alt {
@@ -95,14 +103,20 @@
 }
 
 #osext-toolbar-container {
-    padding: 10px 0px;
-    margin-bottom: 5px;
+    padding: 0px;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 7px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+    z-index: 999;
 }
 
 #osext-toolbar-container span {
     vertical-align: text-bottom;
     position: relative;
-    padding: 5px;
+    padding: 4px;
 }
 
 #osext-toolbar-container div {
@@ -123,7 +137,7 @@
 }
 
 #osext-toolbar-container input[type=range] {
-    width: 200px;
+    width: 60%;
     height: 6px;
     border-radius: 5px;  
     background: var(--range-background-color);
@@ -151,4 +165,48 @@
     border-radius: 50%;
     background: var(--range-thumb-color);
     cursor: pointer;
+}
+
+.osext-balance {
+    position: relative;
+    cursor: default;
+}
+.osext-balance-tooltip {
+    position: absolute;
+    width: 210%;
+    vertical-align: bottom;
+    border: 1px solid var(--status-background-color);
+    background-color: var(--background-color);
+    box-shadow: 0px 0px 10px 0px var(--row-hover-color);
+    bottom: 1.6em;
+    right: -5px;
+    padding: 5px;
+    z-index: 1000;
+    color: var(--status-color);
+    visibility: hidden;
+    display: table;
+    opacity: 1 !important
+}
+.osext-balance:hover > .osext-balance-tooltip > div {
+    display: table-row;
+    vertical-align: bottom;
+}
+.osext-balance:hover:before {
+    content: "= ";
+}
+.osext-balance:hover > .osext-balance-tooltip {
+    visibility: visible;
+}
+.osext-balance:hover > .osext-balance-tooltip .left {
+    float: left;
+    font-size: 0.9em;
+}
+.osext-balance:hover > .osext-balance-tooltip .right {
+    float: right;
+}
+.osext-balance:hover > .osext-balance-tooltip .positive {
+    color: #0a0;
+}
+.osext-balance:hover > .osext-balance-tooltip .negative {
+    color: #b00;
 }

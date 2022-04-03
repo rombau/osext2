@@ -17,6 +17,8 @@ Page.Youth = class extends Page {
 	 */
 	createToolbar (doc, data) {
 		
+		HtmlUtil.allowStickyToolbar(doc);
+
 		let page = this;
 
 		let toolbar = doc.createElement('div');
@@ -58,7 +60,7 @@ Page.Youth = class extends Page {
 		toolbar.appendChild(max);
 
 		let maxTitle = doc.createElement('span');
-		maxTitle.innerHTML = ' Max.';
+		maxTitle.innerHTML = ` Ende ${YOUTH_AGE_MAX}`;
 		toolbar.appendChild(maxTitle);
 
 		return toolbar;

@@ -55,6 +55,12 @@ class MatchDay {
 
 		// the follwing attributes only calculated and not persisted
 
+		/** @type {Promise<MatchDay>} the account balance promise for this match day */ 
+		this.accountBalancePromise;
+
+		/** @type {Number} the account balance before this match day */ 
+		this.accountBalanceBefore;
+
 		/** @type {Number} the stadium income */ 
 		this.stadiumIncome;
 
@@ -154,21 +160,22 @@ class MatchDay {
 	 * @returns {Number}
 	 */
 	calculateMatchDayIncome (stadium, viewSettings) {
+		ensurePrototype(stadium, Stadium);
 		if (this.competition === Competition.LEAGUE && this.opponent) {
 			if (this.location == GameLocation.HOME) {
-				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.league, viewSettings.stadiumLoad);
-				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad);
+				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.league, viewSettings.stadiumLoad || 100);
+				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad || 100);
 				return this.stadiumIncome - this.stadiumCosts;
 			}
 			return 0;
 		} else if (this.competition === Competition.CUP && this.opponent) {
-			this.stadiumIncome = Math.round(stadium.calculateIncome(viewSettings.ticketPrice.cup, viewSettings.stadiumLoad) / 2);
-			this.stadiumCosts = Math.round(stadium.calculateCosts(viewSettings.stadiumLoad) / 2);
+			this.stadiumIncome = Math.round(stadium.calculateIncome(viewSettings.ticketPrice.cup, viewSettings.stadiumLoad || 100) / 2);
+			this.stadiumCosts = Math.round(stadium.calculateCosts(viewSettings.stadiumLoad || 100) / 2);
 			return this.stadiumIncome - this.stadiumCosts;
 		} else if ((this.competition === Competition.OSEQ || this.competition === Competition.OSE || this.competition === Competition.OSCQ || this.competition === Competition.OSC) && this.opponent) {
 			if (this.location == GameLocation.HOME) {
-				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.international, viewSettings.stadiumLoad);
-				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad);
+				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.international, viewSettings.stadiumLoad || 100);
+				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad || 100);
 				return this.stadiumIncome - this.stadiumCosts;
 			}
 			return 0;

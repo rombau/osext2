@@ -126,13 +126,13 @@ describe('Team', () => {
 		let matchDaysInRange = team.getMatchDaysInRange(new MatchDay(15,50), new MatchDay(16,40));
 
 		expect(matchDaysInRange.length).toEqual(63);
-		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.FRIENDLY).length).toEqual(25);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.FRIENDLY).length).toEqual(41);
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.LEAGUE).length).toEqual(7);
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.CUP).length).toEqual(7);
-		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSC).length).toEqual(6);
-		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSCQ).length).toEqual(6);
-		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSE).length).toEqual(6);
-		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSEQ).length).toEqual(6);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSC).length).toEqual(2);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSCQ).length).toEqual(2);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSE).length).toEqual(2);
+		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSEQ).length).toEqual(2);
 
 	});
 

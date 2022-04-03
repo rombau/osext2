@@ -65,7 +65,7 @@ Page.YouthOptskills = class extends Page.Youth {
 							row.cells['Pull' + pos].classList.remove(STYLE_ADD);
 						});
 						row.cells['Pull'].classList.add(STYLE_DELETE);
-					});
+					}, `als ${pos} ziehen`);
 					row.cells['Pull' + pos].classList.add(STYLE_SET_ZAT);
 					row.cells['Pull' + pos].appendChild(setButton);
 				}
@@ -110,6 +110,7 @@ Page.YouthOptskills = class extends Page.Youth {
 					Persistence.storeExtensionData(data);
 					pullContractSpan.textContent = player.pullContractTerm;
 				});
+				pullContractSpan.title = 'Vetragslänge';
 				pullContractSpan.style.float = 'right';
 				pullContractSpan.classList.add(STYLE_SET_CONTRACT);
 				if (player.pullContractTerm) {
