@@ -32,8 +32,6 @@ Page.YouthOptskills = class extends Page.Youth {
 			row.cells['Geb.'] = row.cells['Alter'].cloneNode(true);
 			row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
 
-			row.cells['TOR'].style.setProperty('padding-left', '2em', 'important');
-
 			// pull information
 			row.cells['Pull'] = row.cells['Alter'].cloneNode(true);
 			row.cells['Pull'].style.textAlign = 'left';
@@ -71,6 +69,8 @@ Page.YouthOptskills = class extends Page.Youth {
 				}
 				row.insertBefore(row.cells['Pull' + pos], row.cells[pos].nextElementSibling);	
 			});
+
+			row.cells['TOR'].style.setProperty('padding-left', '2em', 'important');
 
 			if (index === 0) {
 				row.cells['Geb.'].textContent = 'Geb.';
@@ -186,7 +186,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				if (matchDay) {
 					row.cells['Pull'].classList.remove(STYLE_HIDDEN);
 					row.cells['Pull' + pos].classList.remove(STYLE_HIDDEN);
-				} else {
+				} else if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
 					row.cells['Pull'].classList.add(STYLE_HIDDEN);
 					row.cells['Pull' + pos].classList.add(STYLE_HIDDEN);
 				}

@@ -71,9 +71,9 @@ Page.YouthSkills = class extends Page.Youth {
 				let player = data.team.youthPlayers[index - 1];
 					
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = player.pos;
+				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN && player.getSkillAverage(player.getSecondarySkills()) > 0 ? player.pos : '');
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
-				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+				row.cells['Opt.Skill'].textContent = (row.cells['Pos'].textContent ? player.getOpti().toFixed(2) : '');
 			}
 
 			row.insertBefore(row.cells['Pos'], row.cells[0]);
@@ -116,7 +116,7 @@ Page.YouthSkills = class extends Page.Youth {
 				});
 
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
-				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+				row.cells['Opt.Skill'].textContent = (row.cells['Pos'].textContent ? player.getOpti().toFixed(2) : '')
 				
 			} else {
 

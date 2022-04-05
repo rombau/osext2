@@ -142,11 +142,11 @@ describe('Team', () => {
 		let viewSettings = {
 			youthSupportPerDay : 1000,
 		}
-		team.youthPlayers.push(new YouthPlayer());
-		team.youthPlayers.push(new YouthPlayer());
-		team.youthPlayers.push(new YouthPlayer());
-		team.youthPlayers.push(new YouthPlayer());
-		team.youthPlayers.push(new YouthPlayer());
+		for (let index = 0; index < 5; index++) {
+			let player = new YouthPlayer();
+			player.age = YOUTH_AGE_MIN;
+			team.youthPlayers.push(player);
+		}
 
 		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-5000);
 
