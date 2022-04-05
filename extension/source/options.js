@@ -22,7 +22,7 @@ const Theme = Object.freeze({
 const Options = {
 
     /** @type {String} the currently used theme */
-    theme: Theme.DARK,
+    theme: Theme.OSBLUE,
 
     /** @type {LogLevel} the current log level */
     logLevel: LogLevel.LOG,
