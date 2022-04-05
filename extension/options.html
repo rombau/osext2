@@ -1,10 +1,17 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
-  </head>
-  <body>
-    <div>
-        <i class="fas fa-question-circle"></i>
-    </div>
-  </body>
+<head>
+  <title>OSext Einstellungen</title>
+</head>
+<body>
+  <label>Farbgebung: </label>
+  <select id="options-theme">
+    <option value="theme-dark">Dark-Theme</option>
+    <option value="theme-os-blue">OS-Blau-Theme</option>
+  </select>
+  <br><br>
+  <button id="options-save">Speichern</button>
+  <script src="source/logger.js"></script>
+  <script src="source/options.js"></script>
+</body>
 </html>

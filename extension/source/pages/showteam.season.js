@@ -90,9 +90,11 @@ Page.ShowteamSeason = class extends Page {
 		if (data.lastMatchDay.season <= this.selectedSeason) {
 
 			if (data.lastMatchDay.zat > 3) {
-				form.appendChild(HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', (event) => {
+				let scrollButton = HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', (event) => {
 					this.table.rows[data.lastMatchDay.zat - 2].scrollIntoView();
-				}, 'zum aktuellen Zat'));
+				}, 'zum aktuellen Zat');
+				scrollButton.style.marginLeft = '5px';
+				form.appendChild(scrollButton);
 			}
 
 			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
@@ -128,7 +130,7 @@ Page.ShowteamSeason = class extends Page {
 						
 						if (day.youthSupport) {
 							
-							let tooltipHTML = `<div>${day.accountBalanceBefore.toLocaleString()}</div>`;
+							let tooltipHTML = `<div class="right">${day.accountBalanceBefore.toLocaleString()}</div>`;
 							if (day.stadiumIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.stadiumIncome.toLocaleString()}</div></div>`;
 							if (day.stadiumCosts) tooltipHTML += `<div><div class="left">Stadionkosten</div><div class="right negative">-${day.stadiumCosts.toLocaleString()}</div></div>`;
 							if (day.fiendlyIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.fiendlyIncome.toLocaleString()}</div></div>`;
@@ -145,8 +147,12 @@ Page.ShowteamSeason = class extends Page {
 						
 					}));
 
-					if (season === matchDays[matchDays.length - 1].season && matchDay.competition === Competition.FRIENDLY) {
+					if (matchDay.competition === Competition.FRIENDLY) {
 						balanceCell.classList.remove('STU');
+						balanceCell.classList.remove('TOR');
+						balanceCell.classList.remove('DMI');
+						balanceCell.classList.remove('MIT');
+						balanceCell.classList.add('OMI');
 					}
 				}
 

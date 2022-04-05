@@ -9,7 +9,7 @@
 	OSEQ: 'OSEQ',
 	OSE: 'OSE',
 	OSCQ: 'OSCQ',
-	OSC: 'OSC',
+	OSC: 'OSC'
 });
 
 /**

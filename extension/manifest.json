@@ -15,7 +15,6 @@
 			],
 			"js": [
 				"source/logger.js",
-				"source/options.js",
 				"source/common.js",
 				"source/model/data.js",
 				"source/model/matchday.js",
@@ -64,6 +63,16 @@
 				"style/solid.min.css"
 			],
 			"all_frames": true
+		},
+		{
+			"matches": [
+				"*://os.ongapo.com/*"
+			],
+			"js": [
+				"source/options.js"
+			],
+			"all_frames": true,
+			"run_at": "document_start"
 		}
 	],
 	"web_accessible_resources": [

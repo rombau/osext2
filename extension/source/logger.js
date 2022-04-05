@@ -1,13 +1,3 @@
-/**
- * Enum for log level.
- * @readonly
- */
-const LogLevel = Object.freeze({
-	LOG: 1,
-	INFO: 2,
-	WARN: 3,
-	ERROR: 4
-});
 
 /**
  * Logger implementation.

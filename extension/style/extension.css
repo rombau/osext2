@@ -194,6 +194,9 @@ form > .fa-arrow-alt-circle-down {
 .osext-balance:hover:before {
     content: "= ";
 }
+.osext-balance:hover span {
+    text-decoration: underline;
+}
 .osext-balance:hover > .osext-balance-tooltip {
     visibility: visible;
 }
