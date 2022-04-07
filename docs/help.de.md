@@ -54,22 +54,23 @@ In den Optionen der Erweiterung kann zwischen einem angepassten `OS-Blau` oder `
 
 # Installation
 
-Die Extension wurde bisher mit (den aktuellen Versionen von) Chromium und Firefox getestet, sollte aber mit allen Browsern, welche auf der Chrome Extension API basieren , funktionieren.
+Die Erweiterung wurde bisher mit (den aktuellen Versionen von) Chromium und Firefox getestet, sollte aber mit allen Browsern, welche auf der Chrome Extension API basieren funktionieren.
 
-## Release
 
-TODO
+## Firefox
+
+Die aktuelle Version für Firefox kann über https://addons.mozilla.org/de/firefox/addon/online-soccer-extension/ installiert werden.
 
 
 ## Entwickleroption
 
 Klonen des Repos https://github.com/rombau/osext2.git oder Herunterladen und Entpacken des Archivs https://github.com/rombau/osext2/archive/refs/heads/master.zip, und entpackte Erweiterung (Ordner `extension` bzw. `manifest.json`) laden.
 
-### Chromium/Chrome (chrome://extensions/)
+**Chromium/Chrome** (chrome://extensions/)
 
 ![Erweiterung Chrome](setup.chrome.png)
 
-### Firefox (about:debugging#/runtime/this-firefox)
+**Firefox** (about:debugging#/runtime/this-firefox)
 
 ![Erweiterung Firefox](setup.firefox.png)
 
