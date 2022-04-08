@@ -4,13 +4,46 @@
   <title>OSext Einstellungen</title>
 </head>
 <body>
-  <label>Farbgebung: </label>
-  <select id="options-theme">
-    <option value="theme-dark">Dark-Theme</option>
-    <option value="theme-os-blue">OS-Blau-Theme</option>
-  </select>
-  <br><br>
+  <h3>Allgemein</h3>
+  <div style="padding: 3px;">
+    <label>Farbgebung:</label>
+    <select id="options-theme">
+      <option value="theme-dark">Dunkel</option>
+      <option value="theme-os-blue">OS-Blau</option>
+    </select>
+  </div>
+  <div style="padding: 3px;">
+    <label>Konsolenausgaben:</label>
+    <select id="options-logging">
+      <option value="1">Alles</option>
+      <option value="2">Informationen</option>
+      <option value="3">Warnungen</option>
+      <option value="4">Fehler</option>
+    </select>
+  </div>
+  <h3>Prognose</h3>
+  <div style="padding: 3px;">
+    <label>Physio bei Verletzung:</label>
+    <input type="checkbox" id="options-physio">
+  </div>
+  <div style="padding: 3px;">
+    <label>Referenzalter f&uuml;r Traininslimits:</label>
+    <input type="range" min="20" max="30" id="options-age-limit">
+    <span id="options-age-limit-value"></span>
+  </div>
+  <div style="padding: 3px;">
+    <label>Trainingslimit Prim&auml;rskill:</label>
+    <input type="range" min="70" max="99" id="options-ps-limit">
+    <span id="options-ps-limit-value"></span>
+  </div>
+  <div style="padding: 3px;">
+    <label>Trainingslimit Nebenskill:</label>
+    <input type="range" min="50" max="99" id="options-ns-limit">
+    <span id="options-ns-limit-value"></span>
+  </div>
+  <hr>
   <button id="options-save">Speichern</button>
+  <div style="display: inline-block; color:green; position: absolute; right: 20px; vertical-align: bottom;" id="options-status"></div>
   <script src="source/logger.js"></script>
   <script src="source/options.js"></script>
 </body>

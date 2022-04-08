@@ -12,7 +12,7 @@ const Theme = Object.freeze({
  * Enum for log level.
  * @readonly
  */
- const LogLevel = Object.freeze({
+const LogLevel = Object.freeze({
 	LOG: 1,
 	INFO: 2,
 	WARN: 3,
@@ -50,17 +50,32 @@ const Options = {
 
     
     initialize : () => {
-        chrome.storage.local.get(Options, (data) => {
-            chrome.storage.local.set(JSON.parse(JSON.stringify(data)), () => {
-                if (chrome.runtime.lastError) {
-                    new Logger('Options').error('Error when storing options ' + chrome.runtime.lastError);
-                }
-            });
+        chrome.storage.local.get(JSON.parse(JSON.stringify(Options)), (data) => {
+            Object.assign(Options, data);
             if (themeSelect) {
-                themeSelect.value = data.theme;
+                themeSelect.value = Options.theme;
+                loggingSelect.value = Options.logLevel;
+                physioCheckbox.checked = Options.usePhysio;
+                Options.initSlider(ageLimitSlider, Options.ageTrainingLimit);
+                Options.initSlider(psLimitSlider, Options.primarySkillTrainingLimit);
+                Options.initSlider(nsLimitSlider, Options.secondarySkillTrainingLimit);
             } else {
-                Options.setRootTheme(data.theme);
+                Options.setRootTheme(Options.theme);
+                chrome.storage.onChanged.addListener((changes) => {
+                    if (changes.theme) {
+                        Options.setRootTheme(changes.theme.newValue);
+                    }
+                });
             }
+        });
+    },
+
+    initSlider : (slider, value) => {
+        let output = document.getElementById(slider.id + '-value');
+        output.textContent = value;
+        slider.value = value;
+        slider.addEventListener('input', (event) => {
+            output.textContent = event.target.value;
         });
     },
 
@@ -87,15 +102,33 @@ const Options = {
 
     save : () => {
         Options.theme = themeSelect.value;
+        Options.logLevel = loggingSelect.value;
+        Options.usePhysio = physioCheckbox.checked;
+        Options.ageTrainingLimit = ageLimitSlider.value;
+        Options.primarySkillTrainingLimit = psLimitSlider.value;
+        Options.secondarySkillTrainingLimit = nsLimitSlider.value;
         chrome.storage.local.set(JSON.parse(JSON.stringify(Options)), () => {
             if (chrome.runtime.lastError) {
                 new Logger('Options').error('Error when storing options ' + chrome.runtime.lastError);
+            }
+            let status = document.getElementById('options-status');
+            if (status) {
+                status.textContent = 'Optionen wurden gespeichert';
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 1000);
             }
         });
     }
 }
 
 let themeSelect = document.getElementById('options-theme');
+let loggingSelect = document.getElementById('options-logging');
+let physioCheckbox = document.getElementById('options-physio');
+let ageLimitSlider = document.getElementById('options-age-limit');
+let psLimitSlider = document.getElementById('options-ps-limit');
+let nsLimitSlider = document.getElementById('options-ns-limit');
+
 let saveButton = document.getElementById('options-save');
 
 if (saveButton) {

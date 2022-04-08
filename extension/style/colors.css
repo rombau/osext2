@@ -29,8 +29,8 @@
 :root,
 :root.theme-os-blue {
     --input-border-color: #aac;
-    --input-background-color: #ddf;
-    --input-color: #111;
+    --input-background-color: #228;
+    --input-color: #fbf9b3;
     
     --button-color: #116;
     --button-hover-color: #228;

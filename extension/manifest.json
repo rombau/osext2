@@ -6,7 +6,8 @@
 	"author": "Roman Bauer",
 	"homepage_url": "https://github.com/rombau/osext2",
 	"icons": {
-		"32": "images/osext.png"
+		"32": "images/osext.png",
+		"48": "images/osext48.png"
 	},
 	"content_scripts": [
 		{

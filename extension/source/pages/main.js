@@ -114,15 +114,15 @@ Page.Main = class extends Page {
 
 		Persistence.storeExtensionData(data);
 
-		doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
-			Persistence.updateExtensionData(dataToReset => {
-				data.nextZat = ZAT_INDICATING_REFRESH;
-				dataToReset.nextZat = ZAT_INDICATING_REFRESH;
-			}).then(data => {	
-				window.location.reload();
-			});
-			return false;
-		}))
+		// doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
+		// 	Persistence.updateExtensionData(dataToReset => {
+		// 		data.nextZat = ZAT_INDICATING_REFRESH;
+		// 		dataToReset.nextZat = ZAT_INDICATING_REFRESH;
+		// 	}).then(data => {	
+		// 		window.location.reload();
+		// 	});
+		// 	return false;
+		// }));
 
 	}
 }
