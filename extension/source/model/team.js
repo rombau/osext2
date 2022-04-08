@@ -237,7 +237,7 @@ class Team {
 								let forecastedTeam = !calculatedMatchDays ? this.getForecast(lastMatchDay, balancedMatchDay) : new Team();
 								accountBalance += (-balancedMatchDay.youthSupport) || this.calculateYouthSupport(balancedMatchDay, forecastedTeam.youthPlayers, viewSettings);
 								if (balancedMatchDay.zat % MONTH_MATCH_DAYS === 0) {
-									accountBalance += this.calculateSquadSalary(balancedMatchDay, forecastedTeam.squadPlayers);
+									accountBalance += this.calculateSquadSalary(balancedMatchDay, forecastedTeam.squadPlayers, forecastedTeam.youthPlayers);
 									accountBalance += this.calculateLoan(balancedMatchDay, forecastedTeam.squadPlayers);
 									accountBalance += this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
 								}
@@ -281,7 +281,9 @@ class Team {
 		return -matchDay.youthSupport;
 	}
 
-	calculateSquadSalary (matchDay, players) {
+	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
+
+		
 		return 0;
 	}
 

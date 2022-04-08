@@ -173,4 +173,13 @@ describe('Team', () => {
 		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-2000);
 		expect(matchDay.youthSupport).toEqual(2000);
 	});
+
+	it('should return balanced match days', () => {
+
+		Options.forecastSeasons = 1;
+
+		let balancedMatchDays = team.getMatchDaysWithBalance(15, new MatchDay(15,3), {});
+
+		expect(balancedMatchDays.length).toEqual(72);
+	});
 });
