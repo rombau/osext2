@@ -82,6 +82,21 @@ class MatchDay {
 		/** @type {Number} the squad salary */ 
 		this.squadSalary;
 
+		/** @type {Number} the trainer salary */ 
+		this.trainerSalary;
+
+		/** @type {Number} the loan income */ 
+		this.loanIncome;
+
+		/** @type {Number} the loan costs */ 
+		this.loanCosts;
+
+		/** @type {Number} the fast transfer income */ 
+		this.fastTransferIncome;
+
+		/** @type {Number} the physio costs */ 
+		this.physio;
+
 		/** @type {Number} the account balance after this match day */ 
 		this.accountBalance;
 	}

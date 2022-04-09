@@ -238,10 +238,13 @@ class Team {
 								accountBalance += (-balancedMatchDay.youthSupport) || this.calculateYouthSupport(balancedMatchDay, forecastedTeam.youthPlayers, viewSettings);
 								if (balancedMatchDay.zat % MONTH_MATCH_DAYS === 0) {
 									accountBalance += (-balancedMatchDay.squadSalary) || this.calculateSquadSalary(balancedMatchDay, forecastedTeam.squadPlayers, forecastedTeam.youthPlayers);
-									accountBalance += this.calculateLoan(balancedMatchDay, forecastedTeam.squadPlayers);
-									accountBalance += this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
+									accountBalance += (balancedMatchDay.loanIncome - balancedMatchDay.loanCosts) || this.calculateLoan(balancedMatchDay, forecastedTeam.squadPlayers);
+									accountBalance += (-balancedMatchDay.trainerSalary) || this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
 								}
-								accountBalance += this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
+								accountBalance += (balancedMatchDay.fastTransferIncome) || this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
+								if (Options.usePhysio) {
+									accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
+								}
 								balancedMatchDay.accountBalance = accountBalance;
 								resolve(balancedMatchDay);
 							} catch (e) {
@@ -282,31 +285,73 @@ class Team {
 	}
 
 	/**
+	 * Returns the squad salary.
 	 * 
 	 * @param {MatchDay} matchDay 
 	 * @param {[SquadPlayer]} squadPlayers 
 	 * @param {[YouthPlayer]} youthPlayers 
-	 * @returns 
+	 * @returns the costs
 	 */
 	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
 		let squad = squadPlayers.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0) || (player.active && !player.loan))
-			.reduce((sum, player) => sum + player.salary, 0)
+			.reduce((sum, player) => sum + player.salary, 0);
 		let youth = youthPlayers.filter(player => player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).before(matchDay))
 			.reduce((sum, player) => sum + (player.salary || 0), 0);
 		matchDay.squadSalary = squad + youth;
 		return -matchDay.squadSalary;
 	}
 
+	/**
+	 * Returns the loan income minus costs.
+	 * 
+	 * @param {MatchDay} matchDay 
+	 * @param {[SquadPlayer]} players 
+	 * @returns the income/costs
+	 */
 	calculateLoan (matchDay, players) {
-		return 0;
+		matchDay.loanIncome = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee > 0))
+			.reduce((sum, player) => sum + player.loan.fee, 0);
+		matchDay.loanCosts = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0))
+			.reduce((sum, player) => sum - player.loan.fee, 0);
+		return matchDay.loanIncome - matchDay.loanCosts;
 	}
 
+	/**
+	 * Returns the trainer salary.
+	 * 
+	 * @param {MatchDay} matchDay 
+	 * @param {[Trainer]} trainers 
+	 * @returns the costs
+	 */
 	calculateTrainerSalary (matchDay, trainers) {
-		return 0;
+		matchDay.trainerSalary = trainers.reduce((sum, trainer) => sum + trainer.salary, 0);
+		return -matchDay.trainerSalary;
 	}
 
+	/**
+	 * Returns the fast transfer income.
+	 * 
+	 * @param {MatchDay} matchDay 
+	 * @param {[SquadPlayer]} players 
+	 * @returns the income
+	 */
 	calculateFastTransferIncome (matchDay, players) {
-		return 0;
+		matchDay.fastTransferIncome = players.filter(player => player.fastTransferMatchDay && matchDay.equals(player.fastTransferMatchDay))
+			.reduce((sum, player) => sum + player.getFastTransferValue(), 0);
+		return matchDay.fastTransferIncome;
+	}
+
+	/**
+	 * Returns the physio costs.
+	 * 
+	 * @param {MatchDay} matchDay 
+	 * @param {[SquadPlayer]} players 
+	 * @returns the costs
+	 */
+	calculatePhysioCosts (matchDay, players) {
+		matchDay.physio = players.filter(player => player.injuredBefore >= 2)
+			.reduce((sum, player) => sum + PHYSIO_COSTS, 0);
+		return -matchDay.physio;
 	}
 
 	/**

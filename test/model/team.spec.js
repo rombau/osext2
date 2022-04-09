@@ -314,6 +314,100 @@ describe('Team', () => {
 
 	});
 
+	it('should return loan income and costs', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1);
+		team.squadPlayers[0].loan.fee = 20000;
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[1].loan = new SquadPlayer.Loan('from', 'to', 2);
+		team.squadPlayers[1].loan.fee = -10000;
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(10000);
+		expect(matchDay.loanIncome).toEqual(20000);
+		expect(matchDay.loanCosts).toEqual(10000);
+
+		team.squadPlayers[0].loan.duration = 0;
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(10000);
+		expect(matchDay.loanIncome).toEqual(20000);
+		expect(matchDay.loanCosts).toEqual(10000);
+
+		team.squadPlayers[0].loan = null;
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(-10000);
+		expect(matchDay.loanIncome).toEqual(0);
+		expect(matchDay.loanCosts).toEqual(10000);
+
+		team.squadPlayers[1].loan = null;
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(0);
+		expect(matchDay.loanIncome).toEqual(0);
+		expect(matchDay.loanCosts).toEqual(0);
+	});
+
+	it('should return trainer salary', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.trainers.push(new Team.Trainer());
+		team.trainers[0].salary = 10000;
+		team.trainers.push(new Team.Trainer());
+		team.trainers[1].salary = 10000;
+
+		expect(team.calculateTrainerSalary(matchDay, team.trainers)).toEqual(-20000);
+		expect(matchDay.trainerSalary).toEqual(20000);
+	});
+
+	it('should return fast transfer income', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].pos = Position.TOR;
+		team.squadPlayers[0].ageExact = 32.958333333;
+		Object.keys(team.squadPlayers[0].skills).forEach((skillname, s) => {
+			team.squadPlayers[0].skills[skillname] = [18,64,86,85,84,84,0,26,14,29,19,24,46,44,82,29,53][s];
+		});
+		team.squadPlayers[0].contractTerm = 1;
+		team.squadPlayers[0].salary = 100000;
+		team.squadPlayers[0].fastTransferMatchDay = new MatchDay(16, 2);
+
+		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(0);
+		expect(matchDay.fastTransferIncome).toEqual(0);
+
+		matchDay.add(1);
+
+		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(4057261);
+		expect(matchDay.fastTransferIncome).toEqual(4057261);
+	});
+
+	it('should return physio costs', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].injuredBefore = 3;
+		team.squadPlayers[0].injured = 1;
+
+		expect(team.calculatePhysioCosts(matchDay, team.squadPlayers)).toEqual(-10000);
+		expect(matchDay.physio).toEqual(10000);
+
+		team.squadPlayers[0].injuredBefore = 2;
+		team.squadPlayers[0].injured = 0;
+
+		expect(team.calculatePhysioCosts(matchDay, team.squadPlayers)).toEqual(-10000);
+		expect(matchDay.physio).toEqual(10000);
+
+		team.squadPlayers[0].injuredBefore = 1;
+		team.squadPlayers[0].injured = 0;
+
+		expect(team.calculatePhysioCosts(matchDay, team.squadPlayers)).toEqual(-0);
+		expect(matchDay.physio).toEqual(0);
+	});
+
 	it('should return balanced match days', () => {
 
 		Options.forecastSeasons = 1;

@@ -135,9 +135,14 @@ Page.ShowteamSeason = class extends Page {
 							if (day.stadiumCosts) tooltipHTML += `<div><div class="left">Stadionkosten</div><div class="right negative">-${day.stadiumCosts.toLocaleString()}</div></div>`;
 							if (day.fiendlyIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.fiendlyIncome.toLocaleString()}</div></div>`;
 							if (day.squadSalary) tooltipHTML += `<div><div class="left">Gehälter</div><div class="right negative">-${day.squadSalary.toLocaleString()}</div></div>`;
+							if (day.trainerSalary) tooltipHTML += `<div><div class="left">Trainer</div><div class="right negative">-${day.trainerSalary.toLocaleString()}</div></div>`;
+							if (day.loanIncome) tooltipHTML += `<div><div class="left">Leiheinnahmen</div><div class="right positive">${day.loanIncome.toLocaleString()}</div></div>`;
+							if (day.loanCosts) tooltipHTML += `<div><div class="left">Leihausgaben</div><div class="right negative">-${day.loanCosts.toLocaleString()}</div></div>`;
 							if (day.youthSupport) tooltipHTML += `<div><div class="left">Jugendförderung</div><div class="right negative">-${day.youthSupport.toLocaleString()}</div></div>`;
 							if (day.advertisingIncome) tooltipHTML += `<div><div class="left">Fernsehgelder</div><div class="right positive">${day.advertisingIncome.toLocaleString()}</div></div>`;
 							if (day.merchandisingIncome) tooltipHTML += `<div><div class="left">Fanartikel</div><div class="right positive">${day.merchandisingIncome.toLocaleString()}</div></div>`;
+							if (day.physio) tooltipHTML += `<div><div class="left">Physio</div><div class="right negative">-${day.physio.toLocaleString()}</div></div>`;
+							if (day.fastTransferIncome) tooltipHTML += `<div><div class="left">Schnelltransfer</div><div class="right positive">${day.fastTransferIncome.toLocaleString()}</div></div>`;
 							
 							balanceCell.innerHTML = `<div class="osext-balance"><span class="osext-forecast">${day.accountBalance.toLocaleString()}</span><div class="osext-balance-tooltip">${tooltipHTML}</div></div>`;
 							
