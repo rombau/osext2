@@ -29,7 +29,7 @@ class YouthPlayer extends Player {
 		/** @type {String} the last increased skill(s) */
 		this.increase;
 
-		/** @type {MatchDay} the match day (ZAT) the player should be pulled ('Ziehtermin') */ 
+		/** @type {MatchDay} the match day after that the player should be pulled ('Ziehtermin') */ 
 		this.pullMatchDay;
 
 		/** @type {Position} the position of the pulled player ('Ziehposition') */ 
@@ -37,6 +37,12 @@ class YouthPlayer extends Player {
 
 		/** @type {Number} the initial contract length of the pulled player */
 		this.pullContractTerm;
+
+		/** @type {Number} the average skill increase per match day */
+		this.averageIncreasePerDay;
+
+		/** @type {Number} the monthly salary after pulling */
+		this.salary;
 	}
 
 	/**
@@ -80,6 +86,11 @@ class YouthPlayer extends Player {
 			forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
 			if (forecastPlayer.age > YOUTH_AGE_MAX || (targetMatchDay && this.pullMatchDay && matchday.after(this.pullMatchDay))) {
 				forecastPlayer.active = false;
+			}
+			if (this.pullMatchDay && this.pullContractTerm && matchday.equals(forecastPlayer.pullMatchDay)) {
+				let tempPlayer = Object.assign(new YouthPlayer(), JSON.parse(JSON.stringify(forecastPlayer)));
+				this._forecastSkills(tempPlayer, lastMatchDay, this.pullMatchDay);
+				forecastPlayer.salary = tempPlayer.getSalary(this.pullContractTerm);
 			}
 		}
 	}
@@ -171,7 +182,6 @@ class YouthPlayer extends Player {
 			+ Math.pow(term, 2) * -0.00174150326033113 + Math.pow(skill, 2) * 0.00498240336698239 
 			+ Math.pow(term, 3) * 0.000023430692218106 + Math.pow(skill, 3) * -0.000101781463829049 + Math.pow(age, 3) * -0.00148099883935323 
 			+ Math.pow(term, 4) * -1.18310348021728 * Math.pow(10, -7) + Math.pow(skill, 4) * 7.18208724536507 * Math.pow(10, -7) + Math.pow(age, 4) * 0.000044797822229757);
-
 		return Math.round(salary);
 	}
 

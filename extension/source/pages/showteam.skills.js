@@ -130,7 +130,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 				cell.classList.remove('BAK');
 				cell.classList.remove('LEI');
 				cell.classList.remove(STYLE_FORECAST);
-				if (player.loan && player.loan.fee > 0) {
+				if (player.loan && player.loan.duration > 0 && player.loan.fee > 0) {
 					cell.classList.add('LEI');
 				} else {
 					cell.classList.add(player.pos);

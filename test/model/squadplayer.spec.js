@@ -130,7 +130,8 @@ describe('SquadPlayer', () => {
 		player.loan = new SquadPlayer.Loan('Team1', 'Team2', 10);
 
 		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 2)).loan.duration).toEqual(1);
-		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan).toBeNull();
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 3)).loan.duration).toEqual(0);
+		expect(player.getForecast(new MatchDay(15, 65), new MatchDay(16, 4)).loan).toBeNull();
 
 		player.loan.fee = -100000; // lend from other team
 

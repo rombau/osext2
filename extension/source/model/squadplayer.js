@@ -63,7 +63,7 @@ class SquadPlayer extends Player {
 		/** @type {Number} the training factor considered in the market value */
 		this.trainingFactor;
 
-		/** @type {MatchDay} the match day (ZAT) the player should be fast transfered ('Blitz') */ 
+		/** @type {MatchDay} the match day (ZAT) after that the player should be fast transfered ('Blitz') */ 
 		this.fastTransferMatchDay;
 		
 		/** @private @type {SquadPlayer.Training} */
@@ -72,7 +72,7 @@ class SquadPlayer extends Player {
 		/** @private @type {SquadPlayer.Training} */
 		this._nextTraining;
 
-		/** @type {MatchDay} the match day (ZAT) the player contract term should be extended */ 
+		/** @type {MatchDay} the match day (ZAT) after that the player contract term should be extended */ 
 		this.contractExtensionMatchDay;
 
 		/** @type {Number} the new contract length on extension */
@@ -219,7 +219,6 @@ class SquadPlayer extends Player {
 
 			days++;
 		}
-		
 		return forecastPlayer;
 	}
 
@@ -345,7 +344,9 @@ class SquadPlayer extends Player {
 				if (forecastPlayer.loan.fee < 0) {
 					forecastPlayer.active = false;
 				}
-				forecastPlayer.loan = null;
+				if (forecastPlayer.loan.duration < 0) {
+					forecastPlayer.loan = null;
+				}
 			}
 		}
 	}
@@ -435,7 +436,7 @@ SquadPlayer.Loan = class {
 		/** @type {Number} the duration in matchdays */
 		this.duration = duration;
 
-		/** @type {Number} the monthly fee */
+		/** @type {Number} the monthly fee. If the player is loaned from other team, the value is negative (costs); otherwise positive (income). */
 		this.fee;
 	}
 };

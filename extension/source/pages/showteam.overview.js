@@ -49,6 +49,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				player.loan.duration = +matches[3];
 				player.transferLock = +transferLockCell.textContent.substring(1);
 			} else {
+				player.loan = null;
 				player.transferLock = +transferLockCell.textContent;
 			}
 			
@@ -179,7 +180,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 				row.cells['Verl.'].textContent = player.injured;
 				
-				if (player.loan) {
+				if (player.loan && player.loan.duration > 0) {
 					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
@@ -215,7 +216,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				cell.classList.remove(STYLE_FORECAST);
 				if ((+cell.textContent === 0 || cell.textContent === TransferState.NORMAL) && i > 11) {
 					cell.classList.add('BAK');
-				} else if (player.loan && player.loan.fee > 0) {
+				} else if (player.loan && player.loan.duration > 0 && player.loan.fee > 0) {
 					cell.classList.add('LEI');
 				} else {
 					cell.classList.add(player.pos);

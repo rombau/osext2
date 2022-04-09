@@ -174,6 +174,146 @@ describe('Team', () => {
 		expect(matchDay.youthSupport).toEqual(2000);
 	});
 
+	describe('should return squad salary', () => {
+
+		/** @type {MatchDay} */
+		let matchDay;
+
+		beforeEach(() => {
+			matchDay = new MatchDay(16, 1); // zat 1
+		});
+
+		it('with multiple squad players', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[1].salary = 20000;
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[2].salary = 30000;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-60000);
+			expect(matchDay.squadSalary).toEqual(60000);
+		});
+
+		it('with youth player pulled', () => {
+
+			team.youthPlayers.push(new YouthPlayer());
+			team.youthPlayers[0].pullMatchDay = new MatchDay(16, 1);
+			team.youthPlayers[0].pullContractTerm = 72;
+			team.youthPlayers[0].age = 18;
+			team.youthPlayers[0].skills = {'sch': 19, 'bak': 33, 'kob': 25, 'zwk': 26, 'dec': 35, 'ges': 19, 'fuq': 0, 'erf': 0, 'agg': 23, 'pas': 34, 'aus': 25, 'ueb': 37, 'wid': 15, 'sel': 5, 'dis': 95, 'zuv': 21, 'ein': 29};
+			team.youthPlayers[0].salary = 7702;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-0);
+			expect(matchDay.squadSalary).toEqual(0);
+
+			matchDay.add(1); // zat 2
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-7702);
+			expect(matchDay.squadSalary).toEqual(7702);
+		});
+
+		it('with player loaned from', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1);
+			team.squadPlayers[0].loan.fee = -1;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+
+			matchDay.add(1); // zat 2
+			team.squadPlayers[0].loan.duration--; // 0
+			team.squadPlayers[0].active = false;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+
+			matchDay.add(1); // zat 3
+			team.squadPlayers[0].loan = null;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-0);
+			expect(matchDay.squadSalary).toEqual(0);
+		});
+
+		it('with player loaned to', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1);
+			team.squadPlayers[0].loan.fee = 1;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-0);
+			expect(matchDay.squadSalary).toEqual(0);
+
+			matchDay.add(1); // zat 2
+			team.squadPlayers[0].loan.duration--; // 0
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-0);
+			expect(matchDay.squadSalary).toEqual(0);
+
+			matchDay.add(1); // zat 3
+			team.squadPlayers[0].loan = null;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+		});
+
+		it('with fast transfered player', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers[0].fastTransferMatchDay = new MatchDay(16, 1);
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+
+			matchDay.add(1); // zat 2
+			team.squadPlayers[0].active = false;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-0);
+			expect(matchDay.squadSalary).toEqual(0);
+		});
+
+		it('with defined players contract term extension', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers[0].followUpSalary = {'24': 20000};
+			team.squadPlayers[0].contractExtensionMatchDay = new MatchDay(16, 1);
+			team.squadPlayers[0].contractExtensionTerm = 24;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+
+			team.squadPlayers[0]._forecastContractAndSalary(team.squadPlayers[0], team.squadPlayers[0].contractExtensionMatchDay);
+			matchDay.add(1); // zat 2
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-20000);
+			expect(matchDay.squadSalary).toEqual(20000);
+		});
+
+		it('with automatic players contract term extension', () => {
+
+			team.squadPlayers.push(new SquadPlayer());
+			team.squadPlayers[0].salary = 10000;
+			team.squadPlayers[0].contractTerm = 1;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-10000);
+			expect(matchDay.squadSalary).toEqual(10000);
+
+			matchDay.add(1); // zat 2
+			team.squadPlayers[0].contractTerm = 24;
+			team.squadPlayers[0].salary = 20000;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers)).toEqual(-20000);
+			expect(matchDay.squadSalary).toEqual(20000);
+		});
+
+	});
+
 	it('should return balanced match days', () => {
 
 		Options.forecastSeasons = 1;

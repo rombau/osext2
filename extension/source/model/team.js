@@ -222,7 +222,7 @@ class Team {
 		let accountBalance = this.accountBalance;
 		for (let season = selectedSeason; season < (selectedSeason + Options.forecastSeasons); season++) {
 			for (let zat = 1; zat <= SEASON_MATCH_DAYS; zat++) {
-				let balancedMatchDay = balancedMatchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat) ;
+				let balancedMatchDay = balancedMatchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
 				if (!balancedMatchDay) {
 					balancedMatchDay = this.copyScheduledMatchDay(season, zat);
 					balancedMatchDays.push(balancedMatchDay);
@@ -237,7 +237,7 @@ class Team {
 								let forecastedTeam = !calculatedMatchDays ? this.getForecast(lastMatchDay, balancedMatchDay) : new Team();
 								accountBalance += (-balancedMatchDay.youthSupport) || this.calculateYouthSupport(balancedMatchDay, forecastedTeam.youthPlayers, viewSettings);
 								if (balancedMatchDay.zat % MONTH_MATCH_DAYS === 0) {
-									accountBalance += this.calculateSquadSalary(balancedMatchDay, forecastedTeam.squadPlayers, forecastedTeam.youthPlayers);
+									accountBalance += (-balancedMatchDay.squadSalary) || this.calculateSquadSalary(balancedMatchDay, forecastedTeam.squadPlayers, forecastedTeam.youthPlayers);
 									accountBalance += this.calculateLoan(balancedMatchDay, forecastedTeam.squadPlayers);
 									accountBalance += this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
 								}
@@ -281,10 +281,20 @@ class Team {
 		return -matchDay.youthSupport;
 	}
 
+	/**
+	 * 
+	 * @param {MatchDay} matchDay 
+	 * @param {[SquadPlayer]} squadPlayers 
+	 * @param {[YouthPlayer]} youthPlayers 
+	 * @returns 
+	 */
 	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
-
-		
-		return 0;
+		let squad = squadPlayers.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0) || (player.active && !player.loan))
+			.reduce((sum, player) => sum + player.salary, 0)
+		let youth = youthPlayers.filter(player => player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).before(matchDay))
+			.reduce((sum, player) => sum + (player.salary || 0), 0);
+		matchDay.squadSalary = squad + youth;
+		return -matchDay.squadSalary;
 	}
 
 	calculateLoan (matchDay, players) {
@@ -328,7 +338,11 @@ class Team {
 	 */
 	copyScheduledMatchDay (season, zat) {
 		let copyMatchDay = new MatchDay(season, zat);
-		let scheduledMatchDay = this.matchDays.find(matchDay => matchDay.zat === zat);
+		let scheduledMatchDay = this.matchDays.slice().sort((day1, day2) => {
+			if (day1.before(day2)) return 1;
+			if (day1.after(day2)) return -1;
+			return 0;
+		}).find(matchDay => matchDay.zat === zat);
 		if (scheduledMatchDay) {
 			if (scheduledMatchDay.season !== season && 
 				(scheduledMatchDay.competition === Competition.OSEQ || scheduledMatchDay.competition === Competition.OSE || scheduledMatchDay.competition === Competition.OSCQ || scheduledMatchDay.competition === Competition.OSC)) {

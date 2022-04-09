@@ -134,6 +134,7 @@ Page.ShowteamSeason = class extends Page {
 							if (day.stadiumIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.stadiumIncome.toLocaleString()}</div></div>`;
 							if (day.stadiumCosts) tooltipHTML += `<div><div class="left">Stadionkosten</div><div class="right negative">-${day.stadiumCosts.toLocaleString()}</div></div>`;
 							if (day.fiendlyIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.fiendlyIncome.toLocaleString()}</div></div>`;
+							if (day.squadSalary) tooltipHTML += `<div><div class="left">Gehälter</div><div class="right negative">-${day.squadSalary.toLocaleString()}</div></div>`;
 							if (day.youthSupport) tooltipHTML += `<div><div class="left">Jugendförderung</div><div class="right negative">-${day.youthSupport.toLocaleString()}</div></div>`;
 							if (day.advertisingIncome) tooltipHTML += `<div><div class="left">Fernsehgelder</div><div class="right positive">${day.advertisingIncome.toLocaleString()}</div></div>`;
 							if (day.merchandisingIncome) tooltipHTML += `<div><div class="left">Fanartikel</div><div class="right positive">${day.merchandisingIncome.toLocaleString()}</div></div>`;

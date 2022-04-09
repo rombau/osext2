@@ -62,7 +62,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 				let player = data.team.getSquadPlayer(id); 
 
-				if (player.loan || player.transferLock) {
+				if ((player.loan && player.loan.duration > 0) || player.transferLock) {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
 				}
 
@@ -98,7 +98,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					let cell = event.target.parentNode;
 					let viewMatchday = ensurePrototype(data.viewSettings.squadPlayerMatchDay, MatchDay);
 					cell.classList.remove(STYLE_DELETE);
-					if (!data.lastMatchDay.equals(viewMatchday) && !player.loan && !player.transferLock) {
+					if (!data.lastMatchDay.equals(viewMatchday) && !(player.loan && player.loan.duration > 0) && !player.transferLock) {
 						cell.classList.add(STYLE_ADD);
 					}
 					let squadPlayer = data.team.getSquadPlayer(id);
@@ -174,7 +174,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
-				if (player.loan) {
+				if (player.loan && player.loan.duration > 0) {
 					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
@@ -211,7 +211,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				cell.classList.remove(STYLE_FORECAST);
 				if (+cell.textContent === 0 && i === 14) {
 					cell.classList.add('BAK');
-				} else if (player.loan && player.loan.fee > 0) {
+				} else if (player.loan && player.loan.duration > 0 && player.loan.fee > 0) {
 					cell.classList.add('LEI');
 				} else {
 					cell.classList.add(player.pos);
@@ -240,7 +240,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Spielerwert'].classList.add(STYLE_FORECAST);
 
 				row.cells['Blitzerlös'].classList.add(STYLE_FORECAST);
-				if (player.loan || player.transferLock) {
+				if ((player.loan && player.loan.duration > 0) || player.transferLock) {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
 				} else {
 					row.cells['Blitzerlös'].classList.remove(STYLE_INACTIVE);

@@ -38,7 +38,7 @@ describe('Page.ShowteamOverview', () => {
 			expect(data.team.squadPlayers[0].bans.length).toEqual(3);
 			expect(data.team.squadPlayers[0].bans[0].type).toEqual(BanType.LEAGUE);
 			expect(data.team.squadPlayers[0].bans[0].duration).toEqual(1);
-			expect(data.team.squadPlayers[0].loan).toBeUndefined();
+			expect(data.team.squadPlayers[0].loan).toBeNull();
 
 			expect(data.team.squadPlayers[1].bans.length).toEqual(0);
 
