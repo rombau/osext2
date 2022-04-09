@@ -43,9 +43,12 @@ module.exports = function(config) {
 		},
 		reporters : ['spec', 'coverage'],
 		coverageReporter:{
-		      type:'lcov',
-		      dir:'.coverage/'
-		    },
+		      dir: '.coverage/',
+			  reporters: [
+				{ type: 'html', subdir: 'html-report' },
+				{ type: 'json-summary', subdir: '.', file: 'summary.json' },
+			  ]
+		},
 		client: {
 			"captureConsole": true,
 		},

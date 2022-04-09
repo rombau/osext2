@@ -1,3 +1,5 @@
+![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=black&color=green&prefix=$coverage$)
+
 # OnlineSoccer Extension
 
 The `OnlineSoccer Extension` extension adds useful details and forecasts to the pages of [OnlineSoccer](https://os.ongapo.com).
@@ -32,3 +34,7 @@ You need the following entries in your `settings.json` run/debug tests with Karm
 
 For debugging, the `coverage` reporter has to be removed by adding it to the `cleanUpReporters` method of
 `~/.vscode/extensions/raagh.angular-karma-test-explorer-1.2.8/out/config/karma-configurator.js`.
+
+The coverage reports are created with `npm test` in the folder `.coverage`. Based on the `summary.json` the coverage badge is updated in the README with `npm run badge`.
+
+The release arichve can be created with `gulp` in teh folder `release`.
