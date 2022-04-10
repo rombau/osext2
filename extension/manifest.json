@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Online Soccer Extension",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "Erweitert die Seiten von Online Soccer um nützliche Zusatzfunktionen.",
 	"author": "Roman Bauer",
 	"homepage_url": "https://github.com/rombau/osext2",
@@ -12,7 +12,13 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://os.ongapo.com/*"
+				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+			],
+			"exclude_matches": [
+				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
+				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
+				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
+				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
 				"source/logger.js",
@@ -67,7 +73,13 @@
 		},
 		{
 			"matches": [
-				"*://os.ongapo.com/*"
+				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+			],
+			"exclude_matches": [
+				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
+				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
+				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
+				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
 				"source/options.js"
