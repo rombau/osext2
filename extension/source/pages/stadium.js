@@ -14,7 +14,7 @@ Page.Stadium = class extends Page {
 
 		// TODO refresh stadium data especially after expansion request
 
-	};
+	}
 
 }
 
