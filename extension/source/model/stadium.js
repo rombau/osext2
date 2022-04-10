@@ -39,10 +39,10 @@ class Stadium {
 	 * @return {Number} the income 
 	 */		
 	calculateIncome (ticketPrice, load) {
-		return this.getPlaces() * load / 100 * ticketPrice +
+		return Math.round(this.getPlaces() * load / 100 * ticketPrice +
 			(this.coveredPlaces || 0) * load / 100 * STADIUM_ADDITION_COVERED_PLACE +
 			(this.seats || 0) * load / 100 * STADIUM_ADDITION_SEAT +
-			(this.coveredSeats || 0) * load / 100 * STADIUM_ADDITION_COVERED_SEAT;
+			(this.coveredSeats || 0) * load / 100 * STADIUM_ADDITION_COVERED_SEAT);
 	}
 	
 	/**
@@ -52,6 +52,6 @@ class Stadium {
 	 * @return {Number} the costs
 	 */		
 	calculateCosts (load) {	
-		return this.getPlaces() * load / 100 * (STADIUM_PLACE_COSTS - (this.pitchHeating ? 1 : 0));
+		return Math.round(this.getPlaces() * load / 100 * (STADIUM_PLACE_COSTS - (this.pitchHeating ? 1 : 0)));
 	}
 }
