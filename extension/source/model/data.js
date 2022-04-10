@@ -98,7 +98,7 @@ class ExtensionData {
 	}
 
 	set pagesToRequest (value) {
-		return this._pagesToRequest = value;
+		this._pagesToRequest = value;
 	}
 
 	/**

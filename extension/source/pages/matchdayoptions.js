@@ -17,5 +17,5 @@ Page.MatchDayOptions = class extends Page {
 		data.viewSettings.ticketPrice.cup = +doc.getElementsByName("pokal")[0].value;	
 		data.viewSettings.ticketPrice.international = +doc.getElementsByName("int")[0].value;	
 		
-	};
+	}
 }

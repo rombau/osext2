@@ -134,7 +134,7 @@ Page.YouthOptskills = class extends Page.Youth {
 		});
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
-	};
+	}
 
 	/**
 	 * @param {Team} team
@@ -210,7 +210,7 @@ Page.YouthOptskills = class extends Page.Youth {
 
 		});
 
-	};
+	}
 
 	_addPullClass (player, row, leagueLevel) {
 		let pullMatchDay = player.origin ? player.origin.pullMatchDay : player.pullMatchDay;
@@ -219,7 +219,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				row.cells['Pull' + pos].classList.add(STYLE_ADD);
 			});
 		}
-	};
+	}
 
 	_handlePosition (player, callback) {
 		Object.keys(Position).forEach(pos => {

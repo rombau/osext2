@@ -25,7 +25,7 @@ Page.YouthOptions = class extends Page {
 				data.viewSettings.youthSupportBarrierType = YouthSupportBarrierType.AND_OLDER;
 			}
 		}		
-	};
+	}
 
 }
 

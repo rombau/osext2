@@ -24,6 +24,6 @@ Page.LeagueTable = class extends Page {
 				data.viewSettings.leagueRanking = data.team.league.size;
 			}
 		});
-	};
+	}
 }
 

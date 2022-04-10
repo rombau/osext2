@@ -57,6 +57,8 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	extend(doc, data) {
 
+		// TODO extend game info
+
 		this.selectedSeason = +doc.querySelector('select[name=saison]').value;
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamSeason.HEADERS);
@@ -87,10 +89,12 @@ Page.ShowteamSeason = class extends Page {
 		let form = doc.querySelector('form');
 		form.style.paddingLeft = '4px';
 		
+		// TODO extend without current season?
+
 		if (data.lastMatchDay.season <= this.selectedSeason) {
 
 			if (data.lastMatchDay.zat > 3) {
-				let scrollButton = HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', (event) => {
+				let scrollButton = HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', () => {
 					this.table.rows[data.lastMatchDay.zat - 2].scrollIntoView();
 				}, 'zum aktuellen Zat');
 				scrollButton.style.marginLeft = '5px';

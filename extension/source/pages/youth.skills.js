@@ -88,7 +88,7 @@ Page.YouthSkills = class extends Page.Youth {
 		});
 		
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
-	};
+	}
 
 	/**
 	 * @param {Team} team

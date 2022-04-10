@@ -30,7 +30,7 @@ class Requestor {
 	/**
 	 * @returns {MutationObserver} the observer for menu changes
 	 */
-	 static overlayObserver;
+	static overlayObserver;
 	
 	/**
 	 * Returns the current requestor instance. Therefore a new requestor object is created

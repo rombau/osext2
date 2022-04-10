@@ -21,6 +21,7 @@ class Persistence {
 			try {
 				await pending;
 			} finally {
+				/*eslint no-unsafe-finally: "off"*/
 				return new Promise(operation);
 			}
 		}

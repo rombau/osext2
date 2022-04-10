@@ -12,22 +12,22 @@ module.exports = function(config) {
 			'test/lib/**/*',
 			'extension/source/logger.js',
 			'extension/source/options.js',
-		    'extension/source/requestor.js',
-		    'extension/source/common.js',
-		    'extension/source/model/data.js',
-		    'extension/source/model/player.js',
+			'extension/source/requestor.js',
+			'extension/source/common.js',
+			'extension/source/model/data.js',
+			'extension/source/model/player.js',
 			'extension/source/model/squadplayer.js',
-		    'extension/source/model/youthplayer.js',
-		    'extension/source/model/team.js',
-		    'extension/source/model/matchday.js',
+			'extension/source/model/youthplayer.js',
+			'extension/source/model/team.js',
+			'extension/source/model/matchday.js',
 			'extension/source/model/stadium.js',
-		    'extension/source/persistence.js',
-		    'extension/source/page.js',
-		    'extension/source/htmlutil.js',
+			'extension/source/persistence.js',
+			'extension/source/page.js',
+			'extension/source/htmlutil.js',
 			'extension/source/pages/showteam.base.js',
 			'extension/source/pages/youth.base.js',
-		    'extension/source/pages/*.js',
-		    'test/**/*.spec.js'],
+			'extension/source/pages/*.js',
+			'test/**/*.spec.js'],
 		exclude : [
 			'test/handler.spec.js'
 		],
@@ -43,11 +43,11 @@ module.exports = function(config) {
 		},
 		reporters : ['spec', 'coverage'],
 		coverageReporter:{
-		      dir: '.coverage/',
-			  reporters: [
+			dir: '.coverage/',
+			reporters: [
 				{ type: 'html', subdir: 'html-report' },
 				{ type: 'json-summary', subdir: '.', file: 'summary.json' },
-			  ]
+			]
 		},
 		client: {
 			"captureConsole": true,

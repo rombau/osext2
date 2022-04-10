@@ -75,31 +75,31 @@ Page.ShowteamInfo = class extends Page {
 				if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 					stadium.pitchHeating = true;
 				}
-				else if (text.search(/[\d\.]+ .+berdachte Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
+				else if (text.search(/[\d.]+ .+berdachte Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
 					stadium.coveredPlaces -= value;
 					stadium.coveredSeats += value;
 				}
-				else if (text.search(/[\d\.]+ Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
 					stadium.places -= value;
 					stadium.seats += value;
 				}
-				else if (text.search(/[\d\.]+ .+berdachte Sitzpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ .+berdachte Sitzpl.+tze werden gebaut/) != -1) {
 					stadium.coveredSeats += value;
 				}
-				else if (text.search(/[\d\.]+ Sitzpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ Sitzpl.+tze werden gebaut/) != -1) {
 					stadium.seats += value;
 				}
-				else if (text.search(/[\d\.]+ .+berdachte Stehpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ .+berdachte Stehpl.+tze werden gebaut/) != -1) {
 					stadium.coveredPlaces += value;
 				}
-				else if (text.search(/[\d\.]+ Stehpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.+tze werden gebaut/) != -1) {
 					stadium.places += value;
 				}
-				else if (text.search(/[\d\.]+ Sitzpl.+tze werden .+berdacht/) != -1) {
+				else if (text.search(/[\d.]+ Sitzpl.+tze werden .+berdacht/) != -1) {
 					stadium.coveredSeats += value;
 					stadium.seats -= value;
 				}
-				else if (text.search(/[\d\.]+ Stehpl.+tze werden .+berdacht/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.+tze werden .+berdacht/) != -1) {
 					stadium.coveredPlaces += value;
 					stadium.places -= value;
 				}

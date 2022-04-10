@@ -69,7 +69,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 					
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Flag'].innerHTML = `<img src="images/flaggen/${player.countryCode}.gif"\/>`;
+				row.cells['Flag'].innerHTML = `<img src="images/flaggen/${player.countryCode}.gif"/>`;
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
@@ -87,7 +87,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');
-	};
+	}
 
 	/**
 	 * @param {Team} team

@@ -143,11 +143,11 @@ class Player {
 		return Object.keys(this.skills)
 			.filter(key => {
 				return (pos === Position.TOR && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.GES].includes(key)) || 
-				   (pos === Position.ABW && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.ZUV].includes(key)) || 
-				   (pos === Position.DMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.DEC].includes(key)) || 
-				   (pos === Position.MIT && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.ZWK].includes(key)) || 
-				   (pos === Position.OMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.GES].includes(key)) || 
-				   (pos === Position.STU && [Skill.SCH, Skill.KOB, Skill.ZWK, Skill.GES].includes(key));
+					(pos === Position.ABW && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.ZUV].includes(key)) || 
+					(pos === Position.DMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.DEC].includes(key)) || 
+					(pos === Position.MIT && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.ZWK].includes(key)) || 
+					(pos === Position.OMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.GES].includes(key)) || 
+					(pos === Position.STU && [Skill.SCH, Skill.KOB, Skill.ZWK, Skill.GES].includes(key));
 			})
 			.reduce((obj, key) => {
 				obj[key] = this.skills[key];
@@ -199,34 +199,34 @@ class Player {
 		let specials = [];
 		let limit = SPECIAL_SKILL_LIMIT;
 		if (pos === Position.TOR && 
-		    this.skills.kob >= limit && this.skills.dec >= limit && this.skills.ges >= limit) { 
+			this.skills.kob >= limit && this.skills.dec >= limit && this.skills.ges >= limit) { 
 			specials.push(SpecialSkill.E);
 		}
 		if ((pos === Position.ABW || pos === Position.DMI) && 
-		    this.skills.dec >= limit && this.skills.ueb >= limit && this.skills.zwk >= limit) {
+			this.skills.dec >= limit && this.skills.ueb >= limit && this.skills.zwk >= limit) {
 			specials.push(SpecialSkill.L);
 		}
 		if (pos !== Position.TOR && 
-		    this.skills.ueb >= limit && this.skills.pas >= limit && this.skills.bak >= limit) { 
+			this.skills.ueb >= limit && this.skills.pas >= limit && this.skills.bak >= limit) { 
 			specials.push(SpecialSkill.S);
 		}
 		if (pos !== Position.TOR && 
-		    this.skills.sch >= limit && this.skills.ueb >= limit && this.skills.bak >= limit) { 
+			this.skills.sch >= limit && this.skills.ueb >= limit && this.skills.bak >= limit) { 
 			specials.push(SpecialSkill.F);
 		}
 		if (pos !== Position.TOR && 
-		    this.skills.sch >= limit && this.skills.kob >= limit && this.skills.ges >= limit) { 
+			this.skills.sch >= limit && this.skills.kob >= limit && this.skills.ges >= limit) { 
 			specials.push(SpecialSkill.T);
 		}
 		if (pos !== Position.TOR && 
-		    this.skills.bak >= limit && this.skills.pas >= limit && this.skills.ges >= limit) { 
+			this.skills.bak >= limit && this.skills.pas >= limit && this.skills.ges >= limit) { 
 			specials.push(SpecialSkill.G);
 		}
 		if (this.skills.fuq >= limit && this.skills.erf >= limit && this.skills.ein >= limit) { 
 			specials.push(SpecialSkill.K);
 		}
 		if (pos !== Position.TOR && 
-		    this.skills.aus >= limit && this.skills.ges >= limit && this.skills.zuv >= limit) { 
+			this.skills.aus >= limit && this.skills.ges >= limit && this.skills.zuv >= limit) { 
 			specials.push(SpecialSkill.P);
 		}
 		return specials;

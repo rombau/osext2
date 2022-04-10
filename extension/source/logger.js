@@ -24,7 +24,7 @@ class Logger {
 		 * 
 		 * @param {String} message the log message
 		 */
-		 this.info = Options.logLevel <= LogLevel.INFO ? console.info.bind(console, msgTemplate) : () => {};
+		this.info = Options.logLevel <= LogLevel.INFO ? console.info.bind(console, msgTemplate) : () => {};
 
 		/**
 		 * Prints to console (type WARN).

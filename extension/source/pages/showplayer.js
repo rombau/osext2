@@ -20,7 +20,7 @@ Page.ShowPlayer = class extends Page {
 		let id = HtmlUtil.extractIdFromHref(doc.querySelector('img[src^=face]').src);
 
 
-	};
+	}
 
 	/**
 	 * @param {Document} doc
@@ -32,5 +32,5 @@ Page.ShowPlayer = class extends Page {
 			window.resizeTo(window.outerWidth * window.devicePixelRatio, window.outerHeight * window.devicePixelRatio);
 		}
 
-	};
+	}
 }
