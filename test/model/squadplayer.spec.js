@@ -78,6 +78,16 @@ describe('SquadPlayer', () => {
 
 		expect(player.ageExact).toEqual(19.555555555555557);
 		expect(player.trainingFactor).toEqual(1.1451562706246994);
+
+		player.fastTransferMatchDay = new MatchDay(14, 65);
+		player.contractExtensionMatchDay = new MatchDay(14, 65);
+		player.contractExtensionTerm = 24;
+
+		player.complete(new MatchDay(14, 66));
+
+		expect(player.fastTransferMatchDay).toBeNull();
+		expect(player.contractExtensionMatchDay).toBeNull();
+		expect(player.contractExtensionTerm).toBeNull();
 	});
 
 	it('should return static forecast values', () => {

@@ -45,6 +45,14 @@ describe('YouthPlayer', () => {
 		expect(player.ageExact).toEqual(17.555555555555557);
 		expect(player.pos).toEqual(Position.DMI);
 		expect(player.trainingFactor).toEqual(1);
+		
+		player.pullMatchDay = new MatchDay(14, 65);
+
+		player.complete(new MatchDay(14, 66));
+
+		expect(player.pullMatchDay).toBeNull();
+		expect(player.pullContractTerm).toBeNull();
+		expect(player.pullPosition).toBeNull();
 	});
 
 	it('should return salary', () => {
@@ -55,6 +63,12 @@ describe('YouthPlayer', () => {
 		expect(player.getSalary(48)).toEqual(8676);
 		expect(player.getSalary(60)).toEqual(10124);
 		expect(player.getSalary(72)).toEqual(11489);
+	});
+
+	it('should return forecast days interval', () => {
+
+		expect(player.getForecastDays(new MatchDay(15, 25), new MatchDay(15, 72))).toEqual(47);
+		expect(player.getForecastDays(new MatchDay(15, 25))).toEqual(142);
 	});
 
 	it('should return age forecast', () => {
@@ -79,5 +93,23 @@ describe('YouthPlayer', () => {
 		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
 			.toEqual('[21,36,27,29,38,21,0,0,25,37,27,41,15,5,95,23,29]');
 
+		player.skills.bak = 98;
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
+
+		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
+			.toEqual('[21,99,27,29,38,21,0,0,25,37,27,41,15,5,95,23,29]');
+	});
+
+	it('should return salary forecast when pulled', () => {
+
+		player.age = 15;
+		player.birthday = 24;
+		player.pullMatchDay = new MatchDay(18, 23);
+		player.pullContractTerm = 72;
+
+		let forecastPlayer = player.getForecast(new MatchDay(15, 10), new MatchDay(18, 24));
+		
+		expect(forecastPlayer.salary).toEqual(92419);
 	});
 });
