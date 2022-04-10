@@ -26,6 +26,11 @@ class Requestor {
 	 * @returns {String} the id of the status element
 	 */
 	static OVERLAY_ID = Requestor.ID_PREFIX + 'overlay';
+
+	/**
+	 * @returns {MutationObserver} the observer for menu changes
+	 */
+	 static overlayObserver;
 	
 	/**
 	 * Returns the current requestor instance. Therefore a new requestor object is created
@@ -122,6 +127,7 @@ class Requestor {
 		Array.from(top.frames).forEach(frame => {
 			Array.from(frame.document.querySelectorAll('[id^=' + Requestor.ID_PREFIX + ']')).forEach(element => element.remove());
 		});
+		Requestor.overlayObserver && Requestor.overlayObserver.disconnect();
 	}
 
 	/**
@@ -129,12 +135,32 @@ class Requestor {
 	 */
 	static addOverlays() {
 		let addOverlay = (frameWindow) => {
-			let overlay = frameWindow.document.createElement('div');
-			overlay.id = Requestor.OVERLAY_ID;
-			frameWindow.document.body.appendChild(overlay);
+			let overlay = frameWindow.document.getElementById(Requestor.OVERLAY_ID);
+			if (!overlay) {
+				overlay = frameWindow.document.createElement('div');
+				overlay.id = Requestor.OVERLAY_ID;
+				frameWindow.document.body.appendChild(overlay);
+			}
 		};
-		top.addEventListener("load", (event) => addOverlay(top.frames.os_menu));
-		Array.from(top.frames).forEach(frame => addOverlay(frame));
+		Array.from(top.frames).forEach(frame => {
+			if (frame.name === 'os_menu') {
+				Requestor.overlayObserver = new MutationObserver((records) => {
+					records.forEach(record => {
+						Array.from(record.addedNodes).forEach(node => {
+							if (node.nodeName.toUpperCase() === 'HTML') {
+								addOverlay(node.ownerDocument.defaultView);
+							}
+						});
+					});
+				});
+				Requestor.overlayObserver.observe(frame.document, { childList: true });
+			} 
+			if (frame.document.readyState === 'complete') {
+				addOverlay(frame);
+			} else {
+				frame.document.addEventListener('DOMContentLoaded', addOverlay(frame));
+			}
+		});
 	}
 	
 }
