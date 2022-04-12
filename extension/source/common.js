@@ -35,6 +35,52 @@ const PREMIUM_END_OF_SEASON_FACTOR = 2;
 
 const PHYSIO_COSTS = 10000;
 
+const CUP_FIXTURES = {3: '1. Runde', 15: '2. Runde', 27: '3. Runde', 39: 'Achtelfinale', 51: 'Viertelfinale', 63: 'Halbfinale', 69: 'Finale'};
+const OSE_FIXTURES = {
+    5: '1. Qualirunde Hin', 
+    7: '1. Qualirunde Rück', 
+    11: '2. Qualirunde Hin', 
+    13: '2. Qualirunde Rück', 
+    17: '3. Qualirunde Hin', 
+    19: '3. Qualirunde Rück', 
+    23: '1. Runde Hin', 
+    25: '1. Runde Rück', 
+    29: '2. Runde Hin', 
+    31: '2. Runde Rück', 
+    35: '3. Runde Hin', 
+    37: '3. Runde Rück', 
+    41: '4. Runde Hin', 
+    43: '4. Runde Rück', 
+    47: 'Achtelfinale Hin', 
+    49: 'Achtelfinale Rück', 
+    53: 'Viertelfinale Hin', 
+    55: 'Viertelfinale Rück', 
+    59: 'Halbfinale Hin', 
+    61: 'Halbfinale Rück', 
+    71: 'Finale'};
+const OSC_FIXTURES = {
+    5: '1. Qualirunde Hin', 
+    7: '1. Qualirunde Rück', 
+    11: '2. Qualirunde Hin', 
+    13: '2. Qualirunde Rück', 
+    17: '1. Gruppenspiel HR', 
+    19: '2. Gruppenspiel HR', 
+    23: '3. Gruppenspiel HR', 
+    25: '4. Gruppenspiel HR', 
+    29: '5. Gruppenspiel HR', 
+    31: '6. Gruppenspiel HR', 
+    35: '1. Gruppenspiel ZR', 
+    37: '2. Gruppenspiel ZR', 
+    41: '3. Gruppenspiel ZR', 
+    43: '4. Gruppenspiel ZR', 
+    47: '5. Gruppenspiel ZR', 
+    49: '6. Gruppenspiel ZR', 
+    53: 'Viertelfinale Hin', 
+    55: 'Viertelfinale Rück', 
+    59: 'Halbfinale Hin', 
+    61: 'Halbfinale Rück', 
+    71: 'Finale'};
+
 /** Style constants */
 
 const STYLE_FORECAST = 'osext-forecast';
@@ -98,7 +144,7 @@ const getQueuedPromise = (() => {
         try {
             await pending;
         } finally {
-            /*eslint no-unsafe-finally: "off"*/
+            /*eslint no-unsafe-finally: 'off'*/
             return new Promise(operation);
         }
     }
