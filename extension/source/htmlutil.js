@@ -130,7 +130,7 @@ class HtmlUtil {
 
 		let viewInfo = containerElement.ownerDocument.createElement('span');
 		viewInfo.update = (value) => {
-			viewInfo.innerHTML = ` ${value}`;
+			viewInfo.textContent = ` ${value}`;
 		};
 		viewInfo.update(inital);
 		
@@ -167,7 +167,7 @@ class HtmlUtil {
 
 		let viewInfo = containerElement.ownerDocument.createElement('span');
 		viewInfo.update = (season, zat) => {
-			viewInfo.innerHTML = ` Saison ${season} / Zat ${zat}`;
+			viewInfo.textContent = ` Saison ${season} / Zat ${zat}`;
 		};
 		viewInfo.update(matchday.season, matchday.zat);
 		
@@ -196,6 +196,52 @@ class HtmlUtil {
 		changeCallback(matchday);
 	
 		return slider;
+	}
+
+	/**
+	 * Returns a abbreviation element.
+	 * 
+	 * @param {String} title 
+	 * @param {String} content 
+	 * @param {Document} doc 
+	 */
+	static createAbbreviation (title, content, doc = document) {
+		let abbr = doc.createElement('abbr');
+		abbr.title = title;
+		abbr.textContent = content;
+		return abbr;
+	}
+	/**
+	 * Returns a div element with content element or text.
+	 * 
+	 * @param {Element|String} content 
+	 * @param {String} className 
+	 * @param {Document} doc
+	 */
+	static createDivElement (content, className, doc = document) {
+		let div = doc.createElement('div');
+		if (className) div.className = className;
+		if (content instanceof Element) {
+			div.appendChild(content);
+		} else {
+			div.textContent = content;
+		}
+		return div;
+	}
+
+	/**
+	 * Returns a div element containing a left label and a right value element.
+	 * 
+	 * @param {String} label 
+	 * @param {String} value 
+	 * @param {String} valueClass 
+	 * @param {Document} doc 
+	 */
+	static createLabelValueElement (label, value, valueClass, doc = document) {
+		let div = doc.createElement('div');
+		div.appendChild(HtmlUtil.createDivElement(label, 'left'));
+		div.appendChild(HtmlUtil.createDivElement(value, 'right ' + valueClass));
+		return div;
 	}
 
 	/**

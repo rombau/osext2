@@ -103,7 +103,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Skillschnitt'].textContent = 'Skillschn.';
 				row.cells['Sperre'].textContent = 'Sp.';
 	
-				if (!this.showExactAge) row.cells['Geb.'].innerHTML = 'Geb.';
+				if (!this.showExactAge) row.cells['Geb.'].textContent = 'Geb.';
 				row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
 				row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
 				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
@@ -147,7 +147,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			if (player.active) {
 
 				if (this.showExactAge) {
-					row.cells['Alter'].innerHTML = `<abbr title="ZAT ${player.birthday}">${player.ageExact.toFixed(2)}</abbr>`;
+					row.cells['Alter'].appendChild(
+						HtmlUtil.createAbbreviation(`ZAT ${player.birthday}`, player.ageExact.toFixed(2)));
 				} else {
 					row.cells['Alter'].textContent = player.age;
 					row.cells['Geb.'].textContent = player.birthday;
@@ -163,7 +164,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 				row.cells['S'].textContent = '';
 				player.getSpecialSkills().forEach(special => {
-					row.cells['S'].innerHTML += `<abbr title="${special.description}">${special.abbr}</abbr>`;
+					row.cells['S'].appendChild(
+						HtmlUtil.createAbbreviation(special.description, special.abbr));
 				});
 
 				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
@@ -173,15 +175,18 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				if (player.bans) {
 					let banText = '';
 					player.bans.forEach(ban => {
-						banText += ` <abbr title="${ban.duration.toString()} ${ban.duration === 1 ? ban.type.description : ban.type.descriptionPlural}">${ban.duration.toString()}${ban.type.abbr}</abbr>`;
+						let banAbbr = HtmlUtil.createAbbreviation(
+							`${ban.duration.toString()} ${ban.duration === 1 ? ban.type.description : ban.type.descriptionPlural}`, 
+							`${ban.duration.toString()}${ban.type.abbr}`);
+						row.cells['Sperre'].appendChild(banAbbr);
 					});
-					row.cells['Sperre'].innerHTML = banText;
 				}
 
 				row.cells['Verl.'].textContent = player.injured;
 				
 				if (player.loan && player.loan.duration > 0) {
-					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
+					row.cells['TS'].textContent = '';
+					row.cells['TS'].appendChild(HtmlUtil.createAbbreviation(`Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs`, `L${player.loan.duration}`));
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
 					row.cells['TS'].textContent = player.transferLock;

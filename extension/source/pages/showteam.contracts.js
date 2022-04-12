@@ -175,7 +175,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 
 				if (player.loan && player.loan.duration > 0) {
-					row.cells['TS'].innerHTML = `<abbr title="Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs">L${player.loan.duration}</abbr>`;
+					row.cells['TS'].textContent = '';
+					row.cells['TS'].appendChild(HtmlUtil.createAbbreviation(`Leihgabe von ${player.loan.from} an ${player.loan.to} für ${player.loan.duration} ZATs`, `L${player.loan.duration}`));
 					if (player.loan.fee > 0) row.cells['Pos'].textContent = 'LEI';
 				} else {
 					row.cells['TS'].textContent = player.transferLock || '';

@@ -25,7 +25,7 @@ Page.Showteam = class extends Page {
 		toolbar.id = 'osext-toolbar-container';
 		
 		let toolTitle = doc.createElement('span');
-		toolTitle.innerHTML = 'Prognose: ';
+		toolTitle.textContent = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 		
 		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.squadPlayerMatchDay, 

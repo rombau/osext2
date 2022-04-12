@@ -134,22 +134,28 @@ Page.ShowteamSeason = class extends Page {
 						
 						if (day.youthSupport) {
 							
-							let tooltipHTML = `<div class="right">${day.accountBalanceBefore.toLocaleString()}</div>`;
-							if (day.stadiumIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.stadiumIncome.toLocaleString()}</div></div>`;
-							if (day.stadiumCosts) tooltipHTML += `<div><div class="left">Stadionkosten</div><div class="right negative">-${day.stadiumCosts.toLocaleString()}</div></div>`;
-							if (day.fiendlyIncome) tooltipHTML += `<div><div class="left">Zuschauereinnahmen</div><div class="right positive">${day.fiendlyIncome.toLocaleString()}</div></div>`;
-							if (day.squadSalary) tooltipHTML += `<div><div class="left">Gehälter</div><div class="right negative">-${day.squadSalary.toLocaleString()}</div></div>`;
-							if (day.trainerSalary) tooltipHTML += `<div><div class="left">Trainer</div><div class="right negative">-${day.trainerSalary.toLocaleString()}</div></div>`;
-							if (day.loanIncome) tooltipHTML += `<div><div class="left">Leiheinnahmen</div><div class="right positive">${day.loanIncome.toLocaleString()}</div></div>`;
-							if (day.loanCosts) tooltipHTML += `<div><div class="left">Leihausgaben</div><div class="right negative">-${day.loanCosts.toLocaleString()}</div></div>`;
-							if (day.youthSupport) tooltipHTML += `<div><div class="left">Jugendförderung</div><div class="right negative">-${day.youthSupport.toLocaleString()}</div></div>`;
-							if (day.advertisingIncome) tooltipHTML += `<div><div class="left">Fernsehgelder</div><div class="right positive">${day.advertisingIncome.toLocaleString()}</div></div>`;
-							if (day.merchandisingIncome) tooltipHTML += `<div><div class="left">Fanartikel</div><div class="right positive">${day.merchandisingIncome.toLocaleString()}</div></div>`;
-							if (day.physio) tooltipHTML += `<div><div class="left">Physio</div><div class="right negative">-${day.physio.toLocaleString()}</div></div>`;
-							if (day.fastTransferIncome) tooltipHTML += `<div><div class="left">Schnelltransfer</div><div class="right positive">${day.fastTransferIncome.toLocaleString()}</div></div>`;
+							let balanceTooltip = HtmlUtil.createDivElement('', 'osext-balance-tooltip');
+							balanceTooltip.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'right'));
+							if (day.stadiumIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), 'positive'));
+							if (day.stadiumCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Stadionkosten', day.stadiumCosts.toLocaleString(), 'negative'));
+							if (day.fiendlyIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.fiendlyIncome.toLocaleString(), 'positive'));
+							if (day.squadSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Gehälter', day.squadSalary.toLocaleString(), 'negative'));
+							if (day.trainerSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Trainer', day.trainerSalary.toLocaleString(), 'negative'));
+							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));
+							if (day.loanCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leihausgaben', day.loanCosts.toLocaleString(), 'negative'));
+							if (day.youthSupport) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Jugendförderung', day.youthSupport.toLocaleString(), 'negative'));
+							if (day.advertisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fernsehgelder', day.advertisingIncome.toLocaleString(), 'positive'));
+							if (day.merchandisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fanartikel', day.merchandisingIncome.toLocaleString(), 'positive'));
+							if (day.physio) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Physio', day.physio.toLocaleString(), 'negative'));
+							if (day.fastTransferIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Schnelltransfer', day.fastTransferIncome.toLocaleString(), 'positive'));
+
+							let balanceElement = HtmlUtil.createDivElement('', 'osext-balance');
+							balanceElement.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString(), 'osext-forecast'));
+							balanceElement.appendChild(balanceTooltip);
 							
-							balanceCell.innerHTML = `<div class="osext-balance"><span class="osext-forecast">${day.accountBalance.toLocaleString()}</span><div class="osext-balance-tooltip">${tooltipHTML}</div></div>`;
-							
+							balanceCell.textContent = '';
+							balanceCell.appendChild(balanceElement);
+
 						} else {
 							
 							balanceCell.textContent = day.accountBalance.toLocaleString();

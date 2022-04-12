@@ -171,6 +171,9 @@ form > .fa-arrow-alt-circle-down {
     position: relative;
     cursor: default;
 }
+.osext-balance > .osext-forecast {
+    display: inline-block;
+}
 .osext-balance-tooltip {
     position: absolute;
     width: 210%;
@@ -212,4 +215,7 @@ form > .fa-arrow-alt-circle-down {
 }
 .osext-balance:hover > .osext-balance-tooltip .negative {
     color: #d00;
+}
+.osext-balance:hover > .osext-balance-tooltip .negative:before {
+    content: "-";
 }

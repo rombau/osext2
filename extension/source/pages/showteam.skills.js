@@ -48,10 +48,10 @@ Page.ShowteamSkills = class extends Page.Showteam {
 			
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 
-				row.cells['Alter'].innerHTML = 'Alter';
-				row.cells['Geb.'].innerHTML = 'Geb.';
-				row.cells['Skillschn.'].innerHTML = 'Skillschn.';
-				row.cells['Opt.Skill'].innerHTML = 'Opt.Skill';
+				row.cells['Alter'].textContent = 'Alter';
+				row.cells['Geb.'].textContent = 'Geb.';
+				row.cells['Skillschn.'].textContent = 'Skillschn.';
+				row.cells['Opt.Skill'].textContent = 'Opt.Skill';
 
 				row.cells['Land'].colSpan = 2;
 				
@@ -69,9 +69,13 @@ Page.ShowteamSkills = class extends Page.Showteam {
 					
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Flag'].innerHTML = `<img src="images/flaggen/${player.countryCode}.gif"/>`;
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
+
+				row.cells['Flag'].textContent = '';
+				let flagImage = doc.createElement('img');
+				flagImage.src = `images/flaggen/${player.countryCode}.gif`;
+				row.cells['Flag'].appendChild(flagImage);
 
 				row.cells['Geb.'].colSpan = 2;
 				

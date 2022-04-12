@@ -221,7 +221,12 @@ Page.YouthOverview = class extends Page.Youth {
 
 			if (current) {
 				if (player.pullId) {
-					row.cells['Aktion'].innerHTML = `<input name="ziehmich" value="${player.pullId}" type="radio">`;
+					row.cells['Aktion'].textContent = '';
+					let pullRadio = document.createElement('input');
+					pullRadio.type = 'radio';
+					pullRadio.name = 'ziehmich';
+					pullRadio.value = player.pullId;
+					row.cells['Aktion'].appendChild(pullRadio);
 				}
 				row.cells['Aufwertung'].textContent = player.increase;
 			}

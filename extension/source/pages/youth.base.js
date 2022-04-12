@@ -25,7 +25,7 @@ Page.Youth = class extends Page {
 		toolbar.id = 'osext-toolbar-container';
 
 		let toolTitle = doc.createElement('span');
-		toolTitle.innerHTML = 'Prognose: ';
+		toolTitle.textContent = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 
 		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.youthPlayerMatchDay, 
@@ -60,7 +60,7 @@ Page.Youth = class extends Page {
 		toolbar.appendChild(max);
 
 		let maxTitle = doc.createElement('span');
-		maxTitle.innerHTML = ` Ende ${YOUTH_AGE_MAX}`;
+		maxTitle.textContent = ` Ende ${YOUTH_AGE_MAX}`;
 		toolbar.appendChild(maxTitle);
 
 		return toolbar;
