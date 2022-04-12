@@ -228,7 +228,7 @@ class Team {
 					balancedMatchDays.push(balancedMatchDay);
 				}
 				if (balancedMatchDay.after(lastMatchDay)) {
-					balancedMatchDay.accountBalancePromise = Persistence.getPromise((resolve, reject) => { // TODO move/rename Persistence.getPromise
+					balancedMatchDay.accountBalancePromise = getQueuedPromise((resolve, reject) => {
 						setTimeout(() => {
 							try {
 								balancedMatchDay.accountBalanceBefore = accountBalance;

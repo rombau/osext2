@@ -74,8 +74,7 @@ const STYLE_MONTH = 'osext-month';
  * @param {Function} clasz the function constructor for the object
  * @returns the object as 'instance of' clasz
  */
-function ensurePrototype (sourceObject, clasz) {
-
+const ensurePrototype = (sourceObject, clasz) => {
     if (!sourceObject) {
         return sourceObject;
     }
@@ -86,3 +85,22 @@ function ensurePrototype (sourceObject, clasz) {
         return sourceObject instanceof clasz ? sourceObject : Object.setPrototypeOf(sourceObject, clasz.prototype);
     }
 }
+
+/**
+ * Returns a promise with the given operation. The new promise always waits for the last 
+ * requested promise to resolve. This ensures synchronized serial execution.
+ * 
+ * @returns {Promise}
+ */
+const getQueuedPromise = (() => {
+    let pending = Promise.resolve();
+    const run = async (operation) => {
+        try {
+            await pending;
+        } finally {
+            /*eslint no-unsafe-finally: "off"*/
+            return new Promise(operation);
+        }
+    }
+    return (operation) => (pending = run(operation));
+})();

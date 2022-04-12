@@ -10,25 +10,6 @@ class Persistence {
 	static LOGGER = new Logger('Persistence');
 
 	/**
-	 * Returns a promise with the given operation. The new promise always waits for the last 
-	 * requested promise to resolve. This ensures synchronized serial execution.
-	 * 
-	 * @returns {Promise}
-	 */
-	static getPromise = (() => {
-		let pending = Promise.resolve();
-		const run = async (operation) => {
-			try {
-				await pending;
-			} finally {
-				/*eslint no-unsafe-finally: "off"*/
-				return new Promise(operation);
-			}
-		}
-		return (operation) => (pending = run(operation));
-	})();
-
-	/**
 	 * Returns the extension data for the given team name from the local storage.
 	 * 
 	 * If loading is successful the data is returned with the resolved promise.
@@ -39,7 +20,7 @@ class Persistence {
 	 */
 	static getExtensionData (teamName) {
 		if (teamName) {
-			return Persistence.getPromise((resolve, reject) => {
+			return getQueuedPromise((resolve, reject) => {
 				chrome.storage.local.get(teamName, (storedData) => {
 					Persistence.LOGGER.log('getExtensionData', Logger.prepare(storedData[teamName]));
 					if (chrome.runtime.lastError) {
@@ -61,7 +42,7 @@ class Persistence {
 	 * @returns {Promise}
 	 */
 	static updateCurrentTeam (teamName) {
-		return Persistence.getPromise((resolve, reject) => {
+		return getQueuedPromise((resolve, reject) => {
 			chrome.storage.local.set({[Persistence.CURRENT_TEAM]: teamName}, () => {
 				if (chrome.runtime.lastError) {
 					reject(new Error('Speichern der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
@@ -88,7 +69,7 @@ class Persistence {
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
 	 */
 	static updateExtensionData (modifyData = () => {}) {
-		return Persistence.getPromise((resolve, reject) => {
+		return getQueuedPromise((resolve, reject) => {
 			chrome.storage.local.get(Persistence.CURRENT_TEAM, (stored) => {
 				let currentTeamName = stored[Persistence.CURRENT_TEAM];
 				let extensionData;
@@ -145,7 +126,7 @@ class Persistence {
 					}
 				});
 			};
-			return synchronized ? Persistence.getPromise(storeFunction) : new Promise(storeFunction);
+			return synchronized ? getQueuedPromise(storeFunction) : new Promise(storeFunction);
 		} else {
 			return Promise.resolve(data);
 		}
