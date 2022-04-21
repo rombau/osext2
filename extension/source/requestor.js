@@ -30,7 +30,7 @@ class Requestor {
 	/**
 	 * @returns {MutationObserver} the observer for menu changes
 	 */
-	static overlayObserver;
+	static menuObserver;
 	
 	/**
 	 * Returns the current requestor instance. Therefore a new requestor object is created
@@ -39,8 +39,8 @@ class Requestor {
 	 * @param {Document} doc the current document
 	 * @returns {Requestor} the current requestor
 	 */
-	static getCurrent (doc) {
-		let status = document.getElementById(Requestor.STATUS_ID);
+	static getCurrent (doc = document) {
+		let status = doc.getElementById(Requestor.STATUS_ID);
 		if (status) {
 			return new Requestor(status);
 		}
@@ -63,7 +63,11 @@ class Requestor {
 
 		Requestor.addOverlays();
 
-		let status = HtmlUtil.createMessageBox(doc, STYLE_STATUS, null, Requestor.STATUS_ID, finished);
+		let status = HtmlUtil.createMessageBox(doc, STYLE_STATUS, null, Requestor.STATUS_ID, false);
+		status.addEventListener('finished', () => {
+			status.remove();
+			finished();
+		});
 		doc.body.appendChild(status);
 
 		return new Requestor(status);
@@ -115,11 +119,11 @@ class Requestor {
 	 * Additionally all requestor elements (status and overlays) removed from the DOM.
 	 */
 	finish () {
-		this.status.dispatchEvent(new Event('click'));
+		this.status.dispatchEvent(new CustomEvent('finished'));
 		this.status = null;
 		Requestor.cleanUp();
 	}
-
+	
 	/**
 	 * Removes status, frame, form and overlays.
 	 */
@@ -127,16 +131,16 @@ class Requestor {
 		Array.from(top.frames).forEach(frame => {
 			Array.from(frame.document.querySelectorAll('[id^=' + Requestor.ID_PREFIX + ']')).forEach(element => element.remove());
 		});
-		Requestor.overlayObserver && Requestor.overlayObserver.disconnect();
+		Requestor.menuObserver && Requestor.menuObserver.disconnect();
 	}
 
 	/**
-	 * Adds a overlay to rthe given frame window.
+	 * Adds overlay(s) to all frames/windows.
 	 */
 	static addOverlays() {
 		let addOverlay = (frameWindow) => {
 			let overlay = frameWindow.document.getElementById(Requestor.OVERLAY_ID);
-			if (!overlay) {
+			if (!overlay && frameWindow.document.body) {
 				overlay = frameWindow.document.createElement('div');
 				overlay.id = Requestor.OVERLAY_ID;
 				frameWindow.document.body.appendChild(overlay);
@@ -144,7 +148,7 @@ class Requestor {
 		};
 		Array.from(top.frames).forEach(frame => {
 			if (frame.name === 'os_menu') {
-				Requestor.overlayObserver = new MutationObserver((records) => {
+				Requestor.menuObserver = new MutationObserver((records) => {
 					records.forEach(record => {
 						Array.from(record.addedNodes).forEach(node => {
 							if (node.nodeName.toUpperCase() === 'HTML') {
@@ -153,7 +157,7 @@ class Requestor {
 						});
 					});
 				});
-				Requestor.overlayObserver.observe(frame.document, { childList: true });
+				Requestor.menuObserver.observe(frame.document, { childList: true });
 			} 
 			if (frame.document.readyState === 'complete') {
 				addOverlay(frame);

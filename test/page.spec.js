@@ -288,7 +288,6 @@ describe('Page', () => {
 
 			let messageBox = document.querySelector('.' + STYLE_WARNING);
 
-			expect(data.nextZat).toBeUndefined();
 			expect(messageBox).toBeDefined();
 			expect(messageBox.lastChild.textContent).toEqual('test');
 		});
@@ -299,7 +298,6 @@ describe('Page', () => {
 
 			let messageBox = document.querySelector('.' + STYLE_ERROR);
 
-			expect(data.nextZat).toEqual(-1);
 			expect(messageBox).toBeDefined();
 			expect(messageBox.lastChild.textContent).toEqual('test');
 		});
@@ -313,6 +311,7 @@ describe('Page', () => {
 		
 		beforeEach(() => {
 			data = new ExtensionData();
+			data.nextZat = 7;
 			requestor = null;
 						
 			Options.logDataElement = null;
@@ -342,12 +341,28 @@ describe('Page', () => {
 			spyOn(Requestor, 'getCurrent').and.returnValue(null);
 
 			spyOn(page, 'extract');
-			spyOn(page, 'extend').and.callFake(done);
+			spyOn(page, 'extend').and.callFake(() => {done();});
 			
 			page.process(document);
 			
 			expect(Persistence.updateExtensionData).toHaveBeenCalled();
 			expect(page.extract).toHaveBeenCalled();
+		});
+
+		it('before basic initialization', (done) => {
+
+			data.nextZat = null;
+			requestor = Requestor.create(document);
+
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+			spyOn(Requestor, 'create').and.returnValue(requestor);
+
+			spyOn(requestor, 'requestPage').and.callFake((page) => {
+				expect(page.equals(new Page.Main())).toBeTruthy();
+				done();
+			});
+			
+			page.process(document);
 		});
 
 		it('with warning on extracting', (done) => {
@@ -418,21 +433,33 @@ describe('Page', () => {
 		});
 
 		it('by finish requesting further pages', (done) => {
-		
-			requestor = Requestor.create(document);
-
+			
+			let firstPage = new Page('Test1', 'test1.html');
 			let lastPage = new Page('Test2', 'test2.html');
-
+			
+			data.pagesToRequest.push(firstPage);
 			data.pagesToRequest.push(lastPage);
 			
-			spyOn(Requestor, 'getCurrent').and.returnValue(requestor);
+			let originalRequestorCreate = Requestor.create;
+			spyOn(Requestor, 'create').and.callFake((doc, finished) => {
+				requestor = originalRequestorCreate(document, finished);
+				spyOn(requestor, 'requestPage').and.callFake((page) => {
+					page.process(document);
+				});
+				return requestor;
+			});
 
-			spyOn(requestor, 'finish').and.callFake(() => {
+			spyOn(Requestor, 'getCurrent').and.callFake(() => {
+				return requestor;
+			});
+
+			spyOn(data, 'complete').and.callFake(() => {
 				expect(data.pagesToRequest.length).toEqual(0);
+				requestor = null;
 				done();
 			});
 
-			lastPage.process(document);
+			firstPage.process(document);
 		});
 	});
 

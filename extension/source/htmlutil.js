@@ -262,20 +262,16 @@ class HtmlUtil {
 	}
 
 	/**
-	 * @callback closeCallback
-	 */
-
-	/**
 	 * Returns a new message box element (status, warning, error).
 	 * 
 	 * @param {Document} doc the document for element creation
 	 * @param {String} styleClass message box class name, e.g. STYLE_STATUS
 	 * @param {String} message the message to show
 	 * @param {String} id the id of the message box element
-	 * @param {closeCallback} closed the method called when message box is closed
+	 * @param {Boolean} autoClose true, if the message box ahould be closed on click
 	 * @returns {HTMLElement}
 	 */
-	static createMessageBox (doc, styleClass, message, id, closed = () => {}) {
+	static createMessageBox (doc, styleClass, message, id, autoClose = true) {
 
 		doc.querySelectorAll('.' + STYLE_MESSAGE).forEach(message => message.remove());
 
@@ -283,9 +279,8 @@ class HtmlUtil {
 		if (id) container.id = id;
 		container.classList.add(STYLE_MESSAGE);
 		container.classList.add(styleClass);
-		container.addEventListener('click', (event) => {
+		if (autoClose) container.addEventListener('click', (event) => {
 			container.remove();
-			closed();
 		});
 
 		let icon = doc.createElement('i');

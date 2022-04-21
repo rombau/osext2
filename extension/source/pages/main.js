@@ -15,8 +15,10 @@ Page.Main = class extends Page {
 	 */
 	process (doc, win = window) {
 
-		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
-		let matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
+		super.check(doc);
+
+		let teamChangeLink = doc.querySelector('a[href="?changetosecond=true"]');
+		let matches = /Willkommen im Managerbüro von (.+)/gm.exec(teamChangeLink.parentElement.childNodes[0].textContent);
 
 		let page = this;
 		let superProcess = super.process;
@@ -109,10 +111,6 @@ Page.Main = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extend (doc, data) { 
-
-		data.complete();
-
-		Persistence.storeExtensionData(data);
 
 		// doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
 		// 	Persistence.updateExtensionData(dataToReset => {

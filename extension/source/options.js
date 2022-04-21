@@ -83,9 +83,6 @@ const Options = {
 
         // Theme set on each frame
         document.documentElement.className = theme;
-        top.addEventListener("load", (event) => {
-            top.frames.os_menu.document.documentElement.className = theme;
-        });
 
         // Every time the menu is refreshed, the whole document including the html tag is recreated (document.open/write/close).
         // Therefore this observer is listening for added HTML tags, and re-set the theme.

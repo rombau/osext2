@@ -17,6 +17,8 @@ const HttpMethod = Object.freeze({
 	POST: 'POST'
 });
 
+const ID_MARKER = 'osext-marker';
+
 /**
  * Page representation
  */
@@ -137,6 +139,36 @@ class Page {
 	}
 
 	/**
+	 * Reloads the given document if already extended with a marker element,
+	 * to ensure a clean original page after e.g. extension reload.
+	 * 
+	 * Ajax response without location and test documents and are not reloaded.
+	 * 
+	 * @param {Document} doc the document
+	 */
+	reloadIfAlreadyExtended (doc) {
+		if (doc.getElementById(ID_MARKER) && doc.location && doc.location.hostname !== 'localhost') {
+			doc.location.reload();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Adds a marker element to the given document.
+	 * 
+	 * Ajax response documents without location are not marked.
+	 * 
+	 * @param {Document} doc the document
+	 */
+	markExtended (doc = document) {
+		if (!doc.getElementById(ID_MARKER) && doc.location) {
+			let marker = HtmlUtil.createDivElement('', '', doc);
+			marker.id = ID_MARKER;
+			doc.body.appendChild(marker);
+		}
+	}
+	/**
 	 * The extract method used when processing the page. 
 	 * 
 	 * Modifications to the given extension data during extract are stored 
@@ -175,43 +207,44 @@ class Page {
 	 */
 	process (doc) {
 		let page = this;
-		page.check(document);
+		if (page.reloadIfAlreadyExtended(doc)) return;
+		page.check(doc);
 		Persistence.updateExtensionData(data => {
-			page.logger = Object.assign(new Logger(page.name), page.logger);
-			page.logger.log('extract', Logger.prepare(data));
-			page.extract(doc, data);
-			// filter after extract to consider all POST parameters
-			data.pagesToRequest = data.pagesToRequest.filter(pageToRequest => !page.equals(pageToRequest));
+			if (!data.nextZat && !page.equals(new Page.Main())) {
+				data.pagesToRequest = [];
+				data.pagesToRequest.push(new Page.Main());
+			} else {
+				page.logger = Object.assign(new Logger(page.name), page.logger);
+				page.logger.log('extract', Logger.prepare(data));
+				page.extract(doc, data);
+				data.pagesToRequest = data.pagesToRequest.filter(pageToRequest => !page.equals(pageToRequest)); // filter after extract to consider all POST parameters
+			}
 		}).then(updatedData => {
-			try {
-				let requestor = Requestor.getCurrent(doc);
-				if (updatedData.pagesToRequest.length > 0) {
-					if (!requestor) {
-						requestor = Requestor.create(doc, () => {
-							Persistence.getExtensionData(updatedData.team.name).then(newdata => {
-								if (newdata.pagesToRequest.length > 0) {
-									throw new Warning('Initialisierung unterbrochen');
-								} else {
-									page.logger.log('extend', Logger.prepare(newdata));
-									page.extend(doc, newdata);
-								}
-							}).catch(e => {
-								Page.handleError(e);
-							});
+			let requestor = Requestor.getCurrent();
+			if (updatedData.pagesToRequest.length > 0) {
+				if (!requestor) {
+					requestor = Requestor.create(doc, () => {
+						Persistence.updateExtensionData(dataToComplete => {
+							dataToComplete.complete();
+						}).then(completedData => {
+							page.logger.log('extend after init', Logger.prepare(completedData));
+							page.extend(doc, completedData);
+							page.markExtended(doc);
+						}).catch(e => {
+							Page.handleError(e);
 						});
-					}
-					requestor.requestPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+					});
+				}
+				requestor.requestPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+			} else {
+				if (requestor) {
+					requestor.finish();
 				} else {
-					if (requestor) {
-						requestor.finish();
-					} else {
-						page.logger.log('extend', Logger.prepare(updatedData));
-						page.extend(doc, updatedData);
-					}
-				}	
-			} catch (e) {
-				Page.handleError(e);
-			}		
+					page.logger.log('extend', Logger.prepare(updatedData));
+					page.extend(doc, updatedData);
+					page.markExtended(doc);
+				}
+			}	
 		}).catch(e => {
 			Page.handleError(e);
 		});
@@ -230,9 +263,6 @@ class Page {
 			new Logger('Warning').warn(e.message);
 		} else {
 			new Logger('Error').error(e);
-			Persistence.updateExtensionData(data => {
-				data.nextZat = ZAT_INDICATING_REFRESH;
-			});
 		}
 	
 		let parentDoc = top.frames.os_main ? top.frames.os_main.document : document;
