@@ -14,28 +14,23 @@ The `OnlineSoccer Extension` extension adds useful details and forecasts to the 
 
 ## Development with Visual Studio Code
 
-You need the following entries in your `settings.json` run/debug tests with Karma/Jasmine and TestExplorer:
-
+For testing the extension `Karma Test Explorer for Angular, Jasmine, and Mocha` from Lucas Ononiwu is used. You need the following entries in your `settings.json` in order to debug your tests:
 <pre>
-    "angularKarmaTestExplorer.projectType": "Karma",
-    "angularKarmaTestExplorer.debugMode": true,
-    "angularKarmaTestExplorer.karmaConfFilePath": "karma.conf.js",
-    "angularKarmaTestExplorer.debuggerConfiguration": {
+    "karmaTestExplorer.projectType": "karma",
+    "karmaTestExplorer.debuggerConfig": {
         "name": "Debug tests",
         "type": "chrome",
         "request": "attach",
         "port": 9222,
+        "browserAttachLocation": "workspace",
+        "address": "localhost",
+        "timeout": 60000,
         "pathMapping": {
             "/": "${workspaceRoot}",
             "/base/": "${workspaceRoot}/"
         }
-    },
-    "debug.javascript.usePreview": false
+    }
 </pre>
-
-For debugging, the `coverage` reporter has to be removed by adding it to the `cleanUpReporters` method of
-`~/.vscode/extensions/raagh.angular-karma-test-explorer-1.2.8/out/config/karma-configurator.js`.
-
 The coverage reports are created with `npm test` in the folder `.coverage`. Based on the `summary.json` the coverage badge is updated in the README with `npm run badge`.
 
 The release arichve can be created with `gulp` in teh folder `release`.
