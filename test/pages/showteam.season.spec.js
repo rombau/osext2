@@ -79,6 +79,10 @@ describe('Page.ShowteamSeason', () => {
 					
 			page.extend(doc, data);
 
+			expect(doc.getElementsByTagName('table')[2].rows[22].cells[1].textContent).toContain('Liga (12. Spieltag)');
+			expect(doc.getElementsByTagName('table')[2].rows[23].cells[1].textContent).toContain('OSE  (1. Runde Hin)');
+			expect(doc.getElementsByTagName('table')[2].rows[27].cells[1].textContent).toContain('LP (3. Runde)');
+
 			let spy = spyOn(page, 'updateWithMatchDays').and.callFake((matchDays) => {
 
 				(spy.and.callThrough()).call(page, matchDays);

@@ -108,8 +108,6 @@ Page.ShowteamSeason = class extends Page {
 		let form = doc.querySelector('form');
 		form.style.paddingLeft = '4px';
 		
-		// TODO extend without current season?
-
 		if (data.lastMatchDay.season <= this.selectedSeason) {
 
 			if (data.lastMatchDay.zat > 3) {
