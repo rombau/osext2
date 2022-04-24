@@ -23,6 +23,9 @@ class Team {
 			
 		/** @private @type {[SquadPlayer]} */ 
 		this._squadPlayers = [];
+
+		/** @type {Boolean} true after adding a new player */ 
+		this.squadPlayerAdded = false;
 		
 		/** @private @type {[YouthPlayer]} */ 
 		this._youthPlayers = [];
@@ -106,6 +109,7 @@ class Team {
 			player = new SquadPlayer();
 			player.id = id;
 			this.squadPlayers.push(player);
+			this.squadPlayerAdded = true;
 		}
 		return ensurePrototype(player, SquadPlayer);
 	}

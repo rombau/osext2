@@ -61,26 +61,8 @@ Page.Main = class extends Page {
 
 			data.initNextZat(nextZat);
 
-			// define the pages needed to load for initialization
 			data.pagesToRequest = [];
-			data.pagesToRequest.push(new Page.ShowteamOverview());
-			data.pagesToRequest.push(new Page.ShowteamSkills());
-			data.pagesToRequest.push(new Page.ShowteamContracts());
-			data.pagesToRequest.push(new Page.ShowteamSeason());
-			data.pagesToRequest.push(new Page.ShowteamInfo());
-			data.pagesToRequest.push(new Page.LeagueTable());
-			data.pagesToRequest.push(new Page.LoanView());
-			data.pagesToRequest.push(new Page.YouthOverview());
-			data.pagesToRequest.push(new Page.YouthSkills());
-			data.pagesToRequest.push(new Page.YouthOptions());
-			data.pagesToRequest.push(new Page.AccountStatement());
-
-			// error during season interval
-			data.pagesToRequest.push(new Page.Trainer());
-			data.pagesToRequest.push(new Page.Training());
-			data.pagesToRequest.push(new Page.ContractExtension());
-			data.pagesToRequest.push(new Page.MatchDayOptions());
-			
+			data.requestAllPages();		
 		}
 
 		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);

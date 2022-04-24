@@ -26,6 +26,11 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			player.marketValue = +row.cells['Spielerwert'].textContent.replace(/\./g, '');
 
 		});
+
+		// initialize new players
+		if (data.team.squadPlayerAdded) {
+			data.requestSquadPlayerPages();
+		}
 	}
 
 	/**
