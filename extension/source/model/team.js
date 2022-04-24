@@ -224,11 +224,13 @@ class Team {
 
 		let balancedMatchDays = calculatedMatchDays || [];
 		let accountBalance = this.accountBalance;
+		let stadium = this.stadium;
 		for (let season = selectedSeason; season < (selectedSeason + Options.forecastSeasons); season++) {
 			for (let zat = 1; zat <= SEASON_MATCH_DAYS; zat++) {
 				let balancedMatchDay = balancedMatchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
 				if (!balancedMatchDay) {
 					balancedMatchDay = this.copyScheduledMatchDay(season, zat);
+					stadium = balancedMatchDay.stadium || stadium;
 					balancedMatchDays.push(balancedMatchDay);
 				}
 				if (balancedMatchDay.after(lastMatchDay)) {
@@ -236,7 +238,7 @@ class Team {
 						setTimeout(() => {
 							try {
 								balancedMatchDay.accountBalanceBefore = accountBalance;
-								accountBalance += balancedMatchDay.calculateMatchDayIncome(balancedMatchDay.stadium || this.stadium, viewSettings);
+								accountBalance += balancedMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 								accountBalance += balancedMatchDay.calculatePremium(this.league, viewSettings);
 								let forecastedTeam = !calculatedMatchDays ? this.getForecast(lastMatchDay, balancedMatchDay) : new Team();
 								accountBalance += (-balancedMatchDay.youthSupport) || this.calculateYouthSupport(balancedMatchDay, forecastedTeam.youthPlayers, viewSettings);

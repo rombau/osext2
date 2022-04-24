@@ -37,11 +37,12 @@ Page.ShowteamInfo = class extends Page {
 		if (expansionElement) {
 			let matches = /Das Stadion wird noch (\d+) ZAT\(s\) ausgebaut./gm.exec(expansionElement.textContent);
 			if (matches) {
-				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1]);
+				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1]+1);
 				expansionFinished = data.team.getMatchDay(expansionFinished.season, expansionFinished.zat);
 				expansionFinished.stadium = this.extractExpandedStadium(data.team.stadium, Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 					return table.rows.length >= 3 && table.rows[0].cells[0].textContent === expansionElement.textContent;
 				}));
+				data.team.getMatchDay(expansionFinished.season, expansionFinished.zat - 1).stadium = undefined; // bugfix
 				if (data.team.stadium.getPlaces() !== expansionFinished.stadium.getPlaces()) {
 					data.team.stadium.coveredSeats = Math.round(data.team.stadium.coveredSeats * STADIUM_EXPANSION_CAPACITY / 100);
 					data.team.stadium.seats = Math.round(data.team.stadium.seats * STADIUM_EXPANSION_CAPACITY / 100);
