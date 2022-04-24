@@ -26,6 +26,11 @@ Page.ShowteamSkills = class extends Page.Showteam {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
 			});
 		});
+
+		// initialize new players
+		if (data.team.squadPlayerAdded) {
+			data.requestSquadPlayerPages();
+		}		
 	}
 	
 	/**

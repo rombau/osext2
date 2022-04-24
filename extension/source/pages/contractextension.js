@@ -26,6 +26,11 @@ Page.ContractExtension = class extends Page {
 			player.followUpSalary['60'] = +row.cells[14].textContent.replace(/\./g, '');
 
 		});
+
+		// initialize new players
+		if (data.team.squadPlayerAdded) {
+			data.requestSquadPlayerPages();
+		}
 	}
 
 }

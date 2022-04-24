@@ -102,6 +102,43 @@ class ExtensionData {
 	}
 
 	/**
+	 * Adds all pages needed for initialization to the request pages array.
+	 */
+	requestAllPages () {
+		this.pagesToRequest.push(new Page.ShowteamOverview());
+		this.pagesToRequest.push(new Page.ShowteamSkills());
+		this.pagesToRequest.push(new Page.ShowteamContracts());
+		this.pagesToRequest.push(new Page.ShowteamSeason());
+		this.pagesToRequest.push(new Page.ShowteamInfo());
+		this.pagesToRequest.push(new Page.LeagueTable());
+		this.pagesToRequest.push(new Page.LoanView());
+		this.pagesToRequest.push(new Page.YouthOverview());
+		this.pagesToRequest.push(new Page.YouthSkills());
+		this.pagesToRequest.push(new Page.YouthOptions());
+		this.pagesToRequest.push(new Page.AccountStatement());
+		// error during season interval
+		this.pagesToRequest.push(new Page.Trainer());
+		this.pagesToRequest.push(new Page.Training());
+		this.pagesToRequest.push(new Page.ContractExtension());
+		this.pagesToRequest.push(new Page.MatchDayOptions());
+	}
+	
+	/**
+	 * Adds all squad player pages to the request pages array.
+	 */
+	requestSquadPlayerPages () {
+		if (this.pagesToRequest.length === 0) {
+			this.pagesToRequest.push(new Page.ShowteamOverview());		
+			this.pagesToRequest.push(new Page.ShowteamSkills());
+			this.pagesToRequest.push(new Page.ShowteamContracts());
+			this.pagesToRequest.push(new Page.LoanView());
+			this.pagesToRequest.push(new Page.Training());
+			this.pagesToRequest.push(new Page.ContractExtension());
+		}
+		this.team.squadPlayerAdded = false; // reset the flag
+	}
+
+	/**
 	 * Initializes the next zat. During saison interval the next zat is always set to 1.
 	 * 
 	 * @param {Number} zat 

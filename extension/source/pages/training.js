@@ -43,6 +43,11 @@ Page.Training = class extends Page {
 				}
 			}
 		});
+
+		// initialize new players
+		if (data.team.squadPlayerAdded) {
+			data.requestSquadPlayerPages();
+		}		
 	}
 
 	/**

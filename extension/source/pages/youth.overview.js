@@ -82,11 +82,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		if (this.getPullId(doc)) {
-		
-			// TODO add pull listener and refresh all youth players data
-
-		} else {
+		if (!this.getPullId(doc)) {
 
 			doc.getElementsByTagName('div')[0].classList.add(STYLE_YOUTH);
 
