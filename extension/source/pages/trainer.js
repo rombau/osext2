@@ -22,7 +22,7 @@ Page.Trainer = class extends Page {
 
 				let trainer = data.team.getTrainer(+row.cells['#'].textContent); 
 
-				trainer.salary = +row.cells['Gehalt'].textContent.replace(/\./g, "");
+				trainer.salary = +row.cells['Gehalt'].textContent.replaceAll('.', '');
 				trainer.contractTerm = +row.cells['Vertrag'].textContent;
 
 				trainer.legacySkill = Team.Trainer.LIST[row.cells['Skill'].textContent].legacySkill;

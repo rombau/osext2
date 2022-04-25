@@ -18,7 +18,7 @@ Page.Main = class extends Page {
 		super.check(doc);
 
 		let teamChangeLink = doc.querySelector('a[href="?changetosecond=true"]');
-		let matches = /Willkommen im Managerbüro von (.+)/gm.exec(teamChangeLink.parentElement.childNodes[0].textContent);
+		let matches = /Willkommen im Managerb.ro von (.+)/gm.exec(teamChangeLink.parentElement.childNodes[0].textContent);
 
 		let page = this;
 		let superProcess = super.process;
@@ -72,18 +72,18 @@ Page.Main = class extends Page {
 		
 		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
 
-		matches = /Willkommen im Managerbüro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
+		matches = /Willkommen im Managerb.ro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
 			
 		data.team.name = matches[1];
 
-		matches = /(\d)\. Liga (.+)/gm.exec(titleContainer.childNodes[2].textContent);
+		matches = /(\d)\. Liga ?[A-D]? (.+)/gm.exec(titleContainer.childNodes[2].textContent);
 
 		data.team.league.level = +matches[1];
 		data.team.league.countryName = matches[2];
 		
 		let accountBalanceElement = doc.querySelector('a[href="ka.php"]');
 		if (accountBalanceElement) {
-			data.team.accountBalance = +accountBalanceElement.textContent.replace(/\./g, '').replace(' Euro', '');
+			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
 		}
 
 	}

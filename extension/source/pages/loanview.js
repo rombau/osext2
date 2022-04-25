@@ -28,7 +28,7 @@ Page.LoanView = class extends Page {
 				else if (nameCell.firstChild.href) {
 					let id = HtmlUtil.extractIdFromHref(nameCell.firstChild.href);
 					let player = data.team.getSquadPlayer(id);
-					player.loan.fee = +row.cells['Leihgebühr'].textContent.replace(/\./g, "");
+					player.loan.fee = +row.cells['Leihgebühr'].textContent.replaceAll('.', '');
 					if (expense) player.loan.fee *= -1;
 					player.pos = nameCell.className;
 				}

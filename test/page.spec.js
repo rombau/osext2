@@ -246,13 +246,6 @@ describe('Page', () => {
 			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 	
-		it('and throw error if user accessing team overview without authentication', () => {
-			
-			let fixture = Fixture.createDocument('<b>Demoteam</b>');
-	
-			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
-		});
-	
 		it('and throw error if user accessing private page without authentication', () => {
 			
 			let fixture = Fixture.createDocument('Diese Seite ist ohne Team nicht verfügbar!');

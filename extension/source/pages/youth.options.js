@@ -14,7 +14,7 @@ Page.YouthOptions = class extends Page {
 
 		data.viewSettings.youthSupportPerDay = +doc.getElementsByName("foerderung")[0].value;	
 
-		let matches = /Du hast die Jugendschranke derzeit gesetzt. Dein Jahrgang (\d+) und\s(.+)\swerden nur minimal gef.+rdert/gm.exec(doc.body.textContent);
+		let matches = /Du hast die Jugendschranke derzeit gesetzt. Dein Jahrgang (\d+) und\s(.+)\swerden nur minimal gef.rdert/gm.exec(doc.body.textContent);
 		
 		if (matches) {
 			data.viewSettings.youthSupportBarrierSeason = +matches[1];
