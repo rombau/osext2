@@ -1,7 +1,7 @@
 describe('Persistence', () => {
-	
+
 	let storageMock = {};
-	
+
 	beforeEach(() => {
 
 		storageMock = {};
@@ -18,7 +18,7 @@ describe('Persistence', () => {
 			callback();
 		});
 	});
-   
+
 	it('should load data', (done) => {
 
 		let data = new ExtensionData();

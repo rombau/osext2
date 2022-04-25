@@ -4,42 +4,42 @@
 class Team {
 
 	/**
-	 * @param {Number} id 
-	 * @param {String} name 
+	 * @param {Number} id
+	 * @param {String} name
 	 */
 	constructor(id, name) {
-		
-		/** @type {Number} the internal id */ 
+
+		/** @type {Number} the internal id */
 		this.id = id;
 
-		/** @type {String} the name of the team */ 
+		/** @type {String} the name of the team */
 		this.name = name;
 
-		/** @type {String} the emblem file name */ 
+		/** @type {String} the emblem file name */
 		this.emblem;
 
-		/** @type {Team.League} the league this team belong to */ 
+		/** @type {Team.League} the league this team belong to */
 		this._league = new Team.League();
-			
-		/** @private @type {[SquadPlayer]} */ 
+
+		/** @private @type {[SquadPlayer]} */
 		this._squadPlayers = [];
 
-		/** @type {Boolean} true after adding a new player */ 
+		/** @type {Boolean} true after adding a new player */
 		this.squadPlayerAdded = false;
-		
-		/** @private @type {[YouthPlayer]} */ 
+
+		/** @private @type {[YouthPlayer]} */
 		this._youthPlayers = [];
 
-		/** @private @type {[MatchDay]} */ 
+		/** @private @type {[MatchDay]} */
 		this._matchDays = [];
 
-		/** @private @type {[Team.Trainer]} */ 
+		/** @private @type {[Team.Trainer]} */
 		this._trainers = [];
 
-		/** @type {Stadium} the stadium data */ 
+		/** @type {Stadium} the stadium data */
 		this.stadium;
 
-		/** @type {Number} the current account balance */ 
+		/** @type {Number} the current account balance */
 		this.accountBalance;
 	}
 
@@ -94,10 +94,10 @@ class Team {
 		this._trainers = value;
 	}
 
-	
+
 	/**
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
-	 * 
+	 *
 	 * @param {Number} id the id of the player to find (or add)
 	 * @returns {SquadPlayer} the player
 	 */
@@ -115,12 +115,12 @@ class Team {
 	}
 
 	/**
-	 * Returns the youth player with the given index and pull id. 
+	 * Returns the youth player with the given index and pull id.
 	 * If the player can't be found, a new one is added to the team (at the given index).
-	 * Otherwise if the pull id of the player doesn't match with the existing player 
-	 * (at the given index), the one at the index was already pulled to squad and will 
+	 * Otherwise if the pull id of the player doesn't match with the existing player
+	 * (at the given index), the one at the index was already pulled to squad and will
 	 * be removed from the list.
-	 * 
+	 *
 	 * @param {Number} index the index of the player on the page and the array
 	 * @param {Number} pullId the pull id of the player for pull to squad
 	 * @returns {YouthPlayer} the player
@@ -145,7 +145,7 @@ class Team {
 
 	/**
 	 * Returns the match day with the season and zat. If the match day can't be found, a new one is added to the team and returned.
-	 * 
+	 *
 	 * @param {Number} season the season of the match day to find (or add)
 	 * @param {Number} zat the zat of the match day to find (or add)
 	 * @returns {MatchDay} the match day
@@ -163,7 +163,7 @@ class Team {
 
 	/**
 	 * Returns the trainer with the given id. If the trainer can't be found, a new one is added to the team and returned.
-	 * 
+	 *
 	 * @param {Number} nr the id of the trainer to find (or add)
 	 * @returns {Team.Trainer} the trainer
 	 */
@@ -181,21 +181,21 @@ class Team {
 
 	/**
 	 * Returns a forecast of the team for the given target match day.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} targetMatchDay the target match day
 	 * @returns {Team} the forecast of the team
 	 */
 	getForecast (lastMatchDay, targetMatchDay) {
 		let forecastTeam = new Team();
-		
+
 		forecastTeam.origin = this;
 
 		if (targetMatchDay) {
 			if (lastMatchDay.equals(targetMatchDay)) return this;
-			
+
 			let matchDaysInRange = this.getMatchDaysInRange(lastMatchDay, targetMatchDay).slice(1);
-			
+
 			this.squadPlayers.forEach(player => {
 				forecastTeam.squadPlayers.push(player.getForecast(lastMatchDay, targetMatchDay, matchDaysInRange));
 			});
@@ -210,10 +210,10 @@ class Team {
 
 		return forecastTeam;
 	}
-	
+
 	/**
 	 * Returns a (new) list of the season match days with calculated balance.
-	 * 
+	 *
 	 * @param {Number} seaeson the season
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {*} viewSettings the view settings
@@ -268,14 +268,14 @@ class Team {
 
 	/**
 	 * Returns the youth support costs for a match day.
-	 * 
+	 *
 	 * @param {MatchDay} matchDay the match day
 	 * @param {[YouthPlayer]} players the list of youth players
 	 * @param {*} viewSettings the settings the season
 	 * @returns {Number} the costs
 	 */
 	calculateYouthSupport (matchDay, players, viewSettings) {
-		let activePlayers = players.filter(player => player.active && player.age >= YOUTH_AGE_MIN && (!player.pullMatchDay 
+		let activePlayers = players.filter(player => player.active && player.age >= YOUTH_AGE_MIN && (!player.pullMatchDay
 			|| (ensurePrototype(player.pullMatchDay, MatchDay) && player.pullMatchDay.after(matchDay))));
 		let minimumPlayers = viewSettings.youthSupportBarrierType ? activePlayers.filter(player => {
 			if (viewSettings.youthSupportBarrierType === YouthSupportBarrierType.AND_OLDER) {
@@ -292,10 +292,10 @@ class Team {
 
 	/**
 	 * Returns the squad salary.
-	 * 
-	 * @param {MatchDay} matchDay 
-	 * @param {[SquadPlayer]} squadPlayers 
-	 * @param {[YouthPlayer]} youthPlayers 
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[SquadPlayer]} squadPlayers
+	 * @param {[YouthPlayer]} youthPlayers
 	 * @returns the costs
 	 */
 	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
@@ -309,9 +309,9 @@ class Team {
 
 	/**
 	 * Returns the loan income minus costs.
-	 * 
-	 * @param {MatchDay} matchDay 
-	 * @param {[SquadPlayer]} players 
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[SquadPlayer]} players
 	 * @returns the income/costs
 	 */
 	calculateLoan (matchDay, players) {
@@ -324,9 +324,9 @@ class Team {
 
 	/**
 	 * Returns the trainer salary.
-	 * 
-	 * @param {MatchDay} matchDay 
-	 * @param {[Trainer]} trainers 
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[Trainer]} trainers
 	 * @returns the costs
 	 */
 	calculateTrainerSalary (matchDay, trainers) {
@@ -336,9 +336,9 @@ class Team {
 
 	/**
 	 * Returns the fast transfer income.
-	 * 
-	 * @param {MatchDay} matchDay 
-	 * @param {[SquadPlayer]} players 
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[SquadPlayer]} players
 	 * @returns the income
 	 */
 	calculateFastTransferIncome (matchDay, players) {
@@ -349,9 +349,9 @@ class Team {
 
 	/**
 	 * Returns the physio costs.
-	 * 
-	 * @param {MatchDay} matchDay 
-	 * @param {[SquadPlayer]} players 
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[SquadPlayer]} players
 	 * @returns the costs
 	 */
 	calculatePhysioCosts (matchDay, players) {
@@ -361,11 +361,11 @@ class Team {
 	}
 
 	/**
-	 * Returns a list of match days in a range. 
-	 * 
+	 * Returns a list of match days in a range.
+	 *
 	 * The list is generated based on the teams season match days. If the range exceeds the
 	 * season, the list is filled up with similar match days of the season before.
-	 * 
+	 *
 	 * @param {MatchDay} firstMatchDay the first match day
 	 * @param {MatchDay} lastMatchDay the last target match day
 	 * @returns {[MatchDay]} list of match days
@@ -375,16 +375,16 @@ class Team {
 		let targetMatchDay = new MatchDay(firstMatchDay.season, firstMatchDay.zat);
 		do {
 			matchDaysInRange.push(this.copyScheduledMatchDay(targetMatchDay.season, targetMatchDay.zat));
-		} while (!targetMatchDay.add(1).after(lastMatchDay)) 
+		} while (!targetMatchDay.add(1).after(lastMatchDay))
 		return matchDaysInRange;
 	}
 
 	/**
-	 * Returns a new match day copy with the given season and zat, with the referenced attributes 
+	 * Returns a new match day copy with the given season and zat, with the referenced attributes
 	 * of the scheduled match day.
-	 * 
+	 *
 	 * @param {Number} season the match day season
-	 * @param {Number} zat the match day zat 
+	 * @param {Number} zat the match day zat
 	 * @returns new match day
 	 */
 	copyScheduledMatchDay (season, zat) {
@@ -395,7 +395,7 @@ class Team {
 			return 0;
 		}).find(matchDay => matchDay.zat === zat);
 		if (scheduledMatchDay) {
-			if (scheduledMatchDay.season !== season && 
+			if (scheduledMatchDay.season !== season &&
 				(scheduledMatchDay.competition === Competition.OSEQ || scheduledMatchDay.competition === Competition.OSE || scheduledMatchDay.competition === Competition.OSCQ || scheduledMatchDay.competition === Competition.OSC)) {
 				copyMatchDay.competition = Competition.FRIENDLY;
 			} else {
@@ -411,10 +411,10 @@ class Team {
 		}
 		return copyMatchDay;
 	}
-			
+
 	/**
 	 * Completes the initialization of the team data.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 */
 	complete (lastMatchDay) {
@@ -428,16 +428,16 @@ class Team {
  * League representation.
  */
 Team.League = class {
-	
+
 	constructor() {
 
-		/** @type {Number} the league level */ 
+		/** @type {Number} the league level */
 		this.level;
-		
-		/** @type {Number} the league team count */ 
+
+		/** @type {Number} the league team count */
 		this.size;
 
-		/** @type {String} the league country name */ 
+		/** @type {String} the league country name */
 		this.countryName;
 
 		/** @type {[Team]} the teams sorted by current ranking */
@@ -449,10 +449,10 @@ Team.League = class {
  * Trainer representation.
  */
 Team.Trainer = class {
-	
+
 	constructor() {
 
-		/** @type {Number} the number of the trainer  */ 
+		/** @type {Number} the number of the trainer */
 		this.nr;
 
 		/** @type {Number} the contract term in match days (zats) */
@@ -460,7 +460,7 @@ Team.Trainer = class {
 
 		/** @type {Number} the monthly salary */
 		this.salary;
-		
+
 		/** @type {Number} the legacy skill of the trainer */
 		this.legacySkill;
 

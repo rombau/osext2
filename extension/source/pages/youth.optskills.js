@@ -1,6 +1,6 @@
 
 Page.YouthOptskills = class extends Page.Youth {
-	
+
 	constructor() {
 
 		super('Jugend-Optis', 'ju.php', new Page.Param('page', 3));
@@ -8,9 +8,9 @@ Page.YouthOptskills = class extends Page.Youth {
 		/** @type {HTMLTableElement} */
 		this.table;
 	}
-	
+
 	static HEADERS = ['|Land', 'U', 'Alter', 'Skill', 'TOR', 'ABW', 'DMI', 'MIT', 'OMI', 'STU'];
-		
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -18,7 +18,7 @@ Page.YouthOptskills = class extends Page.Youth {
 	extend(doc, data) {
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOptskills.HEADERS);
-		
+
 		this.table.classList.add(STYLE_YOUTH);
 
 		Array.from(this.table.rows)
@@ -46,7 +46,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				row.cells['Pull' + pos].style.textAlign = 'left';
 				row.cells['Pull' + pos].style.width = '1em';
 				row.cells['Pull' + pos].textContent = '';
-				
+
 				if (index === 0) {
 					row.cells['Pull' + pos].textContent = '';
 				} else if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
@@ -67,7 +67,7 @@ Page.YouthOptskills = class extends Page.Youth {
 					row.cells['Pull' + pos].classList.add(STYLE_SET_ZAT);
 					row.cells['Pull' + pos].appendChild(setButton);
 				}
-				row.insertBefore(row.cells['Pull' + pos], row.cells[pos].nextElementSibling);	
+				row.insertBefore(row.cells['Pull' + pos], row.cells[pos].nextElementSibling);
 			});
 
 			row.cells['TOR'].style.setProperty('padding-left', '2em', 'important');
@@ -77,7 +77,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				row.cells['Pos'].textContent = 'Pos';
 				row.cells['Skill'].textContent = 'Skillschn.';
 				row.cells['Pull'].textContent = 'Zieh-Info';
-			} else {			
+			} else {
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = player.pos;
 				row.cells['Pull'].textContent = '';
@@ -130,9 +130,9 @@ Page.YouthOptskills = class extends Page.Youth {
 
 			row.removeChild(oldAgeColumn);
 
-			row.appendChild(row.cells['Pull']);		
+			row.appendChild(row.cells['Pull']);
 		});
-		
+
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 	}
 
@@ -147,13 +147,13 @@ Page.YouthOptskills = class extends Page.Youth {
 			.filter(row => this.isPlayerRow(row))
 			.slice(1)
 			.forEach((row, index) => {
-			
+
 			let player = team.youthPlayers[index];
-		
+
 			row.cells['Alter'].textContent = player.age;
-			
+
 			if (player.active) {
-				
+
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Skill'].textContent = player.getSkillAverage().toFixed(2);
@@ -161,7 +161,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				this._handlePosition(player, pos => {
 					row.cells[pos].textContent = player.getOpti(pos).toFixed(2);
 				})
-				
+
 			} else {
 
 				row.cells['Skill'].textContent = '';
@@ -181,7 +181,7 @@ Page.YouthOptskills = class extends Page.Youth {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
-			
+
 			Object.keys(Position).forEach(pos => {
 				if (matchDay) {
 					row.cells['Pull'].classList.remove(STYLE_HIDDEN);
@@ -192,7 +192,7 @@ Page.YouthOptskills = class extends Page.Youth {
 				}
 				row.cells['Pull' + pos].classList.remove(STYLE_ADD);
 			});
-			
+
 			if ((player.origin && player.origin.pullMatchDay) || player.pullMatchDay) {
 				row.cells['Pull'].classList.add(STYLE_DELETE);
 			} else {

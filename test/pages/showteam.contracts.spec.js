@@ -2,7 +2,7 @@ describe('Page.ShowteamContracts', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.ShowteamContracts} */ let page;
-	
+
 	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.ShowteamContracts();
@@ -16,13 +16,13 @@ describe('Page.ShowteamContracts', () => {
 
 		data.nextZat = 53;
 		data.nextZatSeason = 16;
-		
+
 		data.complete();
-		
+
 		Fixture.getDocument('showteam.php?s=1', doc => {
-			
+
 			page.extract(doc, data);
-					
+
 			expect(data.team.squadPlayers[0].birthday).toEqual(18);
 			expect(data.team.squadPlayers[0].contractTerm).toEqual(17);
 			expect(data.team.squadPlayers[0].salary).toEqual(59812);

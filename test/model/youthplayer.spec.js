@@ -1,8 +1,8 @@
 describe('YouthPlayer', () => {
-	
-	/** @type {YouthPlayer} */ 
+
+	/** @type {YouthPlayer} */
 	let player;
-	
+
 	beforeEach(() => {
 		player = Object.assign(new YouthPlayer(), {
 			'skills': {
@@ -31,7 +31,7 @@ describe('YouthPlayer', () => {
 			'uefa': false
 		});
 	});
-	
+
 	it('should complete initialization', () => {
 
 		player.complete(new MatchDay(14, 5));
@@ -45,7 +45,7 @@ describe('YouthPlayer', () => {
 		expect(player.ageExact).toEqual(17.555555555555557);
 		expect(player.pos).toEqual(Position.DMI);
 		expect(player.trainingFactor).toEqual(1);
-		
+
 		player.pullMatchDay = new MatchDay(14, 65);
 
 		player.complete(new MatchDay(14, 66));
@@ -109,7 +109,7 @@ describe('YouthPlayer', () => {
 		player.pullContractTerm = 72;
 
 		let forecastPlayer = player.getForecast(new MatchDay(15, 10), new MatchDay(18, 24));
-		
+
 		expect(forecastPlayer.salary).toEqual(92419);
 	});
 });

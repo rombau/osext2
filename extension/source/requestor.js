@@ -2,7 +2,7 @@
  * Request frame (and status) for requesting additional pages.
  */
 class Requestor {
-	
+
 	/**
 	 * @param {HTMLElement} the element with the progress
 	 */
@@ -31,11 +31,11 @@ class Requestor {
 	 * @returns {MutationObserver} the observer for menu changes
 	 */
 	static menuObserver;
-	
+
 	/**
 	 * Returns the current requestor instance. Therefore a new requestor object is created
 	 * with the (status) message box found in the DOM.
-	 * 
+	 *
 	 * @param {Document} doc the current document
 	 * @returns {Requestor} the current requestor
 	 */
@@ -54,7 +54,7 @@ class Requestor {
 	/**
 	 * Creates a requestor instance with the (status) message box.
 	 * The finish callback is added to the message box click listener (closing the box).
-	 * 
+	 *
 	 * @param {Document} doc the current document
 	 * @param {finishCallback} finished the method called when requests finished
 	 * @returns {Requestor} the new requestor
@@ -74,13 +74,13 @@ class Requestor {
 	}
 
 	/**
-	 * Requests the given page. 
-	 * 
+	 * Requests the given page.
+	 *
 	 * @param {Page} page the page to request
 	 */
 	requestPage (page) {
-		let throwError = () => { 
-			throw new Error(`${page.name} kann nicht initialisiert werden`); 
+		let throwError = () => {
+			throw new Error(`${page.name} kann nicht initialisiert werden`);
 		}
 		if (this.status) {
 			this.status.lastChild.textContent = `Initialisiere ${page.name}`;
@@ -115,7 +115,7 @@ class Requestor {
 	/**
 	 * Finishes the page requests by dispatching a click event to the status message box.
 	 * Therefore the message box is closed and a registered callback is called.
-	 * 
+	 *
 	 * Additionally all requestor elements (status and overlays) removed from the DOM.
 	 */
 	finish () {
@@ -123,7 +123,7 @@ class Requestor {
 		this.status = null;
 		Requestor.cleanUp();
 	}
-	
+
 	/**
 	 * Removes status, frame, form and overlays.
 	 */
@@ -158,7 +158,7 @@ class Requestor {
 					});
 				});
 				Requestor.menuObserver.observe(frame.document, { childList: true });
-			} 
+			}
 			if (frame.document.readyState === 'complete') {
 				addOverlay(frame);
 			} else {
@@ -166,5 +166,5 @@ class Requestor {
 			}
 		});
 	}
-	
+
 }

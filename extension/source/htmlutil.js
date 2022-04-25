@@ -6,14 +6,14 @@ class HtmlUtil {
 	constructor () {
 		// utility
 	}
-	
+
 	/**
 	 * Returns the HTML table with the specified headers.
-	 * 
+	 *
 	 * The character '|' stands for a additional column in the following data rows.
-	 * 
-	 * @param  {Document} doc 
-	 * @param  {...String} headers 
+	 *
+	 * @param {Document} doc
+	 * @param {...String} headers
 	 * @returns {HTMLTableElement}
 	 */
 	static getTableByHeader (doc, ...headers) {
@@ -53,9 +53,9 @@ class HtmlUtil {
 	/**
 	 * Returns an array with HTML table rows of the table with the specified headers.
 	 * The header (first) row is not part of the array.
-	 * 
-	 * @param  {Document} doc 
-	 * @param  {...String} headers 
+	 *
+	 * @param {Document} doc
+	 * @param {...String} headers
 	 * @returns {[HTMLTableRowElement]}
 	 */
 	static getTableRowsByHeader (doc, ...headers) {
@@ -67,9 +67,9 @@ class HtmlUtil {
 	/**
 	 * Returns an array with HTML table rows of the table with the specified headers and footers.
 	 * The header (first) and footer (last) row are not part of the array.
-	 * 
-	 * @param  {Document} doc 
-	 * @param  {...String} headers 
+	 *
+	 * @param {Document} doc
+	 * @param {...String} headers
 	 * @returns {[HTMLTableRowElement]}
 	 */
 	static getTableRowsByHeaderAndFooter (doc, ...headers) {
@@ -77,11 +77,11 @@ class HtmlUtil {
 		rows.splice(-1, 1);
 		return rows;
 	}
-	
+
 	/**
 	 * Adds script element with the given code.
-	 * 
-	 * @param {Document} doc 
+	 *
+	 * @param {Document} doc
 	 * @param {String} text
 	 */
 	static appendScript (doc, text) {
@@ -89,11 +89,11 @@ class HtmlUtil {
 		script.appendChild(doc.createTextNode(text));
 		doc.body.appendChild(script);
 	}
-	
+
 	/**
 	 * Adds script element with the given code.
-	 * 
-	 * @param {Document} doc 
+	 *
+	 * @param {Document} doc
 	 * @param {String} text
 	 */
 	static allowStickyToolbar (doc) {
@@ -102,8 +102,8 @@ class HtmlUtil {
 
 	/**
 	 * Returns the id extracted from a href.
-	 * 
-	 * @param {String} href 
+	 *
+	 * @param {String} href
 	 * @returns {Number} id
 	 */
 	static extractIdFromHref (href) {
@@ -117,7 +117,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns a element (div) containing the numeric slider and the view (span) showing the current value.
-	 * 
+	 *
 	 * @param {HTMLElement} containerElement the container element where the slider should be created in
 	 * @param {Number} width the width of the slider in pixel
 	 * @param {Number} min the min value
@@ -133,7 +133,7 @@ class HtmlUtil {
 			viewInfo.textContent = ` ${value}`;
 		};
 		viewInfo.update(inital);
-		
+
 		let rangeSlider = containerElement.ownerDocument.createElement('input');
 		rangeSlider.type = 'range';
 		rangeSlider.min = min;
@@ -145,7 +145,7 @@ class HtmlUtil {
 		rangeSlider.addEventListener('change', (event) => {
 			changeCallback(event.target.value);
 		});
-		
+
 		let slider = containerElement.ownerDocument.createElement('div');
 		slider.style.width = (width + 'px');
 		slider.appendChild(rangeSlider);
@@ -156,7 +156,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns a element (div) containing the matchday slider and the view (span) showing the current matchday.
-	 * 
+	 *
 	 * @param {HTMLElement} containerElement the container element where the slider should be created in
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} matchday the match day reference adjusted by slider
@@ -170,7 +170,7 @@ class HtmlUtil {
 			viewInfo.textContent = ` Saison ${season} / Zat ${zat}`;
 		};
 		viewInfo.update(matchday.season, matchday.zat);
-		
+
 		let rangeSlider = containerElement.ownerDocument.createElement('input');
 		rangeSlider.type = 'range';
 		rangeSlider.min = lastMatchDay.season * SEASON_MATCH_DAYS + lastMatchDay.zat;
@@ -192,18 +192,18 @@ class HtmlUtil {
 		let slider = containerElement.ownerDocument.createElement('div');
 		slider.appendChild(rangeSlider);
 		slider.appendChild(viewInfo);
-		
+
 		changeCallback(matchday);
-	
+
 		return slider;
 	}
 
 	/**
 	 * Returns a abbreviation element.
-	 * 
-	 * @param {String} title 
-	 * @param {String} content 
-	 * @param {Document} doc 
+	 *
+	 * @param {String} title
+	 * @param {String} content
+	 * @param {Document} doc
 	 */
 	static createAbbreviation (title, content, doc = document) {
 		let abbr = doc.createElement('abbr');
@@ -213,9 +213,9 @@ class HtmlUtil {
 	}
 	/**
 	 * Returns a div element with content element or text.
-	 * 
-	 * @param {Element|String} content 
-	 * @param {String} className 
+	 *
+	 * @param {Element|String} content
+	 * @param {String} className
 	 * @param {Document} doc
 	 */
 	static createDivElement (content, className, doc = document) {
@@ -231,11 +231,11 @@ class HtmlUtil {
 
 	/**
 	 * Returns a div element containing a left label and a right value element.
-	 * 
-	 * @param {String} label 
-	 * @param {String} value 
-	 * @param {String} valueClass 
-	 * @param {Document} doc 
+	 *
+	 * @param {String} label
+	 * @param {String} value
+	 * @param {String} valueClass
+	 * @param {Document} doc
 	 */
 	static createLabelValueElement (label, value, valueClass, doc = document) {
 		let div = doc.createElement('div');
@@ -246,7 +246,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns a new element with Fontawesome style.
-	 * 
+	 *
 	 * @param {Document} doc document for element creation
 	 * @param {String} styleClass Fontawesome class name
 	 * @param {Function} listener default click listener
@@ -263,7 +263,7 @@ class HtmlUtil {
 
 	/**
 	 * Returns a new message box element (status, warning, error).
-	 * 
+	 *
 	 * @param {Document} doc the document for element creation
 	 * @param {String} styleClass message box class name, e.g. STYLE_STATUS
 	 * @param {String} message the message to show

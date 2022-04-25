@@ -1,11 +1,11 @@
 
 Page.Stadium = class extends Page {
-	
+
 	constructor() {
 
 		super('Stadionausbau', 'osneu/stadion');
 	}
-		
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data

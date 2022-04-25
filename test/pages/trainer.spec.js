@@ -11,9 +11,9 @@ describe('Page.Trainer', () => {
 	it('should extract trainers', (done) => {
 
 		Fixture.getDocument('trainer.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(data.team.trainers.length).toEqual(6);
 			expect(data.team.trainers[0].nr).toEqual(1);
 			expect(data.team.trainers[0].salary).toEqual(507957);
@@ -30,9 +30,9 @@ describe('Page.Trainer', () => {
 	it('should not extract trainers', (done) => {
 
 		Fixture.getDocument('trainer.confirm.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(data.team.trainers.length).toEqual(0);
 
 			page.extend(doc, data);
@@ -45,7 +45,7 @@ describe('Page.Trainer', () => {
 
 		// header changed in fixture
 		Fixture.getDocument('trainer.modified.php', doc => {
-			
+
 			try {
 				page.extract(doc, data);
 			} catch (e) {

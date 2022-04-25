@@ -1,6 +1,6 @@
 
 Page.Youth = class extends Page {
-	
+
 	constructor(name, path, ...params) {
 
 		super(name, path, ...params);
@@ -9,14 +9,14 @@ Page.Youth = class extends Page {
 
 	/**
 	 * Creates the toolbar for the squad player (showteam) views.
-	 * 
+	 *
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
-	 * 
+	 *
 	 * @returns {HTMLElement} the toolbar element
 	 */
 	createToolbar (doc, data) {
-		
+
 		HtmlUtil.allowStickyToolbar(doc);
 
 		let page = this;
@@ -28,13 +28,13 @@ Page.Youth = class extends Page {
 		toolTitle.textContent = 'Prognose: ';
 		toolbar.appendChild(toolTitle);
 
-		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.youthPlayerMatchDay, 
+		let matchdaySlider = HtmlUtil.createMatchDaySlider(toolbar, data.lastMatchDay, data.viewSettings.youthPlayerMatchDay,
 			matchday => {
 				Persistence.storeExtensionData(data);
 				page.updateWithTeam(data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);
 			});
 		toolbar.appendChild(matchdaySlider);
-		
+
 		let max = doc.createElement('i');
 		max.update = (season, zat) => {
 			if (data.viewSettings.youthMax) {
@@ -76,7 +76,7 @@ Page.Youth = class extends Page {
 
 	/**
 	 * Checks if the row contains a real player
-	 * 
+	 *
 	 * @param {HTMLTableRowElement} row the row to handle
 	 * @returns {Boolean}
 	 */
@@ -86,7 +86,7 @@ Page.Youth = class extends Page {
 
 	/**
 	 * Checks if the row contains a year header
-	 * 
+	 *
 	 * @param {HTMLTableRowElement} row the row to handle
 	 * @returns {Boolean}
 	 */
@@ -96,7 +96,7 @@ Page.Youth = class extends Page {
 
 	/**
 	 * Adjusts year table header row to make styling possible.
-	 * 
+	 *
 	 * @param {HTMLTableRowElement} row the row to handle
 	 * @returns {Boolean} true if it is a year header
 	 */

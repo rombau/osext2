@@ -2,7 +2,7 @@ describe('Page.ShowteamSeason', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.ShowteamSeason} */ let page;
-	
+
 	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.ShowteamSeason();
@@ -13,9 +13,9 @@ describe('Page.ShowteamSeason', () => {
 		data.nextZat = 49;
 
 		Fixture.getDocument('showteam.php?s=6', doc => {
-			
+
 			page.extract(doc, data);
-						
+
 			expect(data.team.matchDays.length).toEqual(72);
 			expect(data.team.matchDays[0].zat).toEqual(1);
 			expect(data.team.matchDays[0].season).toEqual(10);
@@ -40,13 +40,13 @@ describe('Page.ShowteamSeason', () => {
 		data.nextZat = 1;
 
 		Fixture.getDocument('showteam.php?s=6', doc => {
-			
+
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 				row.cells[3].textContent = '';
 			});
 
 			page.extract(doc, data);
-						
+
 			expect(data.pagesToRequest.length).toEqual(1);
 			expect(data.pagesToRequest[0].name).toEqual('Saisonplan (Saison 9)');
 
@@ -60,7 +60,7 @@ describe('Page.ShowteamSeason', () => {
 
 		data.nextZat = 53;
 		data.nextZatSeason = 10;
-		
+
 		data.complete();
 
 		spyOn(data.team, 'getMatchDaysWithBalance').and.callFake((matchDays) => {
@@ -72,15 +72,15 @@ describe('Page.ShowteamSeason', () => {
 			});
 			return data.team.matchDays;
 		});
-		
+
 		Fixture.getDocument('showteam.php?s=6', doc => {
-			
+
 			page.extract(doc, data);
-					
+
 			page.extend(doc, data);
 
 			expect(doc.getElementsByTagName('table')[2].rows[22].cells[1].textContent).toContain('Liga (12. Spieltag)');
-			expect(doc.getElementsByTagName('table')[2].rows[23].cells[1].textContent).toContain('OSE  (1. Runde Hin)');
+			expect(doc.getElementsByTagName('table')[2].rows[23].cells[1].textContent).toContain('OSE (1. Runde Hin)');
 			expect(doc.getElementsByTagName('table')[2].rows[27].cells[1].textContent).toContain('LP (3. Runde)');
 
 			let spy = spyOn(page, 'updateWithMatchDays').and.callFake((matchDays) => {

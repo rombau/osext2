@@ -1,6 +1,6 @@
 
 Page.Menu = class extends Page {
-	
+
 	constructor() {
 
 		super('Menüframe', 'os_menu_haupt.html');
@@ -8,7 +8,7 @@ Page.Menu = class extends Page {
 
 	/**
 	 * Processes the menu frame set page.
-	 * 
+	 *
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */
@@ -35,11 +35,11 @@ Page.Menu = class extends Page {
 		let mql = win.matchMedia('(max-width: 1000px)');
 
 		mql.addEventListener('change', () => {
-			if (mql.matches) { 
-				// doc.querySelector('frameset[onload]').cols='0,*' 
-			} else { 
-				// doc.querySelector('frameset[onload]').cols='180,*' 
-			} 
+			if (mql.matches) {
+				// doc.querySelector('frameset[onload]').cols='0,*'
+			} else {
+				// doc.querySelector('frameset[onload]').cols='180,*'
+			}
 		});
 		// mql.onchange();
 

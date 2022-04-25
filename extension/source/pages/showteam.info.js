@@ -1,6 +1,6 @@
 
 Page.ShowteamInfo = class extends Page {
-	
+
 	constructor() {
 
 		super('Teaminfo', 'showteam.php', new Page.Param('s', 5));
@@ -11,10 +11,10 @@ Page.ShowteamInfo = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-	
+
 		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 			return table.rows.length >= 5 && table.rows[2].cells.length >= 4
-				&& table.rows[2].cells[0].textContent.includes('Sitzplätze') 
+				&& table.rows[2].cells[0].textContent.includes('Sitzplätze')
 				&& table.rows[3].cells[0].textContent.includes('Stehplätze')
 				&& table.rows[2].cells[2].textContent.includes('davon überdacht')
 				&& table.rows[3].cells[2].textContent.includes('davon überdacht')
@@ -55,9 +55,9 @@ Page.ShowteamInfo = class extends Page {
 
 	/**
 	 * Returns the new stadium after expansion.
-	 * 
-	 * @param {Stadium} currentStadium 
-	 * @param {String} expansionText 
+	 *
+	 * @param {Stadium} currentStadium
+	 * @param {String} expansionText
 	 * @returns {Stadium}
 	 */
 	extractExpandedStadium(currentStadium, expansionTable) {
@@ -68,10 +68,10 @@ Page.ShowteamInfo = class extends Page {
 		stadium.coveredPlaces = currentStadium.coveredPlaces
 		stadium.places = currentStadium.places
 		stadium.pitchHeating = currentStadium.pitchHeating;
-		
+
 		if (expansionTable) {
 			Array.from(expansionTable.rows).filter(row => row.textContent.trim().length > 0).slice(1).forEach(row => {
-				let text = row.textContent; 					
+				let text = row.textContent;
 				let value = +text.split(" ")[0].replaceAll('.', '');
 				if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 					stadium.pitchHeating = true;

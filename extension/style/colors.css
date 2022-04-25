@@ -1,54 +1,54 @@
 
 :root.theme-dark,
 .theme-dark html {
-    --input-border-color: #bbb;
-    --input-background-color: #333333;
-    --input-color: #fbf9b3;
-    
-    --button-color: #2A2A2A;
-    --button-hover-color: #444;
+	--input-border-color: #bbb;
+	--input-background-color: #333333;
+	--input-color: #fbf9b3;
 
-    --reset-button-background-color: #bbb;
+	--button-color: #2A2A2A;
+	--button-hover-color: #444;
 
-    --status-background-color: #fbf9b388;
-    --status-color: #fff;
+	--reset-button-background-color: #bbb;
 
-    --error-background-color: #ff0000bb;
-    --error-color: #fff;
+	--status-background-color: #fbf9b388;
+	--status-color: #fff;
 
-    --warning-background-color: #ffa500bb;
-    --warning-color: #fff;
+	--error-background-color: #ff0000bb;
+	--error-color: #fff;
 
-    --range-background-color: #fbf9b3;
-    --range-thumb-color: #5c5;
+	--warning-background-color: #ffa500bb;
+	--warning-color: #fff;
 
-    --background-color: #2A2A2A;
-    --row-hover-color: #333333;
+	--range-background-color: #fbf9b3;
+	--range-thumb-color: #5c5;
+
+	--background-color: #2A2A2A;
+	--row-hover-color: #333333;
 }
 
 :root,
 :root.theme-os-blue {
-    --input-border-color: #aac;
-    --input-background-color: #228;
-    --input-color: #fbf9b3;
-    
-    --button-color: #116;
-    --button-hover-color: #228;
+	--input-border-color: #aac;
+	--input-background-color: #228;
+	--input-color: #fbf9b3;
 
-    --reset-button-background-color: #aac;
+	--button-color: #116;
+	--button-hover-color: #228;
 
-    --status-background-color: #fbf9b388;
-    --status-color: #fff;
+	--reset-button-background-color: #aac;
 
-    --error-background-color: #ff0000bb;
-    --error-color: #fff;
+	--status-background-color: #fbf9b388;
+	--status-color: #fff;
 
-    --warning-background-color: #ffa500bb;
-    --warning-color: #fff;
+	--error-background-color: #ff0000bb;
+	--error-color: #fff;
 
-    --range-background-color: #fbf9b3;
-    --range-thumb-color: #55f;
+	--warning-background-color: #ffa500bb;
+	--warning-color: #fff;
 
-    --background-color: #116;
-    --row-hover-color: #1d1d77;
+	--range-background-color: #fbf9b3;
+	--range-thumb-color: #55f;
+
+	--background-color: #116;
+	--row-hover-color: #1d1d77;
 }

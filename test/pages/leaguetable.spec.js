@@ -13,9 +13,9 @@ describe('Page.LeagueTable', () => {
 	it('should extract league table and current ranking', (done) => {
 
 		Fixture.getDocument('lt.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(data.team.league.size).toEqual(10);
 			expect(data.viewSettings.leagueRanking).toEqual(3);
 

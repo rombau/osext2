@@ -27,7 +27,7 @@ class Page {
 	/**
 	 * @param {String} name the name shown when loading
 	 * @param {String} path the path (e.g showteam.php)
-	 * @param  {...Page.Param} params the parameters this page can handle
+	 * @param {...Page.Param} params the parameters this page can handle
 	 */
 	constructor(name, path, ...params) {
 
@@ -49,7 +49,7 @@ class Page {
 
 	/**
 	 * Check if the given location matches the path and params of this page.
-	 * 
+	 *
 	 * @param {String} location the location of a href
 	 * @returns {boolean}
 	 */
@@ -66,7 +66,7 @@ class Page {
 
 	/**
 	 * Creates a URL with the given parameters.
-	 * 
+	 *
 	 * @returns {URL} the resulting URL
 	 */
 	createUrl () {
@@ -85,9 +85,9 @@ class Page {
 
 	/**
 	 * Returns true if the page is the same as the the given one.
-	 * 
+	 *
 	 * All parameters of the given page must be present and equal in this page.
-	 *  
+	 *
 	 * @param {Page} page the page to compare
 	 * @returns {Boolean} the result
 	 */
@@ -102,7 +102,7 @@ class Page {
 
 	/**
 	 * Returns the registered page for a given document location.
-	 * 
+	 *
 	 * @param {string} location of the document
 	 */
 	static byLocation (location) {
@@ -121,7 +121,7 @@ class Page {
 
 	/**
 	 * Checks the given document if a current calculation is running or a login is required.
-	 * 
+	 *
 	 * @param {Document} doc the document that should be checked
 	 */
 	check (doc) {
@@ -141,9 +141,9 @@ class Page {
 	/**
 	 * Reloads the given document if already extended with a marker element,
 	 * to ensure a clean original page after e.g. extension reload.
-	 * 
+	 *
 	 * Ajax response without location and test documents and are not reloaded.
-	 * 
+	 *
 	 * @param {Document} doc the document
 	 */
 	reloadIfAlreadyExtended (doc) {
@@ -156,9 +156,9 @@ class Page {
 
 	/**
 	 * Adds a marker element to the given document.
-	 * 
+	 *
 	 * Ajax response documents without location are not marked.
-	 * 
+	 *
 	 * @param {Document} doc the document
 	 */
 	markExtended (doc = document) {
@@ -169,31 +169,31 @@ class Page {
 		}
 	}
 	/**
-	 * The extract method used when processing the page. 
-	 * 
-	 * Modifications to the given extension data during extract are stored 
+	 * The extract method used when processing the page.
+	 *
+	 * Modifications to the given extension data during extract are stored
 	 * immediatly after return.
-	 * 
+	 *
 	 * In the extract implementation optional and POST parameter values
-	 * should be set in the page params array for the use in a initialization 
-	 * process, so that the requested page can be found and removed from the queue. 
-	 * 
+	 * should be set in the page params array for the use in a initialization
+	 * process, so that the requested page can be found and removed from the queue.
+	 *
 	 * This method is intended be overridden.
-	 * 
+	 *
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
 	 */
 	extract (_doc, _data) {}
 
 	/**
-	 * The extend method used when processing the page. 
-	 * 
-	 * Modifications to the given extension data during extend are NOT stored 
-	 * automatically. Use the synchronized version of Persistence.storeExtensionData() 
+	 * The extend method used when processing the page.
+	 *
+	 * Modifications to the given extension data during extend are NOT stored
+	 * automatically. Use the synchronized version of Persistence.storeExtensionData()
 	 * to store modified data.
-	 * 
+	 *
 	 * This method is intended be overridden.
-	 * 
+	 *
 	 * @param {Document} _doc the current document
 	 * @param {ExtensionData} _data the extension data
 	 */
@@ -201,7 +201,7 @@ class Page {
 
 	/**
 	 * Processes the given document.
-	 * 
+	 *
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */
@@ -244,7 +244,7 @@ class Page {
 					page.extend(doc, updatedData);
 					page.markExtended(doc);
 				}
-			}	
+			}
 		}).catch(e => {
 			Page.handleError(e);
 		});
@@ -252,8 +252,8 @@ class Page {
 
 	/**
 	 * Handles errors and should also be used in reject implementation of Promises.
-	 * 
-	 * @param {Error} e 
+	 *
+	 * @param {Error} e
 	 */
 	static handleError (e) {
 
@@ -264,7 +264,7 @@ class Page {
 		} else {
 			new Logger('Error').error(e);
 		}
-	
+
 		let parentDoc = top.frames.os_main ? top.frames.os_main.document : document;
 		let messageBox = HtmlUtil.createMessageBox(parentDoc, e instanceof Warning ? STYLE_WARNING : STYLE_ERROR, e.message || e);
 

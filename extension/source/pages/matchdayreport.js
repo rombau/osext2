@@ -1,9 +1,9 @@
 
 Page.MatchDayReport = class extends Page {
-	
+
 	/**
-	 * @param {Number} season 
-	 * @param {Number} zat 
+	 * @param {Number} season
+	 * @param {Number} zat
 	 */
 	constructor(season, zat) {
 

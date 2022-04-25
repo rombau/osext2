@@ -29,10 +29,10 @@ class YouthPlayer extends Player {
 		/** @type {String} the last increased skill(s) */
 		this.increase;
 
-		/** @type {MatchDay} the match day after that the player should be pulled ('Ziehtermin') */ 
+		/** @type {MatchDay} the match day after that the player should be pulled ('Ziehtermin') */
 		this.pullMatchDay;
 
-		/** @type {Position} the position of the pulled player ('Ziehposition') */ 
+		/** @type {Position} the position of the pulled player ('Ziehposition') */
 		this.pullPosition;
 
 		/** @type {Number} the initial contract length of the pulled player */
@@ -48,7 +48,7 @@ class YouthPlayer extends Player {
 	/**
 	 * Returns a forecast of the player for the given target match day.
 	 * If target match day is ommited, the maximum age is calculated.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} targetMatchDay the target match day
 	 * @returns {YouthPlayer} the forecast of the player
@@ -60,7 +60,7 @@ class YouthPlayer extends Player {
 		/** @type {YouthPlayer} */
 		let forecastPlayer = Object.assign(new YouthPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
-	
+
 		this._forecastAging(forecastPlayer, lastMatchDay, targetMatchDay);
 		if (forecastPlayer.age >= YOUTH_AGE_MIN) {
 			let days = this._forecastSkills(forecastPlayer, lastMatchDay, targetMatchDay);
@@ -71,9 +71,9 @@ class YouthPlayer extends Player {
 	}
 
 	/**
-	 * @param {YouthPlayer} forecastPlayer 
-	 * @param {MatchDay} lastMatchDay 
-	 * @param {MatchDay} targetMatchDay 
+	 * @param {YouthPlayer} forecastPlayer
+	 * @param {MatchDay} lastMatchDay
+	 * @param {MatchDay} targetMatchDay
 	 */
 	_forecastAging (forecastPlayer, lastMatchDay, targetMatchDay) {
 		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
@@ -96,15 +96,15 @@ class YouthPlayer extends Player {
 	}
 
 	/**
-	 * @param {YouthPlayer} forecastPlayer 
-	 * @param {MatchDay} lastMatchDay 
-	 * @param {MatchDay} targetMatchDay 
+	 * @param {YouthPlayer} forecastPlayer
+	 * @param {MatchDay} lastMatchDay
+	 * @param {MatchDay} targetMatchDay
 	 * @returns {Number} sum of days
 	 */
 	_forecastSkills (forecastPlayer, lastMatchDay, targetMatchDay) {
 		let forecastDays = forecastPlayer.getForecastDays(lastMatchDay, targetMatchDay);
 		let youthDays = forecastPlayer.getYouthDays(lastMatchDay);
-	
+
 		Object.keys(forecastPlayer.getTrainableSkills()).forEach(key => {
 			let change = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
 			forecastPlayer.skills[key] += Math.round(change);
@@ -115,7 +115,7 @@ class YouthPlayer extends Player {
 
 	/**
 	 * Returns the trainable (primary and secondary) skills.
-	 * 
+	 *
 	 * @returns {Skillset} an object with the trainable skills only
 	 */
 	getTrainableSkills () {
@@ -132,9 +132,9 @@ class YouthPlayer extends Player {
 	/**
 	 * Returns the days the player will be trained until given match day.
 	 * If match day is omitted, the days until max age are returned.
-	 * 
-	 * @param {MatchDay} lastMatchDay 
-	 * @param {MatchDay} targetMatchDay 
+	 *
+	 * @param {MatchDay} lastMatchDay
+	 * @param {MatchDay} targetMatchDay
 	 * @returns {Number} forecast days
 	 */
 	getForecastDays (lastMatchDay, targetMatchDay) {
@@ -148,7 +148,7 @@ class YouthPlayer extends Player {
 
 	/**
 	 * Returns the days the player was trained until given match day.
-	 * 
+	 *
 	 * @param {MatchDay} matchday
 	 * @returns {Number} days trained
 	 */
@@ -160,7 +160,7 @@ class YouthPlayer extends Player {
 
 	/**
 	 * Returns the average increase per day.
-	 * 
+	 *
 	 * @param {Number} days
 	 * @returns {Number} average increase
 	 */
@@ -171,23 +171,23 @@ class YouthPlayer extends Player {
 	/**
 	 * Returns the salary for the youth player.
 	 * The formula was provided by Michael Bertram.
-	 * 
+	 *
 	 * @param {Number} term the contract length
 	 * @returns the salary
 	 */
 	getSalary (term = 24) {
 		let skill = this.getSkillAverage();
 		let age = this.age;
-		let salary = Math.exp(8.6352890923681 + term * 0.0705668514584682 + skill * 0.028080430507765 
-			+ Math.pow(term, 2) * -0.00174150326033113 + Math.pow(skill, 2) * 0.00498240336698239 
-			+ Math.pow(term, 3) * 0.000023430692218106 + Math.pow(skill, 3) * -0.000101781463829049 + Math.pow(age, 3) * -0.00148099883935323 
+		let salary = Math.exp(8.6352890923681 + term * 0.0705668514584682 + skill * 0.028080430507765
+			+ Math.pow(term, 2) * -0.00174150326033113 + Math.pow(skill, 2) * 0.00498240336698239
+			+ Math.pow(term, 3) * 0.000023430692218106 + Math.pow(skill, 3) * -0.000101781463829049 + Math.pow(age, 3) * -0.00148099883935323
 			+ Math.pow(term, 4) * -1.18310348021728 * Math.pow(10, -7) + Math.pow(skill, 4) * 7.18208724536507 * Math.pow(10, -7) + Math.pow(age, 4) * 0.000044797822229757);
 		return Math.round(salary);
 	}
 
 	/**
 	 * Completes the initialization of the player data.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 */
 	complete (lastMatchDay) {
@@ -207,12 +207,12 @@ class YouthPlayer extends Player {
 			this.pullPosition = null;
 			this.pullContractTerm = null;
 		}
-		
+
 	}
 
 	/**
 	 * Finds the best position of field players based on the opti.
-	 * 
+	 *
 	 * @returns {Position} the position
 	 */
 	initializeBestPosition () {

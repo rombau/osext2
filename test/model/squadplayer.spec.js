@@ -1,8 +1,8 @@
 describe('SquadPlayer', () => {
-	
-	/** @type {SquadPlayer} */ 
+
+	/** @type {SquadPlayer} */
 	let player;
-	
+
 	beforeEach(() => {
 		player = Object.assign(new SquadPlayer(), {
 			'skills': {
@@ -66,7 +66,7 @@ describe('SquadPlayer', () => {
 			}
 		});
 	});
-	
+
 	it('should complete initialization', () => {
 
 		player.complete(new MatchDay(14, 5));
@@ -160,12 +160,12 @@ describe('SquadPlayer', () => {
 
 		let matchDayInRange = [];
 		let forecastPlayer;
-		
+
 		forecastPlayer = player.getForecast(new MatchDay(15, 1), new MatchDay(15, 72), matchDayInRange);
 		expect(forecastPlayer.bans[0].duration).toEqual(3);
 		expect(forecastPlayer.bans[1].duration).toEqual(2);
 		expect(forecastPlayer.bans[2].duration).toEqual(1);
-		
+
 		const createMatchDay = (season, zat, competition) => {
 			let matchDay = new MatchDay(season, zat);
 			matchDay.competition = competition;
@@ -232,7 +232,7 @@ describe('SquadPlayer', () => {
 		player.skills.pas = 86;
 		player.lastTraining.skill = Skill.PAS;
 		player.nextTraining.skill = Skill.UEB;
-		
+
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.skills.ueb).toEqual(84);

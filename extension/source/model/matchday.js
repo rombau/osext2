@@ -2,7 +2,7 @@
  * Enum for competition types.
  * @readonly
  */
- const Competition = Object.freeze({
+const Competition = Object.freeze({
 	FRIENDLY: 'Friendly',
 	LEAGUE: 'Liga',
 	CUP: 'LP',
@@ -16,7 +16,7 @@
  * Enum for place types.
  * @readonly
  */
- const GameLocation = Object.freeze({
+const GameLocation = Object.freeze({
 	HOME: 'Heim',
 	AWAY: 'Auswärts'
 });
@@ -27,15 +27,15 @@
 class MatchDay {
 
 	/**
-	 * @param {Number} season 
-	 * @param {Number} zat 
+	 * @param {Number} season
+	 * @param {Number} zat
 	 */
 	constructor(season, zat) {
-			
-		/** @type {Number} the season number */ 
+
+		/** @type {Number} the season number */
 		this.season = season;
 
-		/** @type {Number} the number of this match day in the season */ 
+		/** @type {Number} the number of this match day in the season */
 		this.zat = zat;
 
 		/** @type {Competition} the competition */
@@ -44,7 +44,7 @@ class MatchDay {
 		/** @type {GameLocation} the ganme location */
 		this.location;
 
-		/** @private @type {Team} */ 
+		/** @private @type {Team} */
 		this._opponent;
 
 		/** @type {String} the game result */
@@ -55,49 +55,49 @@ class MatchDay {
 
 		// the follwing attributes only calculated and not persisted
 
-		/** @type {Promise<MatchDay>} the account balance promise for this match day */ 
+		/** @type {Promise<MatchDay>} the account balance promise for this match day */
 		this.accountBalancePromise;
 
-		/** @type {Number} the account balance before this match day */ 
+		/** @type {Number} the account balance before this match day */
 		this.accountBalanceBefore;
 
-		/** @type {Number} the stadium income */ 
+		/** @type {Number} the stadium income */
 		this.stadiumIncome;
 
-		/** @type {Number} the stadium costs */ 
+		/** @type {Number} the stadium costs */
 		this.stadiumCosts;
 
-		/** @type {Number} the fiendly income */ 
+		/** @type {Number} the fiendly income */
 		this.fiendlyIncome;
 
-		/** @type {Number} the advertising (tv) income */ 
+		/** @type {Number} the advertising (tv) income */
 		this.advertisingIncome;
 
-		/** @type {Number} the merchandising income */ 
+		/** @type {Number} the merchandising income */
 		this.merchandisingIncome;
 
-		/** @type {Number} the youth support */ 
+		/** @type {Number} the youth support */
 		this.youthSupport;
 
-		/** @type {Number} the squad salary */ 
+		/** @type {Number} the squad salary */
 		this.squadSalary;
 
-		/** @type {Number} the trainer salary */ 
+		/** @type {Number} the trainer salary */
 		this.trainerSalary;
 
-		/** @type {Number} the loan income */ 
+		/** @type {Number} the loan income */
 		this.loanIncome;
 
-		/** @type {Number} the loan costs */ 
+		/** @type {Number} the loan costs */
 		this.loanCosts;
 
-		/** @type {Number} the fast transfer income */ 
+		/** @type {Number} the fast transfer income */
 		this.fastTransferIncome;
 
-		/** @type {Number} the physio costs */ 
+		/** @type {Number} the physio costs */
 		this.physio;
 
-		/** @type {Number} the account balance after this match day */ 
+		/** @type {Number} the account balance after this match day */
 		this.accountBalance;
 	}
 
@@ -114,18 +114,18 @@ class MatchDay {
 
 	/**
 	 * Returns ture if this and the given match day are equal.
-	 * 
-	 * @param {MatchDay} matchday 
+	 *
+	 * @param {MatchDay} matchday
 	 * @returns {Boolean}
 	 */
 	equals (matchday) {
 		return this.zat === matchday.zat && this.season === matchday.season;
 	}
-	
+
 	/**
 	 * Returns ture if this match day is before the given one.
-	 * 
-	 * @param {MatchDay} matchday 
+	 *
+	 * @param {MatchDay} matchday
 	 * @returns {Boolean}
 	 */
 	before (matchday) {
@@ -134,18 +134,18 @@ class MatchDay {
 
 	/**
 	 * Returns ture if this match day is after the given one.
-	 * 
-	 * @param {MatchDay} matchday 
+	 *
+	 * @param {MatchDay} matchday
 	 * @returns {Boolean}
 	 */
 	after (matchday) {
 		return (this.season * SEASON_MATCH_DAYS + this.zat) > (matchday.season * SEASON_MATCH_DAYS + matchday.zat);
 	}
-	
+
 	/**
 	 * Returns the interval of this match day to the given one in days (zats).
-	 * 
-	 * @param {MatchDay} matchday 
+	 *
+	 * @param {MatchDay} matchday
 	 * @returns {Number}
 	 */
 	intervalTo (matchday) {
@@ -157,7 +157,7 @@ class MatchDay {
 
 	/**
 	 * Adds the given days (zats) to the match day.
-	 * 
+	 *
 	 * @param {Number} zats
 	 * @returns {MatchDay}
 	 */
@@ -172,7 +172,7 @@ class MatchDay {
 
 	/**
 	 * Returns the match day income based on the available stadium.
-	 * 
+	 *
 	 * @param {Stadium} stadium the available stadium at this match day
 	 * @param {*} viewSettings the view settings inluding ticket prices and load factor
 	 * @returns {Number}
@@ -205,7 +205,7 @@ class MatchDay {
 
 	/**
 	 * Returns the match day premium amount based on the competition.
-	 * 
+	 *
 	 * @param {Team.League} league the league attributes for premium
 	 * @param {*} viewSettings the view settings inluding current league ranking
 	 * @returns {Number}
@@ -216,10 +216,10 @@ class MatchDay {
 			if (league.size == 10) {
 				ranking = ranking * 2 - 1;
 			}
-			this.advertisingIncome = Math.round(PREMIUM_ADVERTISING[ranking - 1] * PREMIUM_LEAGUE_FACTOR[league.level - 1]); 
+			this.advertisingIncome = Math.round(PREMIUM_ADVERTISING[ranking - 1] * PREMIUM_LEAGUE_FACTOR[league.level - 1]);
 			this.merchandisingIncome = Math.round(PREMIUM_MERCHANDISING[ranking - 1] * PREMIUM_LEAGUE_FACTOR[league.level - 1]);
 			if (this.zat === SEASON_MATCH_DAYS) {
-				this.advertisingIncome *= PREMIUM_END_OF_SEASON_FACTOR; 
+				this.advertisingIncome *= PREMIUM_END_OF_SEASON_FACTOR;
 				this.merchandisingIncome *= PREMIUM_END_OF_SEASON_FACTOR;
 			}
 			return this.advertisingIncome + this.merchandisingIncome;

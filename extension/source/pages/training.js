@@ -1,6 +1,6 @@
 
 Page.Training = class extends Page {
-	
+
 	constructor() {
 
 		super('Training', 'training.php');
@@ -13,15 +13,15 @@ Page.Training = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-		
+
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.Training.HEADERS).forEach(row => {
 
 			let injured = row.cells[''].textContent;
 			let trainerNr = +row.cells['Trainer'].firstChild.value;
 			let skill = Page.Training.getRegularSkill(row.cells['trainierter Skill'].firstChild.selectedOptions[0].text);
-			
+
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill) && row.cells['Chance'].textContent.search(' %') != -1) {
-				
+
 
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
@@ -47,7 +47,7 @@ Page.Training = class extends Page {
 		// initialize new players
 		if (data.team.squadPlayerAdded) {
 			data.requestSquadPlayerPages();
-		}		
+		}
 	}
 
 	/**
@@ -69,16 +69,16 @@ Page.Training = class extends Page {
 				row.cells['Skill'].textContent = 'Wert';
 				row.cells['mögl. MW+'].textContent = 'mögl. MW+';
 				row.cells['zuletzt'].textContent = 'zuletzt trainiert';
-	
+
 			} else {
 
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
-				
+
 				let forecastMarketValue = () => {
 					let skill = Page.Training.getRegularSkill(row.cells['trainierter Skill'].firstChild.selectedOptions[0].text);
 					if (Object.keys(Skill).includes(skill)) {
-						/** @type {SquadPlayer} */ 
+						/** @type {SquadPlayer} */
 						let forecastPlayer = Object.assign(new SquadPlayer(), JSON.parse(JSON.stringify(player)));
 						forecastPlayer.skills[skill.toLocaleLowerCase()]++;
 						row.cells['mögl. MW+'].textContent = (forecastPlayer.getMarketValue() - player.getMarketValue()).toLocaleString();
@@ -124,7 +124,7 @@ Page.Training = class extends Page {
 
 	/**
 	 * Returns the converted skill for position TOR.
-	 * 
+	 *
 	 * @param {String} skill the skill to convert
 	 * @returns {String}
 	 */
@@ -137,11 +137,11 @@ Page.Training = class extends Page {
 		if (skill === 'REF') return 'GES';
 		return skill;
 	}
-	
+
 
 	/**
 	 * Returns the converted skill for position TOR.
-	 * 
+	 *
 	 * @param {String} skill the skill to convert
 	 * @returns {String}
 	 */

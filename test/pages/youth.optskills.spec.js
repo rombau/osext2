@@ -2,8 +2,8 @@ describe('Page.YouthOptskills', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.YouthOptskills} */ let page;
-	
-	beforeEach(() => {			
+
+	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.YouthOptskills();
 
@@ -20,13 +20,13 @@ describe('Page.YouthOptskills', () => {
 		data.complete();
 
 		Fixture.getDocument('ju.php', doc => {
-			
+
 			new Page.YouthOverview().extract(doc, data);
 
 			Fixture.getDocument('ju.php?page=3', doc => {
-			
+
 				page.extend(doc, data);
-	
+
 				done();
 			});
 		});

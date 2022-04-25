@@ -1,6 +1,6 @@
 
 Page.ShowteamSeason = class extends Page {
-	
+
 	/**
 	 * @param {Number} season
 	 */
@@ -14,7 +14,7 @@ Page.ShowteamSeason = class extends Page {
 			this.params.push(new Page.Param('saison', season, true));
 		}
 	}
-	
+
 	static HEADERS = ['ZAT', 'Spielart', 'Gegner', 'Ergebnis', 'Bericht'];
 
 	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
@@ -24,7 +24,7 @@ Page.ShowteamSeason = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-		
+
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
 
@@ -64,14 +64,14 @@ Page.ShowteamSeason = class extends Page {
 		let leagueRound = 1;
 
 		Array.from(this.table.rows).forEach((row, i) => {
-		
+
 			row.cells['Info'] = row.cells[5];
 
 			if (i === 0) {
 
 				row.appendChild(doc.createElement('td'));
 				row.appendChild(doc.createElement('td'));
-	
+
 			} else {
 
 				if (row.cells['Info'].textContent.includes('FSS-Tunier:')) {
@@ -99,7 +99,7 @@ Page.ShowteamSeason = class extends Page {
 					else if (matchDay.competition === Competition.OSC || matchDay.competition === Competition.OSCQ) {
 						type = `${type.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${type.slice(4)}`
 					}
-					row.cells['Spielart'].textContent = type;
+					row.cells['Spielart'].textContent = type.replace(/\s+/g, ' ');
 					row.cells['Spielart'].style.setProperty('padding-right', '0.5em', 'important');
 				}
 			}
@@ -107,7 +107,7 @@ Page.ShowteamSeason = class extends Page {
 
 		let form = doc.querySelector('form');
 		form.style.paddingLeft = '4px';
-		
+
 		if (data.lastMatchDay.season <= this.selectedSeason) {
 
 			if (data.lastMatchDay.zat > 3) {
@@ -127,7 +127,7 @@ Page.ShowteamSeason = class extends Page {
 
 	/**
 	 * Adds or updates the balance column(s).
-	 * 
+	 *
 	 * @param {[MatchDay]} matchDays of match days sorted by season and zat
 	 */
 	updateWithMatchDays (matchDays) {
@@ -137,20 +137,20 @@ Page.ShowteamSeason = class extends Page {
 			for (let season = matchDays[0].season; season <= matchDays[matchDays.length - 1].season; season++) {
 
 				let balanceCell = row.cells['Saldo' + season] || row.cells['ZAT'].cloneNode(true);
-	
+
 				if (i === 0) {
-	
+
 					balanceCell.textContent = 'Saldo Saison ' + season;
-		
+
 				} else {
-	
+
 					balanceCell.textContent = '...';
-					
+
 					let matchDay = matchDays.find(matchDay => matchDay.season === season && matchDay.zat === i)
 					matchDay.accountBalancePromise.then((day => {
-						
+
 						if (day.youthSupport) {
-							
+
 							let balanceTooltip = HtmlUtil.createDivElement('', 'osext-balance-tooltip');
 							balanceTooltip.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'right'));
 							if (day.stadiumIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), 'positive'));
@@ -169,15 +169,15 @@ Page.ShowteamSeason = class extends Page {
 							let balanceElement = HtmlUtil.createDivElement('', 'osext-balance');
 							balanceElement.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString(), 'osext-forecast'));
 							balanceElement.appendChild(balanceTooltip);
-							
+
 							balanceCell.textContent = '';
 							balanceCell.appendChild(balanceElement);
 
 						} else {
-							
+
 							balanceCell.textContent = day.accountBalance.toLocaleString();
 						}
-						
+
 					}));
 
 					if (matchDay.competition === Competition.FRIENDLY) {
@@ -199,25 +199,25 @@ Page.ShowteamSeason = class extends Page {
 
 	/**
 	 * Creates the toolbar for the squad player (showteam) views.
-	 * 
+	 *
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
-	 * 
+	 *
 	 * @returns {HTMLElement} the toolbar element
 	 */
 	createToolbar (doc, data) {
-	
+
 		HtmlUtil.allowStickyToolbar(doc);
 
 		let page = this;
-	
+
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';
-		
+
 		let rankingTitle = doc.createElement('span');
 		rankingTitle.innerHTML = 'Platzierung: ';
 		toolbar.appendChild(rankingTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 150, 1, data.team.league.size, data.viewSettings.leagueRanking, 
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 150, 1, data.team.league.size, data.viewSettings.leagueRanking,
 			ranking => {
 				data.viewSettings.leagueRanking = ranking;
 				Persistence.storeExtensionData(data);
@@ -228,7 +228,7 @@ Page.ShowteamSeason = class extends Page {
 		let loadTitle = doc.createElement('span');
 		loadTitle.innerHTML = 'Stadionauslastung (%): ';
 		toolbar.appendChild(loadTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 150, 1, 100, data.viewSettings.stadiumLoad || 100, 
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 150, 1, 100, data.viewSettings.stadiumLoad || 100,
 			load => {
 				data.viewSettings.stadiumLoad = load;
 				Persistence.storeExtensionData(data);
@@ -239,7 +239,7 @@ Page.ShowteamSeason = class extends Page {
 		let leagueTitle = doc.createElement('span');
 		leagueTitle.innerHTML = ' Eintritt Liga: ';
 		toolbar.appendChild(leagueTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.league, 
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.league,
 			ticketPrice => {
 				data.viewSettings.ticketPrice.league = ticketPrice;
 				Persistence.storeExtensionData(data);
@@ -250,7 +250,7 @@ Page.ShowteamSeason = class extends Page {
 		let cupTitle = doc.createElement('span');
 		cupTitle.innerHTML = 'Pokal: ';
 		toolbar.appendChild(cupTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.cup, 
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.cup,
 			ticketPrice => {
 				data.viewSettings.ticketPrice.cup = ticketPrice;
 				Persistence.storeExtensionData(data);
@@ -259,11 +259,11 @@ Page.ShowteamSeason = class extends Page {
 		));
 
 		if (data.team.matchDays.find(matchday => !matchday.result && (matchday.competition === Competition.OSC || matchday.competition === Competition.OSCQ || matchday.competition === Competition.OSE || matchday.competition === Competition.OSEQ))) {
-		
+
 			let intTitle = doc.createElement('span');
 			intTitle.innerHTML = 'International: ';
 			toolbar.appendChild(intTitle);
-			toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.international, 
+			toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.international,
 				ticketPrice => {
 					data.viewSettings.ticketPrice.international = ticketPrice;
 					Persistence.storeExtensionData(data);

@@ -1,6 +1,6 @@
 
 Page.YouthSkills = class extends Page.Youth {
-	
+
 	constructor() {
 
 		super('Jugendeinzelskills', 'ju.php', new Page.Param('page', 2));
@@ -8,9 +8,9 @@ Page.YouthSkills = class extends Page.Youth {
 		/** @type {HTMLTableElement} */
 		this.table;
 	}
-	
+
 	static HEADERS = ['|Land|', 'U', 'Alter', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
-	
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -19,19 +19,19 @@ Page.YouthSkills = class extends Page.Youth {
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
 			.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
-	
+
 			let player = data.team.youthPlayers[index];
 			if (!player) {
 				player = new YouthPlayer();
 			}
 			data.team.youthPlayers[index] = player;
-			
+
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
 			});
 		});
 	}
-		
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -39,9 +39,9 @@ Page.YouthSkills = class extends Page.Youth {
 	extend(doc, data) {
 
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
-		
+
 		this.table.classList.add(STYLE_YOUTH);
-		
+
 		Array.from(this.table.rows)
 			.filter(row => !this.handleYearHeader(row))
 			.forEach((row, index) => {
@@ -56,20 +56,20 @@ Page.YouthSkills = class extends Page.Youth {
 			row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
 
 			row.cells['Skillschn.'].style.paddingLeft = '10px';
-		
+
 			if (index === 0) {
 
 				row.cells['Geb.'].textContent = 'Geb.';
 				row.cells['Pos'].textContent = 'Pos';
 				row.cells['Skillschn.'].textContent = 'Skillschn.';
 				row.cells['Opt.Skill'].textContent = 'Opt.Skill';
-				
+
 			} else {
 
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
-					
+
 				let player = data.team.youthPlayers[index - 1];
-					
+
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN && player.getSkillAverage(player.getSecondarySkills()) > 0 ? player.pos : '');
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
@@ -80,13 +80,13 @@ Page.YouthSkills = class extends Page.Youth {
 			row.insertBefore(row.cells['Geb.'], row.cells[0]);
 			row.insertBefore(newAgeColumn, row.cells[0]);
 
-			row.appendChild(row.cells['Skillschn.']);			
-			row.appendChild(row.cells['Opt.Skill']);	
+			row.appendChild(row.cells['Skillschn.']);
+			row.appendChild(row.cells['Opt.Skill']);
 
 			row.removeChild(oldAgeColumn);
-			
+
 		});
-		
+
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 	}
 
@@ -101,13 +101,13 @@ Page.YouthSkills = class extends Page.Youth {
 			.filter(row => this.isPlayerRow(row))
 			.slice(1)
 			.forEach((row, index) => {
-			
+
 			let player = team.youthPlayers[index];
 
 			row.cells['Alter'].textContent = player.age;
-			
+
 			if (player.active) {
-				
+
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 
@@ -117,7 +117,7 @@ Page.YouthSkills = class extends Page.Youth {
 
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = (row.cells['Pos'].textContent ? player.getOpti().toFixed(2) : '')
-				
+
 			} else {
 
 				Object.keys(player.skills).forEach((skillname, s) => {
