@@ -99,7 +99,7 @@ Page.ShowteamSeason = class extends Page {
 					else if (matchDay.competition === Competition.OSC || matchDay.competition === Competition.OSCQ) {
 						type = `${type.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${type.slice(4)}`
 					}
-					row.cells['Spielart'].textContent = type;
+					row.cells['Spielart'].textContent = type.replace(/\s+/g, ' ');
 					row.cells['Spielart'].style.setProperty('padding-right', '0.5em', 'important');
 				}
 			}
