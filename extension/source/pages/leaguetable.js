@@ -14,16 +14,21 @@ Page.LeagueTable = class extends Page {
 	 */
 	extract(doc, data) {
 
-		data.team.league.size = 0;
+		if (doc.querySelector('select[name=ligaauswahl]').value && doc.querySelector('select[name=landauswahl]').value) {
 
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.LeagueTable.HEADERS).forEach(row => {
+			let size = 0;
+			let leagueOfCurrentTeam = false;
 
-			data.team.league.size++;
+			HtmlUtil.getTableRowsByHeader(doc, ...Page.LeagueTable.HEADERS).forEach(row => {
 
-			if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.team.id) {
-				data.viewSettings.leagueRanking = data.team.league.size;
-			}
-		});
+				size++;
+				if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.team.id) {
+					data.viewSettings.leagueRanking = size;
+					leagueOfCurrentTeam = true;
+				}
+			});
+
+			if (leagueOfCurrentTeam) data.team.league.size = size;
+		}
 	}
 }
-

@@ -18,8 +18,8 @@ class HtmlUtil {
 	 */
 	static getTableByHeader (doc, ...headers) {
 		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
-			return Array.from(table.rows[0].cells).every((cell, i) => {
-				return cell.textContent === (headers[i].replaceAll('|', ''));
+			return headers.every((header, i) => {
+				return table.rows[0].cells[i].textContent === (header.replaceAll('|', ''));
 			});
 		});
 		if (!table) {
