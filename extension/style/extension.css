@@ -1,222 +1,222 @@
 
 .osext-forecast {
-    opacity: 0.7 !important;
+	opacity: 0.7 !important;
 }
 
 .osext-inactive {
-    opacity: 0.3 !important;
+	opacity: 0.3 !important;
 }
 .osext-inactive:not(.delete) {
-    pointer-events: none;
+	pointer-events: none;
 }
 
 .osext-primary {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .osext-message.osext-hidden, .osext-hidden:not(.osext-set-zat) {
-    display: none;
+	display: none;
 }
 .osext-set-zat.osext-hidden, .TOR.osext-hidden {
-    visibility: hidden;
-    pointer-events: none;
-    cursor: initial;
-    display: table-cell;
+	visibility: hidden;
+	pointer-events: none;
+	cursor: initial;
+	display: table-cell;
 }
 
 .osext-refresh {
-    cursor: pointer;
-    margin: 10px 3px;
+	cursor: pointer;
+	margin: 10px 3px;
 }
 
 .osext-month {
-    background-color: var(--row-hover-color);
+	background-color: var(--row-hover-color);
 }
 
 .osext-set-zat > * {
-    display: none !important;
+	display: none !important;
 }
-.osext-set-zat.add > .fa-bolt, 
-.osext-set-zat.add > .fa-plus-circle, 
-.osext-set-zat.add > .fa-level-up-alt, 
+.osext-set-zat.add > .fa-bolt,
+.osext-set-zat.add > .fa-plus-circle,
+.osext-set-zat.add > .fa-level-up-alt,
 .osext-set-zat.delete > .fa-trash-alt,
 form > .fa-arrow-alt-circle-down {
-    cursor: pointer;
+	cursor: pointer;
 }
 .osext-set-zat.add > .fa-bolt, .osext-set-zat.add > .fa-plus-circle, .osext-set-zat.add > .fa-level-up-alt {
-    display: inline-block !important;
-    margin-right: 5px;
+	display: inline-block !important;
+	margin-right: 5px;
 }
 .osext-set-zat.delete > .fa-trash-alt, .osext-set-zat.delete > span {
-    display: inline-block !important;
-    margin-right: 5px;
+	display: inline-block !important;
+	margin-right: 5px;
 }
 
 .osext-set-contract {
-    border: 0.5px solid;
-    border-radius: 8px;
-    background-color: var(--input-background-color);
-    font-size: 0.6em;
-    padding: 0.25em;
-    vertical-align: top;
-    cursor: pointer;
+	border: 0.5px solid;
+	border-radius: 8px;
+	background-color: var(--input-background-color);
+	font-size: 0.6em;
+	padding: 0.25em;
+	vertical-align: top;
+	cursor: pointer;
 }
 .osext-set-zat.delete > span.osext-set-contract:empty {
-    display: none !important;
+	display: none !important;
 }
 
 .osext-error {
-    background-color: var(--error-background-color);
-    color: var(--error-color);
+	background-color: var(--error-background-color);
+	color: var(--error-color);
 }
 
 .osext-warning {
-    background-color: var(--warning-background-color);
-    color: var(--warning-color);
+	background-color: var(--warning-background-color);
+	color: var(--warning-color);
 }
 
 .osext-status {
-    background-color: var(--status-background-color);
-    color: var(--status-color);
+	background-color: var(--status-background-color);
+	color: var(--status-color);
 }
 
 .osext-message {
-    display: block;
-    padding: 9px 12px;
-    position: fixed;
-    bottom: 12px;
-    right: 12px;
-    z-index: 3;
+	display: block;
+	padding: 9px 12px;
+	position: fixed;
+	bottom: 12px;
+	right: 12px;
+	z-index: 3;
 }
 
 #osext-page-request-overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.1);
-    z-index: 2;
-    cursor: progress;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.1);
+	z-index: 2;
+	cursor: progress;
 }
 
 #osext-toolbar-container {
-    padding: 0px;
-    padding-top: 10px;
-    padding-bottom: 14px;
-    margin-bottom: 7px;
-    position: sticky;
-    top: 0;
-    background-color: var(--background-color);
-    z-index: 999;
+	padding: 0px;
+	padding-top: 10px;
+	padding-bottom: 14px;
+	margin-bottom: 7px;
+	position: sticky;
+	top: 0;
+	background-color: var(--background-color);
+	z-index: 999;
 }
 
 #osext-toolbar-container span {
-    vertical-align: text-bottom;
-    position: relative;
-    padding: 4px;
+	vertical-align: text-bottom;
+	position: relative;
+	padding: 4px;
 }
 
 #osext-toolbar-container div {
-    display: inline-block;
-    width: 350px;
+	display: inline-block;
+	width: 350px;
 }
 
 #osext-toolbar-container .fa-toggle-on,
 #osext-toolbar-container .fa-toggle-off {
-    position: relative;
-    top: 2.5px;
-    font-size: 1.4em;
-    cursor: pointer;
-    color: var(--range-thumb-color);
+	position: relative;
+	top: 2.5px;
+	font-size: 1.4em;
+	cursor: pointer;
+	color: var(--range-thumb-color);
 }
 #osext-toolbar-container .fa-toggle-on {
-    color: var(--range-thumb-color);
+	color: var(--range-thumb-color);
 }
 
 #osext-toolbar-container input[type=range] {
-    width: 60%;
-    height: 6px;
-    border-radius: 5px;  
-    background: var(--range-background-color);
-    outline: none;
-    opacity: 0.7;
-    transition: opacity .2s;
-    -webkit-appearance: none;
-    -webkit-transition: .2s;
-    padding: 0px;
+	width: 60%;
+	height: 6px;
+	border-radius: 5px;
+	background: var(--range-background-color);
+	outline: none;
+	opacity: 0.7;
+	transition: opacity .2s;
+	-webkit-appearance: none;
+	-webkit-transition: .2s;
+	padding: 0px;
 }
 
 #osext-toolbar-container input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%; 
-    background: var(--range-thumb-color);
-    cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--range-thumb-color);
+	cursor: pointer;
 }
-  
+
 #osext-toolbar-container input[type=range]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--range-thumb-color);
-    cursor: pointer;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--range-thumb-color);
+	cursor: pointer;
 }
 
 .osext-balance {
-    position: relative;
-    cursor: default;
+	position: relative;
+	cursor: default;
 }
 .osext-balance > .osext-forecast {
-    display: inline-block;
+	display: inline-block;
 }
 .osext-balance-tooltip {
-    position: absolute;
-    width: 210%;
-    vertical-align: bottom;
-    border: 1px solid var(--status-background-color);
-    background-color: var(--background-color);
-    box-shadow: 0px 0px 10px 0px var(--row-hover-color);
-    bottom: 1.6em;
-    right: -5px;
-    padding: 5px;
-    z-index: 1000;
-    color: var(--status-color);
-    visibility: hidden;
-    display: table;
-    opacity: 1 !important
+	position: absolute;
+	width: 210%;
+	vertical-align: bottom;
+	border: 1px solid var(--status-background-color);
+	background-color: var(--background-color);
+	box-shadow: 0px 0px 10px 0px var(--row-hover-color);
+	bottom: 1.6em;
+	right: -5px;
+	padding: 5px;
+	z-index: 1000;
+	color: var(--status-color);
+	visibility: hidden;
+	display: table;
+	opacity: 1 !important
 }
 .osext-balance:hover > .osext-balance-tooltip > div {
-    display: table-row;
-    vertical-align: bottom;
+	display: table-row;
+	vertical-align: bottom;
 }
 .osext-balance:hover:before {
-    content: "= ";
-    opacity: 0.7 !important;
+	content: "= ";
+	opacity: 0.7 !important;
 }
 .osext-balance:hover span {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 .osext-balance:hover > .osext-balance-tooltip {
-    visibility: visible;
+	visibility: visible;
 }
 .osext-balance:hover > .osext-balance-tooltip .left {
-    float: left;
-    font-size: 0.9em;
+	float: left;
+	font-size: 0.9em;
 }
 .osext-balance:hover > .osext-balance-tooltip .right {
-    float: right;
+	float: right;
 }
 .osext-balance:hover > .osext-balance-tooltip .positive {
-    color: #0a0;
+	color: #0a0;
 }
 .osext-balance:hover > .osext-balance-tooltip .negative {
-    color: #d00;
+	color: #d00;
 }
 .osext-balance:hover > .osext-balance-tooltip .negative:before {
-    content: "-";
+	content: "-";
 }

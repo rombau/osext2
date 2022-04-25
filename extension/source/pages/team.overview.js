@@ -1,6 +1,6 @@
 
 Page.TeamOverview = class extends Page.ShowteamOverview {
-	
+
 	/**
 	 * @param {Number} id the team id
 	 * @param {String} id the team name
@@ -22,7 +22,7 @@ Page.TeamOverview = class extends Page.ShowteamOverview {
 	extract(doc, data) {
 
 	}
-	
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -30,7 +30,7 @@ Page.TeamOverview = class extends Page.ShowteamOverview {
 	extend(doc, data) {
 
 	}
-	
+
 }
 
 

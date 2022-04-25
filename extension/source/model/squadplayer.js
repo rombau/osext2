@@ -17,8 +17,8 @@ class SquadPlayer extends Player {
 	constructor() {
 
 		super();
-		
-		/** @type {Number} the internal id */ 
+
+		/** @type {Number} the internal id */
 		this.id;
 
 		/** @type {String} the name */
@@ -63,16 +63,16 @@ class SquadPlayer extends Player {
 		/** @type {Number} the training factor considered in the market value */
 		this.trainingFactor;
 
-		/** @type {MatchDay} the match day (ZAT) after that the player should be fast transfered ('Blitz') */ 
+		/** @type {MatchDay} the match day (ZAT) after that the player should be fast transfered ('Blitz') */
 		this.fastTransferMatchDay;
-		
+
 		/** @private @type {SquadPlayer.Training} */
 		this._lastTraining;
 
 		/** @private @type {SquadPlayer.Training} */
 		this._nextTraining;
 
-		/** @type {MatchDay} the match day (ZAT) after that the player contract term should be extended */ 
+		/** @type {MatchDay} the match day (ZAT) after that the player contract term should be extended */
 		this.contractExtensionMatchDay;
 
 		/** @type {Number} the new contract length on extension */
@@ -122,13 +122,13 @@ class SquadPlayer extends Player {
 	set nextTraining (value) {
 		this._nextTraining = value;
 	}
-	
+
 	/**
 	 * Returns the calculated market value, considering the training factor for the current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
 	 * @param {Number} factor the training factor; if omitted the current training factor is used
-	 * @returns 
+	 * @returns
 	 */
 	getMarketValue (pos = this.pos, factor = this.trainingFactor) {
 		return super.getMarketValue(pos, factor);
@@ -138,12 +138,12 @@ class SquadPlayer extends Player {
 	/**
 	 * Returns the salary based on the contract term.
 	 * The formula was provided by Michael Bertram.
-	 * 
-	 * If available the salary is used from contract extension page. 
+	 *
+	 * If available the salary is used from contract extension page.
 	 * Otherwise salary is calculated (currently only for minimal term).
-	 * 
+	 *
 	 * @param {Number} term the contract term
-	 * @returns 
+	 * @returns
 	 */
 	getSalary (term = this.contractTerm) {
 		if (this.followUpSalary[term]) {
@@ -153,9 +153,9 @@ class SquadPlayer extends Player {
 			let skill = this.getSkillAverage();
 			let opti = this.getOpti();
 			let skills = this.getSpecialSkills().length;
-			let salary24 = Math.exp(43.4141558006601 - age * 5.54570281665499 + skill * 0.158961589662974 + opti * 0.0621816258155144 
-				+ Math.pow(age, 2) * 0.291391890680615 - Math.pow(skill, 2) * 0.00156875101235568 - Math.pow(opti, 2) * 0.000708828068471812 
-				- Math.pow(age, 3) * 0.00690374205734566 + Math.pow(skill, 3) * 0.0000185915532095852 + Math.pow(opti, 3) * 7.30138929949129 * Math.pow(10, -6) 
+			let salary24 = Math.exp(43.4141558006601 - age * 5.54570281665499 + skill * 0.158961589662974 + opti * 0.0621816258155144
+				+ Math.pow(age, 2) * 0.291391890680615 - Math.pow(skill, 2) * 0.00156875101235568 - Math.pow(opti, 2) * 0.000708828068471812
+				- Math.pow(age, 3) * 0.00690374205734566 + Math.pow(skill, 3) * 0.0000185915532095852 + Math.pow(opti, 3) * 7.30138929949129 * Math.pow(10, -6)
 				+ Math.pow(age, 4) * 0.0000608351611664875 - Math.pow(skill, 4) * 8.52842263501928 * Math.pow(10, -8) - Math.pow(opti,4) * 3.00334542939177 * Math.pow(10, -8) + skills * 0.0271361133643198);
 			if (age >= 32) {
 				salary24 = salary24 * (0.0274395216316261 * Math.pow(age, 2) - 2.01524742754527 * age + 37.4122435618068);
@@ -172,10 +172,10 @@ class SquadPlayer extends Player {
 
 	/**
 	 * Returns the calculated fast transfer value ('Blitzerlös').
-	 * 
+	 *
 	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
 	 * @param {Number} factor the training factor; if omitted the current training factor is used
-	 * @returns 
+	 * @returns
 	 */
 	getFastTransferValue () {
 		if (this.age >= (this.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD)) {
@@ -188,7 +188,7 @@ class SquadPlayer extends Player {
 
 	/**
 	 * Returns a forecast of the player for the given target match day.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 * @param {MatchDay} targetMatchDay the target match day
 	 * @param {[MatchDay]} matchDaysInRange the match days in the range from lastMatchDay and targetMatchDay
@@ -203,9 +203,9 @@ class SquadPlayer extends Player {
 		forecastPlayer.posLastMatch = null;
 		forecastPlayer.moral = null;
 		forecastPlayer.fitness = null;
-	
+
 		this._forecastBans(forecastPlayer, matchDaysInRange);
-		
+
 		let days = 1;
 		let matchday = new MatchDay(lastMatchDay.season, lastMatchDay.zat);
 		while (!matchday.add(1).after(targetMatchDay)) {
@@ -224,9 +224,9 @@ class SquadPlayer extends Player {
 
 	/**
 	 * Calculates the chance for successful training.
-	 * 
-	 * @param {Skill} skill 
-	 * @param {Team.Trainer} trainer 
+	 *
+	 * @param {Skill} skill
+	 * @param {Team.Trainer} trainer
 	 * @returns {Number}
 	 */
 	getTrainingChance (skill, trainer) {
@@ -243,11 +243,11 @@ class SquadPlayer extends Player {
 			let daysUntilIncrease = 100 / chance;
 			let onlyOneTraining = forecastPlayer.lastTraining && forecastPlayer.nextTraining && (forecastPlayer.lastTraining.skill === forecastPlayer.nextTraining.skill);
 			let refObject = (onlyOneTraining ? forecastPlayer : training);
-			refObject.daysUntilIncrease = (refObject.daysUntilIncrease || 0) - 1 
+			refObject.daysUntilIncrease = (refObject.daysUntilIncrease || 0) - 1
 				+ daysUntilIncrease - (refObject.daysUntilIncrease > 0 ? (refObject.lastDaysUntilIncrease || 0): 0);
 			if (refObject.daysUntilIncrease <= 0) {
 				forecastPlayer.skills[training.skill]++;
-				this._handleTrainingLimit(forecastPlayer, training, onlyOneTraining);				
+				this._handleTrainingLimit(forecastPlayer, training, onlyOneTraining);
 			}
 			refObject.lastDaysUntilIncrease = daysUntilIncrease;
 		}
@@ -361,10 +361,10 @@ class SquadPlayer extends Player {
 			forecastPlayer.active = false;
 		}
 	}
-		
+
 	/**
 	 * Completes the initialization of the player data.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 */
 	complete (lastMatchDay) {
@@ -391,7 +391,7 @@ class SquadPlayer extends Player {
  * Enum for ban types.
  * @readonly
  */
- const BanType = Object.freeze({
+const BanType = Object.freeze({
 	LEAGUE: { abbr: 'L', description: 'Ligaspiel', descriptionPlural: 'Ligaspiele' },
 	CUP: { abbr: 'P', description: 'Pokalspiel', descriptionPlural: 'Pokalspiele' },
 	INTERNATIONAL: { abbr: 'I', description: 'internationales Spiel', descriptionPlural: 'internationale Spiele' }
@@ -446,15 +446,15 @@ SquadPlayer.Loan = class {
  * Training representation.
  */
 SquadPlayer.Training = class {
-	
+
 	constructor() {
 
-		/** @private @type {Team.Trainer} */ 
+		/** @private @type {Team.Trainer} */
 		this._trainer;
-		
+
 		/** @type {Skill} the trainings skill */
 		this.skill;
-		
+
 		/** @type {Number} the chance to increase the skill */
 		this.chance;
 

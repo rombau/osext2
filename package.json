@@ -1,31 +1,31 @@
 {
-  "name": "osext2",
-  "version": "2.0.0",
-  "description": "Online Soccer extension for browsers with chrome API",
-  "scripts": {
-    "test": "karma start karma.conf.js",
-    "lint": "eslint .  --ext .js",
-    "badge": "coverage-badge-creator --config './badgeconfig.json'"
-  },
-  "keywords": [
-    "OS",
-    "Online",
-    "Soccer",
-    "Extension"
-  ],
-  "author": "Roman Bauer",
-  "license": "MIT",
-  "devDependencies": {
-    "coverage-badge-creator": "^1.0.11",
-    "eslint": "^8.13.0",
-    "gulp": "^4.0.2",
-    "gulp-zip": "^4.2.0",
-    "jasmine": "^3.7.0",
-    "jasmine-core": "^3.7.1",
-    "karma": "^6.3.17",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-coverage": "^2.0.3",
-    "karma-jasmine": "^4.0.1",
-    "karma-spec-reporter": "0.0.32"
-  }
+	"name": "osext2",
+	"version": "2.0.0",
+	"description": "Online Soccer extension for browsers with chrome API",
+	"scripts": {
+		"test": "karma start karma.conf.js",
+		"lint": "eslint .	--ext .js",
+		"badge": "coverage-badge-creator --config './badgeconfig.json'"
+	},
+	"keywords": [
+		"OS",
+		"Online",
+		"Soccer",
+		"Extension"
+	],
+	"author": "Roman Bauer",
+	"license": "MIT",
+	"devDependencies": {
+		"coverage-badge-creator": "^1.0.11",
+		"eslint": "^8.13.0",
+		"gulp": "^4.0.2",
+		"gulp-zip": "^4.2.0",
+		"jasmine": "^3.7.0",
+		"jasmine-core": "^3.7.1",
+		"karma": "^6.3.17",
+		"karma-chrome-launcher": "^3.1.0",
+		"karma-coverage": "^2.0.3",
+		"karma-jasmine": "^4.0.1",
+		"karma-spec-reporter": "0.0.32"
+	}
 }

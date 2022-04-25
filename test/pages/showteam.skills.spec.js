@@ -2,7 +2,7 @@ describe('Page.ShowteamSkills', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.ShowteamSkills} */ let page;
-	
+
 	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.ShowteamSkills();
@@ -18,11 +18,11 @@ describe('Page.ShowteamSkills', () => {
 		data.nextZatSeason = 16;
 
 		data.complete();
-		
+
 		Fixture.getDocument('showteam.php?s=2', doc => {
-			
+
 			page.extract(doc, data);
-						
+
 			expect(data.team.squadPlayers.length).toEqual(32);
 			expect(data.team.squadPlayers[0].skills.sch).toEqual(58);
 			expect(data.team.squadPlayers[0].skills.bak).toEqual(80);
@@ -41,9 +41,9 @@ describe('Page.ShowteamSkills', () => {
 			expect(data.team.squadPlayers[0].skills.dis).toEqual(3);
 			expect(data.team.squadPlayers[0].skills.zuv).toEqual(80);
 			expect(data.team.squadPlayers[0].skills.ein).toEqual(30);
-			
+
 			page.extend(doc, data);
-			
+
 			let slider = doc.querySelector('input[type=range]')
 			slider.value += 19; // to test season interval
 			slider.dispatchEvent(new Event('input'));

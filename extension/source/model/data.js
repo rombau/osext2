@@ -11,23 +11,23 @@ const YouthSupportBarrierType = Object.freeze({
  * Extension data
  */
 class ExtensionData {
-	
+
 	constructor () {
-		
+
 		/** @type {[Page]} the queue with the pages to request */
 		this._pagesToRequest = [];
 
 		/** @private @type {Team} */
 		this._team = new Team();
-		
-		/** @type {Number} the next zat */ 
+
+		/** @type {Number} the next zat */
 		this.nextZat;
-		
-		/** @type {Number} the next zat season */ 
+
+		/** @type {Number} the next zat season */
 		this.nextZatSeason;
-		
+
 		this.viewSettings = {
-			
+
 			/** @type {MatchDay} */
 			squadPlayerMatchDay : null,
 
@@ -36,7 +36,7 @@ class ExtensionData {
 
 			/** @type {Boolean} */
 			youthMax : false,
-			
+
 			/** @type {Number} */
 			youthSupportPerDay : YOUTH_SUPPORT_MIN,
 
@@ -68,7 +68,7 @@ class ExtensionData {
 
 	/**
 	 * @type {MatchDay} the next match day
- 	 */
+	 */
 	get nextMatchDay () {
 		return this.team.getMatchDay(this.nextZatSeason, this.nextZat);
 	}
@@ -122,13 +122,13 @@ class ExtensionData {
 		this.pagesToRequest.push(new Page.ContractExtension());
 		this.pagesToRequest.push(new Page.MatchDayOptions());
 	}
-	
+
 	/**
 	 * Adds all squad player pages to the request pages array.
 	 */
 	requestSquadPlayerPages () {
 		if (this.pagesToRequest.length === 0) {
-			this.pagesToRequest.push(new Page.ShowteamOverview());		
+			this.pagesToRequest.push(new Page.ShowteamOverview());
 			this.pagesToRequest.push(new Page.ShowteamSkills());
 			this.pagesToRequest.push(new Page.ShowteamContracts());
 			this.pagesToRequest.push(new Page.LoanView());
@@ -140,23 +140,23 @@ class ExtensionData {
 
 	/**
 	 * Initializes the next zat. During saison interval the next zat is always set to 1.
-	 * 
-	 * @param {Number} zat 
+	 *
+	 * @param {Number} zat
 	 */
 	initNextZat (zat) {
-		this.nextZat = (zat <= 1 || zat > SEASON_MATCH_DAYS) ? 1 : zat;	
+		this.nextZat = (zat <= 1 || zat > SEASON_MATCH_DAYS) ? 1 : zat;
 	}
 
 	/**
 	 * Initializes the next zat season, if not yet set. This method should be called after
 	 * extracting the season schedule.
-	 * 
+	 *
 	 * During the season interval (zat=1) there are two possible options for the season schedule:
 	 * - the previous season was extracted (with all the already played games):
 	 *   the season of the next zat can be set (season + 1)
 	 * - the new season (or nothing) was extracted:
 	 *   the previous season has to be loaded for future forecasts; return false
-	 * 
+	 *
 	 * @param {Number} the next zat season
 	 * @returns {Boolean} true if the next zat season can be set and false otherwise
 	 */
@@ -174,7 +174,7 @@ class ExtensionData {
 		}
 		return true;
 	}
-		
+
 	/**
 	 * Completes the initialization of the extension data.
 	 */
@@ -183,5 +183,5 @@ class ExtensionData {
 		this.viewSettings.squadPlayerMatchDay = this.viewSettings.squadPlayerMatchDay || new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
 		this.viewSettings.youthPlayerMatchDay = this.viewSettings.youthPlayerMatchDay || new MatchDay(this.lastMatchDay.season, this.lastMatchDay.zat);
 	}
-	
+
 }

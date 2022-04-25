@@ -14,9 +14,9 @@ describe('Page.AccountStatement', () => {
 	it('should extract current balance from account statement', (done) => {
 
 		Fixture.getDocument('ka.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(data.team.accountBalance).toEqual(32221833);
 			expect(data.team.getMatchDay(16, 53).accountBalance).toEqual(32221833);
 			expect(data.team.getMatchDay(16, 52).accountBalance).toEqual(46161833);

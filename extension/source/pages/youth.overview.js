@@ -1,6 +1,6 @@
 
 Page.YouthOverview = class extends Page.Youth {
-	
+
 	constructor() {
 
 		super('Jugendübersicht', 'ju.php', new Page.Param('page', 1, true));
@@ -16,7 +16,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-	
+
 		this.params[0].value = 1; // to ensure the correct value for this param
 
 		if (!this.getPullId(doc)) {
@@ -24,9 +24,9 @@ Page.YouthOverview = class extends Page.Youth {
 			let index = 0;
 			let playerCount = 0;
 			let season = 0;
-			
+
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS).forEach((row) => {
-		
+
 				if (this.isYearHeaderRow(row)) {
 
 					let matches = /Jahrgang Saison (\d+)/gm.exec(row.textContent);
@@ -40,34 +40,34 @@ Page.YouthOverview = class extends Page.Youth {
 					let pullInput = row.cells['Aktion'].firstChild;
 
 					let player = data.team.getYouthPlayer(index++, pullInput ? +pullInput.value : undefined);
-					
+
 					player.season = season;
 
 					player.age = +row.cells['Alter'].textContent;
 					player.birthday = +row.cells['Geb.'].textContent;
-					
+
 					if (row.cells['Alter'].className == Position.TOR) {
 						player.pos = Position.TOR;
 					}
-					
+
 					player.countryCode = row.cells['Land'].textContent;
 					player.countryName = row.cells['Land'].firstChild.title;
 					player.uefa = row.cells['U'].textContent ? false : true;
-					
+
 					player.talent = row.cells['Talent'].textContent;
 					player.increase = row.cells['Aufwertung'].textContent;
-								
+
 					playerCount++;
 				}
 			});
 		}
 	}
-	
+
 	/**
 	 * Returns the internal id of the player taken from the hidden pull input value,
 	 * or null if the input is not present (overview page).
-	 * 
-	 * @param {Document} doc 
+	 *
+	 * @param {Document} doc
 	 * @returns {Number}
 	 */
 	getPullId(doc) {
@@ -93,9 +93,9 @@ Page.YouthOverview = class extends Page.Youth {
 				element.parentNode.removeChild(element);
 				element = next;
 			}
-			
+
 			this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOverview.HEADERS);
-			
+
 			this.table.classList.add(STYLE_YOUTH);
 
 			Array.from(this.table.rows)
@@ -122,7 +122,7 @@ Page.YouthOverview = class extends Page.Youth {
 					row.cells['&Oslash;P'].style.width = '3.5em';
 					row.cells['&Oslash;N'].style.width = '3.5em';
 					row.cells['&Oslash;U'].style.width = '3.5em';
-		
+
 					row.cells['Pos'].textContent = 'Pos';
 					row.cells['Opt.Skill'].textContent = 'Opt.Skill';
 					row.cells['&Oslash;/Zat'].innerHTML = '&Oslash;/Zat';
@@ -130,13 +130,13 @@ Page.YouthOverview = class extends Page.Youth {
 					row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
 					row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
 					row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
-		
+
 				} else {
-		
+
 					row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
-					
+
 					let player = data.team.youthPlayers[index - 1];
-						
+
 					row.cells['Pos'].textContent = player.pos;
 					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 					if (player.pos) {
@@ -149,16 +149,16 @@ Page.YouthOverview = class extends Page.Youth {
 					row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 					row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 				}
-	
+
 				row.insertBefore(row.cells['Pos'], row.cells['Geb.'].nextSibling);
 				row.insertBefore(row.cells['Opt.Skill'], row.cells['Talent']);
 				row.appendChild(row.cells['&Oslash;/Zat']);
 				row.appendChild(row.cells['Marktwert']);
-				row.appendChild(row.cells['&Oslash;P']);	
+				row.appendChild(row.cells['&Oslash;P']);
 				row.appendChild(row.cells['&Oslash;N']);
 				row.appendChild(row.cells['&Oslash;U']);
 			});
-			
+
 			let form = doc.querySelector('form');
 			form.parentNode.insertBefore(this.createToolbar(doc, data), form);
 		}
@@ -174,7 +174,7 @@ Page.YouthOverview = class extends Page.Youth {
 			.filter(row => this.isPlayerRow(row))
 			.slice(1)
 			.forEach((row, index) => {
-			
+
 			let player = team.youthPlayers[index];
 
 			row.cells['Alter'].textContent = player.age;
@@ -193,7 +193,7 @@ Page.YouthOverview = class extends Page.Youth {
 						row.cells['&Oslash;/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
 					} else {
 						row.cells['&Oslash;/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
-					}	
+					}
 				} else {
 					row.cells['Opt.Skill'].textContent = '';
 					row.cells['Marktwert'].textContent = '';
@@ -202,7 +202,7 @@ Page.YouthOverview = class extends Page.Youth {
 					row.cells['&Oslash;/Zat'].textContent = '';
 				}
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
-								
+
 			} else {
 
 				row.cells['Talent'].textContent = '';

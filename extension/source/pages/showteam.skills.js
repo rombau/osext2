@@ -1,6 +1,6 @@
 
 Page.ShowteamSkills = class extends Page.Showteam {
-	
+
 	constructor() {
 
 		super('Einzelskills', 'showteam.php', new Page.Param('s', 2));
@@ -8,9 +8,9 @@ Page.ShowteamSkills = class extends Page.Showteam {
 		/** @type {HTMLTableElement} */
 		this.table;
 	}
-	
+
 	static HEADERS = ['#', 'Name', 'Land', 'U', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
-	
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -18,10 +18,10 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	extract(doc, data) {
 
 		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamSkills.HEADERS).forEach(row => {
-	
+
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-			let player = data.team.getSquadPlayer(id); 
-			
+			let player = data.team.getSquadPlayer(id);
+
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
 			});
@@ -30,9 +30,9 @@ Page.ShowteamSkills = class extends Page.Showteam {
 		// initialize new players
 		if (data.team.squadPlayerAdded) {
 			data.requestSquadPlayerPages();
-		}		
+		}
 	}
-	
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -42,7 +42,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamSkills.HEADERS);
 
 		Array.from(this.table.rows).forEach((row, i) => {
-			
+
 			row.cells['Alter'] = row.cells['#'].cloneNode(true);
 			row.cells['Geb.'] = row.cells['Name'].cloneNode(true);
 			row.cells['Flag'] = row.cells['#'].cloneNode(true);
@@ -50,7 +50,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 			row.cells['Opt.Skill'] = row.cells['#'].cloneNode(true);
 
 			row.cells['Skillschn.'].style.paddingLeft = '10px';
-			
+
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 
 				row.cells['Alter'].textContent = 'Alter';
@@ -59,19 +59,19 @@ Page.ShowteamSkills = class extends Page.Showteam {
 				row.cells['Opt.Skill'].textContent = 'Opt.Skill';
 
 				row.cells['Land'].colSpan = 2;
-				
+
 				let cellDummy = row.cells['#'].cloneNode(true);
 				cellDummy.width = 0;
 				cellDummy.textContent = '';
 				row.insertBefore(cellDummy, row.cells['Land']);
-				
+
 			} else {
 
 				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
-				
+
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
-					
+
 				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
@@ -83,16 +83,16 @@ Page.ShowteamSkills = class extends Page.Showteam {
 				row.cells['Flag'].appendChild(flagImage);
 
 				row.cells['Geb.'].colSpan = 2;
-				
+
 				row.insertBefore(row.cells['Flag'], row.cells['Land']);
 			}
 
 			row.insertBefore(row.cells['Alter'], row.cells[2]);
 			row.insertBefore(row.cells['Geb.'], row.cells[3]);
-			row.appendChild(row.cells['Skillschn.']);			
-			row.appendChild(row.cells['Opt.Skill']);			
+			row.appendChild(row.cells['Skillschn.']);
+			row.appendChild(row.cells['Opt.Skill']);
 		});
-		
+
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');
@@ -108,7 +108,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = team.getSquadPlayer(id);
-			
+
 			if (player.active) {
 
 				row.cells['Alter'].textContent = player.age;
@@ -120,7 +120,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
 				row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
-				
+
 			} else {
 
 				row.cells['Alter'].textContent = '';

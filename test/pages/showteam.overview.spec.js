@@ -2,11 +2,11 @@ describe('Page.ShowteamOverview', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.ShowteamOverview} */ let page;
-	
-	beforeEach(() => {		
+
+	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.ShowteamOverview();
-		
+
 		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
 			return Promise.resolve();
 		});
@@ -22,9 +22,9 @@ describe('Page.ShowteamOverview', () => {
 		data.team.squadPlayers.push(new SquadPlayer());
 
 		Fixture.getDocument('showteam.php', doc => {
-			
+
 			page.extract(doc, data);
-					
+
 			expect(data.team.squadPlayers.length).toEqual(32);
 			expect(data.team.squadPlayers[0].id).toEqual(41930);
 			expect(data.team.squadPlayers[0].pos).toEqual(Position.TOR);
@@ -48,12 +48,12 @@ describe('Page.ShowteamOverview', () => {
 			expect(data.team.squadPlayers[21].loan.duration).toEqual(1);
 
 			page.extend(doc, data);
-		
+
 			let slider = doc.querySelector('input[type=range]')
 			slider.value += 19; // to test season interval
 			slider.dispatchEvent(new Event('input'));
 			slider.dispatchEvent(new Event('change'));
-		
+
 			done();
 		});
 	});

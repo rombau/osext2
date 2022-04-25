@@ -9,27 +9,27 @@ The `OnlineSoccer Extension` extension adds useful details and forecasts to the 
 
 - Forecast of the team players values (loans, bans, skills based on trainings settings, ...)
 - Finance forecast with account balance in the team season view
-- Youth forecast based on the current skills 
+- Youth forecast based on the current skills
 
 
 ## Development with Visual Studio Code
 
 For testing the extension `Karma Test Explorer for Angular, Jasmine, and Mocha` from Lucas Ononiwu is used. You need the following entries in your `settings.json` in order to debug your tests:
 <pre>
-    "karmaTestExplorer.projectType": "karma",
-    "karmaTestExplorer.debuggerConfig": {
-        "name": "Debug tests",
-        "type": "chrome",
-        "request": "attach",
-        "port": 9222,
-        "browserAttachLocation": "workspace",
-        "address": "localhost",
-        "timeout": 60000,
-        "pathMapping": {
-            "/": "${workspaceRoot}",
-            "/base/": "${workspaceRoot}/"
-        }
-    }
+	"karmaTestExplorer.projectType": "karma",
+	"karmaTestExplorer.debuggerConfig": {
+		"name": "Debug tests",
+		"type": "chrome",
+		"request": "attach",
+		"port": 9222,
+		"browserAttachLocation": "workspace",
+		"address": "localhost",
+		"timeout": 60000,
+		"pathMapping": {
+			"/": "${workspaceRoot}",
+			"/base/": "${workspaceRoot}/"
+		}
+	}
 </pre>
 The coverage reports are created with `npm test` in the folder `.coverage`. Based on the `summary.json` the coverage badge is updated in the README with `npm run badge`.
 

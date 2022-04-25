@@ -1,7 +1,7 @@
 const ZAT_INDICATING_REFRESH = -1;
 
 Page.Main = class extends Page {
-	
+
 	constructor() {
 
 		super('Managerbüro', 'haupt.php');
@@ -9,7 +9,7 @@ Page.Main = class extends Page {
 
 	/**
 	 * Processes the main page and sets the current team. Then the default processing is triggered.
-	 * 
+	 *
 	 * @param {Document} doc the document that should be processed
 	 * @param {Window} win the current window
 	 */
@@ -33,10 +33,10 @@ Page.Main = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract (doc, data) {
-		
+
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
 
-		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];	
+		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];
 		if (data.nextZat !== nextZat) {
 
 			// reset view setting to avoid old matchday
@@ -62,25 +62,25 @@ Page.Main = class extends Page {
 			data.initNextZat(nextZat);
 
 			data.pagesToRequest = [];
-			data.requestAllPages();		
+			data.requestAllPages();
 		}
 
 		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
-			
+
 		data.team.id = +matches[2];
 		data.team.emblem = matches[1];
-		
+
 		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
 
 		matches = /Willkommen im Managerb.ro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
-			
+
 		data.team.name = matches[1];
 
 		matches = /(\d)\. Liga ?[A-D]? (.+)/gm.exec(titleContainer.childNodes[2].textContent);
 
 		data.team.league.level = +matches[1];
 		data.team.league.countryName = matches[2];
-		
+
 		let accountBalanceElement = doc.querySelector('a[href="ka.php"]');
 		if (accountBalanceElement) {
 			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
@@ -92,13 +92,13 @@ Page.Main = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend (doc, data) { 
+	extend (doc, data) {
 
 		// doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
 		// 	Persistence.updateExtensionData(dataToReset => {
 		// 		data.nextZat = ZAT_INDICATING_REFRESH;
 		// 		dataToReset.nextZat = ZAT_INDICATING_REFRESH;
-		// 	}).then(data => {	
+		// 	}).then(data => {
 		// 		window.location.reload();
 		// 	});
 		// 	return false;

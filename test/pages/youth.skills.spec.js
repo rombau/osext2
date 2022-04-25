@@ -2,8 +2,8 @@ describe('Page.YouthSkills', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.YouthSkills} */ let page;
-	
-	beforeEach(() => {		
+
+	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.YouthSkills();
 
@@ -20,9 +20,9 @@ describe('Page.YouthSkills', () => {
 		data.complete();
 
 		Fixture.getDocument('ju.php?page=2', doc => {
-			
+
 			page.extract(doc, data);
-					
+
 			expect(data.team.youthPlayers.length).toEqual(21);
 			expect(data.team.youthPlayers[0].skills.sch).toEqual(69);
 			expect(data.team.youthPlayers[0].skills.bak).toEqual(30);
@@ -43,7 +43,7 @@ describe('Page.YouthSkills', () => {
 			expect(data.team.youthPlayers[0].skills.ein).toEqual(79);
 
 			page.extend(doc, data);
-		
+
 			done();
 		});
 	});

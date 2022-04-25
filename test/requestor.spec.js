@@ -1,16 +1,16 @@
 describe('Requestor', () => {
-	
+
 	/** @type {Requestor} */ let requestor;
-	
+
 	beforeEach(() => {
 		spyOn(XMLHttpRequest.prototype, 'open').and.callThrough();
 		spyOn(XMLHttpRequest.prototype, 'send');
-    });
+	});
 
-    afterEach(() => {
+	afterEach(() => {
 		if (requestor) Requestor.cleanUp();
-    });
-    
+	});
+
 	it('should be created with hidden iframe and status', () => {
 
 		requestor = Requestor.create(document);
@@ -21,7 +21,7 @@ describe('Requestor', () => {
 	});
 
 	it('should request page with query parameters', () => {
-		
+
 		requestor = Requestor.create(document);
 
 		requestor.requestPage(new Page.ShowPlayer(123456, 'Hugo'));
@@ -32,7 +32,7 @@ describe('Requestor', () => {
 	});
 
 	it('should request page with form parameters', () => {
-		
+
 		requestor = Requestor.create(document);
 
 		requestor.requestPage(new Page.MatchDayReport(15, 43));
@@ -45,11 +45,11 @@ describe('Requestor', () => {
 	});
 
 	it('should use callback after finsihing and clean up', (done) => {
-		
+
 		requestor = Requestor.create(document, () => {
 			done();
 		});
-	
+
 		requestor.finish();
 
 		expect(requestor.status).toBeNull();

@@ -2,8 +2,8 @@ describe('Page.YouthOverview', () => {
 
 	/** @type {ExtensionData} */ let data;
 	/** @type {Page.YouthOverview} */ let page;
-	
-	beforeEach(() => {			
+
+	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.YouthOverview();
 
@@ -18,11 +18,11 @@ describe('Page.YouthOverview', () => {
 		data.nextZatSeason = 16;
 
 		data.complete();
-		
+
 		Fixture.getDocument('ju.php', doc => {
-			
+
 			page.extract(doc, data);
-					
+
 			expect(data.team.youthPlayers.length).toEqual(21);
 			expect(data.team.youthPlayers[0].pos).toBeUndefined();
 			expect(data.team.youthPlayers[0].countryCode).toEqual('CYP');
@@ -37,7 +37,7 @@ describe('Page.YouthOverview', () => {
 			expect(data.team.youthPlayers[9].pullId).toBeUndefined();
 
 			page.extend(doc, data);
-		
+
 			done();
 		});
 	});

@@ -1,19 +1,19 @@
 /**
  * Persistence layer of the extension.
- * 
+ *
  * Handles the chrome storage calls.
  */
 class Persistence {
-	
+
 	static CURRENT_TEAM = 'currentTeam';
 
 	static LOGGER = new Logger('Persistence');
 
 	/**
 	 * Returns the extension data for the given team name from the local storage.
-	 * 
+	 *
 	 * If loading is successful the data is returned with the resolved promise.
-	 * 
+	 *
 	 * @async
 	 * @param {String} teamName the name of the team
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
@@ -37,7 +37,7 @@ class Persistence {
 
 	/**
 	 * Updates the current team name in local storage.
-	 * 
+	 *
 	 * @param {String} teamName the name of the current team
 	 * @returns {Promise}
 	 */
@@ -60,10 +60,10 @@ class Persistence {
 
 	/**
 	 * Updates the extension data of the current team in the local storage.
-	 * 
+	 *
 	 * With the given callback the data can be modified before it is stored. If persisting is successful
 	 * the data is returned with the resolved promise.
-	 * 
+	 *
 	 * @async
 	 * @param {extendsionDataCallback} modifyData callback for updating the data
 	 * @returns {Promise<ExtensionData>} promise with data when resolved
@@ -104,7 +104,7 @@ class Persistence {
 
 	/**
 	 * Stores the given extension data only with a current team name.
-	 * 
+	 *
 	 * @async
 	 * @param {ExtensionData} data the data to store
 	 * @param {Boolean} synchronized flag indicating synchronization (default = true)
@@ -131,5 +131,5 @@ class Persistence {
 			return Promise.resolve(data);
 		}
 	}
-	
+
 }

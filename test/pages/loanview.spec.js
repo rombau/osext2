@@ -19,9 +19,9 @@ describe('Page.LoanView', () => {
 		playerTo.pos = 'LEI';
 
 		Fixture.getDocument('viewleih.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(playerFrom.loan.fee).toEqual(-96793);
 
 			expect(playerTo.loan.fee).toEqual(168406);

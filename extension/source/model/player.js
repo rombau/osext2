@@ -30,7 +30,7 @@ const SpecialSkill = Object.freeze({
  * Enum for skills.
  * @readonly
  */
- const Skill = Object.freeze({
+const Skill = Object.freeze({
 	SCH: 'sch',
 	BAK: 'bak',
 	KOB: 'kob',
@@ -53,7 +53,7 @@ const SpecialSkill = Object.freeze({
 /**
  * Skillset of a player.
  */
- class Skillset {
+class Skillset {
 
 	constructor() {
 
@@ -95,10 +95,10 @@ class Player {
 
 		/** @type {Number} the brithday ZAT */
 		this.birthday;
-		
+
 		/** @type {String} the country FIFA code, e.g. IRL for Ireland */
 		this.countryCode;
-		
+
 		/** @type {String} the country Name, e.g. "Irland" */
 		this.countryName;
 
@@ -107,14 +107,14 @@ class Player {
 
 		/** @type {Position} the position */
 		this.pos;
-		
+
 		/** @type {Skillset} the skills of the player */
 		this.skills = new Skillset();
 	}
-	
+
 	/**
-	 * Returns the average of the given or all skills. 
-	 * 
+	 * Returns the average of the given or all skills.
+	 *
 	 * @param {Skillset} skills the skills to calculate the average for; if omitted all the current skills are used
 	 */
 	getSkillAverage (skills = this.skills) {
@@ -124,7 +124,7 @@ class Player {
 
 	/**
 	 * Returns the optimized average ("Opti") for the given or current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to calculate the average for; if omitted the current position is used
 	 */
 	getOpti (pos = this.pos) {
@@ -135,18 +135,18 @@ class Player {
 
 	/**
 	 * Returns the primary skills based on the given or current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to extract the skills for; if omitted the current position is used
 	 * @returns {Skillset} an object with the primary skills only
 	 */
 	getPrimarySkills (pos = this.pos) {
 		return Object.keys(this.skills)
 			.filter(key => {
-				return (pos === Position.TOR && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.GES].includes(key)) || 
-					(pos === Position.ABW && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.ZUV].includes(key)) || 
-					(pos === Position.DMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.DEC].includes(key)) || 
-					(pos === Position.MIT && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.ZWK].includes(key)) || 
-					(pos === Position.OMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.GES].includes(key)) || 
+				return (pos === Position.TOR && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.GES].includes(key)) ||
+					(pos === Position.ABW && [Skill.KOB, Skill.ZWK, Skill.DEC, Skill.ZUV].includes(key)) ||
+					(pos === Position.DMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.DEC].includes(key)) ||
+					(pos === Position.MIT && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.ZWK].includes(key)) ||
+					(pos === Position.OMI && [Skill.BAK, Skill.PAS, Skill.UEB, Skill.GES].includes(key)) ||
 					(pos === Position.STU && [Skill.SCH, Skill.KOB, Skill.ZWK, Skill.GES].includes(key));
 			})
 			.reduce((obj, key) => {
@@ -157,7 +157,7 @@ class Player {
 
 	/**
 	 * Returns the secondary skills based on the given or current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to extract the skills for; if omitted the current position is used
 	 * @returns {Skillset} an object with the secondary skills only
 	 */
@@ -172,10 +172,10 @@ class Player {
 				return obj;
 			}, {});
 	}
-	
+
 	/**
 	 * Returns the unchangable skills.
-	 * 
+	 *
 	 * @returns {Skillset} an object with the unchangable skills only
 	 */
 	getUnchangeableSkills () {
@@ -191,42 +191,42 @@ class Player {
 
 	/**
 	 * Returns a list with the special skills based on the given or current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to get the special skills for; if omitted the current position is used
 	 * @return {[SpecialSkill]} an array of special skills
 	 */
 	getSpecialSkills (pos = this.pos) {
 		let specials = [];
 		let limit = SPECIAL_SKILL_LIMIT;
-		if (pos === Position.TOR && 
-			this.skills.kob >= limit && this.skills.dec >= limit && this.skills.ges >= limit) { 
+		if (pos === Position.TOR &&
+			this.skills.kob >= limit && this.skills.dec >= limit && this.skills.ges >= limit) {
 			specials.push(SpecialSkill.E);
 		}
-		if ((pos === Position.ABW || pos === Position.DMI) && 
+		if ((pos === Position.ABW || pos === Position.DMI) &&
 			this.skills.dec >= limit && this.skills.ueb >= limit && this.skills.zwk >= limit) {
 			specials.push(SpecialSkill.L);
 		}
-		if (pos !== Position.TOR && 
-			this.skills.ueb >= limit && this.skills.pas >= limit && this.skills.bak >= limit) { 
+		if (pos !== Position.TOR &&
+			this.skills.ueb >= limit && this.skills.pas >= limit && this.skills.bak >= limit) {
 			specials.push(SpecialSkill.S);
 		}
-		if (pos !== Position.TOR && 
-			this.skills.sch >= limit && this.skills.ueb >= limit && this.skills.bak >= limit) { 
+		if (pos !== Position.TOR &&
+			this.skills.sch >= limit && this.skills.ueb >= limit && this.skills.bak >= limit) {
 			specials.push(SpecialSkill.F);
 		}
-		if (pos !== Position.TOR && 
-			this.skills.sch >= limit && this.skills.kob >= limit && this.skills.ges >= limit) { 
+		if (pos !== Position.TOR &&
+			this.skills.sch >= limit && this.skills.kob >= limit && this.skills.ges >= limit) {
 			specials.push(SpecialSkill.T);
 		}
-		if (pos !== Position.TOR && 
-			this.skills.bak >= limit && this.skills.pas >= limit && this.skills.ges >= limit) { 
+		if (pos !== Position.TOR &&
+			this.skills.bak >= limit && this.skills.pas >= limit && this.skills.ges >= limit) {
 			specials.push(SpecialSkill.G);
 		}
-		if (this.skills.fuq >= limit && this.skills.erf >= limit && this.skills.ein >= limit) { 
+		if (this.skills.fuq >= limit && this.skills.erf >= limit && this.skills.ein >= limit) {
 			specials.push(SpecialSkill.K);
 		}
-		if (pos !== Position.TOR && 
-			this.skills.aus >= limit && this.skills.ges >= limit && this.skills.zuv >= limit) { 
+		if (pos !== Position.TOR &&
+			this.skills.aus >= limit && this.skills.ges >= limit && this.skills.zuv >= limit) {
 			specials.push(SpecialSkill.P);
 		}
 		return specials;
@@ -234,10 +234,10 @@ class Player {
 
 	/**
 	 * Returns the calculated market value, considering the training factor for the current position.
-	 * 
+	 *
 	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
 	 * @param {Number} factor the training factor; if omitted 1 is used
-	 * @returns 
+	 * @returns
 	 */
 	getMarketValue (pos = this.pos, factor = 1) {
 		return Math.round((Math.pow(1 + this.getOpti(pos) / 100, 8.1)) *
@@ -249,7 +249,7 @@ class Player {
 
 	/**
 	 * Initializes the exact age.
-	 * 
+	 *
 	 * @param {MatchDay} lastMatchDay the last match day
 	 */
 	initializeExactAge (lastMatchDay) {

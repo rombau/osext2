@@ -2,13 +2,13 @@ describe('Team', () => {
 
 	/** @type {Team} */
 	let team;
-	
+
 	beforeEach(() => {
 		team = new Team();
 	});
 
 	it('should be created', () => {
-		
+
 		expect(team.id).toBeUndefined();
 		expect(team.league.level).toBeUndefined();
 
@@ -18,7 +18,7 @@ describe('Team', () => {
 	});
 
 	it('should return requested squad player', () => {
-		
+
 		expect(team.getSquadPlayer()).toBeNull();
 		expect(team.getSquadPlayer(1)).toBeDefined();
 		expect(team.getSquadPlayer(1).id).toEqual(1);
@@ -26,7 +26,7 @@ describe('Team', () => {
 	});
 
 	it('should return requested youth player', () => {
-		
+
 		expect(team.getYouthPlayer(0)).toBeDefined();
 
 		let p1 = team.getYouthPlayer(0);
@@ -37,7 +37,7 @@ describe('Team', () => {
 		p3.pullId = 55;
 		let p4 = team.getYouthPlayer(3); // no pull
 		let p5 = team.getYouthPlayer(4); // no pull
-		
+
 		expect(team.getYouthPlayer(0, 33)).toBe(p1);
 		expect(team.getYouthPlayer(1, 44)).toBe(p2);
 		expect(team.getYouthPlayer(2, 55)).toBe(p3);
@@ -62,7 +62,7 @@ describe('Team', () => {
 	});
 
 	it('should return requested match day', () => {
-		
+
 		expect(team.getMatchDay()).toBeNull();
 		expect(team.getMatchDay(5,34)).toBeDefined();
 		expect(team.getMatchDay(5,34).zat).toEqual(34);
@@ -71,7 +71,7 @@ describe('Team', () => {
 	});
 
 	it('should return requested trainer', () => {
-		
+
 		expect(team.getTrainer()).toBeNull();
 		expect(team.getTrainer(1)).toBeDefined();
 		expect(team.getTrainer(1).nr).toEqual(1);

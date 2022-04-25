@@ -1,6 +1,6 @@
 
 Page.LoanView = class extends Page {
-	
+
 	constructor() {
 
 		super('Leihübersicht', 'viewleih.php');
@@ -13,7 +13,7 @@ Page.LoanView = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
-	
+
 		let expense = false;
 
 		/** @type {[HTMLTableRowElement]} */
@@ -21,7 +21,7 @@ Page.LoanView = class extends Page {
 		rows.forEach(row => {
 			Page.LoanView.HEADERS.forEach((header, i) => row.cells[header] = row.cells[i]);
 			let nameCell = row.cells['Name'];
-			if (nameCell.firstChild) { 
+			if (nameCell.firstChild) {
 				if (nameCell.firstChild.textContent === 'Übersicht der geliehenen Spieler') {
 					expense = true;
 				}

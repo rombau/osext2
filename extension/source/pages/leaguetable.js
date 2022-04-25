@@ -1,6 +1,6 @@
 
 Page.LeagueTable = class extends Page {
-	
+
 	constructor() {
 
 		super('Ligatabelle', 'lt.php');
@@ -17,7 +17,7 @@ Page.LeagueTable = class extends Page {
 		data.team.league.size = 0;
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.LeagueTable.HEADERS).forEach(row => {
-			
+
 			data.team.league.size++;
 
 			if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.team.id) {
