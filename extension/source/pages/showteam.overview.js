@@ -147,6 +147,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			if (player.active) {
 
 				if (this.showExactAge) {
+					row.cells['Alter'].textContent = '';
 					row.cells['Alter'].appendChild(
 						HtmlUtil.createAbbreviation(`ZAT ${player.birthday}`, player.ageExact.toFixed(2)));
 				} else {
