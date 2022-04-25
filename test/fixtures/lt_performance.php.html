@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<title>Online-Soccer 2.0</title>
+
+<script src="js/sorttable.js" type="text/javascript"></script>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>-->
+
+<script src="js/jquery.min.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
+
+<link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
+
+<link rel="stylesheet" href="css/os_styles.css" />
+
+<link rel="stylesheet" href="css/print.css" media="print" />
+
+<link rel="SHORTCUT ICON" href="images/favicon.ico" type="image/ico" />
+
+<script type="text/javascript" src="js/osfunc.js"></script>
+
+</head>
+
+<body><div>
+
+<p class="noprint" id="TopThema"><a href="http://os.ongapo.com/zfeatures.php#b"><img src="images/banner/jugendname.gif" /></a></p><form method="get" action=""><div><b><span style="color:#ffffcc">Ligatabellen</span></b>
+
+<select size="1" name="ligaauswahl">
+
+<option value="0">---Ligaauswahl---</option>
+
+<option value="1" SELECTED>1. Liga</option><option value="2">2. Liga A</option><option value="3">2. Liga B</option><option value="4">3. Liga A</option><option value="5">3. Liga B</option><option value="6">3. Liga C</option><option value="7">3. Liga D</option>
+
+</select>
+
+<select size="1" name="landauswahl">
+
+<option value="0">---Landauswahl---</option>
+
+<option value="45">Albanien</option><option value="95">Andorra</option><option value="83">Armenien</option><option value="104">Aserbaidschan</option><option value="12">Belgien</option><option value="66">Bosnien-Herzegowina</option><option value="42">Bulgarien</option><option value="8">D&auml;nemark</option><option value="6">Deutschland</option><option value="1">England</option><option value="57">Estland</option><option value="68">Far&ouml;er</option><option value="40">Finnland</option><option value="32">Frankreich</option><option value="49">Georgien</option><option value="30">Griechenland</option><option value="5" SELECTED>Irland</option><option value="29">Island</option><option value="23">Israel</option><option value="10">Italien</option><option value="105">Kasachstan</option><option value="24">Kroatien</option><option value="97">Lettland</option><option value="92">Liechtenstein</option><option value="72">Litauen</option><option value="93">Luxemburg</option><option value="69">Malta</option><option value="86">Mazedonien</option><option value="87">Moldawien</option><option value="11">Niederlande</option><option value="4">Nordirland</option><option value="9">Norwegen</option><option value="14">&Ouml;sterreich</option><option value="25">Polen</option><option value="17">Portugal</option><option value="28">Rum&auml;nien</option><option value="19">Russland</option><option value="98">San Marino</option><option value="2">Schottland</option><option value="27">Schweden</option><option value="37">Schweiz</option><option value="41">Serbien und Montenegro</option><option value="70">Slowakei</option><option value="21">Slowenien</option><option value="13">Spanien</option><option value="18">Tschechien</option><option value="39">T&uuml;rkei</option><option value="20">Ukraine</option><option value="26">Ungarn</option><option value="3">Wales</option><option value="71">Weissrussland</option><option value="38">Zypern</option>
+
+</select>
+
+<select size="1" name="tabauswahl">
+
+<option value="0" SELECTED>Gesamttabelle</option><option value="1">Heimtabelle</option><option value="2">Ausw&auml;rtstabelle</option><option value="3">2-Punktetabelle</option><option value="4">Hinrundentabelle</option><option value="5">R&uuml;ckrundentabelle</option><option value="6">1. Halbzeit</option><option value="7">2. Halbzeit</option><option value="10">Kreuztabelle</option>
+
+</select>
+
+<select size="1" name="saauswahl">
+
+<option value="0">--Saison--</option>
+
+<option value="1">Saison 1</option><option value="2">Saison 2</option><option value="3">Saison 3</option><option value="4">Saison 4</option><option value="5">Saison 5</option><option value="6">Saison 6</option><option value="7">Saison 7</option><option value="8">Saison 8</option><option value="9">Saison 9</option><option value="10">Saison 10</option><option value="11">Saison 11</option><option value="12">Saison 12</option><option value="13">Saison 13</option><option value="14">Saison 14</option><option value="15">Saison 15</option><option value="16">Saison 16</option><option value="17">Saison 17</option><option value="18" SELECTED>Saison 18</option>
+
+</select>
+
+<input type="submit" value="Statistik ausgeben" name="stataktion" />
+
+</div>
+
+</form><table cellspacing="1" cellpadding="1" border="0" id="kader1" class="sortable">
+
+<tbody>
+
+<tr align="center" id="tabelle">
+
+	<td>#</td>
+
+	<td></td>
+
+	<td>Club</td>
+
+	<td>Spiele</td>
+
+	<td>Si.</td>
+
+	<td>Un.</td>
+
+	<td>Ni.</td>
+
+	<td>Tore+</td>
+
+	<td>Tore-</td>
+
+	<td>Tore +/-</td>
+
+	<td>Punkte</td>
+
+	<td>Performance</td>
+
+</tr><tr align="right" class="osc">
+
+	<td><a href="javascript:tabellenplatz(1157);">1.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00001157.gif" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(1157)">RC Shelbourne</a></td>
+
+	<td>6</td>
+
+	<td>6</td>
+
+	<td>0</td>
+
+	<td>0</td>
+
+	<td>19</td>
+
+	<td>4</td>
+
+	<td>15</td>
+
+	<td>18</td>
+
+	<td><a href="javascript:os_bericht(548,1157,10,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1157,402,9,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(19,1157,8,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1157,568,6,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(233,1157,4,18)"><font color="lime">S</font></a></td>
+
+</tr><tr align="right" class="oscq">
+
+	<td><a href="javascript:tabellenplatz(19);">2.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000019.png" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(19)">FC Cork [M,P]</a></td>
+
+	<td>6</td>
+
+	<td>5</td>
+
+	<td>0</td>
+
+	<td>1</td>
+
+	<td>12</td>
+
+	<td>7</td>
+
+	<td>5</td>
+
+	<td>15</td>
+
+	<td><a href="javascript:os_bericht(19,1151,10,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1128,19,9,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(19,1157,8,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(812,19,6,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(19,548,4,18)"><font color="lime">S</font></a></td>
+
+</tr><tr align="right" class="oscq">
+
+	<td><a href="javascript:tabellenplatz(402);">3.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000402.png" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(402)">St. Cavan Swallows</a></td>
+
+	<td>6</td>
+
+	<td>4</td>
+
+	<td>0</td>
+
+	<td>2</td>
+
+	<td>15</td>
+
+	<td>13</td>
+
+	<td>2</td>
+
+	<td>12</td>
+
+	<td><a href="javascript:os_bericht(402,1128,10,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1157,402,9,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(402,812,8,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(548,402,6,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1130,402,4,18)"><font color="lime">S</font></a></td>
+
+</tr><tr align="right" class="ose">
+
+	<td><a href="javascript:tabellenplatz(568);">4.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000568.png" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(568)">FC Galway</a></td>
+
+	<td>6</td>
+
+	<td>3</td>
+
+	<td>1</td>
+
+	<td>2</td>
+
+	<td>6</td>
+
+	<td>5</td>
+
+	<td>1</td>
+
+	<td>10</td>
+
+	<td><a href="javascript:os_bericht(568,233,10,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1151,568,9,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(568,1128,8,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1157,568,6,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(568,812,4,18)"><font color="yellow">U</font></a></td>
+
+</tr><tr align="right" class="oseq">
+
+	<td><a href="javascript:tabellenplatz(233);">5.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000233.gif" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(233)">St.Patricks Hallows</a></td>
+
+	<td>6</td>
+
+	<td>2</td>
+
+	<td>1</td>
+
+	<td>3</td>
+
+	<td>7</td>
+
+	<td>6</td>
+
+	<td>1</td>
+
+	<td>7</td>
+
+	<td><a href="javascript:os_bericht(568,233,10,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(233,1130,9,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(233,1151,8,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1128,233,6,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(233,1157,4,18)"><font color="lightsalmon">N</font></a></td>
+
+</tr><tr align="right" class="oseq">
+
+	<td><a href="javascript:tabellenplatz(548);">6.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000548.gif" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(548)">Birr Castle United</a></td>
+
+	<td>6</td>
+
+	<td>2</td>
+
+	<td>1</td>
+
+	<td>3</td>
+
+	<td>12</td>
+
+	<td>14</td>
+
+	<td>-2</td>
+
+	<td>7</td>
+
+	<td><a href="javascript:os_bericht(548,1157,10,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(812,548,9,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1130,548,8,18)"><font color="yellow">U</font></a> <a href="javascript:os_bericht(548,402,6,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(19,548,4,18)"><font color="lightsalmon">N</font></a></td>
+
+</tr><tr align="right" class="tabelle">
+
+	<td><a href="javascript:tabellenplatz(1151);">7.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00001151.png" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(1151)">Tuam Atlethics [N]</a></td>
+
+	<td>6</td>
+
+	<td>2</td>
+
+	<td>1</td>
+
+	<td>3</td>
+
+	<td>8</td>
+
+	<td>11</td>
+
+	<td>-3</td>
+
+	<td>7</td>
+
+	<td><a href="javascript:os_bericht(19,1151,10,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1151,568,9,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(233,1151,8,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(1151,1130,6,18)"><font color="yellow">U</font></a> <a href="javascript:os_bericht(1151,1128,4,18)"><font color="lime">S</font></a></td>
+
+</tr><tr align="right" class="rele">
+
+	<td><a href="javascript:tabellenplatz(812);">8.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00000812.gif" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(812)">Ballyshannon Rovers [N]</a></td>
+
+	<td>6</td>
+
+	<td>1</td>
+
+	<td>2</td>
+
+	<td>3</td>
+
+	<td>6</td>
+
+	<td>13</td>
+
+	<td>-7</td>
+
+	<td>5</td>
+
+	<td><a href="javascript:os_bericht(1130,812,10,18)"><font color="lime">S</font></a> <a href="javascript:os_bericht(812,548,9,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(402,812,8,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(812,19,6,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(568,812,4,18)"><font color="yellow">U</font></a></td>
+
+</tr><tr align="right" class="ab">
+
+	<td><a href="javascript:tabellenplatz(1128);">9.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00001128.png" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(1128)">Derry Town</a></td>
+
+	<td>6</td>
+
+	<td>1</td>
+
+	<td>0</td>
+
+	<td>5</td>
+
+	<td>3</td>
+
+	<td>10</td>
+
+	<td>-7</td>
+
+	<td>3</td>
+
+	<td><a href="javascript:os_bericht(402,1128,10,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1128,19,9,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(568,1128,8,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1128,233,6,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1151,1128,4,18)"><font color="lightsalmon">N</font></a></td>
+
+</tr><tr align="right" class="ab">
+
+	<td><a href="javascript:tabellenplatz(1130);">10.</a></td>
+
+	<td><img width="20" height="20" align="middle" src="images/wappen/00001130.gif" alt="Wappen" /></td>
+
+	<td align="left"><a href="javascript:teaminfo(1130)">Evergreen College [N]</a></td>
+
+	<td>6</td>
+
+	<td>0</td>
+
+	<td>2</td>
+
+	<td>4</td>
+
+	<td>6</td>
+
+	<td>11</td>
+
+	<td>-5</td>
+
+	<td>2</td>
+
+	<td><a href="javascript:os_bericht(1130,812,10,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(233,1130,9,18)"><font color="lightsalmon">N</font></a> <a href="javascript:os_bericht(1130,548,8,18)"><font color="yellow">U</font></a> <a href="javascript:os_bericht(1151,1130,6,18)"><font color="yellow">U</font></a> <a href="javascript:os_bericht(1130,402,4,18)"><font color="lightsalmon">N</font></a></td>
+
+</tr></tbody>
+
+</table>
+
+<br /><br />
+
+<table border="0">
+
+<tr class="osc"><td>Aufstiegsplatz / OSC</td></tr>
+
+<tr class="oscq"><td>Relegationsplatz (Auf) / OSCQ</td></tr>
+
+<tr class="ose"><td>OSE</td></tr>
+
+<tr class="oseq"><td>OSEQ</td></tr>
+
+<tr class="rele"><td>Relegationsplatz (Ab)</td></tr>
+
+<tr class="ab"><td>Abstiegsplatz</td></tr>
+
+</table>
+</div>
+
+</body>
+
+</html>
