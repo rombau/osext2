@@ -22,8 +22,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 			
 			player.birthday = +row.cells['Geb.Tag'].textContent;
 			player.contractTerm = +row.cells['Vertrag'].textContent;
-			player.salary = +row.cells['Monatsgehalt'].textContent.replace(/\./g, '');
-			player.marketValue = +row.cells['Spielerwert'].textContent.replace(/\./g, '');
+			player.salary = +row.cells['Monatsgehalt'].textContent.replaceAll('.', '');
+			player.marketValue = +row.cells['Spielerwert'].textContent.replaceAll('.', '');
 
 		});
 

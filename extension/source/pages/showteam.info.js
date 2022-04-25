@@ -27,10 +27,10 @@ Page.ShowteamInfo = class extends Page {
 		}
 
 		data.team.stadium = Object.assign(new Stadium(), data.team.stadium);
-		data.team.stadium.coveredSeats = +table.rows[2].cells[3].textContent.replace(/\./g, '');
-		data.team.stadium.seats = +table.rows[2].cells[1].textContent.replace(/\./g, '') - data.team.stadium.coveredSeats;
-		data.team.stadium.coveredPlaces = +table.rows[3].cells[3].textContent.replace(/\./g, '');
-		data.team.stadium.places = +table.rows[3].cells[1].textContent.replace(/\./g, '') - data.team.stadium.coveredPlaces;
+		data.team.stadium.coveredSeats = +table.rows[2].cells[3].textContent.replaceAll('.', '');
+		data.team.stadium.seats = +table.rows[2].cells[1].textContent.replaceAll('.', '') - data.team.stadium.coveredSeats;
+		data.team.stadium.coveredPlaces = +table.rows[3].cells[3].textContent.replaceAll('.', '');
+		data.team.stadium.places = +table.rows[3].cells[1].textContent.replaceAll('.', '') - data.team.stadium.coveredPlaces;
 		data.team.stadium.pitchHeating = (table.rows[4].cells[3].textContent == 'Ja');
 
 		let expansionElement = doc.querySelector('td[class="TOR"] > b');
@@ -72,35 +72,35 @@ Page.ShowteamInfo = class extends Page {
 		if (expansionTable) {
 			Array.from(expansionTable.rows).filter(row => row.textContent.trim().length > 0).slice(1).forEach(row => {
 				let text = row.textContent; 					
-				let value = +text.split(" ")[0].replace(/\./g, '');
+				let value = +text.split(" ")[0].replaceAll('.', '');
 				if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 					stadium.pitchHeating = true;
 				}
-				else if (text.search(/[\d.]+ .+berdachte Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
+				else if (text.search(/[\d.]+ .berdachte Stehpl.tze werden zu Sitzpl.tzen umgebaut/) != -1) {
 					stadium.coveredPlaces -= value;
 					stadium.coveredSeats += value;
 				}
-				else if (text.search(/[\d.]+ Stehpl.+tze werden zu Sitzpl.+tzen umgebaut/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.tze werden zu Sitzpl.tzen umgebaut/) != -1) {
 					stadium.places -= value;
 					stadium.seats += value;
 				}
-				else if (text.search(/[\d.]+ .+berdachte Sitzpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ .berdachte Sitzpl.tze werden gebaut/) != -1) {
 					stadium.coveredSeats += value;
 				}
-				else if (text.search(/[\d.]+ Sitzpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ Sitzpl.tze werden gebaut/) != -1) {
 					stadium.seats += value;
 				}
-				else if (text.search(/[\d.]+ .+berdachte Stehpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ .berdachte Stehpl.tze werden gebaut/) != -1) {
 					stadium.coveredPlaces += value;
 				}
-				else if (text.search(/[\d.]+ Stehpl.+tze werden gebaut/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.tze werden gebaut/) != -1) {
 					stadium.places += value;
 				}
-				else if (text.search(/[\d.]+ Sitzpl.+tze werden .+berdacht/) != -1) {
+				else if (text.search(/[\d.]+ Sitzpl.tze werden .berdacht/) != -1) {
 					stadium.coveredSeats += value;
 					stadium.seats -= value;
 				}
-				else if (text.search(/[\d.]+ Stehpl.+tze werden .+berdacht/) != -1) {
+				else if (text.search(/[\d.]+ Stehpl.tze werden .berdacht/) != -1) {
 					stadium.coveredPlaces += value;
 					stadium.places -= value;
 				}

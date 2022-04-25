@@ -20,10 +20,10 @@ Page.ContractExtension = class extends Page {
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = data.team.getSquadPlayer(id); 
 			
-			player.followUpSalary['24'] = +row.cells[8].textContent.replace(/\./g, '');
-			player.followUpSalary['36'] = +row.cells[10].textContent.replace(/\./g, '');
-			player.followUpSalary['48'] = +row.cells[12].textContent.replace(/\./g, '');
-			player.followUpSalary['60'] = +row.cells[14].textContent.replace(/\./g, '');
+			player.followUpSalary['24'] = +row.cells[8].textContent.replaceAll('.', '');
+			player.followUpSalary['36'] = +row.cells[10].textContent.replaceAll('.', '');
+			player.followUpSalary['48'] = +row.cells[12].textContent.replaceAll('.', '');
+			player.followUpSalary['60'] = +row.cells[14].textContent.replaceAll('.', '');
 
 		});
 
