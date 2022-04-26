@@ -179,6 +179,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 						let banAbbr = HtmlUtil.createAbbreviation(
 							`${ban.duration.toString()} ${ban.duration === 1 ? ban.type.description : ban.type.descriptionPlural}`,
 							`${ban.duration.toString()}${ban.type.abbr}`);
+						row.cells['Sperre'].textContent = '';
 						row.cells['Sperre'].appendChild(banAbbr);
 					});
 				}
