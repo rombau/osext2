@@ -30,7 +30,7 @@ describe('Persistence', () => {
 			expect(data instanceof ExtensionData).toBeTruthy();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			done();
-		}, error => {
+		}).catch(error => {
 			fail(error);
 		});
 	});
@@ -41,7 +41,7 @@ describe('Persistence', () => {
 
 		Persistence.getExtensionData('FC Cork').then(data => {
 			fail();
-		}, error => {
+		}).catch(error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
@@ -52,7 +52,7 @@ describe('Persistence', () => {
 
 		Persistence.getExtensionData().then(data => {
 			fail();
-		}, error => {
+		}).catch(error => {
 			expect(chrome.storage.local.get).not.toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Name fehlt');
 			done();
@@ -65,7 +65,7 @@ describe('Persistence', () => {
 		Persistence.updateCurrentTeam('FC Cork').then(() => {
 			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('FC Cork');
 			done();
-		}, _error => {
+		}).catch(error => {
 			fail();
 		});
 	});
@@ -86,7 +86,7 @@ describe('Persistence', () => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(chrome.storage.local.set).toHaveBeenCalled();
 			done();
-		}, _error => {
+		}).catch(error => {
 			fail();
 		});
 	});
@@ -102,7 +102,7 @@ describe('Persistence', () => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(chrome.storage.local.set).toHaveBeenCalled();
 			done();
-		}, _error => {
+		}).catch(error => {
 			fail();
 		});
 	});
@@ -115,7 +115,7 @@ describe('Persistence', () => {
 			data.team.id = 2;
 		}).then(() => {
 			fail();
-		}, error => {
+		}).catch(error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
