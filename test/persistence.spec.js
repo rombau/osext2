@@ -30,18 +30,14 @@ describe('Persistence', () => {
 			expect(data instanceof ExtensionData).toBeTruthy();
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			done();
-		}).catch(error => {
-			fail(error);
-		});
+		}).catch(fail);
 	});
 
 	it('should handle error when loading data', (done) => {
 
 		chrome.runtime.lastError = 'Error';
 
-		Persistence.getExtensionData('FC Cork').then(data => {
-			fail();
-		}).catch(error => {
+		Persistence.getExtensionData('FC Cork').then(fail).catch(error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
@@ -50,9 +46,7 @@ describe('Persistence', () => {
 
 	it('should handle error when loading data without team', (done) => {
 
-		Persistence.getExtensionData().then(data => {
-			fail();
-		}).catch(error => {
+		Persistence.getExtensionData().then(fail).catch(error => {
 			expect(chrome.storage.local.get).not.toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Name fehlt');
 			done();
@@ -65,9 +59,7 @@ describe('Persistence', () => {
 		Persistence.updateCurrentTeam('FC Cork').then(() => {
 			expect(storageMock[Persistence.CURRENT_TEAM]).toEqual('FC Cork');
 			done();
-		}).catch(error => {
-			fail();
-		});
+		}).catch(fail);
 	});
 
 	it('should store data', (done) => {
@@ -86,9 +78,7 @@ describe('Persistence', () => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(chrome.storage.local.set).toHaveBeenCalled();
 			done();
-		}).catch(error => {
-			fail();
-		});
+		}).catch(fail);
 	});
 
 	it('should store data not initialized', (done) => {
@@ -102,9 +92,7 @@ describe('Persistence', () => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(chrome.storage.local.set).toHaveBeenCalled();
 			done();
-		}).catch(error => {
-			fail();
-		});
+		}).catch(fail);
 	});
 
 	it('should handle error when store data', (done) => {
@@ -113,9 +101,7 @@ describe('Persistence', () => {
 
 		Persistence.updateExtensionData((data) => {
 			data.team.id = 2;
-		}).then(() => {
-			fail();
-		}).catch(error => {
+		}).then(fail).catch(error => {
 			expect(chrome.storage.local.get).toHaveBeenCalled();
 			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Error');
 			done();
