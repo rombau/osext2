@@ -30,6 +30,9 @@ const Options = {
 	/** @type {String} the current log extension data element name or null/empty if the whole extension data should be logged, e.g. '_team._youthPlayers.0.skills' */
 	logDataElement: null,
 
+	/** @type {Number} the timeout (used for async operations) */
+	timeout: 10000,
+
 	/** @type {Number} the number of seasons that should be forecasted; two means this and the following season. With more than two forecast precision will drecrease and e.g. contract cannot be extende twice with 24 month */
 	forecastSeasons: 2,
 

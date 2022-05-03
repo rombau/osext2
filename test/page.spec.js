@@ -253,6 +253,20 @@ describe('Page', () => {
 			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
 		});
 
+		it('and throw error if user accessing team overview page without authentication', () => {
+
+			let fixture = Fixture.createDocument('<a href="javascript:writePM()">DemoManager</a>');
+
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
+		});
+
+		it('and throw error if user accessing stadium extension page without authentication', () => {
+
+			let fixture = Fixture.createDocument('Du benötigst ein Team um diese Seite verwenden zu können!');
+
+			expect(() => page.check(fixture)).toThrowError('Anmeldung erforderlich');
+		});
+
 		it('and throw error if user accessing page during season interval', () => {
 
 			let fixture = Fixture.createDocument('Diese Funktion ist erst ZAT 1 wieder verfügbar!');
@@ -350,7 +364,7 @@ describe('Page', () => {
 			spyOn(Requestor, 'getCurrent').and.returnValue(null);
 			spyOn(Requestor, 'create').and.returnValue(requestor);
 
-			spyOn(requestor, 'requestPage').and.callFake((page) => {
+			spyOn(requestor, 'fetchPage').and.callFake(page => {
 				expect(page.equals(new Page.Main())).toBeTruthy();
 				done();
 			});
@@ -397,10 +411,32 @@ describe('Page', () => {
 			spyOn(Requestor, 'getCurrent').and.returnValue(null);
 			spyOn(Requestor, 'create').and.returnValue(requestor);
 
-			spyOn(requestor, 'requestPage').and.callFake((page) => {
+			spyOn(requestor, 'fetchPage').and.callFake((page) => {
 				expect(page).toBe(firstPage);
 				done();
 			});
+
+			page.process(document);
+		});
+
+		it('by start requesting pages without login', (done) => {
+
+			requestor = Requestor.create(document);
+
+			let firstPage = new Page('Test1', 'test1.html');
+
+			data.pagesToRequest.push(firstPage);
+
+			spyOn(Requestor, 'getCurrent').and.returnValue(null);
+			spyOn(Requestor, 'create').and.returnValue(requestor);
+
+			spyOn(Page, 'handleError').and.callFake((e) => {
+				expect(e).toBeInstanceOf(Warning);
+				expect(e.message).toEqual('login');
+				done();
+			});
+
+			spyOn(requestor, 'fetchPage').and.rejectWith(new Warning('login'));
 
 			page.process(document);
 		});
@@ -417,7 +453,7 @@ describe('Page', () => {
 
 			spyOn(Requestor, 'getCurrent').and.returnValue(requestor);
 
-			spyOn(requestor, 'requestPage').and.callFake((page) => {
+			spyOn(requestor, 'fetchPage').and.callFake((page) => {
 				expect(page).toBe(lastPage);
 				done();
 			});
@@ -436,8 +472,9 @@ describe('Page', () => {
 			let originalRequestorCreate = Requestor.create;
 			spyOn(Requestor, 'create').and.callFake((doc, finished) => {
 				requestor = originalRequestorCreate(document, finished);
-				spyOn(requestor, 'requestPage').and.callFake((page) => {
+				spyOn(requestor, 'fetchPage').and.callFake((page) => {
 					page.process(document);
+					return Promise.resolve();
 				});
 				return requestor;
 			});

@@ -3,8 +3,7 @@ describe('Requestor', () => {
 	/** @type {Requestor} */ let requestor;
 
 	beforeEach(() => {
-		spyOn(XMLHttpRequest.prototype, 'open').and.callThrough();
-		spyOn(XMLHttpRequest.prototype, 'send');
+		spyOn(window, 'fetch').and.resolveTo(new Response('', { status: 200, statusText: 'OK' }));
 	});
 
 	afterEach(() => {
@@ -20,28 +19,36 @@ describe('Requestor', () => {
 		expect(requestor.status.className).toContain(STYLE_MESSAGE);
 	});
 
-	it('should request page with query parameters', () => {
+	it('should request page with query parameters', (done) => {
+
+		let page = new Page.ShowPlayer(123456, 'Hugo');
+
+		spyOn(page, 'process').and.callFake(() => {});
 
 		requestor = Requestor.create(document);
 
-		requestor.requestPage(new Page.ShowPlayer(123456, 'Hugo'));
+		requestor.fetchPage(page).then(() => {
+			expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spieler Hugo');
+			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/sp\.php\?s=123456/), {});
+			done();
+		});
 
-		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spieler Hugo');
-		expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith('GET', jasmine.stringMatching(/sp\.php\?s=123456/), true);
-		expect(XMLHttpRequest.prototype.send).toHaveBeenCalledWith(null);
 	});
 
-	it('should request page with form parameters', () => {
+	it('should request page with form parameters', (done) => {
+
+		let page = new Page.MatchDayReport(15, 43);
+
+		spyOn(page, 'process').and.callFake(() => {});
 
 		requestor = Requestor.create(document);
 
-		requestor.requestPage(new Page.MatchDayReport(15, 43));
+		requestor.fetchPage(page).then(() => {
+			expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
+			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/zar\.php/), { method: 'POST', body: 'saison=15&zat=43' });
+			done();
+		});
 
-		expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
-		expect(XMLHttpRequest.prototype.open).toHaveBeenCalledWith('POST', jasmine.stringMatching(/zar\.php/), true);
-		expect(XMLHttpRequest.prototype.send).toHaveBeenCalledWith(jasmine.any(FormData));
-		expect(XMLHttpRequest.prototype.send.calls.mostRecent().args[0].get('saison')).toEqual('15');
-		expect(XMLHttpRequest.prototype.send.calls.mostRecent().args[0].get('zat')).toEqual('43');
 	});
 
 	it('should use callback after finsihing and clean up', (done) => {
@@ -53,7 +60,6 @@ describe('Requestor', () => {
 		requestor.finish();
 
 		expect(requestor.status).toBeNull();
-		expect(() => requestor.requestPage(new Page('Testseite'))).toThrowError('Testseite kann nicht initialisiert werden');
 		expect(Requestor.getCurrent(document)).toBeNull();
 	});
 

@@ -125,15 +125,20 @@ class Page {
 	 * @param {Document} doc the document that should be checked
 	 */
 	check (doc) {
-		if (doc.body.textContent.search(/F.r\sdie\sDauer\svon\sZAT\s.+\ssind\sdie\sSeiten\svon\sOS\s2\.0\sgesperrt!/) != -1) {
+		let contains = (element, regexp) => {
+			if (!element) return false;
+			return (element.textContent.search(regexp) != -1);
+		}
+		if (contains(doc.body, /F.r\sdie\sDauer\svon\sZAT\s.+\ssind\sdie\sSeiten\svon\sOS\s2\.0\sgesperrt!/)) {
 			throw new Warning('Auswertung läuft');
 		}
-		else if (doc.body.textContent.search(/Willkommen im Managerb.ro von Demo[Tt]eam/) != -1 ||
-			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.gbar!/) != -1 ||
-			doc.body.textContent.search(/.*Als Gast gesperrt.*/) != -1) {
+		else if (contains(doc.body, /Willkommen im Managerb.ro von Demo[Tt]eam/) ||
+			contains(doc.body, /Diese Seite ist ohne Team nicht verf.gbar!/) ||			
+			contains(doc.body, /Du ben.tigst ein Team um diese Seite verwenden zu k.nnen!/) ||			
+			contains(doc.querySelector('a[href="javascript:writePM()"]'), /DemoManager/)) {
 			throw new Warning('Anmeldung erforderlich');
 		}
-		else if (doc.body.textContent.search(/Diese Funktion ist erst ZAT 1 wieder verf.gbar/) != -1) {
+		else if (contains(doc.body, /Diese Funktion ist erst ZAT 1 wieder verf.gbar/)) {
 			throw new Warning('Saisonwechsel läuft');
 		}
 	}
@@ -235,7 +240,7 @@ class Page {
 						});
 					});
 				}
-				requestor.requestPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+				return requestor.fetchPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
 			} else {
 				if (requestor) {
 					requestor.finish();

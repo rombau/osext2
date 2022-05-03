@@ -126,7 +126,7 @@ class Persistence {
 					}
 				});
 			};
-			return synchronized ? getQueuedPromise(storeFunction) : new Promise(storeFunction);
+			return synchronized ? getQueuedPromise(storeFunction) : getTimedPromise(storeFunction);
 		} else {
 			return Promise.resolve(data);
 		}
