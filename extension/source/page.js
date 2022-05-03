@@ -129,8 +129,10 @@ class Page {
 			throw new Warning('Auswertung läuft');
 		}
 		else if (doc.body.textContent.search(/Willkommen im Managerb.ro von Demo[Tt]eam/) != -1 ||
-			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.gbar!/) != -1 ||
-			doc.body.textContent.search(/.*Als Gast gesperrt.*/) != -1) {
+			doc.body.textContent.search(/Diese Seite ist ohne Team nicht verf.gbar!/) != -1 ||			
+			doc.body.textContent.search(/Du ben.tigst ein Team um diese Seite verwenden zu k.nnen!/) != -1 ||			
+			doc.body.textContent.search(/.*Als Gast gesperrt.*/) != -1 ||
+			doc.body.textContent.search(/.*DemoManager.*/) != -1) {
 			throw new Warning('Anmeldung erforderlich');
 		}
 		else if (doc.body.textContent.search(/Diese Funktion ist erst ZAT 1 wieder verf.gbar/) != -1) {
@@ -235,7 +237,7 @@ class Page {
 						});
 					});
 				}
-				requestor.requestPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+				return requestor.fetchPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
 			} else {
 				if (requestor) {
 					requestor.finish();

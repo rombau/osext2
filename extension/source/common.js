@@ -133,20 +133,39 @@ const ensurePrototype = (sourceObject, clasz) => {
 }
 
 /**
- * Returns a promise with the given operation. The new promise always waits for the last
+ * Returns a promise with the given executor. The new promise always waits for the last
  * requested promise to resolve. This ensures synchronized serial execution.
  *
+ * @param executor a callback used to initialize the promise
  * @returns {Promise}
  */
 const getQueuedPromise = (() => {
 	let pending = Promise.resolve();
-	const run = async (operation) => {
+	const run = async (executor) => {
 		try {
 			await pending;
 		} finally {
 			/*eslint no-unsafe-finally: 'off'*/
-			return new Promise(operation);
+			return getTimedPromise(executor);
 		}
 	}
-	return (operation) => (pending = run(operation));
+	return (executor) => (pending = run(executor));
 })();
+
+/**
+ * Returns a promise with the given executor. The new promise will be rejected after a the given timout in millis,
+ * if the executor doesn't resolve before.
+ *
+ * @param executor a callback used to initialize the promise
+ * @param timeout the timeout in millis
+ * @returns {Promise}
+ */
+const getTimedPromise = (executor, timeout = Options.timeout) => {
+    return new Promise((resolve, reject) => {
+		const timerID = setTimeout(() => reject(new Error('Die Verarbeitung hat zu lange gedauert!')), timeout);
+		return executor(value => {
+			clearTimeout(timerID); 
+			resolve(value);
+		}, reject);
+	});
+}

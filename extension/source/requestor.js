@@ -76,40 +76,26 @@ class Requestor {
 	/**
 	 * Requests the given page.
 	 *
+	 * @async
 	 * @param {Page} page the page to request
 	 */
-	requestPage (page) {
-		let throwError = () => {
-			throw new Error(`${page.name} kann nicht initialisiert werden`);
-		}
+	async fetchPage (page) {
 		if (this.status) {
 			this.status.lastChild.textContent = `Initialisiere ${page.name}`;
-			let data = null;
-			if (page.method === HttpMethod.POST) {
-				data = new FormData();
-				page.params.forEach(param => {
-					data.append(param.name, param.value);
-				});
-			}
-			let xhr = new XMLHttpRequest();
-			xhr.open(page.method, page.createUrl(), true);
-			xhr.responseType = 'document';
-			xhr.onload = (event) => {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200) {
-						Page.byLocation(xhr.responseURL).process(xhr.responseXML);
-					} else {
-						throwError();
-					}
-				}
-			};
-			xhr.onerror = (event) => {
-				throwError();
-			};
-			xhr.send(data);
-		} else {
-			throwError();
 		}
+		let init = {};
+		if (page.method === HttpMethod.POST) {
+			let data = new URLSearchParams();
+			page.params.forEach(param => {
+				data.append(param.name, param.value);
+			});
+			init.method = page.method;
+			init.body = data.toString();
+		}
+		const response = await fetch(page.createUrl(), init);
+		const html = await response.text();
+		const doc = new DOMParser().parseFromString(html, 'text/html');
+		Page.byLocation(page.createUrl()).process(doc);
 	}
 
 	/**
