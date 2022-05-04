@@ -33,7 +33,7 @@ Page.ShowteamInfo = class extends Page {
 		data.team.stadium.places = +table.rows[3].cells[1].textContent.replaceAll('.', '') - data.team.stadium.coveredPlaces;
 		data.team.stadium.pitchHeating = (table.rows[4].cells[3].textContent == 'Ja');
 
-		let expansionElement = doc.querySelector('td[class="TOR"] > b');
+		let expansionElement = doc.querySelector('td.TOR > b');
 		if (expansionElement) {
 			let matches = /Das Stadion wird noch (\d+) ZAT\(s\) ausgebaut./gm.exec(expansionElement.textContent);
 			if (matches) {
@@ -57,7 +57,7 @@ Page.ShowteamInfo = class extends Page {
 	 * Returns the new stadium after expansion.
 	 *
 	 * @param {Stadium} currentStadium
-	 * @param {String} expansionText
+	 * @param {HTMLTableElement} expansionTable
 	 * @returns {Stadium}
 	 */
 	extractExpandedStadium(currentStadium, expansionTable) {
