@@ -121,7 +121,7 @@ describe('Team', () => {
 				default:
 					matchDay.competition = Competition.FRIENDLY;
 					break;
-				}
+			}
 			team.matchDays.push(matchDay);
 		}
 

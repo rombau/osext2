@@ -35,7 +35,16 @@ const PREMIUM_END_OF_SEASON_FACTOR = 2;
 
 const PHYSIO_COSTS = 10000;
 
-const CUP_FIXTURES = {3: '1. Runde', 15: '2. Runde', 27: '3. Runde', 39: 'Achtelfinale', 51: 'Viertelfinale', 63: 'Halbfinale', 69: 'Finale'};
+const CUP_FIXTURES = {
+	3: '1. Runde',
+	15: '2. Runde',
+	27: '3. Runde',
+	39: 'Achtelfinale',
+	51: 'Viertelfinale',
+	63: 'Halbfinale',
+	69: 'Finale'
+};
+
 const OSE_FIXTURES = {
 	5: '1. Qualirunde Hin',
 	7: '1. Qualirunde Rück',
@@ -57,7 +66,9 @@ const OSE_FIXTURES = {
 	55: 'Viertelfinale Rück',
 	59: 'Halbfinale Hin',
 	61: 'Halbfinale Rück',
-	71: 'Finale'};
+	71: 'Finale'
+};
+
 const OSC_FIXTURES = {
 	5: '1. Qualirunde Hin',
 	7: '1. Qualirunde Rück',
@@ -79,7 +90,8 @@ const OSC_FIXTURES = {
 	55: 'Viertelfinale Rück',
 	59: 'Halbfinale Hin',
 	61: 'Halbfinale Rück',
-	71: 'Finale'};
+	71: 'Finale'
+};
 
 /** Style constants */
 
@@ -105,9 +117,6 @@ const STYLE_WARNING = 'osext-warning';
 const STYLE_STATUS = 'osext-status';
 
 const STYLE_MONTH = 'osext-month';
-
-
-
 
 /**
  * Ensures the object has the clasz prototype. If not the prototype is added.
@@ -161,7 +170,7 @@ const getQueuedPromise = (() => {
  * @returns {Promise}
  */
 const getTimedPromise = (executor, timeout = Options.timeout) => {
-    return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		const timerID = setTimeout(() => reject(new Error('Die Verarbeitung hat zu lange gedauert!')), timeout);
 		return executor(value => {
 			clearTimeout(timerID); 
