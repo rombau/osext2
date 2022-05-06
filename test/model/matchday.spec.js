@@ -65,18 +65,18 @@ describe('Matchday', () => {
 
 		matchDay.friendlyShare = 50;
 		expect(matchDay.calculateMatchDayIncome()).toEqual(250000);
-		expect(matchDay.fiendlyIncome).toEqual(250000);
+		expect(matchDay.friendlyIncome).toEqual(250000);
 
 		matchDay.friendlyShare = 70;
 		expect(matchDay.calculateMatchDayIncome()).toEqual(350000);
-		expect(matchDay.fiendlyIncome).toEqual(350000);
+		expect(matchDay.friendlyIncome).toEqual(350000);
 	});
 
 	it('should be calculate league income', () => {
 
 		matchDay.competition = Competition.LEAGUE;
 		expect(matchDay.calculateMatchDayIncome()).toEqual(250000);
-		expect(matchDay.fiendlyIncome).toEqual(250000);
+		expect(matchDay.friendlyIncome).toEqual(250000);
 
 		matchDay.opponent = new Team();
 		matchDay.location = GameLocation.AWAY;
@@ -92,7 +92,7 @@ describe('Matchday', () => {
 
 		matchDay.competition = Competition.CUP;
 		expect(matchDay.calculateMatchDayIncome()).toEqual(250000);
-		expect(matchDay.fiendlyIncome).toEqual(250000);
+		expect(matchDay.friendlyIncome).toEqual(250000);
 
 		matchDay.opponent = new Team();
 		expect(matchDay.calculateMatchDayIncome(stadium, settings)).toEqual(875000);
@@ -104,7 +104,7 @@ describe('Matchday', () => {
 
 		matchDay.competition = Competition.OSE;
 		expect(matchDay.calculateMatchDayIncome()).toEqual(250000);
-		expect(matchDay.fiendlyIncome).toEqual(250000);
+		expect(matchDay.friendlyIncome).toEqual(250000);
 
 		matchDay.opponent = new Team();
 		matchDay.location = GameLocation.AWAY;

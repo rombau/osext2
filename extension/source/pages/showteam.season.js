@@ -32,11 +32,10 @@ Page.ShowteamSeason = class extends Page {
 			let gameInfo = row.cells['Spielart'].textContent;
 			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
-				matchday.competition = gameInfo.split(' : ')[0];
-				matchday.location = gameInfo.split(' : ')[1];
+				[ matchday.competition, matchday.location ] = gameInfo.split(' : ', 2);
 				matchday.result = row.cells['Ergebnis'].textContent;
 				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
-					matchday.friendlyShare = +row.cells[5].textContent.split('/')[0];
+					matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
 				}
 				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {
@@ -74,7 +73,7 @@ Page.ShowteamSeason = class extends Page {
 
 			} else {
 
-				if (row.cells['Info'].textContent.includes('FSS-Tunier:')) {
+				if (row.cells['Info'].textContent.includes('FSS-Turnier:')) {
 					row.cells['Gegner'].textContent = row.cells['Info'].textContent;
 					row.cells['Info'].textContent = '';
 				}
@@ -155,7 +154,7 @@ Page.ShowteamSeason = class extends Page {
 							balanceTooltip.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'right'));
 							if (day.stadiumIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), 'positive'));
 							if (day.stadiumCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Stadionkosten', day.stadiumCosts.toLocaleString(), 'negative'));
-							if (day.fiendlyIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.fiendlyIncome.toLocaleString(), 'positive'));
+							if (day.friendlyIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.friendlyIncome.toLocaleString(), 'positive'));
 							if (day.squadSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Gehälter', day.squadSalary.toLocaleString(), 'negative'));
 							if (day.trainerSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Trainer', day.trainerSalary.toLocaleString(), 'negative'));
 							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));

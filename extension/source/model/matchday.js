@@ -67,8 +67,8 @@ class MatchDay {
 		/** @type {Number} the stadium costs */
 		this.stadiumCosts;
 
-		/** @type {Number} the fiendly income */
-		this.fiendlyIncome;
+		/** @type {Number} the friendly income */
+		this.friendlyIncome;
 
 		/** @type {Number} the advertising (tv) income */
 		this.advertisingIncome;
@@ -198,8 +198,8 @@ class MatchDay {
 			}
 			return 0;
 		} else {
-			this.fiendlyIncome = STADIUM_FRIENDLY_INCOME * (this.friendlyShare || 50) / 100;
-			return this.fiendlyIncome;
+			this.friendlyIncome = STADIUM_FRIENDLY_INCOME * (this.friendlyShare || 50) / 100;
+			return this.friendlyIncome;
 		}
 	}
 

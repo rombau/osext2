@@ -69,7 +69,7 @@ Page.Stadium = class extends Page {
 
 		while ((expansionElement = expansionElement.nextElementSibling)) {
 			let text = expansionElement.textContent;
-			let value = +text.split(" ")[0].replaceAll('.', '');
+			let value = +text.split(" ", 2)[0].replaceAll('.', '');
 			if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 				stadium.pitchHeating = true;
 			}
@@ -81,16 +81,16 @@ Page.Stadium = class extends Page {
 				stadium.places -= value;
 				stadium.seats += value;
 			}
-			else if (text.search(/[\d.]+ .berdachte Sitzpl.tze werden (neu )*gebaut/) != -1) {
+			else if (text.search(/[\d.]+ .berdachte Sitzpl.tze werden( neu)? gebaut/) != -1) {
 				stadium.coveredSeats += value;
 			}
-			else if (text.search(/[\d.]+ Sitzpl.tze werden (neu )*gebaut/) != -1) {
+			else if (text.search(/[\d.]+ Sitzpl.tze werden( neu)? gebaut/) != -1) {
 				stadium.seats += value;
 			}
-			else if (text.search(/[\d.]+ .berdachte Stehpl.tze werden (neu )*gebaut/) != -1) {
+			else if (text.search(/[\d.]+ .berdachte Stehpl.tze werden( neu)? gebaut/) != -1) {
 				stadium.coveredPlaces += value;
 			}
-			else if (text.search(/[\d.]+ Stehpl.tze werden (neu )*gebaut/) != -1) {
+			else if (text.search(/[\d.]+ Stehpl.tze werden( neu)? gebaut/) != -1) {
 				stadium.places += value;
 			}
 			else if (text.search(/[\d.]+ Sitzpl.tze werden .berdacht/) != -1) {
