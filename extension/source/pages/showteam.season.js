@@ -73,7 +73,7 @@ Page.ShowteamSeason = class extends Page {
 
 			} else {
 
-				if (row.cells['Info'].textContent.includes('FSS-Tunier:')) {
+				if (row.cells['Info'].textContent.includes('FSS-Turnier:')) {
 					row.cells['Gegner'].textContent = row.cells['Info'].textContent;
 					row.cells['Info'].textContent = '';
 				}
