@@ -114,10 +114,14 @@ describe('Team', () => {
 				case 6:
 					matchDay.competition = Competition.OSEQ;
 					break;
+				case 7:
+					matchDay.competition = Competition.FRIENDLY;
+					matchDay.friendlyShare = 70;
+					break;
 				default:
 					matchDay.competition = Competition.FRIENDLY;
 					break;
-			}
+				}
 			team.matchDays.push(matchDay);
 		}
 
@@ -133,6 +137,9 @@ describe('Team', () => {
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSCQ).length).toEqual(2);
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSE).length).toEqual(2);
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.OSEQ).length).toEqual(2);
+
+		expect(matchDaysInRange[7].friendlyShare).toEqual(70);
+		expect(matchDaysInRange[8].friendlyShare).toBeUndefined();
 
 	});
 

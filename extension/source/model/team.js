@@ -402,6 +402,7 @@ class Team {
 				copyMatchDay.competition = scheduledMatchDay.competition;
 				copyMatchDay.location = scheduledMatchDay.location;
 				copyMatchDay.opponent = scheduledMatchDay.opponent;
+				copyMatchDay.friendlyShare = scheduledMatchDay.friendlyShare;
 			}
 			copyMatchDay.accountBalance = scheduledMatchDay.accountBalance;
 			scheduledMatchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat) || scheduledMatchDay;
