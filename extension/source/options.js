@@ -118,7 +118,7 @@ const Options = {
 			}
 		});
 	}
-}
+};
 
 let themeSelect = document.getElementById('options-theme');
 let loggingSelect = document.getElementById('options-logging');
