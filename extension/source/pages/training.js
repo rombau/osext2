@@ -31,7 +31,7 @@ Page.Training = class extends Page {
 				}
 				player.nextTraining.trainer = data.team.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
-				player.nextTraining.chance = +row.cells['Chance'].textContent.split(' ')[0];
+				player.nextTraining.chance = +row.cells['Chance'].textContent.split(' ', 2)[0];
 
 				// last training only undefined when initializing the first time
 				// otherwise it's initialized from the stored next training (main page)

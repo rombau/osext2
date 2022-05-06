@@ -72,7 +72,7 @@ Page.ShowteamInfo = class extends Page {
 		if (expansionTable) {
 			Array.from(expansionTable.rows).filter(row => row.textContent.trim().length > 0).slice(1).forEach(row => {
 				let text = row.textContent;
-				let value = +text.split(" ")[0].replaceAll('.', '');
+				let value = +text.split(" ", 2)[0].replaceAll('.', '');
 				if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 					stadium.pitchHeating = true;
 				}

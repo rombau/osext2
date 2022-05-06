@@ -32,11 +32,10 @@ Page.ShowteamSeason = class extends Page {
 			let gameInfo = row.cells['Spielart'].textContent;
 			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
-				matchday.competition = gameInfo.split(' : ')[0];
-				matchday.location = gameInfo.split(' : ')[1];
+				[ matchday.competition, matchday.location ] = gameInfo.split(' : ', 2);
 				matchday.result = row.cells['Ergebnis'].textContent;
 				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
-					matchday.friendlyShare = +row.cells[5].textContent.split('/')[0];
+					matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
 				}
 				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {

@@ -69,7 +69,7 @@ Page.Stadium = class extends Page {
 
 		while ((expansionElement = expansionElement.nextElementSibling)) {
 			let text = expansionElement.textContent;
-			let value = +text.split(" ")[0].replaceAll('.', '');
+			let value = +text.split(" ", 2)[0].replaceAll('.', '');
 			if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
 				stadium.pitchHeating = true;
 			}
