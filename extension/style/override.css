@@ -5,7 +5,6 @@
 
 select {
 	padding: 2px 18px 2px 2px;
-	font-size: 1.05em;
 	border: 1px solid var(--input-border-color);
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -16,11 +15,14 @@ select {
 	background-repeat: no-repeat;
 	background-color: var(--input-background-color);
 	color: var(--input-color);
+	font-size: 0.95em;
+}
+select option {
+	font-size: 0.95em;
 }
 
 input, textarea {
 	border: 1px solid var(--input-border-color);
-	font-size: 1em;
 	color: var(--input-color);
 	background-color: var(--input-background-color);
 	outline: none;
@@ -39,7 +41,7 @@ input[type=submit], input[type=button], input[type=reset] {
 	margin-right: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	font-size: 1em !important;
+	font-size: 0.95em;
 }
 
 input[type=checkbox] {
@@ -51,9 +53,15 @@ input[type=radio] {
 	vertical-align: middle;
 }
 
+input[type=number] {
+	font-size: 0.95em;
+	padding-right: 0;
+}
+
 td > input {
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;
+	margin-left: 0px;
 }
 
 input[type=submit]:hover, input[type=reset]:hover {
@@ -71,6 +79,10 @@ input[type=reset] {
 
 input[value="Zugabgabe speichern"] {
 	height: 25px;
+}
+
+form[action="/osneu/stadion"] input, form[action="/osneu/stadion"] select {
+	margin: 2px;
 }
 
 hr {
@@ -118,6 +130,9 @@ body:not(.mediawiki):not(#tplIndex) td {
 
 body:not(.mediawiki):not(#tplIndex) td {
 	padding-right: 3px !important
+}
+body:not(.mediawiki):not(#tplIndex) form td {
+	padding: 2px;
 }
 td.BAK {
 	color: var(--background-color) !important;

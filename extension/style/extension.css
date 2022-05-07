@@ -114,7 +114,7 @@ form > .fa-arrow-alt-circle-down {
 }
 
 #osext-toolbar-container span {
-	vertical-align: text-bottom;
+	vertical-align: middle;
 	position: relative;
 	padding: 4px;
 }
@@ -147,6 +147,7 @@ form > .fa-arrow-alt-circle-down {
 	-webkit-appearance: none;
 	-webkit-transition: .2s;
 	padding: 0px;
+	vertical-align: middle;
 }
 
 #osext-toolbar-container input[type=range]::-webkit-slider-thumb {
@@ -165,6 +166,7 @@ form > .fa-arrow-alt-circle-down {
 	border-radius: 50%;
 	background: var(--range-thumb-color);
 	cursor: pointer;
+	border: none;
 }
 
 .osext-balance {
