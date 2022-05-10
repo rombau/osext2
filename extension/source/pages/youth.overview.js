@@ -88,7 +88,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 			// remove the remark
 			let element = doc.getElementsByTagName('table')[0].nextSibling;
-			while (element.nodeName.toLowerCase() != 'form') {
+			while (element.nodeName.toLowerCase() != 'form' && element.nodeName.toLowerCase() != 'div') {
 				let next = element.nextSibling;
 				element.parentNode.removeChild(element);
 				element = next;
@@ -103,13 +103,18 @@ Page.YouthOverview = class extends Page.Youth {
 				.slice(0, -1)
 				.forEach((row, index) => {
 
-				row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
-				row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
-				row.cells['&Oslash;/Zat'] = row.cells['Alter'].cloneNode(true);
-				row.cells['Marktwert'] = row.cells['Alter'].cloneNode(true);
-				row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
-				row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
-				row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
+				let baseCell = row.cells['Alter'].cloneNode(true);
+				baseCell.style.color = null;
+				baseCell.style.fontWeight = null;
+				baseCell.style.opacity = null;
+
+				row.cells['Pos'] = baseCell;
+				row.cells['Opt.Skill'] = baseCell.cloneNode(true);
+				row.cells['&Oslash;/Zat'] = baseCell.cloneNode(true);
+				row.cells['Marktwert'] = baseCell.cloneNode(true);
+				row.cells['&Oslash;P'] = baseCell.cloneNode(true);
+				row.cells['&Oslash;N'] = baseCell.cloneNode(true);
+				row.cells['&Oslash;U'] = baseCell.cloneNode(true);
 
 				row.cells['&Oslash;P'].style.width = '45px';
 
