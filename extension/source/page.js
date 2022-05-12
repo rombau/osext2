@@ -55,7 +55,7 @@ class Page {
 	 */
 	match (location) {
 		let url = new URL(location, document.location.href);
-		if (!url.pathname.includes(this.path)) {
+		if (url.pathname !== ('/' + this.path)) {
 			return false;
 		}
 		return this.params.every(param => {
