@@ -6,9 +6,8 @@ const del = require('del');
 const argv = require('minimist')(process.argv.slice(2));
 const release = require('gulp-github-release');
 
-gulp.task('clean', (cb) => {
-	del(['./release/*.zip']);
-	cb();
+gulp.task('clean', () => {
+	return del('./release/*.zip');
 });
 
 gulp.task('zip', () => {
@@ -17,35 +16,28 @@ gulp.task('zip', () => {
 		.pipe(gulp.dest('./release'));
 });
 
-gulp.task('bump', (cb) => {
-	gulp.src('./extension/manifest.json')
+gulp.task('bump', () => {
+	return gulp.src(['./extension/manifest.json', './package.json'])
 		.pipe(bump({ version: argv.release }))
-		.pipe(gulp.dest('./extension'));
-	gulp.src('./package.json')
-		.pipe(bump({ version: argv.release }))
-		.pipe(gulp.dest('./'));
-	cb();
+		.pipe(gulp.dest(file => file.base));
 });
 
 gulp.task('git-add', () => {
-	return gulp.src('.')
+	return gulp.src(['./extension/manifest.json', './package.json'])
 		.pipe(git.add());
 });
 
 gulp.task('git-commit', () => {
-	return gulp.src('.')
-		.pipe(git.commit('new version ' + argv.release));
+	return gulp.src(['./extension/manifest.json', './package.json'])
+		.pipe(git.commit('new version ' + argv.release, { disableAppendPaths: true }));
 });
 
 gulp.task('git-push', (cb) => {
-	git.push('origin', (err) => {
-		if (err) throw err;
-	});
-	cb();
+	git.push('origin', null, cb);
 });
 
-gulp.task('release', (cb) => {
-	gulp.src('./release/osext_' + argv.release + '.zip')
+gulp.task('release', () => {
+	return gulp.src('./release/osext_' + argv.release + '.zip')
 		.pipe(release({
 			owner: 'rombau',
 			repo: 'osext2',
@@ -55,7 +47,6 @@ gulp.task('release', (cb) => {
 			prerelease: false,
 			manifest: require('./package.json')
 		}));
-	cb();
 });
 
 gulp.task('default', gulp.series('clean', 'bump', 'git-add', 'git-commit', 'git-push', 'zip', 'release'));
