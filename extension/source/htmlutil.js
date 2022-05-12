@@ -91,10 +91,9 @@ class HtmlUtil {
 	}
 
 	/**
-	 * Adds script element with the given code.
+	 * Helps creating sticky toolbar by setting div style to 'inline-block' display.
 	 *
 	 * @param {Document} doc
-	 * @param {String} text
 	 */
 	static allowStickyToolbar (doc) {
 		doc.querySelector('body > div').style.display = 'inline-block';
