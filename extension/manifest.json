@@ -95,8 +95,6 @@
 		"webfonts/fa-solid-900.woff2"
 	],
 	"permissions": [
-		"*://os.ongapo.com/*",
-		"tabs",
 		"storage"
 	],
 	"options_ui": {
