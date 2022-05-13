@@ -31,6 +31,13 @@ For testing the extension `Karma Test Explorer for Angular, Jasmine, and Mocha` 
 		}
 	}
 </pre>
+
+### Node and Gulp tools
+
 The coverage reports are created with `npm test` in the folder `.coverage`. Based on the `summary.json` the coverage badge is updated in the README with `npm run badge`.
 
-The release archive (zip) can be created by running `gulp` in the folder `release`.
+The release can be created by running `gulp --release major.minor.patch`:
+- this updates the version in the relevant files
+- pushes these updates in a separate commit
+- creates the extension archive (for uploading to AMO) in the folder `release`
+- creates a new release/tag in github (env variable `GITHUB_TOKEN` is needed)
