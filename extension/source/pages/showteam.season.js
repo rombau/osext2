@@ -19,6 +19,31 @@ Page.ShowteamSeason = class extends Page {
 
 	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
 
+	static UNALIASGAMETYPE = {
+		"^$"	:	'spielfrei',
+		'FSS'	:	'Friendly',
+		'Pokal'	:	'LP',
+		'Super'	:	'Supercup',
+		'(H)'	:	': Heim',
+		'(A)'	:	': Ausw\u00E4rts'
+	};
+
+	/**
+	 * @param {Document} doc
+	 */
+	unscript (doc) {
+
+		// Undo option 'shortKom' from OS2.spielplan.user.js:
+		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
+			let gameInfo = row.cells['Spielart'].textContent;
+			let gameInfoOrg = Object.entries(Page.ShowteamSeason.UNALIASGAMETYPE).reduce(
+					(gameType, [key, value]) => gameType.replace(key, value), gameInfo);
+			if (gameInfoOrg !== gameInfo) {
+				row.cells['Spielart'].textContent = gameInfoOrg;
+			}
+		});
+	}
+
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
