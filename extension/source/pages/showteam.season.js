@@ -20,7 +20,7 @@ Page.ShowteamSeason = class extends Page {
 	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
 
 	static UNALIASGAMETYPE = {
-		"^$"	:	'spielfrei',
+		'^$'	:	'spielfrei',
 		'FSS'	:	'Friendly',
 		'Pokal'	:	'LP',
 		'Super'	:	'Supercup',
