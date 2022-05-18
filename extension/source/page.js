@@ -173,6 +173,14 @@ class Page {
 			doc.body.appendChild(marker);
 		}
 	}
+
+	/**
+	 * Reverts Greasemonkey script modifications on the given document.
+	 *
+	 * @param {Document} doc the document
+	 */
+	unscript (doc = document) {}
+
 	/**
 	 * The extract method used when processing the page.
 	 *
@@ -214,6 +222,9 @@ class Page {
 		let page = this;
 		if (page.reloadIfAlreadyExtended(doc)) return;
 		page.check(doc);
+		if (doc.getElementById('options')) {	// Greasemonkey script invoked!
+			page.unscript(doc);
+		}
 		Persistence.updateExtensionData(data => {
 			if (!data.nextZat && !page.equals(new Page.Main())) {
 				data.pagesToRequest = [];

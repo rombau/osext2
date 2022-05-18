@@ -17,6 +17,10 @@ Page.Main = class extends Page {
 
 		super.check(doc);
 
+		if (doc.getElementById('options')) {
+			super.unscript(doc);
+		}
+
 		let teamChangeLink = doc.querySelector('a[href="?changetosecond=true"]');
 		let matches = /Willkommen im Managerb.ro von (.+)/gm.exec(teamChangeLink.parentElement.childNodes[0].textContent);
 
