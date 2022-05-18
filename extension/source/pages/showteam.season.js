@@ -19,7 +19,7 @@ Page.ShowteamSeason = class extends Page {
 
 	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
 
-	static UNALIASGAMETYPE = {
+	static UNALIAS_GAMETYPE = {
 		'^$'	:	'spielfrei',
 		'FSS'	:	'Friendly',
 		'Pokal'	:	'LP',
@@ -36,7 +36,7 @@ Page.ShowteamSeason = class extends Page {
 		// Undo option 'shortKom' from OS2.spielplan.user.js:
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 			let gameInfo = row.cells['Spielart'].textContent;
-			let gameInfoOrg = Object.entries(Page.ShowteamSeason.UNALIASGAMETYPE).reduce(
+			let gameInfoOrg = Object.entries(Page.ShowteamSeason.UNALIAS_GAMETYPE).reduce(
 					(gameType, [key, value]) => gameType.replace(key, value), gameInfo);
 			if (gameInfoOrg !== gameInfo) {
 				row.cells['Spielart'].textContent = gameInfoOrg;
