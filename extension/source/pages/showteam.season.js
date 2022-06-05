@@ -29,10 +29,10 @@ Page.ShowteamSeason = class extends Page {
 		this.params.push(new Page.Param('saison', season, true));
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
-			let gameInfo = row.cells['Spielart'].textContent;
+			let gameInfo = ScriptUtil.getOriginalCellContent(row.cells['Spielart']);
 			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
-				[ matchday.competition, matchday.location ] = gameInfo.split(' : ', 2);
+				[matchday.competition, matchday.location] = gameInfo.split(' : ', 2);
 				matchday.result = row.cells['Ergebnis'].textContent;
 				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
 					matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
@@ -45,7 +45,7 @@ Page.ShowteamSeason = class extends Page {
 		});
 
 		if (!data.initNextSeason(season)) {
-			this.logger.info(`Initiate loading of previous season (${season-1}) matchday schedule`);
+			this.logger.info(`Initiate loading of previous season (${season - 1}) matchday schedule`);
 			data.pagesToRequest.unshift(new Page.ShowteamSeason(season - 1));
 		}
 	}
@@ -84,8 +84,8 @@ Page.ShowteamSeason = class extends Page {
 				}
 
 				let matchDay = data.team.getMatchDay(this.selectedSeason, i);
-				if (matchDay) {
-					let type = row.cells['Spielart'].textContent;
+				if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
+					let type = ScriptUtil.getOriginalCellContent(row.cells['Spielart']);
 					if (matchDay.competition === Competition.LEAGUE) {
 						type = i < 70 ? `${type.slice(0, 4)} (${leagueRound++}. Spieltag) ${type.slice(4)}` : 'Relegation';
 					}

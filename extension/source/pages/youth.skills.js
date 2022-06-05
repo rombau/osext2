@@ -27,7 +27,7 @@ Page.YouthSkills = class extends Page.Youth {
 			data.team.youthPlayers[index] = player;
 
 			Object.keys(player.skills).forEach((skillname, s) => {
-				player.skills[skillname] = +row.cells[skillname.toUpperCase()].textContent;
+				player.skills[skillname] = +ScriptUtil.getOriginalCellContent(row.cells[skillname.toUpperCase()]);
 			});
 		});
 	}
@@ -104,11 +104,10 @@ Page.YouthSkills = class extends Page.Youth {
 
 			let player = team.youthPlayers[index];
 
-			row.cells['Alter'].textContent = player.age;
+			row.cells['Alter'].textContent = row.cells['Alter'].textContent.includes('.') ? player.ageExact.toFixed(2) : player.age;
 
 			if (player.active) {
 
-				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 
 				Object.keys(player.skills).forEach((skillname, s) => {

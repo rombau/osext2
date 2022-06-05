@@ -21,6 +21,22 @@
 				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
+				"source/handler.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+			],
+			"exclude_matches": [
+				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
+				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
+				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
+				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
+			],
+			"js": [
+				"source/options.js",
 				"source/logger.js",
 				"source/common.js",
 				"source/model/data.js",
@@ -32,6 +48,7 @@
 				"source/model/stadium.js",
 				"source/requestor.js",
 				"source/htmlutil.js",
+				"source/scriptutil.js",
 				"source/persistence.js",
 				"source/page.js",
 				"source/pages/menu.js",
@@ -59,8 +76,7 @@
 				"source/pages/youth.optskills.js",
 				"source/pages/youth.options.js",
 				"source/pages/accountstatement.js",
-				"source/pages/stadium.js",
-				"source/handler.js"
+				"source/pages/stadium.js"
 			],
 			"css": [
 				"style/colors.css",
@@ -68,21 +84,6 @@
 				"style/extension.css",
 				"style/fontawesome.min.css",
 				"style/solid.min.css"
-			],
-			"all_frames": true
-		},
-		{
-			"matches": [
-				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
-			],
-			"exclude_matches": [
-				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
-				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
-				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
-				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
-			],
-			"js": [
-				"source/options.js"
 			],
 			"all_frames": true,
 			"run_at": "document_start"
