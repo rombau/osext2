@@ -12,7 +12,8 @@ new MutationObserver((records, observer) => {
 				}
 			});
 		}
-		else if (record.target.nodeName == 'BODY' && record.addedNodes.item(0).getAttribute('id') == ID_MARKER) {
+		else if (record.target.nodeName == 'BODY' && record.addedNodes.length > 0 && record.addedNodes.item(0).getAttribute 
+			&& record.addedNodes.item(0).getAttribute('id') == ID_MARKER) {
 			observer.disconnect();
 		}
 	});
