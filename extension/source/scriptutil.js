@@ -7,12 +7,12 @@ new MutationObserver((records, observer) => {
 	records.forEach(record => {
 		if (record.target.nodeName == 'TR') {
 			record.addedNodes.forEach(node => {
-				if (node.nodeName == 'TD' && node.textContent.length && !node.textContent.match(/[\r\n]+/g)) {
+				if (node.nodeName == 'TD' && node.textContent.length > 0 && !node.textContent.match(/[\r\n]+/)) {
 					if (!node.getAttribute(ATTR_ORIGINAL)) node.setAttribute(ATTR_ORIGINAL, node.textContent);
 				}
 			});
 		}
-		else if (record.target.nodeName == 'BODY' && record.addedNodes.length > 0 && record.addedNodes.item(0).getAttribute 
+		else if (record.target.nodeName == 'BODY' && record.addedNodes.length > 0  && record.addedNodes.item(0) instanceof Element
 			&& record.addedNodes.item(0).getAttribute('id') == ID_MARKER) {
 			observer.disconnect();
 		}
