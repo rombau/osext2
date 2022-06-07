@@ -29,7 +29,7 @@ Page.ShowteamSeason = class extends Page {
 		this.params.push(new Page.Param('saison', season, true));
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
-			let gameInfo = ScriptUtil.getOriginalCellContent(row.cells['Spielart']);
+			let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
 			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
 				[matchday.competition, matchday.location] = gameInfo.split(' : ', 2);
@@ -85,20 +85,20 @@ Page.ShowteamSeason = class extends Page {
 
 				let matchDay = data.team.getMatchDay(this.selectedSeason, i);
 				if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
-					let type = ScriptUtil.getOriginalCellContent(row.cells['Spielart']);
+					let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
 					if (matchDay.competition === Competition.LEAGUE) {
-						type = i < 70 ? `${type.slice(0, 4)} (${leagueRound++}. Spieltag) ${type.slice(4)}` : 'Relegation';
+						gameInfo = i < 70 ? `${gameInfo.slice(0, 4)} (${leagueRound++}. Spieltag) ${gameInfo.slice(4)}` : 'Relegation';
 					}
 					else if (matchDay.competition === Competition.CUP) {
-						type = `${type.slice(0, 2)} (${Object.entries(CUP_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${type.slice(2)}`
+						gameInfo = `${gameInfo.slice(0, 2)} (${Object.entries(CUP_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(2)}`
 					}
 					else if (matchDay.competition === Competition.OSE || matchDay.competition === Competition.OSEQ) {
-						type = `${type.slice(0, 4)} (${Object.entries(OSE_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${type.slice(4)}`
+						gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSE_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
 					}
 					else if (matchDay.competition === Competition.OSC || matchDay.competition === Competition.OSCQ) {
-						type = `${type.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${type.slice(4)}`
+						gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
 					}
-					row.cells['Spielart'].textContent = type.replace(/\s+/g, ' ');
+					row.cells['Spielart'].textContent = gameInfo.replace(/\s+/g, ' ');
 					row.cells['Spielart'].style.setProperty('padding-right', '0.5em', 'important');
 				}
 			}

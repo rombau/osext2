@@ -12,7 +12,7 @@ new MutationObserver((records, observer) => {
 				}
 			});
 		}
-		else if (record.target.nodeName == 'BODY' && record.addedNodes.length > 0  && record.addedNodes.item(0) instanceof Element
+		else if (record.target.nodeName == 'BODY' && record.addedNodes.length > 0 && record.addedNodes.item(0) instanceof Element
 			&& record.addedNodes.item(0).getAttribute('id') == ID_MARKER) {
 			observer.disconnect();
 		}
@@ -31,15 +31,16 @@ class ScriptUtil {
 	/**
 	 * Returns the original (or initial) value for the given cell.
 	 *
-	 * @param {HTMLTableCellElement} cell
+	 * @param {HTMLTableCellElement} cell the table cell
+	 * @param {Boolean} textContentIfNull if true, the current textContent is returned if ther is no original value (false by default)
 	 * @returns {String} value
 	 */
-	static getOriginalCellContent(cell) {
+	static getCellContent(cell, textContentIfNull = false) {
 		if (cell instanceof HTMLTableCellElement) {
-			return cell.getAttribute(ATTR_ORIGINAL) || cell.textContent;
+			let original = cell.getAttribute(ATTR_ORIGINAL);
+			return original || (textContentIfNull ? cell.textContent : null);
 		}
 		return null;
 	}
-
 
 }

@@ -27,7 +27,7 @@ Page.YouthSkills = class extends Page.Youth {
 			data.team.youthPlayers[index] = player;
 
 			Object.keys(player.skills).forEach((skillname, s) => {
-				player.skills[skillname] = +ScriptUtil.getOriginalCellContent(row.cells[skillname.toUpperCase()]);
+				player.skills[skillname] = +ScriptUtil.getCellContent(row.cells[skillname.toUpperCase()], true);
 			});
 		});
 	}
