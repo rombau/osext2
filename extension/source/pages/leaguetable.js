@@ -16,7 +16,8 @@ Page.LeagueTable = class extends Page {
 
 		if (+doc.querySelector('select[name=ligaauswahl]').value && 
 			+doc.querySelector('select[name=landauswahl]').value && 
-			!(+doc.querySelector('select[name=tabauswahl]').value)) {
+			!(+doc.querySelector('select[name=tabauswahl]').value) &&
+			doc.querySelector('select[name=saauswahl]').value === doc.querySelector('select[name=saauswahl] :last-child').value) {
 
 			let size = 0;
 			let leagueOfCurrentTeam = false;
