@@ -43,7 +43,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 					player.season = season;
 
-					player.age = +row.cells['Alter'].textContent;
+					player.age = Math.floor(+row.cells['Alter'].textContent);
 					player.birthday = +row.cells['Geb.'].textContent;
 
 					if (row.cells['Alter'].className == Position.TOR) {
@@ -182,7 +182,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 			let player = team.youthPlayers[index];
 
-			row.cells['Alter'].textContent = player.age;
+			row.cells['Alter'].textContent = row.cells['Alter'].textContent.includes('.') ? player.ageExact.toFixed(2) : player.age;
 
 			if (player.active) {
 				row.cells['Geb.'].textContent = player.birthday;

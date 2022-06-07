@@ -150,11 +150,10 @@ Page.YouthOptskills = class extends Page.Youth {
 
 			let player = team.youthPlayers[index];
 
-			row.cells['Alter'].textContent = player.age;
+			row.cells['Alter'].textContent = row.cells['Alter'].textContent.includes('.') ? player.ageExact.toFixed(2) : player.age;
 
 			if (player.active) {
 
-				row.cells['Alter'].textContent = player.age;
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Skill'].textContent = player.getSkillAverage().toFixed(2);
 
