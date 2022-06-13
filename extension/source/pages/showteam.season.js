@@ -176,8 +176,8 @@ Page.ShowteamSeason = class extends Page {
 
 							balanceCell.textContent = day.accountBalance.toLocaleString();
 						}
-						
-					});
+
+					}).catch(this.logger.error);
 
 					if (matchDay.competition === Competition.FRIENDLY) {
 						balanceCell.classList.remove('STU');
