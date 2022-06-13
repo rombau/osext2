@@ -82,7 +82,7 @@ Page.Main = class extends Page {
 		data.team.league.countryName = matches[2];
 
 		let accountBalanceElement = doc.querySelector('a[href="ka.php"]');
-		if (accountBalanceElement) {
+		if (accountBalanceElement && accountBalanceElement.textContent.includes('Euro')) {
 			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
 		}
 

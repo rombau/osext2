@@ -146,7 +146,7 @@ Page.ShowteamSeason = class extends Page {
 					balanceCell.textContent = '...';
 
 					let matchDay = matchDays.find(matchDay => matchDay.season === season && matchDay.zat === i)
-					matchDay.accountBalancePromise.then((day => {
+					matchDay.accountBalancePromise.then(day => {
 
 						if (day.youthSupport) {
 
@@ -176,8 +176,8 @@ Page.ShowteamSeason = class extends Page {
 
 							balanceCell.textContent = day.accountBalance.toLocaleString();
 						}
-
-					}));
+						
+					});
 
 					if (matchDay.competition === Competition.FRIENDLY) {
 						balanceCell.classList.remove('STU');
