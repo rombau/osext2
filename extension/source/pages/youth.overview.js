@@ -22,8 +22,9 @@ Page.YouthOverview = class extends Page.Youth {
 		if (!this.getPullId(doc)) {
 
 			let index = 0;
-			let playerCount = 0;
 			let season = 0;
+
+			let oldYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
 
 			HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS).forEach((row) => {
 
@@ -36,12 +37,12 @@ Page.YouthOverview = class extends Page.Youth {
 
 				} else if (this.isPlayerRow(row)) {
 
-					// player with pull id?
-					let pullInput = row.cells['Aktion'].firstChild;
-
-					let player = data.team.getYouthPlayer(index++, pullInput ? +pullInput.value : undefined);
+					let player = data.team.pageYouthPlayers[index] || new YouthPlayer();
 
 					player.season = season;
+
+					let pullInput = row.cells['Aktion'].firstChild;
+					player.pullId = pullInput ? +pullInput.value : undefined;
 
 					player.age = Math.floor(+row.cells['Alter'].textContent);
 					player.birthday = +row.cells['Geb.'].textContent;
@@ -57,9 +58,20 @@ Page.YouthOverview = class extends Page.Youth {
 					player.talent = row.cells['Talent'].textContent;
 					player.increase = row.cells['Aufwertung'].textContent;
 
-					playerCount++;
+					data.team.pageYouthPlayers[index] = player;
+					index++;
 				}
 			});
+
+			data.team.pageYouthPlayers.splice(index);
+
+			let newYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
+
+			if (newYouthTeamFingerprint != oldYouthTeamFingerprint) {
+				data.pagesToRequest.push(new Page.YouthSkills());
+			} else if (!data.pagesToRequest.find(pageToRequest => new Page.YouthSkills().equals(pageToRequest))) {
+				data.team.syncYouthPlayers();
+			}
 		}
 	}
 

@@ -37,13 +37,11 @@ describe('YouthPlayer', () => {
 		player.complete(new MatchDay(14, 5));
 
 		expect(player.ageExact).toEqual(17.73611111111111);
-		expect(player.pos).toEqual(Position.DMI);
 		expect(player.trainingFactor).toEqual(1);
 
 		player.complete(new MatchDay(14, 64));
 
 		expect(player.ageExact).toEqual(17.555555555555557);
-		expect(player.pos).toEqual(Position.DMI);
 		expect(player.trainingFactor).toEqual(1);
 
 		player.pullMatchDay = new MatchDay(14, 65);
@@ -111,5 +109,19 @@ describe('YouthPlayer', () => {
 		let forecastPlayer = player.getForecast(new MatchDay(15, 10), new MatchDay(18, 24));
 
 		expect(forecastPlayer.salary).toEqual(92419);
+	});
+
+	it('should return fingerprint', () => {
+
+		player.season = 1;
+		player.talent = Talent.NORMAL;
+		player.birthday = 24;
+
+		expect(player.getFingerPrint()).toEqual('GUA124normal15059529');
+
+		player.pos = Position.TOR;
+		player.talent = Talent.HIGH;
+
+		expect(player.getFingerPrint()).toEqual('GUA124hoch15059529');
 	});
 });

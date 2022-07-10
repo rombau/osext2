@@ -46,6 +46,16 @@ class YouthPlayer extends Player {
 	}
 
 	/**
+	 * Returns a finger print of the youth player based on concatenated unchangeable properties of the player.
+	 * 
+	 * @param {Page} page
+	 */
+	getFingerPrint(page) {
+		return this.countryCode + this.season + this.birthday + this.talent 
+			+ Object.values(this.getUnchangeableSkills()).map(v => String(v).padStart(2, '0')).join('');
+	}
+
+	/**
 	 * Returns a forecast of the player for the given target match day.
 	 * If target match day is ommited, the maximum age is calculated.
 	 *
@@ -195,9 +205,6 @@ class YouthPlayer extends Player {
 		// initialize exact age
 		this.initializeExactAge(lastMatchDay);
 
-		// initialize the best fitting position
-		this.initializeBestPosition();
-
 		// initialize training factor
 		this.trainingFactor = 1;
 
@@ -215,19 +222,20 @@ class YouthPlayer extends Player {
 	 *
 	 * @returns {Position} the position
 	 */
-	initializeBestPosition () {
-		let pos, opti, optiTop = 0;
+	getBestPosition () {
+		let pos, opti, optiTop = 0, bestPos = this.pos;
 		if (this.pos != Position.TOR) {
 			for (pos in Position) {
 				if (Position[pos] != Position.TOR) {
 					opti = this.getOpti(Position[pos]);
 					if (opti > optiTop) {
 						optiTop = opti;
-						this.pos = Position[pos];
+						bestPos = Position[pos];
 					}
 				}
 			}
 		}
+		return bestPos;
 	}
 
 }

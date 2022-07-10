@@ -30,6 +30,9 @@ class Team {
 		/** @private @type {[YouthPlayer]} */
 		this._youthPlayers = [];
 
+		/** @private @type {[YouthPlayer]} */
+		this._pageYouthPlayers = [];
+
 		/** @private @type {[MatchDay]} */
 		this._matchDays = [];
 
@@ -70,6 +73,17 @@ class Team {
 
 	set youthPlayers (value) {
 		this._youthPlayers = value;
+	}
+
+	/**
+	 * @type {[YouthPlayer]} the youth players from the page
+	 */
+	get pageYouthPlayers () {
+		return ensurePrototype(this._pageYouthPlayers, YouthPlayer) || [];
+	}
+
+	set pageYouthPlayers (value) {
+		this._pageYouthPlayers = value;
 	}
 
 	/**
@@ -115,32 +129,30 @@ class Team {
 	}
 
 	/**
-	 * Returns the youth player with the given index and pull id.
-	 * If the player can't be found, a new one is added to the team (at the given index).
-	 * Otherwise if the pull id of the player doesn't match with the existing player
-	 * (at the given index), the one at the index was already pulled to squad and will
-	 * be removed from the list.
-	 *
-	 * @param {Number} index the index of the player on the page and the array
-	 * @param {Number} pullId the pull id of the player for pull to squad
-	 * @returns {YouthPlayer} the player
+	 * Synchronizes the youth players in the model with the fully initialized page youth players, 
+	 * based on the fingerprints.
+	 * 
+	 * If the player is not found, it is inserted (new or scouted).
+	 * If the player is found on a greater index, all players between are deleted (pull or removed with scouting).
+	 * 
 	 */
-	getYouthPlayer (index, pullId) {
-		let player = this.youthPlayers[index];
-		if (!player) {
-			player = new YouthPlayer();
-		}
-		while (player.pullId && player.pullId !== pullId) {
-			this.youthPlayers.splice(index, 1);
-			player = this.youthPlayers[index];
-			if (!player) {
-				player = new YouthPlayer();
-				break;
+	syncYouthPlayers () {
+		this.pageYouthPlayers.forEach((player, index) => {
+			let foundIndex = this.youthPlayers.findIndex(p => p.getFingerPrint() == player.getFingerPrint());
+			if (foundIndex < 0) {
+				this._youthPlayers.splice(index, 0, player); // insert
+			} else {
+				if (foundIndex > index) {
+					this._youthPlayers.splice(index, foundIndex - index); // delete
+				}
+				Object.entries(player).forEach(([key, value]) => {
+					if (value) {
+						this._youthPlayers[index][key] = value;
+					}
+				});
 			}
-		}
-		if (pullId) player.pullId = pullId;
-		this.youthPlayers[index] = player;
-		return ensurePrototype(player, YouthPlayer);
+			this._youthPlayers[index].pos = player.pos || player.getBestPosition();
+		});
 	}
 
 	/**

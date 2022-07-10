@@ -23,6 +23,8 @@ describe('Page.YouthOptskills', () => {
 
 			new Page.YouthOverview().extract(doc, data);
 
+			data.team.syncYouthPlayers();
+
 			Fixture.getDocument('ju.php?page=3', doc => {
 
 				page.extend(doc, data);

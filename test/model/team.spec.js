@@ -3,6 +3,34 @@ describe('Team', () => {
 	/** @type {Team} */
 	let team;
 
+	/**
+	 * Creates a youth player.
+	 * 
+	 * @param {Number} season 
+	 * @param {Number} birthday 
+	 * @param {String} countryCode 
+	 * @param {Talent} talent 
+	 * @param {Number} wid 
+	 * @param {Number} sel 
+	 * @param {Number} dis 
+	 * @param {Number} ein 
+	 * @param {String} data 
+	 * @returns 
+	 */
+	let createYouthPlayer = (season, birthday, countryCode, talent, wid, sel, dis, ein, data) => {
+		let player = new YouthPlayer();
+		player.season = season;
+		player.birthday = birthday;
+		player.countryCode = countryCode;
+		player.talent = talent;
+		player.skills.wid = wid;
+		player.skills.sel = sel;
+		player.skills.dis = dis;
+		player.skills.ein = ein;
+		player.data = data;
+		return player;
+	}
+
 	beforeEach(() => {
 		team = new Team();
 	});
@@ -25,42 +53,67 @@ describe('Team', () => {
 		expect(team.getSquadPlayer(2)).toBe(team.getSquadPlayer(2));
 	});
 
-	it('should return requested youth player', () => {
+	describe('should sync youth players', () => {
 
-		expect(team.getYouthPlayer(0)).toBeDefined();
+		it('with new one', () => {
 
-		let p1 = team.getYouthPlayer(0);
-		p1.pullId = 33;
-		let p2 = team.getYouthPlayer(1);
-		p2.pullId = 44;
-		let p3 = team.getYouthPlayer(2);
-		p3.pullId = 55;
-		let p4 = team.getYouthPlayer(3); // no pull
-		let p5 = team.getYouthPlayer(4); // no pull
+			team.pageYouthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44));
 
-		expect(team.getYouthPlayer(0, 33)).toBe(p1);
-		expect(team.getYouthPlayer(1, 44)).toBe(p2);
-		expect(team.getYouthPlayer(2, 55)).toBe(p3);
-		expect(team.getYouthPlayer(3)).toBe(p4);
-		expect(team.getYouthPlayer(4)).toBe(p5);
+			team.syncYouthPlayers();
 
-		// p1 pulled
-		expect(team.getYouthPlayer(0, 44)).toBe(p2);
-		expect(team.getYouthPlayer(1, 55)).toBe(p3);
-		expect(team.getYouthPlayer(2)).toBe(p4);
-		expect(team.getYouthPlayer(3)).toBe(p5);
+			expect(team.youthPlayers.length).toEqual(1);
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].data).toBeUndefined();
+		});
 
-		// p3 pulled, no more players to pull
-		expect(team.getYouthPlayer(0, 44)).toBe(p2);
-		expect(team.getYouthPlayer(1)).toBe(p4);
-		expect(team.getYouthPlayer(2)).toBe(p5);
+		it('with scouted one', () => {
 
-		// p4 can now be pulled
-		expect(team.getYouthPlayer(0, 44)).toBe(p2);
-		expect(team.getYouthPlayer(1, 66)).toBe(p4);
-		expect(team.getYouthPlayer(2)).toBe(p5);
+			team.youthPlayers.push(createYouthPlayer(11, 6, 'FIN', Talent.NORMAL, 12, 23, 34, 45, 'data1'));
+			team.youthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44, 'data2'));
+
+			team.pageYouthPlayers.push(createYouthPlayer(11, 6, 'FIN', Talent.NORMAL, 12, 23, 34, 45));
+			team.pageYouthPlayers.push(createYouthPlayer(11, 6, 'FIN', Talent.NORMAL, 0, 23, 34, 45));
+			team.pageYouthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44));
+
+			team.syncYouthPlayers();
+
+			expect(team.youthPlayers.length).toEqual(3);
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('FIN116normal12233445');
+			expect(team.youthPlayers[0].data).toEqual('data1');
+			expect(team.youthPlayers[1].getFingerPrint()).toEqual('FIN116normal00233445');
+			expect(team.youthPlayers[1].data).toBeUndefined();
+			expect(team.youthPlayers[2].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[2].data).toEqual('data2');
+		});
+
+		it('with existing one', () => {
+
+			team.youthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44, 'data'));
+
+			team.pageYouthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44));
+
+			team.syncYouthPlayers();
+
+			expect(team.youthPlayers.length).toEqual(1);
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].data).toEqual('data');
+		});
+
+		it('with removed one', () => {
+
+			team.youthPlayers.push(createYouthPlayer(11, 6, 'FIN', Talent.NORMAL, 12, 23, 34, 45, 'data1'));
+			team.youthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44, 'data2'));
+
+			team.pageYouthPlayers.push(createYouthPlayer(11, 24, 'CYP', Talent.NORMAL, 11, 22, 33, 44));
+
+			team.syncYouthPlayers();
+
+			expect(team.youthPlayers.length).toEqual(1);
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].data).toEqual('data2');
+		});
 	});
-
+	
 	it('should return requested match day', () => {
 
 		expect(team.getMatchDay()).toBeNull();

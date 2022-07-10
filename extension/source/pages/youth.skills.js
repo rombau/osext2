@@ -17,19 +17,32 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extract(doc, data) {
 
+		let index = 0;
+
+		let oldYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
+
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
-			.filter(row => this.isPlayerRow(row)).forEach((row, index) => {
+			.filter(row => this.isPlayerRow(row)).forEach((row) => {
 
-			let player = data.team.youthPlayers[index];
-			if (!player) {
-				player = new YouthPlayer();
-			}
-			data.team.youthPlayers[index] = player;
-
+			let player = data.team.pageYouthPlayers[index] || new YouthPlayer();
+			
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +ScriptUtil.getCellContent(row.cells[skillname.toUpperCase()], true);
 			});
+
+			data.team.pageYouthPlayers[index] = player;
+			index++;
 		});
+
+		data.team.pageYouthPlayers.splice(index);
+
+		let newYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
+
+		if (newYouthTeamFingerprint != oldYouthTeamFingerprint) {
+			data.pagesToRequest.push(new Page.YouthOverview());
+		} else if (!data.pagesToRequest.find(pageToRequest => new Page.YouthOverview().equals(pageToRequest))) {
+			data.team.syncYouthPlayers();
+		}
 	}
 
 	/**
