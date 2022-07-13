@@ -62,7 +62,7 @@ describe('Team', () => {
 			team.syncYouthPlayers();
 
 			expect(team.youthPlayers.length).toEqual(1);
-			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP01124normal11223344');
 			expect(team.youthPlayers[0].data).toBeUndefined();
 		});
 
@@ -78,11 +78,11 @@ describe('Team', () => {
 			team.syncYouthPlayers();
 
 			expect(team.youthPlayers.length).toEqual(3);
-			expect(team.youthPlayers[0].getFingerPrint()).toEqual('FIN116normal12233445');
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('FIN01106normal12233445');
 			expect(team.youthPlayers[0].data).toEqual('data1');
-			expect(team.youthPlayers[1].getFingerPrint()).toEqual('FIN116normal00233445');
+			expect(team.youthPlayers[1].getFingerPrint()).toEqual('FIN01106normal00233445');
 			expect(team.youthPlayers[1].data).toBeUndefined();
-			expect(team.youthPlayers[2].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[2].getFingerPrint()).toEqual('CYP01124normal11223344');
 			expect(team.youthPlayers[2].data).toEqual('data2');
 		});
 
@@ -95,7 +95,7 @@ describe('Team', () => {
 			team.syncYouthPlayers();
 
 			expect(team.youthPlayers.length).toEqual(1);
-			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP01124normal11223344');
 			expect(team.youthPlayers[0].data).toEqual('data');
 		});
 
@@ -109,7 +109,7 @@ describe('Team', () => {
 			team.syncYouthPlayers();
 
 			expect(team.youthPlayers.length).toEqual(1);
-			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP1124normal11223344');
+			expect(team.youthPlayers[0].getFingerPrint()).toEqual('CYP01124normal11223344');
 			expect(team.youthPlayers[0].data).toEqual('data2');
 		});
 	});

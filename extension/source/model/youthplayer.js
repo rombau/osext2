@@ -51,7 +51,7 @@ class YouthPlayer extends Player {
 	 * @param {Page} page
 	 */
 	getFingerPrint(page) {
-		return this.countryCode + this.season + this.birthday + this.talent 
+		return this.countryCode + String(this.season).padStart(3, '0') + String(this.birthday).padStart(2, '0') + this.talent 
 			+ Object.values(this.getUnchangeableSkills()).map(v => String(v).padStart(2, '0')).join('');
 	}
 

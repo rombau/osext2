@@ -117,11 +117,15 @@ describe('YouthPlayer', () => {
 		player.talent = Talent.NORMAL;
 		player.birthday = 24;
 
-		expect(player.getFingerPrint()).toEqual('GUA124normal15059529');
+		expect(player.getFingerPrint()).toEqual('GUA00124normal15059529');
 
 		player.pos = Position.TOR;
 		player.talent = Talent.HIGH;
 
-		expect(player.getFingerPrint()).toEqual('GUA124hoch15059529');
+		expect(player.getFingerPrint()).toEqual('GUA00124hoch15059529');
+
+		player.birthday = 6;
+
+		expect(player.getFingerPrint()).toEqual('GUA00106hoch15059529');
 	});
 });
