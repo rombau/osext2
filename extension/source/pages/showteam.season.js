@@ -29,9 +29,9 @@ Page.ShowteamSeason = class extends Page {
 		this.params.push(new Page.Param('saison', season, true));
 
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
+			let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
 			let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
-			if (gameInfo && !Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
-				let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
+			if (!Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				[matchday.competition, matchday.location] = gameInfo.split(' : ', 2);
 				matchday.result = row.cells['Ergebnis'].textContent;
 				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
@@ -41,6 +41,8 @@ Page.ShowteamSeason = class extends Page {
 				if (opponentCell.textContent) {
 					matchday.opponent = new Team(HtmlUtil.extractIdFromHref(opponentCell.firstChild.href), opponentCell.textContent);
 				}
+			} else {
+			 	data.team.matchDays.splice(data.team.matchDays.findIndex(m => m === matchday), 1);
 			}
 		});
 

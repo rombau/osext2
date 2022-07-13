@@ -16,7 +16,7 @@ describe('Page.ShowteamSeason', () => {
 
 			page.extract(doc, data);
 
-			expect(data.team.matchDays.length).toEqual(72);
+			expect(data.team.matchDays.length).toEqual(71);
 			expect(data.team.matchDays[0].zat).toEqual(1);
 			expect(data.team.matchDays[0].season).toEqual(10);
 			expect(data.team.matchDays[0].competition).toEqual(Competition.FRIENDLY);
