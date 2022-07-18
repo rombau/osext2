@@ -230,6 +230,11 @@ describe('Team', () => {
 
 		team.youthPlayers[2].pullMatchDay = new MatchDay(15, 51);
 
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-3000);
+		expect(matchDay.youthSupport).toEqual(3000);
+
+		team.youthPlayers[2].pullMatchDay = new MatchDay(15, 50);
+
 		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-2000);
 		expect(matchDay.youthSupport).toEqual(2000);
 	});

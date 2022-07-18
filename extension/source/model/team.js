@@ -288,7 +288,7 @@ class Team {
 	 */
 	calculateYouthSupport (matchDay, players, viewSettings) {
 		let activePlayers = players.filter(player => player.active && player.age >= YOUTH_AGE_MIN && (!player.pullMatchDay
-			|| (ensurePrototype(player.pullMatchDay, MatchDay) && player.pullMatchDay.after(matchDay))));
+			|| (ensurePrototype(player.pullMatchDay, MatchDay) && !player.pullMatchDay.before(matchDay))));
 		let minimumPlayers = viewSettings.youthSupportBarrierType ? activePlayers.filter(player => {
 			if (viewSettings.youthSupportBarrierType === YouthSupportBarrierType.AND_OLDER) {
 				return player.season <= viewSettings.youthSupportBarrierSeason;
