@@ -222,3 +222,8 @@ form > .fa-arrow-alt-circle-down {
 .osext-balance:hover > .osext-balance-tooltip .negative:before {
 	content: "-";
 }
+
+td[title] > a.sortheader {
+	text-decoration: underline;
+	text-decoration-style: dotted;
+  }

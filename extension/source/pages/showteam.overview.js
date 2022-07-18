@@ -104,9 +104,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Sperre'].textContent = 'Sp.';
 
 				if (!this.showExactAge) row.cells['Geb.'].textContent = 'Geb.';
-				row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
-				row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
-				row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
+				row.cells['&Oslash;P'].innerHTML = '&Oslash;P'; row.cells['&Oslash;P'].title = 'Durchschnitt Primärskills';
+				row.cells['&Oslash;N'].innerHTML = '&Oslash;N'; row.cells['&Oslash;N'].title = 'Durchschnitt Nebenkills';
+				row.cells['&Oslash;U'].innerHTML = '&Oslash;U'; row.cells['&Oslash;U'].title = 'Durchschnitt unveränderliche Skills';
 
 			} else {
 

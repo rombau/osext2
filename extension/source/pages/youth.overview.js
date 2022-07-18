@@ -138,17 +138,21 @@ Page.YouthOverview = class extends Page.Youth {
 					row.cells['Talent'].style.width = '4.5em';
 					row.cells['Aufwertung'].style.width = '9em';
 					row.cells['Marktwert'].style.width = '6em';
+					row.cells['Marktwert'].style.textAlign = 'right';
 					row.cells['&Oslash;P'].style.width = '3.5em';
 					row.cells['&Oslash;N'].style.width = '3.5em';
 					row.cells['&Oslash;U'].style.width = '3.5em';
+					row.cells['&Oslash;P'].style.textAlign = 'right';
+					row.cells['&Oslash;N'].style.textAlign = 'right';
+					row.cells['&Oslash;U'].style.textAlign = 'right';
 
 					row.cells['Pos'].textContent = 'Pos';
 					row.cells['Opt.Skill'].textContent = 'Opt.Skill';
 					row.cells['&Oslash;/Zat'].innerHTML = '&Oslash;/Zat';
 					row.cells['Marktwert'].textContent = 'Marktwert';
-					row.cells['&Oslash;P'].innerHTML = '&Oslash;P';
-					row.cells['&Oslash;N'].innerHTML = '&Oslash;N';
-					row.cells['&Oslash;U'].innerHTML = '&Oslash;U';
+					row.cells['&Oslash;P'].innerHTML = '<abbr title="Durchschnitt Primärskills">&Oslash;P</abbr>';
+					row.cells['&Oslash;N'].innerHTML = '<abbr title="Durchschnitt Nebenkills">&Oslash;N</abbr>';
+					row.cells['&Oslash;U'].innerHTML = '<abbr title="Durchschnitt unveränderliche Skills">&Oslash;U</abbr>';
 
 				} else {
 
