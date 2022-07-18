@@ -49,6 +49,8 @@ Page.YouthOverview = class extends Page.Youth {
 
 					if (row.cells['Alter'].className == Position.TOR) {
 						player.pos = Position.TOR;
+					} else {
+						player.pos = undefined;
 					}
 
 					player.countryCode = row.cells['Land'].textContent;
