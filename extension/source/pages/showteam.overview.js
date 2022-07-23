@@ -174,12 +174,11 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
 				if (player.bans) {
-					let banText = '';
+					row.cells['Sperre'].textContent = '';
 					player.bans.forEach(ban => {
 						let banAbbr = HtmlUtil.createAbbreviation(
 							`${ban.duration.toString()} ${ban.duration === 1 ? ban.type.description : ban.type.descriptionPlural}`,
 							`${ban.duration.toString()}${ban.type.abbr}`);
-						row.cells['Sperre'].textContent = '';
 						row.cells['Sperre'].appendChild(banAbbr);
 					});
 				}
