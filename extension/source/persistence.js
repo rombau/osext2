@@ -116,7 +116,7 @@ class Persistence {
 			let storeFunction = (resolve, reject) => {
 				let objectToStore = {
 					[Persistence.CURRENT_TEAM]: data.team.name,
-					[data.team.name]: JSON.parse(JSON.stringify(data))
+					[data.team.name]: Persistence.prepare(data)
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {
@@ -132,4 +132,20 @@ class Persistence {
 		}
 	}
 
+	/**
+	 * Prepares the extension data. Unnecessary functions and empty arrays/objects are removed.
+	 * 
+	 * @param {*} dataObject the data object to prepare
+	 * @returns {*} prepared extension data
+	 */
+	static prepare (dataObject) {
+		Object.entries(dataObject).forEach(([key, value]) => {
+			if (value === null || (Array.isArray(value) && value.length === 0 && key.startsWith('_'))) {
+				delete dataObject[key];
+			} else if (typeof value === 'object') {
+				Persistence.prepare(value);	
+			}
+		});
+		return JSON.parse(JSON.stringify(dataObject));
+	}
 }

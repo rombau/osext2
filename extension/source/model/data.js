@@ -15,7 +15,7 @@ class ExtensionData {
 	constructor () {
 
 		/** @type {[Page]} the queue with the pages to request */
-		this._pagesToRequest = [];
+		this._pagesToRequest;
 
 		/** @private @type {Team} */
 		this._team = new Team();
@@ -94,7 +94,8 @@ class ExtensionData {
 	 * @type {[Page]} the pages to request
 	 */
 	get pagesToRequest () {
-		return this._pagesToRequest || [];
+		this._pagesToRequest = this._pagesToRequest || [];
+		return this._pagesToRequest;
 	}
 
 	set pagesToRequest (value) {

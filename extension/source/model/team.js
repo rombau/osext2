@@ -19,25 +19,25 @@ class Team {
 		this.emblem;
 
 		/** @type {Team.League} the league this team belong to */
-		this._league = new Team.League();
+		this._league;
 
 		/** @private @type {[SquadPlayer]} */
-		this._squadPlayers = [];
+		this._squadPlayers;
 
 		/** @type {Boolean} true after adding a new player */
 		this.squadPlayerAdded = false;
 
 		/** @private @type {[YouthPlayer]} */
-		this._youthPlayers = [];
+		this._youthPlayers;
 
 		/** @private @type {[YouthPlayer]} */
-		this._pageYouthPlayers = [];
+		this._pageYouthPlayers;
 
 		/** @private @type {[MatchDay]} */
-		this._matchDays = [];
+		this._matchDays;
 
 		/** @private @type {[Team.Trainer]} */
-		this._trainers = [];
+		this._trainers;
 
 		/** @type {Stadium} the stadium data */
 		this.stadium;
@@ -50,6 +50,7 @@ class Team {
 	 * @type {Team.League} the current team league
 	 */
 	get league () {
+		this._league = this._league || new Team.League();
 		return ensurePrototype(this._league, Team.League);
 	}
 
@@ -57,6 +58,7 @@ class Team {
 	 * @type {[SquadPlayer]} the squad players
 	 */
 	get squadPlayers () {
+		this._squadPlayers = this._squadPlayers || [];
 		return ensurePrototype(this._squadPlayers, SquadPlayer);
 	}
 
@@ -68,6 +70,7 @@ class Team {
 	 * @type {[YouthPlayer]} the youth players
 	 */
 	get youthPlayers () {
+		this._youthPlayers = this._youthPlayers || [];
 		return ensurePrototype(this._youthPlayers, YouthPlayer);
 	}
 
@@ -91,6 +94,7 @@ class Team {
 	 * @type {[MatchDay]} the match days (ZATS) of the current (and following) saison(s)
 	 */
 	get matchDays () {
+		this._matchDays = this._matchDays || [];
 		return ensurePrototype(this._matchDays, MatchDay);
 	}
 
@@ -102,6 +106,7 @@ class Team {
 	 * @type {[Team.Trainer]} the trainers for training the squad player
 	 */
 	get trainers () {
+		this._trainers = this._trainers || [];
 		return ensurePrototype(this._trainers, Team.Trainer);
 	}
 
@@ -434,6 +439,8 @@ class Team {
 	complete (lastMatchDay) {
 		this.squadPlayers.forEach(player => ensurePrototype(player, SquadPlayer).complete(lastMatchDay));
 		this.youthPlayers.forEach(player => ensurePrototype(player, YouthPlayer).complete(lastMatchDay));
+
+		this.matchDays = this.matchDays.filter(matchDay => matchDay.season >= lastMatchDay.season);
 	}
 
 }
