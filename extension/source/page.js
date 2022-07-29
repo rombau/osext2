@@ -104,6 +104,7 @@ class Page {
 	 * Returns the registered page for a given document location.
 	 *
 	 * @param {string} location of the document
+	 * @returns {Page} the page
 	 */
 	static byLocation (location) {
 		let pageFound = Object.values(Page).map(constructor => new (constructor)).find(page => {

@@ -42,7 +42,7 @@ Page.ShowteamSeason = class extends Page {
 					matchday.opponent = new Team(HtmlUtil.extractIdFromHref(opponentCell.firstChild.href), opponentCell.textContent);
 				}
 			} else {
-			 	data.team.matchDays.splice(data.team.matchDays.findIndex(m => m === matchday), 1);
+				data.team.matchDays.splice(data.team.matchDays.findIndex(m => m === matchday), 1);
 			}
 		});
 
