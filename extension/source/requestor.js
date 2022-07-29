@@ -95,7 +95,12 @@ class Requestor {
 		const response = await fetch(page.createUrl(), init);
 		const html = await response.text();
 		const doc = new DOMParser().parseFromString(html, 'text/html');
-		Page.byLocation(page.createUrl()).process(doc);
+		
+		// prototype of the page implementation needed for the right extract method
+		Object.setPrototypeOf(page, Object.getPrototypeOf(Page.byLocation(page.createUrl())));
+
+		// the given page should be processed
+		page.process(doc);
 	}
 
 	/**
