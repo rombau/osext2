@@ -79,7 +79,8 @@ class Team {
 	 * @type {[YouthPlayer]} the youth players from the page
 	 */
 	get pageYouthPlayers () {
-		return ensurePrototype(this._pageYouthPlayers, YouthPlayer) || [];
+		this._pageYouthPlayers = this._pageYouthPlayers || [];
+		return ensurePrototype(this._pageYouthPlayers, YouthPlayer);
 	}
 
 	set pageYouthPlayers (value) {
