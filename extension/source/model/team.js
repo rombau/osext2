@@ -158,6 +158,7 @@ class Team {
 				});
 			}
 			this._youthPlayers[index].pos = player.pos || player.getBestPosition();
+			this._youthPlayers[index].increase = player.increase; // take over empty value too!
 		});
 	}
 
