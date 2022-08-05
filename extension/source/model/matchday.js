@@ -41,6 +41,9 @@ class MatchDay {
 		/** @type {Competition} the competition */
 		this.competition;
 
+		/** @type {Boolean} indicates the next round of the competition */
+		this.nextRound;
+
 		/** @type {GameLocation} the ganme location */
 		this.location;
 
@@ -186,11 +189,11 @@ class MatchDay {
 				return this.stadiumIncome - this.stadiumCosts;
 			}
 			return 0;
-		} else if (this.competition === Competition.CUP && this.opponent) {
+		} else if (this.competition === Competition.CUP && (this.opponent || this.nextRound)) {
 			this.stadiumIncome = Math.round(stadium.calculateIncome(viewSettings.ticketPrice.cup, viewSettings.stadiumLoad || 100) / 2);
 			this.stadiumCosts = Math.round(stadium.calculateCosts(viewSettings.stadiumLoad || 100) / 2);
 			return this.stadiumIncome - this.stadiumCosts;
-		} else if ((this.competition === Competition.OSEQ || this.competition === Competition.OSE || this.competition === Competition.OSCQ || this.competition === Competition.OSC) && this.opponent) {
+		} else if ((this.competition === Competition.OSEQ || this.competition === Competition.OSE || this.competition === Competition.OSCQ || this.competition === Competition.OSC) && (this.opponent || this.nextRound)) {
 			if (this.location == GameLocation.HOME) {
 				this.stadiumIncome = stadium.calculateIncome(viewSettings.ticketPrice.international, viewSettings.stadiumLoad || 100);
 				this.stadiumCosts = stadium.calculateCosts(viewSettings.stadiumLoad || 100);

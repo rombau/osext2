@@ -28,14 +28,21 @@ Page.ShowteamSeason = class extends Page {
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
 
+		let nextRound = {};
+
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
 			let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
 			let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
 			if (!Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
 				[matchday.competition, matchday.location] = gameInfo.split(' : ', 2);
 				matchday.result = row.cells['Ergebnis'].textContent;
-				if (matchday.competition === Competition.FRIENDLY && !matchday.result) {
-					matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
+				if (!matchday.result) {
+					if (matchday.competition === Competition.FRIENDLY) {
+						matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
+					} else if (matchday.competition !== Competition.LEAGUE && !nextRound[matchday.competition]) {
+						matchday.nextRound = true;
+						nextRound[matchday.competition] = true;
+					}
 				}
 				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {

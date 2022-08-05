@@ -26,6 +26,10 @@ describe('Page.ShowteamSeason', () => {
 			expect(data.team.matchDays[0].opponent.name).toEqual('FC Ferastrau Suceava');
 
 			expect(data.team.matchDays[66].friendlyShare).toEqual(50);
+			expect(data.team.matchDays[66].nextRound).toBeFalsy();
+
+			expect(data.team.matchDays[68].competition).toEqual(Competition.CUP);
+			expect(data.team.matchDays[68].nextRound).toBeTruthy();
 
 			expect(data.nextMatchDay.season).toEqual(10);
 			expect(data.nextMatchDay.zat).toEqual(49);
