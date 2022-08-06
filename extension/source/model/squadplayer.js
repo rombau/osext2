@@ -39,6 +39,9 @@ class SquadPlayer extends Player {
 		/** @type {Number} injured for upcomming matchdays */
 		this.injured;
 
+		/** @type {Number} physio costs on the upcoming match day */
+		this.physioCosts;
+
 		/** @type {TransferState} the transfer state */
 		this.transferState;
 
@@ -199,6 +202,10 @@ class SquadPlayer extends Player {
 
 		let forecastPlayer = Object.assign(new SquadPlayer(), JSON.parse(JSON.stringify(this)));
 		forecastPlayer.origin = this;
+
+		if (lastMatchDay.intervalTo(targetMatchDay) > 1) {
+			forecastPlayer.physioCosts = null;
+		}
 
 		forecastPlayer.posLastMatch = null;
 		forecastPlayer.moral = null;

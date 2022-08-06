@@ -267,9 +267,7 @@ class Team {
 									accountBalance += (-balancedMatchDay.trainerSalary) || this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
 								}
 								accountBalance += (balancedMatchDay.fastTransferIncome) || this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
-								if (Options.usePhysio) {
-									accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
-								}
+								accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
 								balancedMatchDay.accountBalance = accountBalance;
 								resolve(balancedMatchDay);
 							} catch (e) {
@@ -374,8 +372,12 @@ class Team {
 	 * @returns the costs
 	 */
 	calculatePhysioCosts (matchDay, players) {
-		matchDay.physio = players.filter(player => player.injuredBefore >= 2 && (!player.loan || player.loan.fee < 0))
-			.reduce((sum, player) => sum + PHYSIO_COSTS, 0);
+		matchDay.physio = players.reduce((sum, player) => sum + (player.physioCosts || 0), 0);
+		if (Options.usePhysio) {
+			matchDay.physio += players
+				.filter(player => player.injuredBefore >= 2 && !player.physioCosts && (!player.loan || player.loan.fee < 0))
+				.reduce((sum, player) => sum + PHYSIO_COSTS, 0);
+		}
 		return -matchDay.physio;
 	}
 

@@ -18,6 +18,12 @@ describe('Page.MatchDayOptions', () => {
 			expect(data.viewSettings.ticketPrice.cup).toEqual(36);
 			expect(data.viewSettings.ticketPrice.international).toEqual(43);
 
+			expect(data.team.squadPlayers[0].id).toEqual(11031);
+			expect(data.team.squadPlayers[0].physioCosts).toBeNull();
+
+			expect(data.team.squadPlayers[13].id).toEqual(111254);
+			expect(data.team.squadPlayers[13].physioCosts).toEqual(50000);
+			
 			done();
 		});
 	});

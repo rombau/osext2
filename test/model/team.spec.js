@@ -487,6 +487,22 @@ describe('Team', () => {
 		expect(matchDay.physio).toEqual(0);
 	});
 
+	it('should return additional physio costs', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].injuredBefore = 3;
+		team.squadPlayers[0].injured = 1;
+		team.squadPlayers[0].physioCosts = 10000;
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[1].physioCosts = 27000;
+
+		expect(team.calculatePhysioCosts(matchDay, team.squadPlayers)).toEqual(-37000);
+		expect(matchDay.physio).toEqual(37000);
+	});
+
 	it('should return balanced match days', () => {
 
 		Options.forecastSeasons = 1;
