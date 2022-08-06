@@ -449,6 +449,20 @@ describe('Team', () => {
 		expect(matchDay.fastTransferIncome).toEqual(4057261);
 	});
 
+	it('should not return physio costs for awarded players', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].injuredBefore = 3;
+		team.squadPlayers[0].injured = 1;
+		team.squadPlayers[0].loan = new SquadPlayer.Loan();
+		team.squadPlayers[0].loan.fee = 123456;
+
+		expect(team.calculatePhysioCosts(matchDay, team.squadPlayers)).toEqual(-0);
+		expect(matchDay.physio).toEqual(0);
+	});
+
 	it('should return physio costs', () => {
 
 		let matchDay = new MatchDay(16, 1); // zat 1

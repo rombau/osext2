@@ -374,7 +374,7 @@ class Team {
 	 * @returns the costs
 	 */
 	calculatePhysioCosts (matchDay, players) {
-		matchDay.physio = players.filter(player => player.injuredBefore >= 2)
+		matchDay.physio = players.filter(player => player.injuredBefore >= 2 && (!player.loan || player.loan.fee < 0))
 			.reduce((sum, player) => sum + PHYSIO_COSTS, 0);
 		return -matchDay.physio;
 	}
