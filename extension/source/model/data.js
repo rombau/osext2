@@ -136,7 +136,7 @@ class ExtensionData {
 			this.pagesToRequest.push(new Page.Training());
 			this.pagesToRequest.push(new Page.ContractExtension());
 		}
-		this.team.squadPlayerAdded = false; // reset the flag
+		this.team.squadPlayerAdded = null; // reset the flag
 	}
 
 	/**

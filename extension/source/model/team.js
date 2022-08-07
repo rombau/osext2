@@ -25,7 +25,7 @@ class Team {
 		this._squadPlayers;
 
 		/** @type {Boolean} true after adding a new player */
-		this.squadPlayerAdded = false;
+		this.squadPlayerAdded;
 
 		/** @private @type {[YouthPlayer]} */
 		this._youthPlayers;
