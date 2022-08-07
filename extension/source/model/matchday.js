@@ -64,6 +64,12 @@ class MatchDay {
 		/** @type {Number} the account balance before this match day */
 		this.accountBalanceBefore;
 
+		/** @type {Number} the ticket price */
+		this.ticketPrice;
+
+		/** @type {Number} the visitor count */
+		this.visitors;
+
 		/** @type {Number} the stadium income */
 		this.stadiumIncome;
 
