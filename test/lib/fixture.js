@@ -12,7 +12,7 @@ const Fixture = {
 		if (path.indexOf('.html') < 0) {
 			path += '.html';
 		}
-		path = path.replace(/\?/, '_').replace(/\//, '.');
+		path = path.replace(/\?/, '_').replace(/\//g, '.');
 		
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", Fixture._base + path, true);

@@ -35,6 +35,22 @@ describe('Requestor', () => {
 
 	});
 
+	it('should request page with path parameters', (done) => {
+
+		let page = new Page.GameReport(12, 46, 1, 2);
+
+		spyOn(page, 'process').and.callFake(() => {});
+
+		requestor = Requestor.create(document);
+
+		requestor.fetchPage(page).then(() => {
+			expect(requestor.status.lastChild.textContent).toEqual('Initialisiere Spielbericht');
+			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/rep\/saison\/12\/46\/1-2\.html/), {});
+			done();
+		});
+
+	});
+
 	it('should request page with form parameters', (done) => {
 
 		let page = new Page.MatchDayReport(15, 43);

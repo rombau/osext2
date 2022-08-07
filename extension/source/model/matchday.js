@@ -68,7 +68,7 @@ class MatchDay {
 		this.ticketPrice;
 
 		/** @type {Number} the visitor count */
-		this.visitors;
+		this.stadiumVisitors;
 
 		/** @type {Number} the stadium income */
 		this.stadiumIncome;

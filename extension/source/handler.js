@@ -1,5 +1,5 @@
 
-let page = Page.byLocation(document.location);
+let page = Page.byLocation(document.location.href);
 if (page) {
 	new Logger('Handler').info(`Page found for ${document.location}: ${page.name}`);
 	try {

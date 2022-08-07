@@ -97,7 +97,7 @@ class Requestor {
 		const doc = new DOMParser().parseFromString(html, 'text/html');
 		
 		// prototype of the page implementation needed for the right extract method
-		Object.setPrototypeOf(page, Object.getPrototypeOf(Page.byLocation(page.createUrl())));
+		Object.setPrototypeOf(page, Object.getPrototypeOf(Page.byLocation(page.createUrl().href)));
 
 		// the given page should be processed
 		page.process(doc);

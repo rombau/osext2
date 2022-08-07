@@ -26,7 +26,7 @@ class Page {
 
 	/**
 	 * @param {String} name the name shown when loading
-	 * @param {String} path the path (e.g showteam.php)
+	 * @param {String} path the path; could include path parameters with curly brackets
 	 * @param {...Page.Param} params the parameters this page can handle
 	 */
 	constructor(name, path, ...params) {
@@ -54,13 +54,17 @@ class Page {
 	 * @returns {boolean}
 	 */
 	match (location) {
+		let path = this.path;
+		this.params.filter(param => /{\w+}/.test(param.name)).forEach((param, i) => {
+			path = path.replace(param.name, param.value);
+		});
 		let url = new URL(location, document.location.href);
-		if (url.pathname !== ('/' + this.path)) {
+		if (url.pathname !== ('/' + path)) {
 			return false;
-		}
+		} 
 		return this.params.every(param => {
 			let value = url.searchParams.get(param.name);
-			return value ? (param.value === undefined || value == param.value) : param.optional;
+			return value ? (param.value === undefined || value == param.value) : (param.optional || /{\w+}/.test(param.name));
 		});
 	}
 
@@ -70,9 +74,13 @@ class Page {
 	 * @returns {URL} the resulting URL
 	 */
 	createUrl () {
-		let url = new URL(this.path, document.location.href);
+		let path = this.path;
+		this.params.filter(param => /{\w+}/.test(param.name)).forEach((param) => {
+			path = path.replace(param.name, param.value);
+		});
+		let url = new URL(path, document.location.href);
 		this.params.forEach((param) => {
-			if (!param.optional) {
+			if (!param.optional && !/{\w+}/.test(param.name)) {
 				if (param.value) {
 					url.searchParams.append(param.name, param.value);
 				} else {
@@ -108,13 +116,22 @@ class Page {
 	 */
 	static byLocation (location) {
 		let pageFound = Object.values(Page).map(constructor => new (constructor)).find(page => {
-			return page && page instanceof Page && page.match(location);
+			if (page && page instanceof Page && page.path) {
+				let pathParamValues = location.match(page.path.replace(/[.*+^$()|[\]\\]/g, '\\$&').replace(/{\w+}/g, '(\\w+)'));
+				if (pathParamValues) {
+					page.params.filter(param => /{\w+}/.test(param.name)).forEach((param, i) => {
+						param.value = param.value || pathParamValues[i + 1];
+					});
+				}
+				return page.match(location);
+			}
+			return false;
 		});
 		if (pageFound) {
 			let url = new URL(location, document.location.href);
 			pageFound.params.forEach((param) => {
 				let paramValue = url.searchParams.get(param.name);
-				param.value = (isNaN(paramValue) ? paramValue : +paramValue);
+				if (paramValue)	param.value = (isNaN(paramValue) ? paramValue : +paramValue);
 			});
 		}
 		return pageFound;
@@ -284,13 +301,13 @@ class Page {
 Page.Param = class {
 
 	/**
-	 * @param {String} name the parameter name
+	 * @param {String} name the parameter name; path parameters are surrounded with curly brackets
 	 * @param {String} value the parameter value
 	 * @param {Boolean} optional flag indicating an optional parameter (default = false)
 	 */
 	constructor(name, value, optional = false) {
 
-		/** @type {String} the parameter name */
+		/** @type {String} the parameter name; path parameters are surrounded with curly brackets */
 		this.name = name;
 
 		/** @type {String} the parameter value */

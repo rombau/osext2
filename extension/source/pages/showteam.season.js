@@ -56,6 +56,15 @@ Page.ShowteamSeason = class extends Page {
 		if (!data.initNextSeason(season)) {
 			this.logger.info(`Initiate loading of previous season (${season - 1}) matchday schedule`);
 			data.pagesToRequest.unshift(new Page.ShowteamSeason(season - 1));
+		} else if (data.lastMatchDay 
+			&& data.lastMatchDay.opponent 
+			&& data.lastMatchDay.competition !== Competition.FRIENDLY 
+			&& data.lastMatchDay.location === GameLocation.HOME 
+			&& !data.lastMatchDay.stadiumVisitors) {
+				data.pagesToRequest.push(new Page.GameReport(
+					data.lastMatchDay.season, data.lastMatchDay.zat, 
+					data.lastMatchDay.location === GameLocation.HOME ? data.team.id : data.lastMatchDay.opponent.id, 
+					data.lastMatchDay.location === GameLocation.AWAY ? data.team.id : data.lastMatchDay.opponent.id));
 		}
 	}
 

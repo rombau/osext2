@@ -37,7 +37,7 @@ describe('Page', () => {
 
 		it('with path param', () => {
 
-			let page = new Page('Testseite', 'rep/1/2.html');
+			let page = new Page('Testseite', 'rep/{1}/{2}.html', new Page.Param('{1}', '1'), new Page.Param('{2}', '2'));
 
 			expect(page.createUrl()).toMatch(/rep\/1\/2\.html/);
 		});
@@ -143,11 +143,13 @@ describe('Page', () => {
 
 		it('with path param', () => {
 
-			let page = new Page('Testseite', 'rep/1/2.html');
+			let page = new Page('Testseite', 'rep/{1}/{2}.html', new Page.Param('{1}', '1'), new Page.Param('{2}', '2'));
 
 			expect(page.match('http://www.any.com')).toBeFalsy();
+			expect(page.match('http://www.any.com/rep')).toBeFalsy();
 			expect(page.match('http://www.any.com/rep.html')).toBeFalsy();
 			expect(page.match('http://www.any.com/rep/1.html')).toBeFalsy();
+			expect(page.match('http://www.any.com/rep/2/1.html')).toBeFalsy();
 			expect(page.match('http://www.any.com/rep/1/2.html')).toBeTruthy();
 		});
 	});
@@ -205,14 +207,34 @@ describe('Page', () => {
 			expect(Page.byLocation('http://www.any.com/zar.php')).not.toEqualWithoutLogger(matchDayReportWithParams);
 		});
 
-		// TODO fix path param matching
-		xit('with path params', () => {
+		it('with path params', () => {
 
 			let reportPage = new Page.GameReport(15, 42, 1, 2);
+			let found;
 
 			expect(Page.byLocation('http://www.any.com/rep/saison')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html')).toBeUndefined();
-			expect(Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html')).toEqualWithoutLogger(reportPage);
+
+			found = Page.byLocation('http://www.any.com/rep/saison/14/41/2-1.html');
+			expect(found.path).toEqual(reportPage.path);
+			expect(found.params[0].name).toEqual(reportPage.params[0].name);
+			expect(found.params[0].value).not.toEqual(reportPage.params[0].value);
+			expect(found.params[1].name).toEqual(reportPage.params[1].name);
+			expect(found.params[1].value).not.toEqual(reportPage.params[1].value);
+			expect(found.params[2].name).toEqual(reportPage.params[2].name);
+			expect(found.params[2].value).not.toEqual(reportPage.params[2].value);
+			expect(found.params[3].name).toEqual(reportPage.params[3].name);
+			expect(found.params[3].value).not.toEqual(reportPage.params[3].value);
+
+			found = Page.byLocation('http://www.any.com/rep/saison/15/42/1-2.html');
+			expect(found.path).toEqual(reportPage.path);
+			expect(found.params[0].name).toEqual(reportPage.params[0].name);
+			expect(+found.params[0].value).toEqual(reportPage.params[0].value);
+			expect(found.params[1].name).toEqual(reportPage.params[1].name);
+			expect(+found.params[1].value).toEqual(reportPage.params[1].value);
+			expect(found.params[2].name).toEqual(reportPage.params[2].name);
+			expect(+found.params[2].value).toEqual(reportPage.params[2].value);
+			expect(found.params[3].name).toEqual(reportPage.params[3].name);
+			expect(+found.params[3].value).toEqual(reportPage.params[3].value);
 		});
 	});
 
