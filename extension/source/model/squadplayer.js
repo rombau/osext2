@@ -468,6 +468,8 @@ SquadPlayer.Training = class {
 		/** @type {Number} the match bonus multiplying the chance */
 		this.matchBonus = 1;
 
+		/** @type {Boolean} true if training was successful */
+		this.successful;
 	}
 
 	/** @type {Team.Trainer} the trainer delegated for this training */

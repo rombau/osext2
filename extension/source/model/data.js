@@ -121,6 +121,7 @@ class ExtensionData {
 		this.pagesToRequest.push(new Page.Trainer());
 		this.pagesToRequest.push(new Page.Training());
 		this.pagesToRequest.push(new Page.ContractExtension());
+		this.pagesToRequest.push(new Page.MatchDayReport());
 		this.pagesToRequest.push(new Page.MatchDayOptions());
 	}
 
