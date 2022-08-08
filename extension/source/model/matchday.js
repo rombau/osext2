@@ -56,8 +56,6 @@ class MatchDay {
 		/** @type {Number} the friendly share for the team */
 		this.friendlyShare;
 
-		// the follwing attributes only calculated and not persisted
-
 		/** @type {Promise<MatchDay>} the account balance promise for this match day */
 		this.accountBalancePromise;
 
@@ -105,6 +103,9 @@ class MatchDay {
 
 		/** @type {Number} the physio costs */
 		this.physio;
+
+		/** @type {Object} the other bookings (attribute key is the label) */
+		this.otherBookings;
 
 		/** @type {Number} the account balance after this match day */
 		this.accountBalance;

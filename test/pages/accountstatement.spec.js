@@ -19,6 +19,7 @@ describe('Page.AccountStatement', () => {
 
 			expect(data.team.accountBalance).toEqual(32221833);
 			expect(data.team.getMatchDay(16, 53).accountBalance).toEqual(32221833);
+			expect(data.team.getMatchDay(16, 53).otherBookings).toEqual({'Transfer mit Györi SC':-14000000});
 			expect(data.team.getMatchDay(16, 52).accountBalance).toEqual(46161833);
 			expect(data.team.getMatchDay(16, 51).accountBalance).toEqual(46351833);
 			expect(data.team.getMatchDay(16, 50).accountBalance).toEqual(45757665);

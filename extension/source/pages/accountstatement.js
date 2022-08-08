@@ -31,11 +31,23 @@ Page.AccountStatement = class extends Page {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
 		}
 
+		let zat;
 		HtmlUtil.getTableRowsByHeader(doc, ...Page.AccountStatement.HEADERS).forEach(row => {
-
-			matches = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
-			if (matches) {
-				data.team.getMatchDay(season, +matches[1]).accountBalance = +row.cells['Kontostand nach Buchung'].textContent.replaceAll('.', '');
+			
+			let balanceText = row.cells['Kontostand nach Buchung'].textContent;
+			if (!balanceText.includes('Nicht möglich')) {
+				matches = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
+				if (matches) zat = +matches[1];
+				if (zat) {
+					let matchday = data.team.getMatchDay(season, zat);
+					if (matches) {
+						matchday.accountBalance = +balanceText.replaceAll('.', '');
+					} else {
+						matchday.otherBookings = matchday.otherBookings || {};
+						matchday.otherBookings[row.cells['Buchungstext'].textContent] = row.cells['Eingang'].textContent ? 
+							+row.cells['Eingang'].textContent.replaceAll('.', '') : +row.cells['Ausgang'].textContent.replaceAll('.', '');
+					}
+				}
 			}
 		});
 
