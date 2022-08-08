@@ -442,8 +442,6 @@ class Team {
 	complete (lastMatchDay) {
 		this.squadPlayers.forEach(player => ensurePrototype(player, SquadPlayer).complete(lastMatchDay));
 		this.youthPlayers.forEach(player => ensurePrototype(player, YouthPlayer).complete(lastMatchDay));
-
-		this.matchDays = this.matchDays.filter(matchDay => matchDay.season >= lastMatchDay.season);
 	}
 
 }
