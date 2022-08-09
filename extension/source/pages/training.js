@@ -69,6 +69,7 @@ Page.Training = class extends Page {
 				row.cells['Skill'].textContent = 'Wert';
 				row.cells['mögl. MW+'].textContent = 'mögl. MW+';
 				row.cells['zuletzt'].textContent = 'zuletzt trainiert';
+				row.cells['zuletzt'].style.textAlign = 'left';
 
 			} else {
 
@@ -109,6 +110,9 @@ Page.Training = class extends Page {
 					}
 					if (player.lastTraining.chance) {
 						row.cells['zuletzt'].textContent += ` bei ${player.lastTraining.chance.toFixed(2)} %`;
+					}
+					if (player.lastTraining.successful) {
+						row.cells['zuletzt'].textContent += ' erfolgreich'
 					}
 				} else {
 					row.cells['zuletzt'].textContent = '';
