@@ -40,12 +40,15 @@ Page.AccountStatement = class extends Page {
 				if (matches) zat = +matches[1];
 				if (zat) {
 					let matchday = data.team.getMatchDay(season, zat);
+					let bookingValue = row.cells['Eingang'].textContent ? 
+						+row.cells['Eingang'].textContent.replaceAll('.', '') : +row.cells['Ausgang'].textContent.replaceAll('.', '');
 					if (matches) {
 						matchday.accountBalance = +balanceText.replaceAll('.', '');
+						matchday.accountBalanceBefore = matchday.accountBalance - bookingValue;
 					} else {
 						matchday.otherBookings = matchday.otherBookings || {};
-						matchday.otherBookings[row.cells['Buchungstext'].textContent] = row.cells['Eingang'].textContent ? 
-							+row.cells['Eingang'].textContent.replaceAll('.', '') : +row.cells['Ausgang'].textContent.replaceAll('.', '');
+						matchday.otherBookings[row.cells['Buchungstext'].textContent] = bookingValue;
+						matchday.accountBalanceBefore = matchday.accountBalanceBefore - bookingValue;
 					}
 				}
 			}

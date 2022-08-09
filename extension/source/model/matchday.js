@@ -104,6 +104,9 @@ class MatchDay {
 		/** @type {Number} the physio costs */
 		this.physio;
 
+		/** @type {Number} the bonus premium for win and draw */
+		this.winBonus;
+
 		/** @type {Object} the other bookings (attribute key is the label) */
 		this.otherBookings;
 

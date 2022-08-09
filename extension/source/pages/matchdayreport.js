@@ -35,8 +35,11 @@ Page.MatchDayReport = class extends Page {
 				let label = row.cells[0].textContent;
 				let value = row.cells[1].textContent.replaceAll('.', '').split(' Euro')[0];
 				if (label.includes('Zuschauereinnahmen')) {
-					matchday.stadiumIncome = +value;
-					matchday.friendlyIncome = value;
+					if (matchday.competition === Competition.FRIENDLY) {
+						matchday.friendlyIncome = +value;
+					} else {
+						matchday.stadiumIncome = +value;
+					}
 				} else if (label.includes('Stadionkosten')) {
 					matchday.stadiumCosts = -value;
 				} else if (label.search('Geh.lter') !== -1) {
@@ -57,6 +60,8 @@ Page.MatchDayReport = class extends Page {
 					matchday.merchandisingIncome = +value;
 				} else if (label.includes('Physiotherapeut')) {
 					matchday.physio = (matchday.physio || 0) + (-value);
+				} else if (label.search('Siegpr.mie') !== -1) {
+					matchday.winBonus = +value;
 				}
 			});
 
