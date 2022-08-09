@@ -173,7 +173,7 @@ form > .fa-arrow-alt-circle-down {
 	position: relative;
 	cursor: default;
 }
-.osext-balance > .osext-forecast {
+.osext-balance > * {
 	display: inline-block;
 }
 .osext-balance-tooltip {

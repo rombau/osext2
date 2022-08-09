@@ -178,13 +178,17 @@ Page.ShowteamSeason = class extends Page {
 							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));
 							if (day.loanCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leihausgaben', day.loanCosts.toLocaleString(), 'negative'));
 							if (day.youthSupport) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Jugendförderung', day.youthSupport.toLocaleString(), 'negative'));
+							if (day.winBonus) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Siegprämie', day.winBonus.toLocaleString(), 'positive'));
 							if (day.advertisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fernsehgelder', day.advertisingIncome.toLocaleString(), 'positive'));
 							if (day.merchandisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fanartikel', day.merchandisingIncome.toLocaleString(), 'positive'));
 							if (day.physio) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Physio', day.physio.toLocaleString(), 'negative'));
 							if (day.fastTransferIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Schnelltransfer', day.fastTransferIncome.toLocaleString(), 'positive'));
+							if (day.otherBookings) Object.entries(day.otherBookings).forEach(([label, value]) => {
+								balanceTooltip.appendChild(HtmlUtil.createLabelValueElement(label, value.toLocaleString(), value >= 0 ? 'positive' : 'negative'));
+							});
 
 							let balanceElement = HtmlUtil.createDivElement('', 'osext-balance');
-							balanceElement.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString(), 'osext-forecast'));
+							balanceElement.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString(), day.result ? null : 'osext-forecast'));
 							balanceElement.appendChild(balanceTooltip);
 
 							balanceCell.textContent = '';

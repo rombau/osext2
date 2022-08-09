@@ -409,6 +409,10 @@ class Team {
 	 * @returns new match day
 	 */
 	copyScheduledMatchDay (season, zat) {
+		let seasonMatchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
+		if (seasonMatchDay && seasonMatchDay.result) {
+			return ensurePrototype(JSON.parse(JSON.stringify(seasonMatchDay)), MatchDay);
+		}
 		let copyMatchDay = new MatchDay(season, zat);
 		let scheduledMatchDay = this.matchDays.slice().sort((day1, day2) => {
 			if (day1.before(day2)) return 1;
