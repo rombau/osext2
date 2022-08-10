@@ -28,6 +28,8 @@ describe('Page.ShowteamContracts', () => {
 			expect(data.team.squadPlayers[0].salary).toEqual(59812);
 			expect(data.team.squadPlayers[0].marketValue).toEqual(9379453);
 
+			data.team.squadPlayers.forEach(player => player.trainingFactor = 1);
+
 			page.extend(doc, data);
 
 			let spy = spyOn(page, 'updateWithTeam').and.callFake((team, current, matchDay) => {

@@ -43,6 +43,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 		Array.from(this.table.rows).forEach((row, i) => {
 
+			row.cells['TF'] = row.cells['Spielerwert'].cloneNode(true);
 			row.cells['Blitzerlös'] = row.cells['Spielerwert'].cloneNode(true);
 			row.cells['Aktion'] = row.cells['Name'].cloneNode(true);
 			row.cells['Aktion'].style.setProperty('padding-left', '0.5em', 'important');
@@ -51,9 +52,15 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 				row.cells['Geb.Tag'].textContent = 'Geb.';
 				row.cells['Geb.Tag'].align = 'left';
-
+				
 				row.cells['Skillschnitt'].textContent = 'Skillschn.';
+				row.cells['TS'].align = 'right';
 				row.cells['TS'].style.width = '1.9em';
+
+				row.cells['TF'].textContent = 'TF';
+				row.cells['TF'].title = 'Trainingsfaktor';
+				row.cells['TF'].align = 'right';
+				row.cells['TF'].style.width = '3em';
 
 				row.cells['Blitzerlös'].textContent = 'Blitzerlös';
 				row.cells['Blitzerlös'].align = 'right';
@@ -71,6 +78,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 					row.cells['Blitzerlös'].classList.add(STYLE_INACTIVE);
 				}
 
+				row.cells['TF'].textContent = player.trainingFactor.toFixed(3);
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
 				row.cells['Aktion'].textContent = '';
 
@@ -147,6 +155,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			}
 
+			row.insertBefore(row.cells['TF'], row.cells['TS']);
+
 			row.appendChild(row.cells['Blitzerlös']);
 			row.appendChild(row.cells['Aktion']);
 
@@ -191,6 +201,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Monatsgehalt'].textContent = player.salary.toLocaleString();
 				row.cells['Spielerwert'].textContent = player.getMarketValue().toLocaleString();
 
+				row.cells['TF'].textContent = player.trainingFactor.toFixed(3);
+
 				row.cells['Blitzerlös'].textContent = player.getFastTransferValue().toLocaleString();
 
 			} else {
@@ -206,6 +218,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Vertrag'].textContent = '';
 				row.cells['Monatsgehalt'].textContent = '';
 				row.cells['Spielerwert'].textContent = '';
+
+				row.cells['TF'].textContent = '';
 
 				row.cells['Blitzerlös'].textContent = '';
 			}
@@ -244,6 +258,8 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				row.cells['Vertrag'].classList.add(STYLE_FORECAST);
 				row.cells['Monatsgehalt'].classList.add(STYLE_FORECAST);
 				row.cells['Spielerwert'].classList.add(STYLE_FORECAST);
+
+				row.cells['TF'].classList.add(STYLE_FORECAST);
 
 				row.cells['Blitzerlös'].classList.add(STYLE_FORECAST);
 				if ((player.loan && player.loan.duration > 0) || player.transferLock) {
