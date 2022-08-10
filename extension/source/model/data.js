@@ -62,7 +62,10 @@ class ExtensionData {
 			},
 
 			/** @type {Number} */
-			stadiumLoad : 100
+			stadiumLoad : 100,
+
+			/** @type {Boolean} */
+			winBonus : false,
 		};
 	}
 

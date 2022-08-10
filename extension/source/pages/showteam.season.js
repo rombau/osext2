@@ -246,6 +246,33 @@ Page.ShowteamSeason = class extends Page {
 			}
 		));
 
+		let winBonus = doc.createElement('i');
+		winBonus.update = () => {
+			if (data.viewSettings.winBonus) {
+				winBonus.classList.add('fa-toggle-on');
+				winBonus.classList.remove('fa-toggle-off');
+			} else {
+				winBonus.classList.add('fa-toggle-off');
+				winBonus.classList.remove('fa-toggle-on');
+			}
+			page.updateWithMatchDays(data.team.getMatchDaysWithBalance(page.selectedSeason, data.lastMatchDay, data.viewSettings, this.balancedMatchDays));
+		};
+		winBonus.classList.add('fas');
+		winBonus.addEventListener('click', (event) => {
+			data.viewSettings.winBonus = !data.viewSettings.winBonus;
+			Persistence.storeExtensionData(data);
+			winBonus.update();
+		});
+		winBonus.update();
+		toolbar.appendChild(winBonus);
+
+		let winBonusTitle = doc.createElement('span');
+		winBonusTitle.textContent = ' Siegprämien berücksichtigen';
+		toolbar.appendChild(winBonusTitle);
+
+		toolbar.appendChild(doc.createElement('br'));
+		toolbar.appendChild(doc.createElement('br'));
+
 		let loadTitle = doc.createElement('span');
 		loadTitle.innerHTML = 'Stadionauslastung (%): ';
 		toolbar.appendChild(loadTitle);
@@ -260,7 +287,7 @@ Page.ShowteamSeason = class extends Page {
 		let leagueTitle = doc.createElement('span');
 		leagueTitle.innerHTML = ' Eintritt Liga: ';
 		toolbar.appendChild(leagueTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.league,
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 100, 1, 100, data.viewSettings.ticketPrice.league,
 			ticketPrice => {
 				data.viewSettings.ticketPrice.league = ticketPrice;
 				Persistence.storeExtensionData(data);
@@ -271,7 +298,7 @@ Page.ShowteamSeason = class extends Page {
 		let cupTitle = doc.createElement('span');
 		cupTitle.innerHTML = 'Pokal: ';
 		toolbar.appendChild(cupTitle);
-		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.cup,
+		toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 100, 1, 100, data.viewSettings.ticketPrice.cup,
 			ticketPrice => {
 				data.viewSettings.ticketPrice.cup = ticketPrice;
 				Persistence.storeExtensionData(data);
@@ -284,7 +311,7 @@ Page.ShowteamSeason = class extends Page {
 			let intTitle = doc.createElement('span');
 			intTitle.innerHTML = 'International: ';
 			toolbar.appendChild(intTitle);
-			toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 120, 1, 100, data.viewSettings.ticketPrice.international,
+			toolbar.appendChild(HtmlUtil.createNumericSlider(toolbar, 100, 1, 100, data.viewSettings.ticketPrice.international,
 				ticketPrice => {
 					data.viewSettings.ticketPrice.international = ticketPrice;
 					Persistence.storeExtensionData(data);

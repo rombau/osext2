@@ -244,6 +244,7 @@ class Team {
 		let balancedMatchDays = calculatedMatchDays || [];
 		let accountBalance = this.accountBalance;
 		let stadium = this.stadium;
+		let winBonusPerLeagueMatchDay = this.calculateWinBonusPerLeagueMatchDay(viewSettings.leagueRanking, this.league.size);
 		for (let season = selectedSeason; season < (selectedSeason + Options.forecastSeasons); season++) {
 			for (let zat = 1; zat <= SEASON_MATCH_DAYS; zat++) {
 				let balancedMatchDay = balancedMatchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
@@ -268,6 +269,10 @@ class Team {
 								}
 								accountBalance += (balancedMatchDay.fastTransferIncome) || this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
 								accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
+								if (viewSettings.winBonus) {
+									balancedMatchDay.winBonus = winBonusPerLeagueMatchDay;
+									accountBalance += winBonusPerLeagueMatchDay;
+								}
 								balancedMatchDay.accountBalance = accountBalance;
 								resolve(balancedMatchDay);
 							} catch (e) {
@@ -313,7 +318,7 @@ class Team {
 	 * @param {MatchDay} matchDay
 	 * @param {[SquadPlayer]} squadPlayers
 	 * @param {[YouthPlayer]} youthPlayers
-	 * @returns the costs
+	 * @returns {Number} the costs
 	 */
 	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
 		let squad = squadPlayers.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0) || (player.active && !player.loan))
@@ -329,7 +334,7 @@ class Team {
 	 *
 	 * @param {MatchDay} matchDay
 	 * @param {[SquadPlayer]} players
-	 * @returns the income/costs
+	 * @returns {Number} the income/costs
 	 */
 	calculateLoan (matchDay, players) {
 		matchDay.loanIncome = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee > 0))
@@ -344,7 +349,7 @@ class Team {
 	 *
 	 * @param {MatchDay} matchDay
 	 * @param {[Trainer]} trainers
-	 * @returns the costs
+	 * @returns {Number} the costs
 	 */
 	calculateTrainerSalary (matchDay, trainers) {
 		matchDay.trainerSalary = trainers.reduce((sum, trainer) => sum + trainer.salary, 0);
@@ -356,7 +361,7 @@ class Team {
 	 *
 	 * @param {MatchDay} matchDay
 	 * @param {[SquadPlayer]} players
-	 * @returns the income
+	 * @returns {Number} the income
 	 */
 	calculateFastTransferIncome (matchDay, players) {
 		matchDay.fastTransferIncome = players.filter(player => player.fastTransferMatchDay && matchDay.equals(player.fastTransferMatchDay))
@@ -369,7 +374,7 @@ class Team {
 	 *
 	 * @param {MatchDay} matchDay
 	 * @param {[SquadPlayer]} players
-	 * @returns the costs
+	 * @returns {Number} the costs
 	 */
 	calculatePhysioCosts (matchDay, players) {
 		matchDay.physio = players.reduce((sum, player) => sum + (player.physioCosts || 0), 0);
@@ -379,6 +384,24 @@ class Team {
 				.reduce((sum, player) => sum + PHYSIO_COSTS, 0);
 		}
 		return -matchDay.physio;
+	}
+
+	/**
+	 * Returns the win bonus for an leage match day, 
+	 * based on the ranking and assumption in WIN_BONUS_BY_RANKING.
+	 *
+	 * @param {Number} leagueRanking
+	 * @param {Number} leagueSize
+	 * @returns {Number} the bonus
+	 */
+	calculateWinBonusPerLeagueMatchDay (leagueRanking, leagueSize) {
+		let season = this.matchDays.slice().sort((day1, day2) => {
+			if (day1.before(day2)) return 1;
+			if (day1.after(day2)) return -1;
+			return 0;
+		})[0].season;
+		let leagueMatchDays = this.matchDays.filter(matchDay => matchDay.season === season && matchDay.competition === Competition.LEAGUE);
+		return Math.round((WIN_BONUS_BY_RANKING[leagueSize][leagueRanking - 1] * WIN_BONUS) / leagueMatchDays.length);
 	}
 
 	/**

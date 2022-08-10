@@ -505,10 +505,36 @@ describe('Team', () => {
 
 	it('should return balanced match days', () => {
 
+		for (let zat = 2; zat < SEASON_MATCH_DAYS; zat += 2) {
+			let matchDay = new MatchDay(15, zat);
+			matchDay.competition = Competition.LEAGUE;			
+			team.matchDays.push(matchDay);
+		}
+
+		let viewSettings = { leagueRanking : 1 };
+		team.league.size = 10;
 		Options.forecastSeasons = 1;
 
-		let balancedMatchDays = team.getMatchDaysWithBalance(15, new MatchDay(15,3), {});
+		let balancedMatchDays = team.getMatchDaysWithBalance(15, new MatchDay(15,3), viewSettings);
 
 		expect(balancedMatchDays.length).toEqual(72);
+	});
+
+
+	it('should return win bonus per league match day', () => {
+
+		for (let zat = 2; zat < SEASON_MATCH_DAYS; zat += 2) {
+			let matchDay = new MatchDay(15, zat);
+			matchDay.competition = Competition.LEAGUE;			
+			team.matchDays.push(matchDay);
+		}
+
+		expect(team.calculateWinBonusPerLeagueMatchDay(1, 10)).toEqual(161143);
+		expect(team.calculateWinBonusPerLeagueMatchDay(10, 10)).toEqual(35429);
+		expect(team.calculateWinBonusPerLeagueMatchDay(1, 18)).toEqual(154857);
+		expect(team.calculateWinBonusPerLeagueMatchDay(10, 18)).toEqual(98286);
+		expect(team.calculateWinBonusPerLeagueMatchDay(1, 20)).toEqual(165143);
+		expect(team.calculateWinBonusPerLeagueMatchDay(10, 20)).toEqual(114857);
+
 	});
 });
