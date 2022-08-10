@@ -50,7 +50,7 @@ class Logger {
 	 */
 	static prepare (data) {
 		if (!data) return 'no data';
-		else if (data instanceof ExtensionData && Options.logDataElement) {
+		else if (Options.logDataElement) {
 			Options.logDataElement.split('.').forEach(attr => {
 				data = data[attr];
 			});

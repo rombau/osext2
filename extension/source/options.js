@@ -128,10 +128,14 @@ let psLimitSlider = document.getElementById('options-ps-limit');
 let nsLimitSlider = document.getElementById('options-ns-limit');
 
 let saveButton = document.getElementById('options-save');
+let editorButton = document.getElementById('options-editor');
 
 if (saveButton) {
 	document.addEventListener('DOMContentLoaded', Options.initialize);
 	saveButton.addEventListener('click', Options.save);
+	editorButton.addEventListener('click', () => {
+		chrome.tabs.create({url: 'editor.html'});
+	});
 } else {
 	Options.initialize();
 }

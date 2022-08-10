@@ -15,24 +15,27 @@ class Persistence {
 	 * If loading is successful the data is returned with the resolved promise.
 	 *
 	 * @async
-	 * @param {String} teamName the name of the team
-	 * @returns {Promise<ExtensionData>} promise with data when resolved
+	 * @returns {Promise<Object>} promise with data when resolved
 	 */
-	static getExtensionData (teamName) {
-		if (teamName) {
-			return getQueuedPromise((resolve, reject) => {
-				chrome.storage.local.get(teamName, (storedData) => {
-					Persistence.LOGGER.log('getExtensionData', Logger.prepare(storedData[teamName]));
-					if (chrome.runtime.lastError) {
-						reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
-					} else {
-						resolve(Object.assign(new ExtensionData(), storedData[teamName]));
-					}
-				});
+	static getExtensionData () {
+		return getQueuedPromise((resolve, reject) => {
+			chrome.storage.local.get(Persistence.CURRENT_TEAM, (stored) => {
+				let currentTeamName = stored[Persistence.CURRENT_TEAM];
+				if (chrome.runtime.lastError) {
+					reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
+				} else if (!currentTeamName) {
+					reject(new Error('Laden der Teamdaten fehlgeschlagen: Kein aktives Team'));
+				} else {
+					chrome.storage.local.get(currentTeamName, (storedData) => {
+						if (chrome.runtime.lastError) {
+							reject(new Error('Laden der Teamdaten fehlgeschlagen: ' + chrome.runtime.lastError));
+						} else {
+							resolve(storedData[currentTeamName]);
+						}
+					});
+				}
 			});
-		} else {
-			return Promise.reject(new Error('Laden der Teamdaten fehlgeschlagen: Name fehlt'));
-		}
+		});
 	}
 
 	/**
@@ -112,11 +115,11 @@ class Persistence {
 	 */
 	static storeExtensionData (data, synchronized = true) {
 		Persistence.LOGGER.log('storeExtensionData', Logger.prepare(data));
-		if (data.team.name) {
+		if (data._team.name) {
 			let storeFunction = (resolve, reject) => {
 				let objectToStore = {
-					[Persistence.CURRENT_TEAM]: data.team.name,
-					[data.team.name]: Persistence.prepare(data)
+					[Persistence.CURRENT_TEAM]: data._team.name,
+					[data._team.name]: Persistence.prepare(data)
 				};
 				chrome.storage.local.set(objectToStore, () => {
 					if (chrome.runtime.lastError) {

@@ -24,11 +24,12 @@ describe('Persistence', () => {
 		let data = new ExtensionData();
 		data.team.id = 1;
 		storageMock['FC Cork'] = data;
+		storageMock[Persistence.CURRENT_TEAM] = 'FC Cork';
 
-		Persistence.getExtensionData('FC Cork').then(data => {
+		Persistence.getExtensionData().then(data => {
 			expect(data.team.id).toEqual(1);
 			expect(data instanceof ExtensionData).toBeTruthy();
-			expect(chrome.storage.local.get).toHaveBeenCalled();
+			expect(chrome.storage.local.get).toHaveBeenCalledTimes(2);
 			done();
 		}).catch(fail);
 	});
@@ -47,8 +48,8 @@ describe('Persistence', () => {
 	it('should handle error when loading data without team', (done) => {
 
 		Persistence.getExtensionData().then(fail).catch(error => {
-			expect(chrome.storage.local.get).not.toHaveBeenCalled();
-			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Name fehlt');
+			expect(chrome.storage.local.get).toHaveBeenCalledTimes(1);
+			expect(error.message).toEqual('Laden der Teamdaten fehlgeschlagen: Kein aktives Team');
 			done();
 		});
 	});
