@@ -1,6 +1,6 @@
 // create the editor
 const container = document.getElementById("jsoneditor");
-const options = {};
+const options = { modes: ['view', 'form', 'code']};
 const editor = new JSONEditor(container, options);
 
 Persistence.getExtensionData().then(data => {
