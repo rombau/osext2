@@ -20,11 +20,10 @@ Page.Training = class extends Page {
 			let trainerNr = +row.cells['Trainer'].firstChild.value;
 			let skill = Page.Training.getRegularSkill(row.cells['trainierter Skill'].firstChild.selectedOptions[0].text);
 
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
+			let player = data.team.getSquadPlayer(id);
+
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill) && row.cells['Chance'].textContent.search(' %') != -1) {
-
-
-				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
-				let player = data.team.getSquadPlayer(id);
 
 				if (!player.nextTraining) {
 					player.nextTraining = new SquadPlayer.Training();
