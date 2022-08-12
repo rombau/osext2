@@ -57,6 +57,8 @@
 				"source/pages/gamereport.js",
 				"source/pages/matchdayoptions.js",
 				"source/pages/matchdayreport.js",
+				"source/pages/matchday.actions.js",
+				"source/pages/matchday.linup.js",
 				"source/pages/showteam.base.js",
 				"source/pages/showteam.overview.js",
 				"source/pages/showteam.skills.js",
