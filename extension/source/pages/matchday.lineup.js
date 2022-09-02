@@ -26,26 +26,18 @@ Page.MatchDayLineUp = class extends Page {
 
 				/** @type {HTMLAnchorElement} */
 				let nameLink = row.cells['Name'].firstChild;
-				if (nameLink && nameLink.tagName && nameLink.tagName.toLowerCase === 'a') {
+				if (nameLink && nameLink.tagName && nameLink.tagName.toUpperCase() === 'A') {
 
-					if (gridSelect.value) {
+					if (gridSelect.value.match(/[ABCDEFGHKLTUVWXYZ]/)) {
 
 						let id = HtmlUtil.extractIdFromHref(nameLink.href);
 						let player = data.team.getSquadPlayer(id);
 	
 						player.nextTraining = player.nextTraining || new SquadPlayer.Training();
-
-						// if (gridSelect.value)
-						// player.nextTraining.matchBonus = gridSelect.value
-
-
+						player.nextTraining.matchBonus = (gridSelect.value >= 'U' ? 1.1 : 1.35);
 					}
-
-
 				}
-
 			}
-
 		});
 	}
 }

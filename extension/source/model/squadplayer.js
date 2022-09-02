@@ -243,7 +243,7 @@ class SquadPlayer extends Player {
 	}
 
 	_forecastTraining (forecastPlayer, training) {
-		if (forecastPlayer.injured > 0 || !training || forecastPlayer.skills[training.skill] === SKILL_LIMIT) return;
+		if (forecastPlayer.injured > 0 || !training || !training.trainer || !training.skill || forecastPlayer.skills[training.skill] === SKILL_LIMIT) return;
 
 		let chance = forecastPlayer.getTrainingChance(training.skill, training.trainer);
 		if (chance > 0) {

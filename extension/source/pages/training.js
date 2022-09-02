@@ -59,7 +59,10 @@ Page.Training = class extends Page {
 
 			row.cells['zuletzt'] = row.cells['Name'].cloneNode(true);
 			row.cells['mögl. MW+'] = row.cells['Chance'].cloneNode(true);
+			row.cells['EB'] = row.cells['Chance'].cloneNode(true);
+			row.cells['ChanceEB'] = row.cells['Chance'].cloneNode(true);
 
+			row.cells['mögl. MW+'].style.paddingLeft = '1em';
 			row.cells['zuletzt'].style.paddingLeft = '2em';
 
 			if (index === 0) {
@@ -67,6 +70,11 @@ Page.Training = class extends Page {
 				row.cells['trainierter Skill'].textContent = 'Skill';
 				row.cells['Skill'].textContent = 'Wert';
 				row.cells['mögl. MW+'].textContent = 'mögl. MW+';
+				row.cells['EB'].textContent = 'EB';
+				row.cells['EB'].innerHTML = '<abbr title="Einsatzbonus lt. Zugabgabe">EB</abbr>';
+				row.cells['EB'].style.width = '3em';
+				row.cells['EB'].style.textAlign = 'right';
+				row.cells['ChanceEB'].textContent = '(Chance)';
 				row.cells['zuletzt'].textContent = 'zuletzt trainiert';
 				row.cells['zuletzt'].style.textAlign = 'left';
 
@@ -74,6 +82,20 @@ Page.Training = class extends Page {
 
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
+
+				if (player.nextTraining && player.nextTraining.matchBonus !== 1) {
+					row.cells['EB'].textContent = player.nextTraining.matchBonus.toFixed(2);
+					if (player.nextTraining.chance) {
+						let chanceEB = player.nextTraining.chance * player.nextTraining.matchBonus;
+						if (chanceEB > 99) chanceEB = 99;
+						row.cells['ChanceEB'].textContent = chanceEB.toFixed(2) + ' %';
+					} else {
+						row.cells['ChanceEB'].textContent = '';
+					}
+				} else {
+					row.cells['EB'].textContent = '';
+					row.cells['ChanceEB'].textContent = '';
+				}
 
 				let forecastMarketValue = () => {
 					let skill = Page.Training.getRegularSkill(row.cells['trainierter Skill'].firstChild.selectedOptions[0].text);
@@ -91,9 +113,11 @@ Page.Training = class extends Page {
 
 				row.cells['Trainer'].firstChild.addEventListener('change', (event) => {
 					row.cells['Chance'].textContent = '';
+					row.cells['ChanceEB'].textContent = '';
 				});
 				row.cells['trainierter Skill'].firstChild.addEventListener('change', (event) => {
 					row.cells['Chance'].textContent = '';
+					row.cells['ChanceEB'].textContent = '';
 					forecastMarketValue();
 				});
 				forecastMarketValue();
@@ -108,7 +132,9 @@ Page.Training = class extends Page {
 						row.cells['zuletzt'].textContent += ` mit ${player.lastTraining.trainer.legacySkill}er`;
 					}
 					if (player.lastTraining.chance) {
-						row.cells['zuletzt'].textContent += ` bei ${player.lastTraining.chance.toFixed(2)} %`;
+						let chanceEB = player.lastTraining.chance * player.lastTraining.matchBonus;
+						if (chanceEB > 99) chanceEB = 99;
+						row.cells['zuletzt'].textContent += ` bei ${chanceEB.toFixed(2)} %`;
 					}
 					if (player.lastTraining.successful) {
 						row.cells['zuletzt'].textContent += ' erfolgreich'
@@ -120,6 +146,8 @@ Page.Training = class extends Page {
 				row.cells['zuletzt'].classList.add(STYLE_FORECAST);
 			}
 
+			row.appendChild(row.cells['EB']);
+			row.appendChild(row.cells['ChanceEB']);
 			row.appendChild(row.cells['mögl. MW+']);
 			row.appendChild(row.cells['zuletzt']);
 		});

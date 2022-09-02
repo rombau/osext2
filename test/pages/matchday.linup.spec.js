@@ -14,7 +14,8 @@ describe('Page.MatchDayLineUp', () => {
 
 			page.extract(doc, data);
 
-			expect(1).toEqual(1);
+			expect(data.team.squadPlayers[0].nextTraining.matchBonus).toEqual(1.1);
+			expect(data.team.squadPlayers[1].nextTraining.matchBonus).toEqual(1.35);
 			
 			done();
 		});
