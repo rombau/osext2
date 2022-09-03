@@ -269,7 +269,7 @@ class Team {
 								}
 								accountBalance += (balancedMatchDay.fastTransferIncome) || this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
 								accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
-								if (viewSettings.winBonus) {
+								if (viewSettings.winBonus && balancedMatchDay.competition === Competition.LEAGUE) {
 									balancedMatchDay.winBonus = winBonusPerLeagueMatchDay;
 									accountBalance += winBonusPerLeagueMatchDay;
 								}
