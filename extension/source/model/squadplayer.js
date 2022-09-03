@@ -480,4 +480,18 @@ SquadPlayer.Training = class {
 	set trainer(value) {
 		this._trainer = value;
 	}
+
+	/**
+	 * Returns the Chance with the matchday training bonus. Zero if there is no chance or bonus, and limited to 99.
+	 * 
+	 * @returns {Number}
+	 */
+	getChanceWithBonus () {
+		if (this.chance && this.matchBonus) {
+			let chanceWithBonus = this.chance * this.matchBonus;
+			if (chanceWithBonus > 99) chanceWithBonus = 99;
+			return chanceWithBonus;
+		}
+		return 0;
+	}
 };

@@ -55,6 +55,8 @@ Page.Training = class extends Page {
 	 */
 	extend(doc, data) {
 
+		let matchdayConfirmed = data.team.squadPlayers.find(player => player.nextTraining && player.nextTraining.matchBonus !== 1);
+
 		Array.from(HtmlUtil.getTableByHeader(doc, ...Page.Training.HEADERS).rows).forEach((row, index) => {
 
 			row.cells['zuletzt'] = row.cells['Name'].cloneNode(true);
@@ -86,9 +88,7 @@ Page.Training = class extends Page {
 				if (player.nextTraining && player.nextTraining.matchBonus !== 1) {
 					row.cells['EB'].textContent = player.nextTraining.matchBonus.toFixed(2);
 					if (player.nextTraining.chance) {
-						let chanceEB = player.nextTraining.chance * player.nextTraining.matchBonus;
-						if (chanceEB > 99) chanceEB = 99;
-						row.cells['ChanceEB'].textContent = chanceEB.toFixed(2) + ' %';
+						row.cells['ChanceEB'].textContent = player.nextTraining.getChanceWithBonus().toFixed(2) + ' %';
 					} else {
 						row.cells['ChanceEB'].textContent = '';
 					}
@@ -132,9 +132,7 @@ Page.Training = class extends Page {
 						row.cells['zuletzt'].textContent += ` mit ${player.lastTraining.trainer.legacySkill}er`;
 					}
 					if (player.lastTraining.chance) {
-						let chanceEB = player.lastTraining.chance * player.lastTraining.matchBonus;
-						if (chanceEB > 99) chanceEB = 99;
-						row.cells['zuletzt'].textContent += ` bei ${chanceEB.toFixed(2)} %`;
+						row.cells['zuletzt'].textContent += ` bei ${player.nextTraining.getChanceWithBonus().toFixed(2)} %`;
 					}
 					if (player.lastTraining.successful) {
 						row.cells['zuletzt'].textContent += ' erfolgreich'
@@ -146,8 +144,10 @@ Page.Training = class extends Page {
 				row.cells['zuletzt'].classList.add(STYLE_FORECAST);
 			}
 
-			row.appendChild(row.cells['EB']);
-			row.appendChild(row.cells['ChanceEB']);
+			if (matchdayConfirmed) {
+				row.appendChild(row.cells['EB']);
+				row.appendChild(row.cells['ChanceEB']);
+			}
 			row.appendChild(row.cells['mögl. MW+']);
 			row.appendChild(row.cells['zuletzt']);
 		});

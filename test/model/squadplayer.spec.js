@@ -374,6 +374,18 @@ describe('SquadPlayer', () => {
 
 		expect(forecastPlayer.contractTerm).toEqual(22);
 		expect(forecastPlayer.salary).toEqual(20000);
+	});
 
+	it('should return training chance with bonus', () => {
+
+		expect(player.nextTraining.getChanceWithBonus()).toEqual(0);
+
+		player.nextTraining.chance = 75.5;
+
+		expect(player.nextTraining.getChanceWithBonus()).toEqual(75.5);
+
+		player.nextTraining.matchBonus = 1.35;
+
+		expect(player.nextTraining.getChanceWithBonus()).toEqual(99);
 	});
 });
