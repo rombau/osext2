@@ -99,6 +99,7 @@
 	"permissions": [
 		"storage"
 	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.9.0/jsoneditor.min.js; object-src 'self'",
 	"options_ui": {
 		"page": "options.html",
 		"open_in_tab": false
