@@ -15,6 +15,10 @@ Page.MatchDayConfirmation = class extends Page {
 
 		let tables = doc.getElementsByTagName('table');
 
+		data.team.squadPlayers.forEach(player => {
+			if (player.nextTraining) player.nextTraining.matchBonus = 1;
+		});
+
 		if (tables && tables.length >= 2) {
 
 			Array.from(tables[0].rows).forEach(row => {
