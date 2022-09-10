@@ -26,7 +26,7 @@ Page.AccountStatement = class extends Page {
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
 
-		let matches = /Kontoauszug - Kontostand : ([\d.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
+		let matches = /Kontoauszug - Kontostand : ([-\d.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
 		if (matches) {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
 		}
