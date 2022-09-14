@@ -28,6 +28,9 @@ describe('Page.MatchDayReport', () => {
 			expect(matchday.advertisingIncome).toEqual(747752);
 			expect(matchday.merchandisingIncome).toEqual(654163);
 			expect(matchday.physio).toEqual(20000);
+			expect(matchday.winBonus).toEqual(200000);
+			expect(matchday.cupPremium).toEqual(1000000);
+			expect(matchday.intPremium).toEqual(1000000);
 		
 			expect(data.team.getSquadPlayer(105508).lastTraining).toBeUndefined();
 			expect(data.team.getSquadPlayer(135694).lastTraining.successful).toBeTruthy();

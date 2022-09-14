@@ -178,6 +178,8 @@ Page.ShowteamSeason = class extends Page {
 							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));
 							if (day.loanCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leihausgaben', day.loanCosts.toLocaleString(), 'negative'));
 							if (day.youthSupport) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Jugendförderung', day.youthSupport.toLocaleString(), 'negative'));
+							if (day.intPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Aufstiegsprämie', day.intPremium.toLocaleString(), 'positive'));
+							if (day.cupPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Pokalprämie', day.cupPremium.toLocaleString(), 'positive'));
 							if (day.winBonus) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Siegprämie', day.winBonus.toLocaleString(), 'positive'));
 							if (day.advertisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fernsehgelder', day.advertisingIncome.toLocaleString(), 'positive'));
 							if (day.merchandisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fanartikel', day.merchandisingIncome.toLocaleString(), 'positive'));
