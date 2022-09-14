@@ -45,8 +45,8 @@ Page.AccountStatement = class extends Page {
 					if (matches) {
 						matchday.accountBalance = +balanceText.replaceAll('.', '');
 						matchday.accountBalanceBefore = matchday.accountBalance - bookingValue;
+						matchday.otherBookings = {};
 					} else {
-						matchday.otherBookings = matchday.otherBookings || {};
 						let label = row.cells['Buchungstext'].textContent.split(' ')[0];
 						matchday.otherBookings[label] = (matchday.otherBookings[label] || 0) + bookingValue;
 						matchday.accountBalanceBefore = matchday.accountBalanceBefore - bookingValue;
