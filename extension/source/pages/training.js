@@ -129,10 +129,10 @@ Page.Training = class extends Page {
 					}
 					row.cells['zuletzt'].textContent = skill;
 					if (player.lastTraining.trainer && player.lastTraining.trainer.legacySkill) {
-						row.cells['zuletzt'].textContent += ` mit ${player.lastTraining.trainer.legacySkill}er`;
+						row.cells['zuletzt'].textContent += ` mit T ${player.lastTraining.trainer.nr} ${player.lastTraining.trainer.upToSkill}`;
 					}
 					if (player.lastTraining.chance) {
-						row.cells['zuletzt'].textContent += ` bei ${player.nextTraining.getChanceWithBonus().toFixed(2)} %`;
+						row.cells['zuletzt'].textContent += ` bei ${player.lastTraining.getChanceWithBonus().toFixed(2)} %`;
 					}
 					if (player.lastTraining.successful) {
 						row.cells['zuletzt'].textContent += ' erfolgreich'
