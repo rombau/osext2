@@ -23,6 +23,7 @@ describe('Page.ShowteamInfo', () => {
 			expect(data.team.stadium.coveredSeats).toEqual(22500);
 			expect(data.team.stadium.pitchHeating).toEqual(false);
 
+			expect(data.team.getMatchDay(5,49).stadiumCapacity).toEqual(43000);
 			expect(data.team.getMatchDay(5,49).stadium).toBeUndefined();
 
 			expect(data.team.getMatchDay(5,50).stadium.places).toEqual(10000);

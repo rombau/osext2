@@ -65,6 +65,9 @@ class MatchDay {
 		/** @type {Number} the ticket price */
 		this.ticketPrice;
 
+		/** @type {Number} the stadium overall place count */
+		this.stadiumCapacity;
+
 		/** @type {Number} the visitor count */
 		this.stadiumVisitors;
 
