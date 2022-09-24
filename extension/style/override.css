@@ -44,6 +44,11 @@ input[type=submit], input[type=button], input[type=reset] {
 	font-size: 0.95em;
 }
 
+.spv input[type="button"] {
+	margin-top: 0;
+	margin-left: 10px;
+}
+
 input[type=checkbox] {
 	vertical-align: middle;
 }
