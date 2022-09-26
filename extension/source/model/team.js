@@ -250,9 +250,9 @@ class Team {
 				let balancedMatchDay = balancedMatchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat);
 				if (!balancedMatchDay) {
 					balancedMatchDay = this.copyScheduledMatchDay(season, zat);
-					stadium = balancedMatchDay.stadium || stadium;
 					balancedMatchDays.push(balancedMatchDay);
 				}
+				stadium = balancedMatchDay.stadium || stadium;
 				if (balancedMatchDay.after(lastMatchDay)) {
 					balancedMatchDay.accountBalancePromise = getQueuedPromise((resolve, reject) => {
 						setTimeout(() => {
