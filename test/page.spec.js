@@ -328,7 +328,8 @@ describe('Page', () => {
 			let messageBox = document.querySelector('.' + STYLE_ERROR);
 
 			expect(messageBox).toBeDefined();
-			expect(messageBox.lastChild.textContent).toEqual('test');
+			expect(messageBox.lastChild.previousSibling.textContent).toEqual('test');
+			expect(messageBox.lastChild.title).toEqual('Fehler per eMail melden');
 		});
 	});
 

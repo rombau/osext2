@@ -289,7 +289,7 @@ class Page {
 		}
 
 		let parentDoc = top.frames.os_main ? top.frames.os_main.document : document;
-		let messageBox = HtmlUtil.createMessageBox(parentDoc, e instanceof Warning ? STYLE_WARNING : STYLE_ERROR, e.message || e);
+		let messageBox = HtmlUtil.createMessageBox(parentDoc, e instanceof Warning ? STYLE_WARNING : STYLE_ERROR, e);
 
 		parentDoc.body.appendChild(messageBox);
 	}

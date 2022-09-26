@@ -265,12 +265,12 @@ class HtmlUtil {
 	 *
 	 * @param {Document} doc the document for element creation
 	 * @param {String} styleClass message box class name, e.g. STYLE_STATUS
-	 * @param {String} message the message to show
+	 * @param {String|Error} entity the message or error to show
 	 * @param {String} id the id of the message box element
 	 * @param {Boolean} autoClose true, if the message box ahould be closed on click
 	 * @returns {HTMLElement}
 	 */
-	static createMessageBox (doc, styleClass, message, id, autoClose = true) {
+	static createMessageBox (doc, styleClass, entity, id, autoClose = true) {
 
 		doc.querySelectorAll('.' + STYLE_MESSAGE).forEach(message => message.remove());
 
@@ -299,10 +299,21 @@ class HtmlUtil {
 
 		let text = doc.createElement('span');
 		text.style.paddingLeft = '7px';
-		if (message) text.textContent = message;
+		if (entity) text.textContent = entity.message || entity;
 
 		container.appendChild(icon);
 		container.appendChild(text);
+
+		if (styleClass === STYLE_ERROR) {
+			let bugReportLink = doc.createElement('a');
+			bugReportLink.className = 'fas fa-envelope';
+			bugReportLink.title = 'Fehler per eMail melden';
+			bugReportLink.href = 'mailto:osext@greenmoon.at?subject=Fehler in der Erweiterung&body=' + entity + '%0D%0A' + entity.stack.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
+			bugReportLink.style.marginLeft = '10px';
+			bugReportLink.style.cursor = 'pointer';
+			bugReportLink.style.color = 'white';
+			container.appendChild(bugReportLink);
+		}
 
 		return container;
 	}
