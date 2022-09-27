@@ -65,7 +65,7 @@ Page.Main = class extends Page {
 			data.requestAllPages();
 		}
 
-		matches = /images\/wappen\/((\d+)\.(png|gif))/gm.exec(doc.querySelector('img[src*=wappen]').src);
+		matches = /images\/wappen\/((\d+)\.[a-z]+)/gm.exec(doc.querySelector('img[src*=wappen]').src);
 
 		data.team.id = +matches[2];
 		data.team.emblem = matches[1];
