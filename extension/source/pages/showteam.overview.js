@@ -88,7 +88,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
 			row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
 			row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
-
+			row.cells['EQ19'] = row.cells['Alter'].cloneNode(true);
 
 			if (i === 0 || i == (this.table.rows.length - 1)) {
 
@@ -97,6 +97,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;P'].style.width = '3.5em';
 				row.cells['&Oslash;N'].style.width = '3.5em';
 				row.cells['&Oslash;U'].style.width = '3.5em';
+				row.cells['EQ19'].style.width = '3.5em';
 
 				row.cells['MOR'].textContent = 'Mor';
 				row.cells['FIT'].textContent = 'Fit';
@@ -107,6 +108,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;P'].innerHTML = '&Oslash;P'; row.cells['&Oslash;P'].title = 'Durchschnitt Primärskills';
 				row.cells['&Oslash;N'].innerHTML = '&Oslash;N'; row.cells['&Oslash;N'].title = 'Durchschnitt Nebenkills';
 				row.cells['&Oslash;U'].innerHTML = '&Oslash;U'; row.cells['&Oslash;U'].title = 'Durchschnitt unveränderliche Skills';
+				row.cells['EQ19'].innerHTML = 'EQ19'; row.cells['EQ19'].title = 'Qualität/Potential/Talent';
 
 			} else {
 
@@ -118,6 +120,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
+				row.cells['EQ19'].textContent = player.getPotential().toFixed(0);
 			}
 
 			if (!this.showExactAge) row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
@@ -125,6 +128,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			row.appendChild(row.cells['&Oslash;P']);
 			row.appendChild(row.cells['&Oslash;N']);
 			row.appendChild(row.cells['&Oslash;U']);
+			row.appendChild(row.cells['EQ19']);
 
 		});
 
@@ -173,6 +177,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
+				row.cells['EQ19'].textContent = player.getPotential().toFixed(0);
+
 				if (player.bans) {
 					row.cells['Sperre'].textContent = '';
 					player.bans.forEach(ban => {
@@ -213,6 +219,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;P'].textContent = '';
 				row.cells['&Oslash;N'].textContent = '';
 				row.cells['&Oslash;U'].textContent = '';
+
+				row.cells['EQ19'].textContent = '';
 			}
 
 			// styling
@@ -247,6 +255,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
 				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
 				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
+				row.cells['EQ19'].classList.add(STYLE_FORECAST);
 			}
 		});
 	}

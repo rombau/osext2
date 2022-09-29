@@ -146,7 +146,7 @@ class SquadPlayer extends Player {
 	 * Otherwise salary is calculated (currently only for minimal term).
 	 *
 	 * @param {Number} term the contract term
-	 * @returns
+	 * @returns {Number}
 	 */
 	getSalary (term = this.contractTerm) {
 		if (this.followUpSalary[term]) {
@@ -174,11 +174,23 @@ class SquadPlayer extends Player {
 	}
 
 	/**
+	 * Returns the potential.
+	 * The formula was provided by Michael Bertram.
+	 *
+	 * @returns {Number}
+	 */
+	getPotential () {
+		let trainedSkills = {...this.getPrimarySkills(), ...this.getSecondarySkills()};
+		delete trainedSkills.fuq;
+		delete trainedSkills.erf;
+		return Object.values(trainedSkills).reduce((sum, value) => sum + POTENTIAL_DURATION[value], 0) 
+			- (POTENTIAL_DAYS[this.age] + Math.round( Math.round(SEASON_MATCH_DAYS * (this.ageExact - this.age)) * POTENTIAL_FACTOR[this.age] / 100));
+	}
+
+	/**
 	 * Returns the calculated fast transfer value ('Blitzerlös').
 	 *
-	 * @param {Position} pos the position to get the market value for; if omitted the current position is used
-	 * @param {Number} factor the training factor; if omitted the current training factor is used
-	 * @returns
+	 * @returns {Number}
 	 */
 	getFastTransferValue () {
 		if (this.age >= (this.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD)) {
