@@ -10,6 +10,9 @@ describe('Page.ContractExtension', () => {
 
 	it('should extract contract extension data', (done) => {
 
+		data.nextZat = 31;
+		data.nextZatSeason = 18;
+		
 		Fixture.getDocument('vt.php', doc => {
 
 			page.extract(doc, data);
@@ -18,6 +21,8 @@ describe('Page.ContractExtension', () => {
 			expect(data.team.squadPlayers[0].followUpSalary['36']).toEqual(50565);
 			expect(data.team.squadPlayers[0].followUpSalary['48']).toEqual(42901);
 			expect(data.team.squadPlayers[0].followUpSalary['60']).toEqual(36400);
+
+			page.extend(doc, data);
 
 			done();
 		});
