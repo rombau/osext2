@@ -238,4 +238,13 @@ class YouthPlayer extends Player {
 		return bestPos;
 	}
 
+	/**
+	 * Returns true, if the player will disappear next match day.
+	 *
+	 * @returns {Boolean}
+	 */
+	willDisappear () {
+		return (this.ageExact - this.age) * SEASON_MATCH_DAYS === (SEASON_MATCH_DAYS - 1);
+	}
+
 }

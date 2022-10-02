@@ -129,6 +129,8 @@ const STYLE_STATUS = 'osext-status';
 
 const STYLE_MONTH = 'osext-month';
 
+const STYLE_ACTION_INFO = 'osext-action-info';
+
 /**
  * Ensures the object has the clasz prototype. If not the prototype is added.
  * In case of an array, the prototype is added to each object in the array.

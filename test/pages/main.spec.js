@@ -48,7 +48,33 @@ describe('Page.Main', () => {
 
 			data.nextZatSeason = 12; // initialized before extend
 
+			let player1 = new SquadPlayer();
+			player1.name = 'Test1';
+			player1.contractExtensionMatchDay = data.lastMatchDay;
+			player1.contractExtensionTerm = 24;
+			data.team.squadPlayers.push(player1);
+			let player2 = new SquadPlayer();
+			player2.name = 'Test2';
+			player2.contractExtensionMatchDay = data.lastMatchDay;
+			player2.contractExtensionTerm = 36;
+
+			data.team.squadPlayers.push(player2);
+			let player3 = new SquadPlayer();
+			player3.name = 'Test3';
+			player3.fastTransferMatchDay = data.lastMatchDay;
+			data.team.squadPlayers.push(player3);
+
+			let player4 = new YouthPlayer();
+			player4.pullMatchDay = data.lastMatchDay;
+			data.team.youthPlayers.push(player4);
+
 			page.extend(doc, data);
+
+			let actionItems = doc.querySelectorAll('.osext-action-info');
+			expect(actionItems.length).toEqual(3);
+			expect(actionItems[0].textContent).toEqual('Vertragsverlängerung von Test1 (24 Monate), Test2 (36 Monate)');
+			expect(actionItems[1].textContent).toEqual('Schnelltranfer von Test3');
+			expect(actionItems[2].textContent).toEqual('Jugendspieler (1) ins A-Team übernehmen');
 
 			done();
 		});

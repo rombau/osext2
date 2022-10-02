@@ -1,5 +1,3 @@
-const ZAT_INDICATING_REFRESH = -1;
-
 Page.Main = class extends Page {
 
 	constructor() {
@@ -43,21 +41,19 @@ Page.Main = class extends Page {
 			data.viewSettings.squadPlayerMatchDay = null;
 			data.viewSettings.youthPlayerMatchDay = null;
 
-			// take over the trainings settings from previous zat, except during refresh
-			if (data.nextZat !== ZAT_INDICATING_REFRESH) {
-				data.team.squadPlayers.forEach(player => {
-					if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
-						if (player.nextTraining) {
-							player.lastTraining = new SquadPlayer.Training();
-							player.lastTraining.trainer = player.nextTraining.trainer;
-							player.lastTraining.skill = player.nextTraining.skill;
-							player.lastTraining.chance = player.nextTraining.chance;
-						} else {
-							player.lastTraining = null;
-						}
+			// take over the trainings settings from previous zat
+			data.team.squadPlayers.forEach(player => {
+				if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
+					if (player.nextTraining) {
+						player.lastTraining = new SquadPlayer.Training();
+						player.lastTraining.trainer = player.nextTraining.trainer;
+						player.lastTraining.skill = player.nextTraining.skill;
+						player.lastTraining.chance = player.nextTraining.chance;
+					} else {
+						player.lastTraining = null;
 					}
-				});
-			}
+				}
+			});
 
 			data.initNextZat(nextZat);
 
@@ -93,17 +89,59 @@ Page.Main = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extend (doc, data) {
+		
+		let contractExtensionPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.contractExtensionMatchDay 
+			&& data.lastMatchDay.equals(player.contractExtensionMatchDay));
+		let fastTransferPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.fastTransferMatchDay 
+			&& data.lastMatchDay.equals(player.fastTransferMatchDay));
+		let pullYouthPlayers = data.team.youthPlayers.filter(player => data.lastMatchDay && player.pullMatchDay 
+			&& data.lastMatchDay.equals(player.pullMatchDay));
+					
+		if (contractExtensionPlayers.length || fastTransferPlayers.length || pullYouthPlayers.length) {
 
-		// doc.body.appendChild(HtmlUtil.createAwesomeButton(doc,'fa-redo-alt',() => {
-		// 	Persistence.updateExtensionData(dataToReset => {
-		// 		data.nextZat = ZAT_INDICATING_REFRESH;
-		// 		dataToReset.nextZat = ZAT_INDICATING_REFRESH;
-		// 	}).then(data => {
-		// 		window.location.reload();
-		// 	});
-		// 	return false;
-		// }));
+			let table = doc.querySelector('div#a > table');
+			let warnCell = table.querySelector('td[class=STU] > b').parentElement;
 
+			if (warnCell) {
+
+				let tipRow = warnCell.parentElement.nextElementSibling;
+				let infoRow = tipRow.cloneNode(true);
+				let infoCell = infoRow.cells[0];
+
+				infoCell.childNodes[1].textContent = 'Geplante Aktionen (vor dem nächsten Zat):';
+				infoCell.childNodes[3].remove();
+				infoCell.style.padding = '7px 0px';
+
+				if (contractExtensionPlayers.length) {
+					let link = doc.createElement('a');
+					link.href = 'vt.php';
+					link.textContent = 'Vertragsverlängerung von ';
+					contractExtensionPlayers.forEach((player, i) => {
+						link.textContent += `${i > 0 ? ', ' : ''}${player.name} (${player.contractExtensionTerm} Monate)`;
+					});
+					infoCell.appendChild(HtmlUtil.createDivElement(link, STYLE_ACTION_INFO, doc));
+				}
+
+				if (fastTransferPlayers.length) {
+					let link = doc.createElement('a');
+					link.href = 'blitz.php';
+					link.textContent = 'Schnelltranfer von ';
+					fastTransferPlayers.forEach((player, i) => {
+						link.textContent += `${i > 0 ? ', ' : ''}${player.name}`;
+					});
+					infoCell.appendChild(HtmlUtil.createDivElement(link, STYLE_ACTION_INFO, doc));
+				}
+
+				if (pullYouthPlayers.length) {
+					let link = doc.createElement('a');
+					link.href = 'ju.php';
+					link.textContent = `Jugendspieler (${pullYouthPlayers.length}) ins A-Team übernehmen`;
+					infoCell.appendChild(HtmlUtil.createDivElement(link, STYLE_ACTION_INFO, doc));
+				}
+
+				table.tBodies[0].insertBefore(infoRow, tipRow);
+			}
+		}
 	}
 }
 

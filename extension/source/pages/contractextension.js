@@ -63,6 +63,11 @@ Page.ContractExtension = class extends Page {
 					(player.ageExact + lastDay.intervalTo(data.lastMatchDay) / SEASON_MATCH_DAYS).toFixed(2)));
 
 				row.cells['AlterAblauf'].classList.add(STYLE_FORECAST);
+
+				if (player.contractExtensionMatchDay && data.lastMatchDay.equals(player.contractExtensionMatchDay) && player.contractExtensionTerm) {
+					let radio = row.cells[player.contractExtensionTerm / 6 + 3].firstChild;
+					if (radio) radio.checked = true;
+				}
 			}
 
 			row.insertBefore(row.cells['Geb.Tag'], row.cells['Land']);

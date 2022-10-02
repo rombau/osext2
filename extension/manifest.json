@@ -77,7 +77,8 @@
 				"source/pages/youth.optskills.js",
 				"source/pages/youth.options.js",
 				"source/pages/accountstatement.js",
-				"source/pages/stadium.js"
+				"source/pages/stadium.js",
+				"source/pages/fasttransfer.js"
 			],
 			"css": [
 				"style/colors.css",

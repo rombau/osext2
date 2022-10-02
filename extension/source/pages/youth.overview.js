@@ -41,7 +41,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 					player.season = season;
 
-					let pullInput = row.cells['Aktion'].firstChild;
+					let pullInput = row.cells['Aktion'].lastChild;
 					player.pullId = pullInput ? +pullInput.value : undefined;
 
 					player.age = Math.floor(+row.cells['Alter'].textContent);
@@ -238,9 +238,12 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['&Oslash;U'].textContent = '';
 			}
 
+			row.cells['Aktion'].textContent = '';
+			if (player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).equals(matchDay)) {
+				row.cells['Aktion'].appendChild(HtmlUtil.createAwesomeButton(document, 'fa-calendar-check', () => {}, 'Geplante Aktion'));
+			}
 			if (current) {
 				if (player.pullId) {
-					row.cells['Aktion'].textContent = '';
 					let pullRadio = document.createElement('input');
 					pullRadio.type = 'radio';
 					pullRadio.name = 'ziehmich';
@@ -250,7 +253,6 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['Aufwertung'].textContent = player.increase;
 			}
 			else {
-				row.cells['Aktion'].textContent = '';
 				row.cells['Aufwertung'].textContent = '';
 			}
 

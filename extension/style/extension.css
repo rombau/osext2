@@ -226,4 +226,18 @@ form > .fa-arrow-alt-circle-down {
 td[title] > a.sortheader {
 	text-decoration: underline;
 	text-decoration-style: dotted;
-  }
+}
+
+.osext-action-info {
+	margin-bottom: 1px;
+}
+.osext-action-info * {
+	color: orange;
+}
+.osext-action-info:before {
+	content: "• ";
+}
+
+.fa-calendar-check {
+	margin-right: 5px;
+}
