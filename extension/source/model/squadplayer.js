@@ -322,9 +322,15 @@ class SquadPlayer extends Player {
 		}
 		else if (matchday.zat % MONTH_MATCH_DAYS === 0) {
 			forecastPlayer.contractTerm--;
-			if (forecastPlayer.contractTerm === 0) {
-				forecastPlayer.contractTerm = Options.followUpContractTerm;
-				forecastPlayer.salary = forecastPlayer.getSalary();
+			if (forecastPlayer.contractTerm <= 0) {
+				if (+Options.followUpContractTerm) {
+					forecastPlayer.contractTerm = Options.followUpContractTerm;
+					forecastPlayer.salary = forecastPlayer.getSalary();
+				} else {
+					forecastPlayer.active = false;
+					forecastPlayer.salary = 0;
+					forecastPlayer.contractTerm = 0;
+				}
 			}
 		}
 	}

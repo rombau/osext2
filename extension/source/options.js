@@ -58,6 +58,7 @@ const Options = {
 				themeSelect.value = Options.theme;
 				loggingSelect.value = Options.logLevel;
 				physioCheckbox.checked = Options.usePhysio;
+				followupSelect.value = Options.followUpContractTerm;
 				Options.initSlider(ageLimitSlider, Options.ageTrainingLimit);
 				Options.initSlider(psLimitSlider, Options.primarySkillTrainingLimit);
 				Options.initSlider(nsLimitSlider, Options.secondarySkillTrainingLimit);
@@ -102,6 +103,7 @@ const Options = {
 		Options.theme = themeSelect.value;
 		Options.logLevel = loggingSelect.value;
 		Options.usePhysio = physioCheckbox.checked;
+		Options.followUpContractTerm = followupSelect.value;
 		Options.ageTrainingLimit = ageLimitSlider.value;
 		Options.primarySkillTrainingLimit = psLimitSlider.value;
 		Options.secondarySkillTrainingLimit = nsLimitSlider.value;
@@ -123,6 +125,7 @@ const Options = {
 let themeSelect = document.getElementById('options-theme');
 let loggingSelect = document.getElementById('options-logging');
 let physioCheckbox = document.getElementById('options-physio');
+let followupSelect = document.getElementById('options-followup');
 let ageLimitSlider = document.getElementById('options-age-limit');
 let psLimitSlider = document.getElementById('options-ps-limit');
 let nsLimitSlider = document.getElementById('options-ns-limit');
