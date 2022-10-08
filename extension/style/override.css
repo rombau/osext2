@@ -146,13 +146,15 @@ td.BAK {
 table[id^=team] tr:hover,
 table[id^=tm] tr:hover,
 table[style*="width: 850px"] tr:hover,
-table.osext-youth tr:hover:not(.osext-youth-year-header) {
+table.osext-youth tr:hover:not(.osext-youth-year-header),
+table.osext-contractextension tr:hover {
 	background-color: var(--row-hover-color);
 }
 table[id^=team] tr:first-child:hover,
 table[id^=team] tr:last-child:hover,
 table.osext-youth tr:first-child:hover,
 table.osext-youth tr:last-child:hover,
+table.osext-contractextension tr:first-child:hover,
 table[id^=tm] tr:first-child:hover,
 table[style*="width: 850px"] tr:first-child:hover {
 	background-color: var(--background-color) !important;

@@ -110,6 +110,7 @@ const STYLE_FORECAST = 'osext-forecast';
 const STYLE_INACTIVE = 'osext-inactive';
 const STYLE_PRIMARY = 'osext-primary';
 const STYLE_HIDDEN = 'osext-hidden';
+const STYLE_IMPOSSIBLE = 'osext-impossible';
 
 const STYLE_SET_ZAT = 'osext-set-zat';
 const STYLE_ADD = 'add';
@@ -121,6 +122,7 @@ const STYLE_REFRESH = 'osext-refresh';
 const STYLE_YOUTH = 'osext-youth';
 const STYLE_YOUTH_YEAR_HEADER = 'osext-youth-year-header';
 const STYLE_TRAINER = 'osext-trainer';
+const STYLE_CONTRACT_EXTENSION = 'osext-contractextension';
 
 const STYLE_MESSAGE = 'osext-message';
 const STYLE_ERROR = 'osext-error';

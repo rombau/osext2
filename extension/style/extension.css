@@ -238,6 +238,11 @@ td[title] > a.sortheader {
 	content: "• ";
 }
 
+.osext-contractextension .osext-impossible {
+	color: lightgray;
+	font-size: 90% !important;
+}
+
 .fa-calendar-check {
 	margin-right: 5px;
 }
