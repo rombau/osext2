@@ -239,10 +239,10 @@ Page.YouthOverview = class extends Page.Youth {
 			}
 
 			row.cells['Aktion'].textContent = '';
-			if (player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).equals(matchDay)) {
-				row.cells['Aktion'].appendChild(HtmlUtil.createAwesomeButton(document, 'fa-calendar-check', () => {}, 'Geplante Aktion'));
-			}
 			if (current) {
+				if (player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).equals(matchDay)) {
+					row.cells['Aktion'].appendChild(HtmlUtil.createAwesomeButton(document, 'fa-calendar-check', () => {}, 'Geplante Aktion'));
+				}
 				if (player.pullId) {
 					let pullRadio = document.createElement('input');
 					pullRadio.type = 'radio';
