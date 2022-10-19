@@ -17,16 +17,25 @@
 .osext-message.osext-hidden, .osext-hidden:not(.osext-set-zat) {
 	display: none;
 }
-.osext-set-zat.osext-hidden, .TOR.osext-hidden {
+.osext-set-zat.osext-hidden {
 	visibility: hidden;
 	pointer-events: none;
 	cursor: initial;
 	display: table-cell;
 }
 
-.osext-refresh {
+.osext-managed {
+	display: inline-block;
+	width: 100%;
+}
+.osext-managed > table {
+	float: left;
+	white-space: nowrap;
+}
+.osext-managed > table + .fa-cogs {
 	cursor: pointer;
-	margin: 10px 3px;
+	float: left;
+	padding: 3px;
 }
 
 .osext-month {

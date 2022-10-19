@@ -4,9 +4,8 @@ Page.Training = class extends Page {
 	constructor() {
 
 		super('Training', 'training.php');
-	}
 
-	static HEADERS = ['', 'Name', 'Alter', 'Opti', 'Trainer', 'trainierter Skill', 'Skill', 'Chance'];
+	}
 
 	/**
 	 * @param {Document} doc
@@ -14,7 +13,24 @@ Page.Training = class extends Page {
 	 */
 	extract(doc, data) {
 
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.Training.HEADERS).forEach(row => {
+		this.table = new ManagedTable(this.name,
+			new Column(''),
+			new Column('Name'),
+			new Column('Alter'),
+			new Column('Opti'),
+			new Column('Trainer'),
+			new Column('trainierter Skill').withHeader('Skill'),
+			new Column('Skill').withHeader('Wert'),
+			new Column('Chance'),
+			new Column('EB', Origin.Extension).withHeader('<abbr title="Einsatzbonus lt. Zugabgabe">EB</abbr>').withStyle('width','3em').withStyle('text-align','right'),
+			new Column('ChanceEB', Origin.Extension).withHeader('(Chance)'),
+			new Column('mögl. MW+', Origin.Extension).withStyleClass(STYLE_FORECAST).withStyle('padding-left','1em'),
+			new Column('zuletzt', Origin.Extension).withHeader('zuletzt trainiert').withStyleClass(STYLE_FORECAST).withStyle('padding-left','2em').withStyle('text-align','left')
+		);
+
+		this.table.initialize(doc);
+
+		this.table.rows.slice(1).forEach(row => {
 
 			let injured = row.cells[''].textContent;
 			let trainerNr = +row.cells['Trainer'].firstChild.value;
@@ -57,30 +73,9 @@ Page.Training = class extends Page {
 
 		let matchdayConfirmed = data.team.squadPlayers.find(player => player.nextTraining && player.nextTraining.matchBonus !== 1);
 
-		Array.from(HtmlUtil.getTableByHeader(doc, ...Page.Training.HEADERS).rows).forEach((row, index) => {
+		this.table.rows.forEach((row, i) => {
 
-			row.cells['zuletzt'] = row.cells['Name'].cloneNode(true);
-			row.cells['mögl. MW+'] = row.cells['Chance'].cloneNode(true);
-			row.cells['EB'] = row.cells['Chance'].cloneNode(true);
-			row.cells['ChanceEB'] = row.cells['Chance'].cloneNode(true);
-
-			row.cells['mögl. MW+'].style.paddingLeft = '1em';
-			row.cells['zuletzt'].style.paddingLeft = '2em';
-
-			if (index === 0) {
-
-				row.cells['trainierter Skill'].textContent = 'Skill';
-				row.cells['Skill'].textContent = 'Wert';
-				row.cells['mögl. MW+'].textContent = 'mögl. MW+';
-				row.cells['EB'].textContent = 'EB';
-				row.cells['EB'].innerHTML = '<abbr title="Einsatzbonus lt. Zugabgabe">EB</abbr>';
-				row.cells['EB'].style.width = '3em';
-				row.cells['EB'].style.textAlign = 'right';
-				row.cells['ChanceEB'].textContent = '(Chance)';
-				row.cells['zuletzt'].textContent = 'zuletzt trainiert';
-				row.cells['zuletzt'].style.textAlign = 'left';
-
-			} else {
+			if (i > 0) {
 
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
@@ -89,12 +84,7 @@ Page.Training = class extends Page {
 					row.cells['EB'].textContent = player.nextTraining.matchBonus.toFixed(2);
 					if (player.nextTraining.chance) {
 						row.cells['ChanceEB'].textContent = player.nextTraining.getChanceWithBonus().toFixed(2) + ' %';
-					} else {
-						row.cells['ChanceEB'].textContent = '';
 					}
-				} else {
-					row.cells['EB'].textContent = '';
-					row.cells['ChanceEB'].textContent = '';
 				}
 
 				let forecastMarketValue = () => {
@@ -137,19 +127,13 @@ Page.Training = class extends Page {
 					if (player.lastTraining.successful) {
 						row.cells['zuletzt'].textContent += ' erfolgreich'
 					}
-				} else {
-					row.cells['zuletzt'].textContent = '';
 				}
-				row.cells['mögl. MW+'].classList.add(STYLE_FORECAST);
-				row.cells['zuletzt'].classList.add(STYLE_FORECAST);
 			}
-
-			if (matchdayConfirmed) {
-				row.appendChild(row.cells['EB']);
-				row.appendChild(row.cells['ChanceEB']);
+			
+			if (!matchdayConfirmed) {
+				row.cells['EB'].classList.add(STYLE_HIDDEN);
+				row.cells['ChanceEB'].classList.add(STYLE_HIDDEN);
 			}
-			row.appendChild(row.cells['mögl. MW+']);
-			row.appendChild(row.cells['zuletzt']);
 		});
 	}
 

@@ -118,7 +118,7 @@ const STYLE_DELETE = 'delete';
 
 const STYLE_SET_CONTRACT = 'osext-set-contract';
 
-const STYLE_REFRESH = 'osext-refresh';
+const STYLE_MANAGED = 'osext-managed';
 const STYLE_YOUTH = 'osext-youth';
 const STYLE_YOUTH_YEAR_HEADER = 'osext-youth-year-header';
 const STYLE_TRAINER = 'osext-trainer';

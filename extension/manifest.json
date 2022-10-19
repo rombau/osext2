@@ -48,6 +48,7 @@
 				"source/model/stadium.js",
 				"source/requestor.js",
 				"source/htmlutil.js",
+				"source/table.js",
 				"source/scriptutil.js",
 				"source/persistence.js",
 				"source/page.js",
