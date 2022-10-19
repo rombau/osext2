@@ -22,7 +22,7 @@ Page.MatchDayConfirmation = class extends Page {
 		if (tables && tables.length >= 2) {
 
 			Array.from(tables[0].rows).forEach(row => {
-				if (row.cells.length === 3) {
+				if (row.cells.length >= 3) {
 					let player = data.team.squadPlayers.find(player => player.name === row.cells[2].textContent);
 					if (player) {
 						player.nextTraining = player.nextTraining || new SquadPlayer.Training();
