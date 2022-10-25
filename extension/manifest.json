@@ -36,9 +36,9 @@
 				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
-				"source/options.js",
-				"source/logger.js",
 				"source/common.js",
+				"source/logger.js",
+				"source/options.js",
 				"source/model/data.js",
 				"source/model/matchday.js",
 				"source/model/player.js",

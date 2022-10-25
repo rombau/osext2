@@ -2,6 +2,14 @@ describe('Managed table', () => {
 
 	/** @type {ManagedTable} */ let table;
 
+	beforeEach(() => {
+
+		Options.pageConfig = {};
+
+		spyOn(Options, 'initialize').and.callFake(() => {});
+		spyOn(Options, 'save').and.callFake(() => {});
+	});
+
 	it('should be not found ', () => {
 
 		table = new ManagedTable('Test', new Column('A', Origin.OS) );
@@ -62,16 +70,20 @@ describe('Managed table', () => {
 
 		it('one column and different header', () => {
 
-			table = new ManagedTable('Test', new Column('A').withHeader('X') );
+			table = new ManagedTable('Test', new Column('A').withHeader('X'), new Column('B', Origin.Extension).withHeader('Y','Ypsilon') );
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td></tr></table>'));
 
 			expect(table.rows[0].cells[0].textContent).toEqual('X');
+			expect(table.rows[0].cells[1].textContent).toEqual('Y');
+			expect(table.rows[0].cells[1].title).toEqual('Ypsilon');
+			expect(table.rows[0].cells[1].firstChild.textContent).toEqual('Y');
+			expect(table.rows[0].cells[1].firstChild.title).toEqual('Ypsilon');
 		});
 
-		it('three columns and span before', () => {
+		it('three columns with header span', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('B').withDataColumnBefore(), new Column('C') );
+			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C') );
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td colspan=2>B</td><td>C</td></tr><tr><td>1</td><td>2a</td><td>2b</td><td>3</td></tr></table>'));
 
@@ -79,38 +91,36 @@ describe('Managed table', () => {
 			expect(table.rows[0].cells[1].textContent).toEqual('B');
 			expect(table.rows[0].cells[2].textContent).toEqual('C');
 			expect(table.rows[1].cells[0].textContent).toEqual('1');
-			expect(table.rows[1].cells[1].textContent).toEqual('2a');
-			expect(table.rows[1].cells[2].textContent).toEqual('2b');
-			expect(table.rows[1].cells[3].textContent).toEqual('3');
+			expect(table.rows[1].cells[1].textContent).toEqual('2a 2b');
+			expect(table.rows[1].cells[2].textContent).toEqual('3');
 			expect(table.rows[1].cells['A'].textContent).toEqual('1');
-			expect(table.rows[1].cells['B'].textContent).toEqual('2b');
+			expect(table.rows[1].cells['B'].textContent).toEqual('2a 2b');
 			expect(table.rows[1].cells['C'].textContent).toEqual('3');
 		});
 
-		it('three columns and span after', () => {
+		it('three columns with data span', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('B').withDataColumnAfter(), new Column('C'), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C'), new Column('X', Origin.Extension) );
 
-			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td colspan=2>B</td><td>C</td></tr><tr><td>1</td><td>2a</td><td>2b</td><td>3</td></tr></table>'));
+			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td></td><td>C</td></tr><tr><td>1</td><td colspan=2>2a 2b</td><td>3</td></tr></table>'));
 
 			expect(table.rows[0].cells[0].textContent).toEqual('A');
 			expect(table.rows[0].cells[1].textContent).toEqual('B');
 			expect(table.rows[0].cells[2].textContent).toEqual('C');
 			expect(table.rows[0].cells[3].textContent).toEqual('X');
 			expect(table.rows[1].cells[0].textContent).toEqual('1');
-			expect(table.rows[1].cells[1].textContent).toEqual('2a');
-			expect(table.rows[1].cells[2].textContent).toEqual('2b');
-			expect(table.rows[1].cells[3].textContent).toEqual('3');
-			expect(table.rows[1].cells[4].textContent).toEqual('');
+			expect(table.rows[1].cells[1].textContent).toEqual('2a 2b');
+			expect(table.rows[1].cells[2].textContent).toEqual('3');
+			expect(table.rows[1].cells[3].textContent).toEqual('');
 			expect(table.rows[1].cells['A'].textContent).toEqual('1');
-			expect(table.rows[1].cells['B'].textContent).toEqual('2a');
+			expect(table.rows[1].cells['B'].textContent).toEqual('2a 2b');
 			expect(table.rows[1].cells['C'].textContent).toEqual('3');
 			expect(table.rows[1].cells['X'].textContent).toEqual('');
 		});
 
 		it('unmanaged columns', () => {
 
-			table = new ManagedTable('Test', new Column('A').withDataColumnAfter(), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
 
 			table.initialize(Fixture.createDocument('<table><tr><td colspan=2>A</td><td>B</td><td>C</td></tr><tr><td>1a</td><td>1b</td><td>2</td><td>3</td></tr></table>'));
 
@@ -118,12 +128,62 @@ describe('Managed table', () => {
 			expect(table.rows[0].cells[1].textContent).toEqual('X');
 			expect(table.rows[0].cells[2].textContent).toEqual('B');
 			expect(table.rows[0].cells[3].textContent).toEqual('C');
-			expect(table.rows[1].cells['A'].textContent).toEqual('1a');
+			expect(table.rows[1].cells['A'].textContent).toEqual('1a 1b');
 			expect(table.rows[1].cells['X'].textContent).toEqual('');
 			expect(table.rows[1].cells['B']).toBeUndefined();
 			expect(table.rows[1].cells['C']).toBeUndefined();
-			expect(table.rows[1].cells[3].textContent).toEqual('2');
-			expect(table.rows[1].cells[4].textContent).toEqual('3');
+			expect(table.rows[1].cells[0].textContent).toEqual('1a 1b');
+			expect(table.rows[1].cells[1].textContent).toEqual('');
+			expect(table.rows[1].cells[2].textContent).toEqual('2');
+			expect(table.rows[1].cells[3].textContent).toEqual('3');
+		});
+
+		it('columns and customize', () => {
+
+			let config = new PageConfig();
+			config.sortedColumns = ['X', 'A'];
+			config.hiddenColumns = ['X', 'B'];
+			Options.pageConfig['Test'] = config;
+
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+
+			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td>C</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>'));
+
+			expect(table.rows[0].cells[0].textContent).toEqual('X');
+			expect(table.rows[0].cells[1].textContent).toEqual('A');
+			expect(table.rows[0].cells[2].textContent).toEqual('B');
+			expect(table.rows[0].cells[3].textContent).toEqual('C');
+			expect(table.rows[1].cells[0].textContent).toEqual('');
+			expect(table.rows[1].cells[1].textContent).toEqual('1');
+			expect(table.rows[1].cells[2].textContent).toEqual('2');
+			expect(table.rows[1].cells[3].textContent).toEqual('3');
+			expect(table.rows[1].cells['X'].textContent).toEqual('');
+			expect(table.rows[1].cells['A'].textContent).toEqual('1');
+
+			expect(table.rows[0].cells[0].classList.contains(STYLE_HIDDEN_COLUMN)).toBeTrue();
+			expect(table.rows[0].cells[1].classList.contains(STYLE_HIDDEN_COLUMN)).toBeFalse();
+			expect(table.rows[0].cells[2].classList.contains(STYLE_HIDDEN_COLUMN)).toBeTrue();
+			expect(table.rows[0].cells[3].classList.contains(STYLE_HIDDEN_COLUMN)).toBeFalse();
+			expect(table.rows[1].cells[0].classList.contains(STYLE_HIDDEN_COLUMN)).toBeTrue();
+			expect(table.rows[1].cells[1].classList.contains(STYLE_HIDDEN_COLUMN)).toBeFalse();
+			expect(table.rows[1].cells[2].classList.contains(STYLE_HIDDEN_COLUMN)).toBeTrue();
+			expect(table.rows[1].cells[3].classList.contains(STYLE_HIDDEN_COLUMN)).toBeFalse();
+		});
+
+		it('columns and sort with old order', () => {
+
+			let config = new PageConfig();
+			config.sortedColumns = ['D', 'X', 'A', 'E'];
+			Options.pageConfig['Test'] = config;
+
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+
+			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td>C</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>'));
+
+			expect(table.rows[0].cells[0].textContent).toEqual('X');
+			expect(table.rows[0].cells[1].textContent).toEqual('A');
+			expect(table.rows[0].cells[2].textContent).toEqual('B');
+			expect(table.rows[0].cells[3].textContent).toEqual('C');
 		});
 
 		it('youth overview', (done) => {
@@ -134,7 +194,7 @@ describe('Managed table', () => {
 					new Column('Alter', Origin.OS),
 					new Column('Pos', Origin.Extension),
 					new Column('Geb.', Origin.OS),
-					new Column('Land', Origin.OS).withDataColumnBefore(),
+					new Column('Land', Origin.OS),
 					new Column('U', Origin.OS),
 					new Column('Skillschnitt', Origin.OS).withHeader('Skillschn.'),
 					new Column('Opt.Skill', Origin.Extension),
@@ -154,11 +214,11 @@ describe('Managed table', () => {
 
 				expect(getCellContentArray(table.rows[0])).toEqual(['Alter','Pos','Geb.','Land','U','Skillschn.','Opt.Skill','Talent','Aktion','Aufwertung','Ø/Zat','Marktwert','ØP','ØN','ØU']);
 				expect(getCellContentArray(table.rows[1])).toEqual(['Jahrgang Saison 11']);
-				expect(getCellContentArray(table.rows[2])).toEqual(['18','','24','','CYP','','41.65','','normal','','','','','','','']);
+				expect(getCellContentArray(table.rows[2])).toEqual(['18','','24',' CYP','','41.65','','normal','','','','','','','']);
 
 				table.columns.forEach((column, i) => {
 					expect(table.rows[0].cells[column.name]).toEqual(table.rows[0].cells[i]);
-				});
+				});			
 				
 				done();
 			});
@@ -167,11 +227,37 @@ describe('Managed table', () => {
 
 	it('should be customizable', () => {
 
-		table = new ManagedTable('Test', new Column('A').withDataColumnAfter(), new Column('X', Origin.Extension) );
+		table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
 
-		table.initialize(Fixture.createDocument('<table><tr><td colspan=2>A</td><td>B</td><td>C</td></tr><tr><td>1a</td><td>1b</td><td>2</td><td>3</td></tr></table>'));
+		let doc = Fixture.createDocument('<table><tr><td>A</td><td>B</td></tr><tr><td>1</td><td>2</td></tr></table>');
 
+		table.initialize(doc);
 
+		let menu = doc.querySelector('.osext-managed > .fa-cogs + div > div');
+		expect(menu.className).toEqual('osext-hidden');
 
+		doc.querySelector('.osext-managed > .fa-cogs').dispatchEvent(new Event('click'));
+		expect(menu.className).toEqual('');
+
+		let columnButtons = menu.querySelectorAll('i');
+		let columnLabels = menu.querySelectorAll('span');
+		expect(columnButtons[0].className).toEqual('fas fa-toggle-on');
+		expect(columnButtons[1].className).toEqual('fas fa-toggle-on');
+		expect(columnLabels[0].textContent).toEqual('X');
+		expect(columnLabels[1].textContent).toEqual('B');
+
+		columnButtons[1].dispatchEvent(new Event('click'));
+		expect(columnButtons[1].className).toEqual('fas fa-toggle-off');
+		expect(Options.save).toHaveBeenCalled();
+
+		columnButtons[1].dispatchEvent(new Event('click'));
+		expect(columnButtons[1].className).toEqual('fas fa-toggle-on');
+		expect(Options.save).toHaveBeenCalled();
+
+		menu.dispatchEvent(new Event('click'));
+		expect(menu.className).toEqual('');
+
+		doc.body.dispatchEvent(new Event('click'));
+		expect(menu.className).toEqual('osext-hidden');
 	});
 });

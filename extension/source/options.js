@@ -19,6 +19,21 @@ const LogLevel = Object.freeze({
 	ERROR: 4
 });
 
+/**
+ * Page configuration
+ */
+class PageConfig {
+
+	constructor() {
+
+		/** @type {[String]} the column sort order */
+		this.sortedColumns = [];
+
+		/** @type {[String]} the columns to hide */
+		this.hiddenColumns = [];
+	}
+}
+
 const Options = {
 
 	/** @type {String} the currently used theme */
@@ -51,25 +66,37 @@ const Options = {
 	/** @type {Number} the follow up contract term */
 	followUpContractTerm: 24,
 
+	/** @type {Object<string, PageConfig>} dictionary of page configurations */
+	pageConfig: {},
+
 	initialize : () => {
-		chrome.storage.local.get(JSON.parse(JSON.stringify(Options)), (data) => {
-			Object.assign(Options, data);
-			if (themeSelect) {
-				themeSelect.value = Options.theme;
-				loggingSelect.value = Options.logLevel;
-				physioCheckbox.checked = Options.usePhysio;
-				followupSelect.value = Options.followUpContractTerm;
-				Options.initSlider(ageLimitSlider, Options.ageTrainingLimit);
-				Options.initSlider(psLimitSlider, Options.primarySkillTrainingLimit);
-				Options.initSlider(nsLimitSlider, Options.secondarySkillTrainingLimit);
-			} else {
-				Options.setRootTheme(Options.theme);
-				chrome.storage.onChanged.addListener((changes) => {
-					if (changes.theme) {
-						Options.setRootTheme(changes.theme.newValue);
+		getQueuedPromise((resolve, reject) => {
+			chrome.storage.local.get(JSON.parse(JSON.stringify(Options)), (data) => {
+				if (chrome.runtime.lastError) {
+					reject(chrome.runtime.lastError);
+				} else {
+					Object.assign(Options, data);
+					if (themeSelect) {
+						themeSelect.value = Options.theme;
+						loggingSelect.value = Options.logLevel;
+						physioCheckbox.checked = Options.usePhysio;
+						followupSelect.value = Options.followUpContractTerm;
+						Options.initSlider(ageLimitSlider, Options.ageTrainingLimit);
+						Options.initSlider(psLimitSlider, Options.primarySkillTrainingLimit);
+						Options.initSlider(nsLimitSlider, Options.secondarySkillTrainingLimit);
+					} else {
+						Options.setRootTheme(Options.theme);
+						chrome.storage.onChanged.addListener((changes) => {
+							if (changes.theme) {
+								Options.setRootTheme(changes.theme.newValue);
+							}
+						});
 					}
-				});
-			}
+					resolve();
+				}
+			});
+		}).catch(e => {
+			new Logger('Options').error('Error when loading options ' + e);
 		});
 	},
 
@@ -100,24 +127,32 @@ const Options = {
 	},
 
 	save : () => {
-		Options.theme = themeSelect.value;
-		Options.logLevel = loggingSelect.value;
-		Options.usePhysio = physioCheckbox.checked;
-		Options.followUpContractTerm = followupSelect.value;
-		Options.ageTrainingLimit = ageLimitSlider.value;
-		Options.primarySkillTrainingLimit = psLimitSlider.value;
-		Options.secondarySkillTrainingLimit = nsLimitSlider.value;
-		chrome.storage.local.set(JSON.parse(JSON.stringify(Options)), () => {
-			if (chrome.runtime.lastError) {
-				new Logger('Options').error('Error when storing options ' + chrome.runtime.lastError);
-			}
-			let status = document.getElementById('options-status');
-			if (status) {
-				status.textContent = 'Optionen wurden gespeichert';
-				setTimeout(() => {
-					status.textContent = '';
-				}, 1000);
-			}
+		if (themeSelect) {
+			Options.theme = themeSelect.value;
+			Options.logLevel = loggingSelect.value;
+			Options.usePhysio = physioCheckbox.checked;
+			Options.followUpContractTerm = followupSelect.value;
+			Options.ageTrainingLimit = ageLimitSlider.value;
+			Options.primarySkillTrainingLimit = psLimitSlider.value;
+			Options.secondarySkillTrainingLimit = nsLimitSlider.value;
+		}
+		getQueuedPromise((resolve, reject) => {
+			chrome.storage.local.set(JSON.parse(JSON.stringify(Options)), () => {
+				if (chrome.runtime.lastError) {
+					reject();
+				} else {
+					let status = document.getElementById('options-status');
+					if (status) {
+						status.textContent = 'Optionen wurden gespeichert';
+						setTimeout(() => {
+							status.textContent = '';
+						}, 1000);
+					}
+					resolve();
+				}
+			});
+		}).catch(e => {
+			new Logger('Options').error('Error when storing options ' + e);
 		});
 	}
 };

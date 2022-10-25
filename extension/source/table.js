@@ -53,43 +53,14 @@ class Column {
 		/** @type {String} the column title */
 		this.title;
 
-		/** @type {Number} number of additional data column before this column (header col span) */
-		this.dataColumnBefore = 0;
-
-		/** @type {Number} number of additional data column after this column (header col span) */
-		this.dataColumnAfter = 0;
-
 		/** @type {[String]} list with additional element style classes */
 		this.stylesClasses = [];
 
 		/** @type {[StyleProperty]} list with custom style properties */
 		this.styles = [];
 
-		/** @type {Number} the original header index of the cell */
-		this.headerIndex = null;
-
-		/** @type {Number} the original data index of the cell */
-		this.dataIndex = null;
-	}
-
-	/**
-	 * Adds an additional data column before this column (header col span).
-	 * 
-	 * @returns this column
-	 */
-	withDataColumnBefore () {
-		this.dataColumnBefore++;
-		return this;
-	}
-
-	/**
-	 * Adds an additional data column after this column (header col span).
-	 * 
-	 * @returns this column
-	 */
-	withDataColumnAfter () {
-		this.dataColumnAfter++;
-		return this;
+		/** @type {Number} the original index of the cell based on the header */
+		this.originalIndex = null;
 	}
 
 	/**
@@ -154,9 +125,21 @@ class ManagedTable {
 	}
 
 	/**
+	 * @type {PageConfig} the tables page configuration
+	 */
+	get config () {
+		Options.pageConfig[this.page] = Options.pageConfig[this.page] || new PageConfig();
+		ensurePrototype(Options.pageConfig[this.page].hiddenColumns, Array);
+		return Options.pageConfig[this.page];
+	}
+
+	/**
 	 * Finds the first HTML table with the row headers matching the Origin.OS columns 
 	 * (by name and indepentant of the order), and modifies the table based on all 
 	 * defined columns considering the defined order and custom headers/styles.
+	 * 
+	 * Splitted columns related to either spaned header or data columns are joined,
+	 * in order to make column positioning and sorting possible.
 	 * 
 	 * Named cell references are added to the resulting table rows, 
 	 * so accessing a cell is possible by column name:
@@ -181,78 +164,223 @@ class ManagedTable {
 		if (!this.table) {
 			throw new Error(`Tabelle nicht gefunden! (${this.page})`);
 		}
+
+		// define header related rows
+		let cellHeaders = Array.from(this.rows[0].cells).map(cell => cell.textContent);
+		let headeredRows = this.rows.filter(row => !Array.from(row.cells).find(cell => {
+			let spanAttr = cell.getAttributeNode('colspan');
+			return spanAttr && +spanAttr.value > 3; // limit col span joining
+		}));
+		headeredRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'')));
+
+		// join spaned columns; headers could be changed
+		cellHeaders = this._removeColSpans(headeredRows, osColumns);
 	
 		// find header and data index of original columns
-		let cellHeaders = Array.from(this.rows[0].cells).map(cell => cell.textContent);
-		osColumns.forEach(column => {
-			column.headerIndex = cellHeaders.indexOf(column.name);
-			column.dataIndex = osColumns.reduce((index, column) => (index + (column.dataIndex != null ? (1 + column.dataColumnBefore + column.dataColumnAfter) : 0)), 0)
-		});
+		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
 
 		// reorder and add named cell references
-		this.rows.forEach(row => {
-			if (row.cells.length >= cellHeaders.length) {
+		let columnNames = [];
+		headeredRows.forEach(row => {
 
-				let header = row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'');
+			/** @type {[HTMLTableCellElement]} */ 
+			let orderedCells = [];
+			let namedCellMap = [];
 
+			// known columns
+			this.columns.forEach(column => {
+				
 				/** @type {[HTMLTableCellElement]} */ 
-				let orderedCells = [];
-				let namedCellMap = [];
-
-				this.columns.forEach(column => {
-					/** @type {[HTMLTableCellElement]} */ 
-					let cell;
-					if (column.origin === Origin.OS) {
-						if (header) {
-							cell = row.cells[column.headerIndex];
-							cell.innerHTML = column.header;
-							orderedCells.push(cell);
+				let cell;
+				
+				if (column.origin === Origin.OS) {
+					cell = row.cells[column.originalIndex];
+					if (row.isHeader) cell.innerHTML = column.header;
+					orderedCells.push(cell);
+				} else if (column.origin === Origin.Extension) {
+					cell = doc.createElement('td');
+					let classNameCell = Array.from(row.cells).find(cell => cell.className);
+					if (classNameCell) cell.className = classNameCell.className;
+					if (row.isHeader) {
+						if (column.title) {
+							cell.title = column.title;
+							// TODO will it work without abbreviation tag?
+							cell.appendChild(HtmlUtil.createAbbreviation(column.title, column.header, doc));
 						} else {
-							let dataIndex = column.dataIndex;
-							[...Array(column.dataColumnBefore)].forEach(() => orderedCells.push(row.cells[dataIndex++]));
-							cell = row.cells[dataIndex];
-							orderedCells.push(cell);
-							[...Array(column.dataColumnAfter)].forEach(() => orderedCells.push(row.cells[++dataIndex]));
-						}
-					} else if (column.origin === Origin.Extension) {
-						cell = doc.createElement('td');
-						let classNameCell = Array.from(row.cells).find(cell => cell.className);
-						if (classNameCell) cell.className = classNameCell.className;
-						if (header) {
-							if (column.title) cell.title = column.title;
 							cell.innerHTML = column.header;
 						}
-						orderedCells.push(cell);
-					}
+					}					
+					orderedCells.push(cell);
+				}
+				cell.columnName = column.name;
+				
+				column.stylesClasses.forEach(styleClass => cell.classList.add(styleClass));
+				column.styles.forEach(style => cell.style.setProperty(style.propertyName, style.value, style.priority));
 
-					column.stylesClasses.forEach(styleClass => cell.classList.add(styleClass));
-					column.styles.forEach(style => cell.style.setProperty(style.propertyName, style.value, style.priority));
+				namedCellMap[column.name] = cell;
+			});
 
-					namedCellMap[column.name] = cell;
-				});
+			// add unknown columns
+			Array.from(row.cells).forEach(cell => {
+				if (!orderedCells.includes(cell)) orderedCells.push(cell);
+			});
 
-				Array.from(row.cells).forEach(cell => {
-					if (!orderedCells.includes(cell)) orderedCells.push(cell);
-				});
+			// reorder
+			row.replaceChildren(...orderedCells);
+			
+			// customizing based on options
+			if (row.isHeader) columnNames = orderedCells.map(cell => cell.columnName || cell.textContent);
+			this._customizeCells(orderedCells, columnNames);
 
-				row.replaceChildren(...orderedCells);
-
-				Object.entries(namedCellMap).forEach(([name, cell]) => {
-					row.cells[name] = cell;
-				});
-			}
+			// add named references
+			Object.entries(namedCellMap).forEach(([name, cell]) => {
+				row.cells[name] = cell;
+			});
 		});
 
-		let container = HtmlUtil.createDivElement('', STYLE_MANAGED, doc);
+		// add configuration button/menu
+		this._addConfiguration(doc, columnNames, headeredRows);
+	}
+
+	/**
+	 * Splitted columns related to either spaned header or data columns are joined,
+	 * in order to make column positioning and sorting possible.
+	 * 
+	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
+	 * @param {[Column]} osColumns column definitions
+	 * @returns {[String]} the updated headers
+	 */
+	_removeColSpans (headeredRows, osColumns) {
+
+		let headerSpan = [];
+		let dataSpan = [];
+		headeredRows.forEach(row => {
+			Array.from(row.cells).forEach((cell, i) => {
+				let spanAttr = cell.getAttributeNode('colspan');
+				if (spanAttr) {
+					if (row.isHeader) {
+						headerSpan[i] = +spanAttr.value;
+					} else {
+						dataSpan[i] = +spanAttr.value;
+					}
+					cell.removeAttributeNode(spanAttr);
+				}
+			});
+		});
+		headeredRows.forEach(row => {
+			Array.from(row.cells).forEach((cell, i) => {
+				let span = row.isHeader ? dataSpan[i] : headerSpan[i];
+				if (span > 1) {
+					[...Array(span - 1)].forEach(() => {
+						let newContent = (cell.innerHTML + ' ' + cell.nextElementSibling.innerHTML).trim();
+						if (row.isHeader) {
+							let column = osColumns.find(column => column.header === cell.textContent);
+							column.name = newContent;
+						}
+						cell.innerHTML = newContent;
+						cell.nextElementSibling.remove();
+					});
+				}
+			});
+		});
+		return Array.from(this.rows[0].cells).map(cell => cell.textContent);
+	}
+
+	/**
+	 * Change the visibility and the sort order based on the page configuration.
+	 * 
+	 * @param {[HTMLTableCellElement]} orderedCells ordered list of cells
+	 * @param {[String]} columnNames ordered list of column names
+	 */
+	_customizeCells (orderedCells, columnNames) {
+
+		orderedCells.forEach(cell => {
+			if (this.config.hiddenColumns.includes(columnNames[cell.cellIndex])) {
+				cell.classList.add(STYLE_HIDDEN_COLUMN);
+			} else {
+				cell.classList.remove(STYLE_HIDDEN_COLUMN);
+			}
+		});
+		orderedCells.sort((c1, c2) => {
+			let index1 = this.config.sortedColumns.indexOf(columnNames[c1.cellIndex]);
+			let index2 = this.config.sortedColumns.indexOf(columnNames[c2.cellIndex]);
+			if (index1 < 0 && index2 < 0) return 0;
+			else if (index1 < 0 && index2 >= 0) return 1;
+			else if (index1 >= 0 && index2 < 0) return -1;
+			else return index1 - index2;
+		});
+		orderedCells[0].parentElement.replaceChildren(...orderedCells);
+	}
+
+	/**
+	 * Adds configuration options for the table.
+	 * 
+	 * @param {Document} doc 
+	 * @param {[String]} columnNames ordered list of column names
+	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
+	 */
+	_addConfiguration (doc, columnNames, headeredRows) {
+
+		let menuArea = HtmlUtil.createDivElement('', STYLE_HIDDEN, doc);
+		menuArea.addEventListener('click', (event) => {
+			event.stopPropagation();
+		});
+		let configButton = HtmlUtil.createAwesomeButton(doc, 'fa-cogs', (event) => {
+			menuArea.classList.toggle(STYLE_HIDDEN);
+			event.stopPropagation();
+		}, 'Spaltenkonfiguration');
+
+		doc.body.addEventListener('click', () => {
+			menuArea.classList.add(STYLE_HIDDEN);
+		});
+
+		this.columns
+			.filter(column => column.origin === Origin.Extension)
+			.map(({ name, header, title }) => ({ name: name, desc: title || header || name }))
+			.concat(columnNames
+				.filter(columnName => !this.columns.map(column => column.name).includes(columnName))
+				.map(name => ({ name: name, script: true })))
+			.forEach(column => {
+
+				let hidden = this.config.hiddenColumns.includes(column.name);
+				menuArea.appendChild(HtmlUtil.createAwesomeButton(doc, hidden ? 'fa-toggle-off' : 'fa-toggle-on', (event) => {
+					event.target.classList.toggle('fa-toggle-off');
+					event.target.classList.toggle('fa-toggle-on');
+					let on = event.target.classList.contains('fa-toggle-on');
+					let index = columnNames.indexOf(column.name);
+					headeredRows.forEach(row => {
+						if (on) {
+							row.cells[index].classList.remove(STYLE_HIDDEN_COLUMN);
+						} else {
+							row.cells[index].classList.add(STYLE_HIDDEN_COLUMN);
+						}
+					});
+					if (on) {
+						this.config.hiddenColumns = this.config.hiddenColumns.filter(c => c !== column.name);
+					} else {
+						this.config.hiddenColumns.push(column.name);
+					}
+					Options.save();
+				}));
+				
+				let label = doc.createElement('span');
+				label.textContent = (column.desc || column.name);
+				menuArea.appendChild(label);
+				if (column.script) {
+					let script = doc.createElement('span');
+					script.textContent = ' script';
+					script.style.fontSize = 'smaller';
+					script.style.opacity = 0.8;
+					label.style.opacity = 0.8;
+					menuArea.appendChild(script);
+				}
+				menuArea.appendChild(doc.createElement('br'));
+			});
+
+		let container = HtmlUtil.createDivElement(configButton, STYLE_MANAGED, doc);
+		container.appendChild(HtmlUtil.createDivElement(menuArea, null, doc));
 		this.table.parentNode.insertBefore(container, this.table);
 		container.appendChild(this.table);
-		container.appendChild(HtmlUtil.createAwesomeButton(doc, 'fa-cogs', () => {
-
-			
-
-
-		}, 'Spaltenkonfiguration'));
-
 	}
 
 	/**
@@ -261,13 +389,5 @@ class ManagedTable {
 	get rows () {
 		return Array.from(this.table.rows);
 	}
-
-	/**
-	 * @property {HTMLTableElement} the managed HTML table; use with care!
-	 */
-	get instance () {
-		return this.table;
-	}
-
 }
 

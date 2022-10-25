@@ -22,8 +22,8 @@ Page.Training = class extends Page {
 			new Column('trainierter Skill').withHeader('Skill'),
 			new Column('Skill').withHeader('Wert'),
 			new Column('Chance'),
-			new Column('EB', Origin.Extension).withHeader('<abbr title="Einsatzbonus lt. Zugabgabe">EB</abbr>').withStyle('width','3em').withStyle('text-align','right'),
-			new Column('ChanceEB', Origin.Extension).withHeader('(Chance)'),
+			new Column('EB', Origin.Extension).withHeader('EB', 'Einsatzbonus lt. Zugabgabe').withStyle('width','3em').withStyle('text-align','right'),
+			new Column('ChanceEB', Origin.Extension).withHeader('Chance', 'Chance mit Einsatzbonus'),
 			new Column('mögl. MW+', Origin.Extension).withStyleClass(STYLE_FORECAST).withStyle('padding-left','1em'),
 			new Column('zuletzt', Origin.Extension).withHeader('zuletzt trainiert').withStyleClass(STYLE_FORECAST).withStyle('padding-left','2em').withStyle('text-align','left')
 		);

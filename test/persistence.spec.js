@@ -7,10 +7,12 @@ describe('Persistence', () => {
 		storageMock = {};
 
 		Options.logDataElement = null;
+		spyOn(Options, 'initialize').and.callFake(() => {});
 
 		chrome.runtime.lastError = undefined;
 
 		spyOn(chrome.storage.local, 'get').and.callFake((key, callback) => {
+			console.error('test get', key);
 			callback({[key]: storageMock[key]});
 		});
 		spyOn(chrome.storage.local, 'set').and.callFake((object, callback) => {
