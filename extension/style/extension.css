@@ -261,7 +261,8 @@ form > .fa-arrow-alt-circle-down {
 	content: "-";
 }
 
-td[title] > a.sortheader {
+td[title] > a.sortheader,
+td[title] > span.abbr {
 	text-decoration: underline;
 	text-decoration-style: dotted;
 }

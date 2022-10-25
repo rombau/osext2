@@ -77,8 +77,8 @@ describe('Managed table', () => {
 			expect(table.rows[0].cells[0].textContent).toEqual('X');
 			expect(table.rows[0].cells[1].textContent).toEqual('Y');
 			expect(table.rows[0].cells[1].title).toEqual('Ypsilon');
-			expect(table.rows[0].cells[1].firstChild.textContent).toEqual('Y');
-			expect(table.rows[0].cells[1].firstChild.title).toEqual('Ypsilon');
+			expect(table.rows[0].cells[1].textContent).toEqual('Y');
+			expect(table.rows[0].cells[1].title).toEqual('Ypsilon');
 		});
 
 		it('three columns with header span', () => {

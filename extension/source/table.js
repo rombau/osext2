@@ -204,8 +204,10 @@ class ManagedTable {
 					if (row.isHeader) {
 						if (column.title) {
 							cell.title = column.title;
-							// TODO will it work without abbreviation tag?
-							cell.appendChild(HtmlUtil.createAbbreviation(column.title, column.header, doc));
+							let span = doc.createElement('span');
+							span.innerHTML = column.header;
+							span.className = 'abbr';
+							cell.appendChild(span);
 						} else {
 							cell.innerHTML = column.header;
 						}
@@ -362,7 +364,7 @@ class ManagedTable {
 					}
 					Options.save();
 				}));
-				
+
 				let label = doc.createElement('span');
 				label.textContent = (column.desc || column.name);
 				menuArea.appendChild(label);
