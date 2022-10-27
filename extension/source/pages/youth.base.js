@@ -38,13 +38,13 @@ Page.Youth = class extends Page {
 		let max = doc.createElement('i');
 		max.update = (season, zat) => {
 			if (data.viewSettings.youthMax) {
-				max.classList.add('fa-toggle-on');
-				max.classList.remove('fa-toggle-off');
+				max.classList.add(STYLE_ON);
+				max.classList.remove(STYLE_OFF);
 				matchdaySlider.classList.add(STYLE_INACTIVE);
 				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay), false);
 			} else {
-				max.classList.add('fa-toggle-off');
-				max.classList.remove('fa-toggle-on');
+				max.classList.add(STYLE_OFF);
+				max.classList.remove(STYLE_ON);
 				matchdaySlider.classList.remove(STYLE_INACTIVE);
 				let matchday = data.viewSettings.youthPlayerMatchDay;
 				page.updateWithTeam.call(page, data.team.getForecast(data.lastMatchDay, matchday), data.lastMatchDay.equals(matchday), matchday);

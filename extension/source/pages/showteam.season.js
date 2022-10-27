@@ -251,11 +251,11 @@ Page.ShowteamSeason = class extends Page {
 		let winBonus = doc.createElement('i');
 		winBonus.update = () => {
 			if (data.viewSettings.winBonus) {
-				winBonus.classList.add('fa-toggle-on');
-				winBonus.classList.remove('fa-toggle-off');
+				winBonus.classList.add(STYLE_ON);
+				winBonus.classList.remove(STYLE_OFF);
 			} else {
-				winBonus.classList.add('fa-toggle-off');
-				winBonus.classList.remove('fa-toggle-on');
+				winBonus.classList.add(STYLE_OFF);
+				winBonus.classList.remove(STYLE_ON);
 			}
 			page.updateWithMatchDays(data.team.getMatchDaysWithBalance(page.selectedSeason, data.lastMatchDay, data.viewSettings, this.balancedMatchDays));
 		};

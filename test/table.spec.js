@@ -7,7 +7,9 @@ describe('Managed table', () => {
 		Options.pageConfig = {};
 
 		spyOn(Options, 'initialize').and.callFake(() => {});
-		spyOn(Options, 'save').and.callFake(() => {});
+		spyOn(Options, 'save').and.callFake(() => {
+			return { then: () => {} };
+		});
 	});
 
 	it('should be not found ', () => {
@@ -254,10 +256,35 @@ describe('Managed table', () => {
 		expect(columnButtons[1].className).toEqual('fas fa-toggle-on');
 		expect(Options.save).toHaveBeenCalled();
 
+		menu.querySelector('a').dispatchEvent(new Event('click'));
+		expect(Options.save).toHaveBeenCalled();
+
 		menu.dispatchEvent(new Event('click'));
 		expect(menu.className).toEqual('');
 
 		doc.body.dispatchEvent(new Event('click'));
 		expect(menu.className).toEqual('osext-hidden');
+
+		let cellMoveFrom = table.rows[0].cells[0];
+		let cellMoveTo = table.rows[0].cells[1];
+
+		expect(table.rows[0].cells[0].textContent).toEqual('A');
+		expect(table.rows[0].cells[1].textContent).toEqual('X');
+
+		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', { dataTransfer: new DataTransfer() }));
+		cellMoveTo.dispatchEvent(new DragEvent('dragenter'));
+		cellMoveTo.dispatchEvent(new DragEvent('dragover', { dataTransfer: new DataTransfer() }));
+		cellMoveTo.dispatchEvent(new DragEvent('drop'));
+		cellMoveTo.dispatchEvent(new DragEvent('dragend'));
+
+		expect(table.rows[0].cells[0].textContent).toEqual('X');
+		expect(table.rows[0].cells[1].textContent).toEqual('A');
+
+		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', { dataTransfer: new DataTransfer() }));
+		cellMoveTo.dispatchEvent(new DragEvent('drop'));
+
+		expect(table.rows[0].cells[0].textContent).toEqual('A');
+		expect(table.rows[0].cells[1].textContent).toEqual('X');
+
 	});
 });

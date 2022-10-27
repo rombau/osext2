@@ -122,6 +122,9 @@ class ManagedTable {
 		
 		/** @type {HTMLTableElement} the managed HTML table element */
 		this.table;
+
+		/** @type {[String]} the current ordered column names/headers of the table */
+		this.columnNames = [];
 	}
 
 	/**
@@ -180,7 +183,6 @@ class ManagedTable {
 		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
 
 		// reorder and add named cell references
-		let columnNames = [];
 		headeredRows.forEach(row => {
 
 			/** @type {[HTMLTableCellElement]} */ 
@@ -231,8 +233,8 @@ class ManagedTable {
 			row.replaceChildren(...orderedCells);
 			
 			// customizing based on options
-			if (row.isHeader) columnNames = orderedCells.map(cell => cell.columnName || cell.textContent);
-			this._customizeCells(orderedCells, columnNames);
+			if (row.isHeader) this.columnNames = orderedCells.map(cell => cell.columnName || cell.textContent);
+			this._customizeCells(orderedCells);
 
 			// add named references
 			Object.entries(namedCellMap).forEach(([name, cell]) => {
@@ -240,8 +242,13 @@ class ManagedTable {
 			});
 		});
 
+		this.columnNames = Array.from(headeredRows[0].cells).map(cell => cell.columnName || cell.textContent)
+
 		// add configuration button/menu
-		this._addConfiguration(doc, columnNames, headeredRows);
+		this._addColumnVisibilityConfiguration(doc, headeredRows);
+
+		// add column move handling
+		this._makeColumnsMovable(headeredRows);
 	}
 
 	/**
@@ -292,20 +299,19 @@ class ManagedTable {
 	 * Change the visibility and the sort order based on the page configuration.
 	 * 
 	 * @param {[HTMLTableCellElement]} orderedCells ordered list of cells
-	 * @param {[String]} columnNames ordered list of column names
 	 */
-	_customizeCells (orderedCells, columnNames) {
+	_customizeCells (orderedCells) {
 
 		orderedCells.forEach(cell => {
-			if (this.config.hiddenColumns.includes(columnNames[cell.cellIndex])) {
+			if (this.config.hiddenColumns.includes(this.columnNames[cell.cellIndex])) {
 				cell.classList.add(STYLE_HIDDEN_COLUMN);
 			} else {
 				cell.classList.remove(STYLE_HIDDEN_COLUMN);
 			}
 		});
 		orderedCells.sort((c1, c2) => {
-			let index1 = this.config.sortedColumns.indexOf(columnNames[c1.cellIndex]);
-			let index2 = this.config.sortedColumns.indexOf(columnNames[c2.cellIndex]);
+			let index1 = this.config.sortedColumns.indexOf(this.columnNames[c1.cellIndex]);
+			let index2 = this.config.sortedColumns.indexOf(this.columnNames[c2.cellIndex]);
 			if (index1 < 0 && index2 < 0) return 0;
 			else if (index1 < 0 && index2 >= 0) return 1;
 			else if (index1 >= 0 && index2 < 0) return -1;
@@ -318,10 +324,9 @@ class ManagedTable {
 	 * Adds configuration options for the table.
 	 * 
 	 * @param {Document} doc 
-	 * @param {[String]} columnNames ordered list of column names
 	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
 	 */
-	_addConfiguration (doc, columnNames, headeredRows) {
+	_addColumnVisibilityConfiguration (doc, headeredRows) {
 
 		let menuArea = HtmlUtil.createDivElement('', STYLE_HIDDEN, doc);
 		menuArea.addEventListener('click', (event) => {
@@ -339,17 +344,17 @@ class ManagedTable {
 		this.columns
 			.filter(column => column.origin === Origin.Extension)
 			.map(({ name, header, title }) => ({ name: name, desc: title || header || name }))
-			.concat(columnNames
+			.concat(this.columnNames
 				.filter(columnName => !this.columns.map(column => column.name).includes(columnName))
 				.map(name => ({ name: name, script: true })))
 			.forEach(column => {
 
 				let hidden = this.config.hiddenColumns.includes(column.name);
-				menuArea.appendChild(HtmlUtil.createAwesomeButton(doc, hidden ? 'fa-toggle-off' : 'fa-toggle-on', (event) => {
-					event.target.classList.toggle('fa-toggle-off');
-					event.target.classList.toggle('fa-toggle-on');
-					let on = event.target.classList.contains('fa-toggle-on');
-					let index = columnNames.indexOf(column.name);
+				menuArea.appendChild(HtmlUtil.createAwesomeButton(doc, hidden ? STYLE_OFF : STYLE_ON, (event) => {
+					event.target.classList.toggle(STYLE_OFF);
+					event.target.classList.toggle(STYLE_ON);
+					let on = event.target.classList.contains(STYLE_ON);
+					let index = this.columnNames.indexOf(column.name);
 					headeredRows.forEach(row => {
 						if (on) {
 							row.cells[index].classList.remove(STYLE_HIDDEN_COLUMN);
@@ -371,18 +376,108 @@ class ManagedTable {
 				if (column.script) {
 					let script = doc.createElement('span');
 					script.textContent = ' script';
-					script.style.fontSize = 'smaller';
-					script.style.opacity = 0.8;
-					label.style.opacity = 0.8;
+					script.style.fontSize = 'xx-small';
+					script.style.opacity = 0.6;
+					label.style.opacity = 0.9;
 					menuArea.appendChild(script);
 				}
 				menuArea.appendChild(doc.createElement('br'));
 			});
+		
+		menuArea.appendChild(doc.createElement('br'));
+		menuArea.appendChild(this._createResetLink(doc));
 
 		let container = HtmlUtil.createDivElement(configButton, STYLE_MANAGED, doc);
 		container.appendChild(HtmlUtil.createDivElement(menuArea, null, doc));
 		this.table.parentNode.insertBefore(container, this.table);
 		container.appendChild(this.table);
+	}
+
+	/**
+	 * Creates a reset link element.
+	 * 
+	 * @param {Document} doc 
+	 * @returns {HTMLAnchorElement}
+	 */
+	_createResetLink(doc) {
+
+		let reset = doc.createElement('a');
+		reset.href = '#';
+		reset.textContent = 'Alles zurücksetzen';
+		reset.style.float = 'right';
+		reset.style.fontSize = 'smaller';
+		reset.style.opacity = 0.8;
+		reset.addEventListener('click', (event) => {
+			event.preventDefault();
+			this.config.hiddenColumns = [];
+			this.config.sortedColumns = [];
+			Options.save().then(() => {
+				window.location.reload();
+			});
+		});
+		return reset;
+	}
+
+	/**
+	 * Makes the columns of the table movable and stores the order.
+	 * 
+	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
+	 */
+	_makeColumnsMovable (headeredRows) {
+
+		let srcCell;
+
+		this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(cell => {
+
+			cell.setAttribute('draggable', true);
+
+			cell.addEventListener('dragstart', (event) => {
+				srcCell = event.currentTarget;
+				srcCell.classList.add(STYLE_DRAG);
+				event.dataTransfer.effectAllowed = 'move';
+			});
+
+			cell.addEventListener('dragenter', (event) => {
+				this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
+				event.currentTarget.classList.add(STYLE_DRAGOVER);
+				return;
+			});
+
+			cell.addEventListener('dragover', (event) => {
+				event.preventDefault();
+				event.dataTransfer.dropEffect = 'move';
+				return;
+			});
+
+			cell.addEventListener('drop', (event) => {
+				event.stopPropagation();
+				if (srcCell !== event.currentTarget) {
+					let fromIndex = srcCell.cellIndex;
+					let toIndex = event.currentTarget.cellIndex;
+					headeredRows.forEach(row => {
+						if (toIndex > fromIndex) {
+							row.insertBefore(row.cells[fromIndex], row.cells[toIndex].nextSibling);
+						} else if (toIndex < this.columnNames.length - 1) {
+							row.insertBefore(row.cells[fromIndex], row.cells[toIndex]);
+						}
+					});
+					let newColumnNames = Array.from(headeredRows[0].cells).map(cell => cell.columnName || cell.textContent);
+					if (this.columnNames !== newColumnNames) {
+						this.columnNames = newColumnNames;
+						this.config.sortedColumns = newColumnNames;
+						Options.save();
+					}
+				}
+				return;
+			});
+
+			cell.addEventListener('dragend', () => {
+				this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
+				srcCell.classList.remove(STYLE_DRAG);
+				return;
+			});
+		});
+		
 	}
 
 	/**

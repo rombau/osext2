@@ -32,6 +32,10 @@
 	float: left;
 	white-space: nowrap;
 }
+.osext-managed > table tr:first-child td {
+	cursor: move;
+	user-select: none;
+}
 .osext-managed > .fa-cogs {
 	cursor: pointer;
 	float: left;
@@ -65,6 +69,12 @@
 }
 .osext-managed .fa-toggle-on {
 	color: var(--range-thumb-color);
+}
+.osext-managed .osext-drag {
+	opacity: 0.5;
+}
+.osext-managed .osext-drag-over {
+	text-shadow: var(--input-color) 1px 0 10px;
 }
 
 .osext-month {

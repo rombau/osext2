@@ -136,7 +136,7 @@ const Options = {
 			Options.primarySkillTrainingLimit = psLimitSlider.value;
 			Options.secondarySkillTrainingLimit = nsLimitSlider.value;
 		}
-		getQueuedPromise((resolve, reject) => {
+		return getQueuedPromise((resolve, reject) => {
 			chrome.storage.local.set(JSON.parse(JSON.stringify(Options)), () => {
 				if (chrome.runtime.lastError) {
 					reject();
@@ -148,6 +148,7 @@ const Options = {
 							status.textContent = '';
 						}, 1000);
 					}
+					new Logger('Options').log('saved', Options.pageConfig['Training']);
 					resolve();
 				}
 			});

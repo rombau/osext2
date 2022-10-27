@@ -233,13 +233,13 @@ class Page {
 		if (page.reloadIfAlreadyExtended(doc)) return;
 		page.check(doc);
 		Persistence.updateExtensionData(data => {
+			page.logger = Object.assign(new Logger(page.name), page.logger);
+			page.logger.log('extract', Logger.prepare(data));
+			page.extract(doc, data);
 			if (!data.nextZat && !page.equals(new Page.Main())) {
 				data.pagesToRequest = [];
 				data.pagesToRequest.push(new Page.Main());
 			} else {
-				page.logger = Object.assign(new Logger(page.name), page.logger);
-				page.logger.log('extract', Logger.prepare(data));
-				page.extract(doc, data);
 				data.pagesToRequest = data.pagesToRequest.filter(pageToRequest => !page.equals(pageToRequest)); // filter after extract to consider all POST parameters
 			}
 		}).then(updatedData => {
