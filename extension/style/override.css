@@ -143,21 +143,13 @@ td.BAK {
 	color: var(--background-color) !important;
 }
 
-table[id^=team] tr:hover,
-table[id^=tm] tr:hover,
-table[style*="width: 850px"] tr:hover,
-table.osext-youth tr:hover:not(.osext-youth-year-header),
-table.osext-contractextension tr:hover {
+table[id^=team] tr:hover:not(:first-child):not(:last-child),
+table[id^=tm] tr:hover:not(:first-child),
+table[style*="width: 850px"] tr:hover:not(:first-child),
+table.osext-youth tr:hover:not(.osext-youth-year-header):not(:first-child):not(:last-child),
+table.osext-contractextension tr:hover:not(:first-child),
+table[id=teamstats] tr:hover:not(:first-child) {
 	background-color: var(--row-hover-color);
-}
-table[id^=team] tr:first-child:hover,
-table[id^=team] tr:last-child:hover,
-table.osext-youth tr:first-child:hover,
-table.osext-youth tr:last-child:hover,
-table.osext-contractextension tr:first-child:hover,
-table[id^=tm] tr:first-child:hover,
-table[style*="width: 850px"] tr:first-child:hover {
-	background-color: var(--background-color) !important;
 }
 table.osext-youth td {
 	padding: 2px !important;
@@ -184,6 +176,16 @@ table.osext-youth tr.osext-youth-year-header b {
 }
 table.osext-youth input[type=submit] {
 	margin-top: 10px !important;
+}
+
+table[id=teamstats] {
+	position: absolute;
+	left: 560px;
+	top: 10px;
+}
+
+table[id=teamstats] tr:not(:first-child) td {
+	color: var(--input-color) !important;
 }
 
 table.jugend.osext-youth tr td:nth-child(odd) {
