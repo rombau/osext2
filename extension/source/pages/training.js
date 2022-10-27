@@ -73,9 +73,9 @@ Page.Training = class extends Page {
 
 		let matchdayConfirmed = data.team.squadPlayers.find(player => player.nextTraining && player.nextTraining.matchBonus !== 1);
 
-		this.table.rows.forEach((row, i) => {
+		this.table.rows.forEach(row => {
 
-			if (i > 0) {
+			if (!row.isHeader) {
 
 				let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 				let player = data.team.getSquadPlayer(id);
