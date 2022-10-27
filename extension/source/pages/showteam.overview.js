@@ -5,13 +5,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 		super('Teamübersicht', 'showteam.php', new Page.Param('s', 0, true));
 
-		/** @type {HTMLTableElement} */
-		this.table;
-
 		this.showExactAge = false;
 	}
-
-	static HEADERS = ['#', 'Nr.', 'Name', 'Alter', 'Pos', 'Auf', '', 'Land', 'U', 'MOR', 'FIT', 'Skillschnitt', 'Opt.Skill', 'S', 'Sperre', 'Verl.', 'T', 'TS'];
 
 	/**
 	 * @param {Document} doc
@@ -19,9 +14,36 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extract(doc, data) {
 
+		this.table = new ManagedTable(this.name,
+			new Column('#'),
+			new Column('Nr.'),
+			new Column('Name'),
+			new Column('Alter'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag'),
+			new Column('Pos'),
+			new Column('Auf').withStyle('width','2.5em').withStyle('text-align','left'),
+			new Column('Land').withStyle('text-align','left'),
+			new Column('U'),
+			new Column('MOR').withHeader('Mor'),
+			new Column('FIT').withHeader('Fit'),
+			new Column('Skillschnitt').withHeader('Skillschn.'),
+			new Column('Opt.Skill'),
+			new Column('S'),
+			new Column('Sperre').withHeader('Sp.', 'Sperre'),
+			new Column('Verl.'),
+			new Column('T'),
+			new Column('TS').withStyle('width','1.9em'),
+			new Column('&Oslash;P', Origin.Extension).withHeader('&Oslash;P', 'Durchschnitt Primärskills').withStyle('width','3.5em'),
+			new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenkills').withStyle('width','3.5em'),
+			new Column('&Oslash;U', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt  unveränderliche Skills').withStyle('width','3.5em'),
+			new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width','3.5em')
+		);
+
+		this.table.initialize(doc);
+
 		let currentPlayerIds = [];
 
-		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.ShowteamOverview.HEADERS).forEach(row => {
+		this.table.rows.slice(1, -1).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			currentPlayerIds.push(id);
@@ -34,8 +56,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			player.age = Math.floor(+row.cells['Alter'].textContent);
 			player.pos = player.pos || row.cells['Pos'].textContent;
 			player.posLastMatch = row.cells['Auf'].textContent;
-			player.countryCode = row.cells['Land'].textContent;
-			player.countryName = row.cells['Land'].firstChild.title;
+			player.countryCode = row.cells['Land'].textContent.trim();
+			player.countryName = row.cells['Land'].lastChild.title;
 			player.uefa = row.cells['U'].textContent ? false : true;
 			player.moral = +row.cells['MOR'].textContent;
 			player.fitness = +row.cells['FIT'].textContent;
@@ -79,60 +101,16 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
-		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamOverview.HEADERS);
+		this.table.rows.forEach(row => {
 
-		Array.from(this.table.rows).forEach((row, i) => {
-
-			if (!this.showExactAge) row.cells['Geb.'] = row.cells['Name'].cloneNode(true);
-
-			row.cells['&Oslash;P'] = row.cells['Alter'].cloneNode(true);
-			row.cells['&Oslash;N'] = row.cells['Alter'].cloneNode(true);
-			row.cells['&Oslash;U'] = row.cells['Alter'].cloneNode(true);
-			row.cells['EQ19'] = row.cells['Alter'].cloneNode(true);
-
-			if (i === 0 || i == (this.table.rows.length - 1)) {
-
-				row.cells['Auf'].style.width = '2em';
-				row.cells['TS'].style.width = '1.9em';
-				row.cells['&Oslash;P'].style.width = '3.5em';
-				row.cells['&Oslash;N'].style.width = '3.5em';
-				row.cells['&Oslash;U'].style.width = '3.5em';
-				row.cells['EQ19'].style.width = '3.5em';
-
-				row.cells['MOR'].textContent = 'Mor';
-				row.cells['FIT'].textContent = 'Fit';
-				row.cells['Skillschnitt'].textContent = 'Skillschn.';
-				row.cells['Sperre'].textContent = 'Sp.';
-
-				if (!this.showExactAge) row.cells['Geb.'].textContent = 'Geb.';
-				row.cells['&Oslash;P'].innerHTML = '&Oslash;P'; row.cells['&Oslash;P'].title = 'Durchschnitt Primärskills';
-				row.cells['&Oslash;N'].innerHTML = '&Oslash;N'; row.cells['&Oslash;N'].title = 'Durchschnitt Nebenkills';
-				row.cells['&Oslash;U'].innerHTML = '&Oslash;U'; row.cells['&Oslash;U'].title = 'Durchschnitt unveränderliche Skills';
-				row.cells['EQ19'].innerHTML = 'EQ19'; row.cells['EQ19'].title = 'Qualität/Potential/Talent';
-
+			if (this.showExactAge) {
+				row.cells['Geb.'].classList.add(STYLE_HIDDEN);
 			} else {
-
-				let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
-				let player = data.team.getSquadPlayer(id);
-
-				if (!this.showExactAge) row.cells['Geb.'].textContent = player.birthday;
-
-				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
-				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
-				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
-				row.cells['EQ19'].textContent = player.getPotential().toFixed(0);
+				row.cells['Geb.'].classList.remove(STYLE_HIDDEN);
 			}
-
-			if (!this.showExactAge) row.insertBefore(row.cells['Geb.'], row.cells['Pos']);
-
-			row.appendChild(row.cells['&Oslash;P']);
-			row.appendChild(row.cells['&Oslash;N']);
-			row.appendChild(row.cells['&Oslash;U']);
-			row.appendChild(row.cells['EQ19']);
-
 		});
 
-		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');
 	}
@@ -143,7 +121,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	updateWithTeam (team, current) {
 
-		Array.from(this.table.rows).slice(1, -1).forEach(row => {
+		this.table.rows.slice(1, -1).forEach(row => {
 
 			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
 			let player = team.getSquadPlayer(id);
@@ -258,5 +236,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['EQ19'].classList.add(STYLE_FORECAST);
 			}
 		});
+
+		this.table.styleUnknownColumns(!current);
 	}
 }

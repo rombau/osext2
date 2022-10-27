@@ -125,6 +125,9 @@ class ManagedTable {
 
 		/** @type {[String]} the current ordered column names/headers of the table */
 		this.columnNames = [];
+
+		/** @type {[HTMLTableRowElement]} the current rows related to a column/header */
+		this.columnRelatedRows = [];
 	}
 
 	/**
@@ -170,20 +173,20 @@ class ManagedTable {
 
 		// define header related rows
 		let cellHeaders = Array.from(this.rows[0].cells).map(cell => cell.textContent);
-		let headeredRows = this.rows.filter(row => !Array.from(row.cells).find(cell => {
+		this.columnRelatedRows = this.rows.filter(row => !Array.from(row.cells).find(cell => {
 			let spanAttr = cell.getAttributeNode('colspan');
 			return spanAttr && +spanAttr.value > 3; // limit col span joining
 		}));
-		headeredRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'')));
+		this.columnRelatedRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'')));
 
 		// join spaned columns; headers could be changed
-		cellHeaders = this._removeColSpans(headeredRows, osColumns);
+		cellHeaders = this._removeColSpans(osColumns);
 	
 		// find header and data index of original columns
 		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
 
 		// reorder and add named cell references
-		headeredRows.forEach(row => {
+		this.columnRelatedRows.forEach(row => {
 
 			/** @type {[HTMLTableCellElement]} */ 
 			let orderedCells = [];
@@ -242,48 +245,48 @@ class ManagedTable {
 			});
 		});
 
-		this.columnNames = Array.from(headeredRows[0].cells).map(cell => cell.columnName || cell.textContent)
+		this.columnNames = Array.from(this.columnRelatedRows[0].cells).map(cell => cell.columnName || cell.textContent)
 
 		// add configuration button/menu
-		this._addColumnVisibilityConfiguration(doc, headeredRows);
+		this._addColumnVisibilityConfiguration(doc);
 
 		// add column move handling
-		this._makeColumnsMovable(headeredRows);
+		this._makeColumnsMovable();
 	}
 
 	/**
 	 * Splitted columns related to either spaned header or data columns are joined,
 	 * in order to make column positioning and sorting possible.
 	 * 
-	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
 	 * @param {[Column]} osColumns column definitions
 	 * @returns {[String]} the updated headers
 	 */
-	_removeColSpans (headeredRows, osColumns) {
+	_removeColSpans (osColumns) {
 
 		let headerSpan = [];
 		let dataSpan = [];
-		headeredRows.forEach(row => {
+		this.columnRelatedRows.forEach((row, r) => {
 			Array.from(row.cells).forEach((cell, i) => {
 				let spanAttr = cell.getAttributeNode('colspan');
 				if (spanAttr) {
 					if (row.isHeader) {
-						headerSpan[i] = +spanAttr.value;
-					} else {
+						if (r == 0) headerSpan[i] = +spanAttr.value;
+					} else if (!dataSpan[i]) {
 						dataSpan[i] = +spanAttr.value;
+						if (i < headerSpan.length) headerSpan.splice(i, dataSpan[i] - 1);
 					}
 					cell.removeAttributeNode(spanAttr);
 				}
 			});
 		});
-		headeredRows.forEach(row => {
+		this.columnRelatedRows.forEach(row => {
 			Array.from(row.cells).forEach((cell, i) => {
 				let span = row.isHeader ? dataSpan[i] : headerSpan[i];
 				if (span > 1) {
 					[...Array(span - 1)].forEach(() => {
 						let newContent = (cell.innerHTML + ' ' + cell.nextElementSibling.innerHTML).trim();
 						if (row.isHeader) {
-							let column = osColumns.find(column => column.header === cell.textContent);
+							let column = osColumns.find(c => c.header === cell.textContent);
 							column.name = newContent;
 						}
 						cell.innerHTML = newContent;
@@ -324,9 +327,8 @@ class ManagedTable {
 	 * Adds configuration options for the table.
 	 * 
 	 * @param {Document} doc 
-	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
 	 */
-	_addColumnVisibilityConfiguration (doc, headeredRows) {
+	_addColumnVisibilityConfiguration (doc) {
 
 		let menuArea = HtmlUtil.createDivElement('', STYLE_HIDDEN, doc);
 		menuArea.addEventListener('click', (event) => {
@@ -355,7 +357,7 @@ class ManagedTable {
 					event.target.classList.toggle(STYLE_ON);
 					let on = event.target.classList.contains(STYLE_ON);
 					let index = this.columnNames.indexOf(column.name);
-					headeredRows.forEach(row => {
+					this.columnRelatedRows.forEach(row => {
 						if (on) {
 							row.cells[index].classList.remove(STYLE_HIDDEN_COLUMN);
 						} else {
@@ -420,14 +422,12 @@ class ManagedTable {
 
 	/**
 	 * Makes the columns of the table movable and stores the order.
-	 * 
-	 * @param {[HTMLTableRowElement]} headeredRows rows related to the header
 	 */
-	_makeColumnsMovable (headeredRows) {
+	_makeColumnsMovable () {
 
 		let srcCell;
 
-		this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(cell => {
+		this.columnNames.map((_name, i) => this.columnRelatedRows[0].cells[i]).forEach(cell => {
 
 			cell.setAttribute('draggable', true);
 
@@ -438,7 +438,7 @@ class ManagedTable {
 			});
 
 			cell.addEventListener('dragenter', (event) => {
-				this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
+				this.columnNames.map((_name, i) => this.columnRelatedRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
 				event.currentTarget.classList.add(STYLE_DRAGOVER);
 				return;
 			});
@@ -454,14 +454,14 @@ class ManagedTable {
 				if (srcCell !== event.currentTarget) {
 					let fromIndex = srcCell.cellIndex;
 					let toIndex = event.currentTarget.cellIndex;
-					headeredRows.forEach(row => {
+					this.columnRelatedRows.forEach(row => {
 						if (toIndex > fromIndex) {
 							row.insertBefore(row.cells[fromIndex], row.cells[toIndex].nextSibling);
 						} else if (toIndex < this.columnNames.length - 1) {
 							row.insertBefore(row.cells[fromIndex], row.cells[toIndex]);
 						}
 					});
-					let newColumnNames = Array.from(headeredRows[0].cells).map(cell => cell.columnName || cell.textContent);
+					let newColumnNames = Array.from(this.columnRelatedRows[0].cells).map(cell => cell.columnName || cell.textContent);
 					if (this.columnNames !== newColumnNames) {
 						this.columnNames = newColumnNames;
 						this.config.sortedColumns = newColumnNames;
@@ -472,7 +472,7 @@ class ManagedTable {
 			});
 
 			cell.addEventListener('dragend', () => {
-				this.columnNames.map((_name, i) => headeredRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
+				this.columnNames.map((_name, i) => this.columnRelatedRows[0].cells[i]).forEach(c => c.classList.remove(STYLE_DRAGOVER));
 				srcCell.classList.remove(STYLE_DRAG);
 				return;
 			});
@@ -481,10 +481,44 @@ class ManagedTable {
 	}
 
 	/**
+	 * Sets the opacity of unknown/script columns. 
+	 * These column values aren't changed related to a forecast.
+	 * 
+	 * @param {Boolean} forecast indicates a forecast view
+	 */
+	styleUnknownColumns (forecast) {
+		
+		this.columnNames.filter(columnName => !this.columns.map(column => column.name).includes(columnName)).forEach(columnName => {
+			this.columnRelatedRows.forEach(row => {
+				let cell = row.cells[this.columnNames.indexOf(columnName)];
+				if (forecast) {
+					cell.classList.add(STYLE_INACTIVE);
+				} else {
+					cell.classList.remove(STYLE_INACTIVE);
+				}
+			});
+		});
+	}
+
+	/**
 	 * @property {[HTMLTableRowElement]} array with the table rows
 	 */
 	get rows () {
 		return Array.from(this.table.rows);
+	}
+
+	/**
+	 * @property {Node} parentNode of the table (container)
+	 */
+	get container () {
+		return this.table.parentNode;
+	}
+	
+	/**
+	 * @property {Node} parentNode of the table (container)
+	 */
+	get parentNode () {
+		return this.container.parentNode;
 	}
 }
 
