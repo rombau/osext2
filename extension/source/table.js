@@ -182,7 +182,7 @@ class ManagedTable {
 		// join spaned columns; headers could be changed
 		cellHeaders = this._removeColSpans(osColumns);
 	
-		// find header and data index of original columns
+		// find index of original columns
 		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
 
 		// reorder and add named cell references
@@ -284,12 +284,13 @@ class ManagedTable {
 				let span = row.isHeader ? dataSpan[i] : headerSpan[i];
 				if (span > 1) {
 					[...Array(span - 1)].forEach(() => {
-						let newContent = (cell.innerHTML + ' ' + cell.nextElementSibling.innerHTML).trim();
 						if (row.isHeader) {
 							let column = osColumns.find(c => c.header === cell.textContent);
-							column.name = newContent;
+							cell.textContent = (cell.textContent + ' ' + cell.nextElementSibling.textContent).trim();
+							column.header = cell.textContent;
+						} else {
+							cell.innerHTML = (cell.innerHTML + ' ' + cell.nextElementSibling.innerHTML).trim();
 						}
-						cell.innerHTML = newContent;
 						cell.nextElementSibling.remove();
 					});
 				}
