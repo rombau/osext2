@@ -387,7 +387,7 @@ class ManagedTable {
 				menuArea.appendChild(doc.createElement('br'));
 			});
 		
-		menuArea.appendChild(doc.createElement('br'));
+		if (menuArea.children.length) menuArea.appendChild(doc.createElement('br'));
 		menuArea.appendChild(this._createResetLink(doc));
 
 		let container = HtmlUtil.createDivElement(configButton, STYLE_MANAGED, doc);

@@ -15,8 +15,6 @@ Page.AccountStatement = class extends Page {
 		}
 	}
 
-	static HEADERS = ['Datum', 'Eingang', 'Ausgang', 'Buchungstext', 'Kontostand nach Buchung'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -30,9 +28,19 @@ Page.AccountStatement = class extends Page {
 		if (matches) {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
 		}
-
+		
+		this.table = new ManagedTable(this.name,
+			new Column('Datum'),
+			new Column('Eingang'),
+			new Column('Ausgang'),
+			new Column('Buchungstext'),
+			new Column('Kontostand nach Buchung')
+		);
+		
+		this.table.initialize(doc);
+			
 		let zat;
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.AccountStatement.HEADERS).forEach(row => {
+		this.table.rows.slice(1).forEach(row => {
 			
 			let balanceText = row.cells['Kontostand nach Buchung'].textContent;
 			if (!balanceText.includes('Nicht möglich')) {

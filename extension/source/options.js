@@ -148,7 +148,6 @@ const Options = {
 							status.textContent = '';
 						}, 1000);
 					}
-					new Logger('Options').log('saved', Options.pageConfig['Training']);
 					resolve();
 				}
 			});
