@@ -6,7 +6,7 @@
 .osext-inactive {
 	opacity: 0.3 !important;
 }
-.osext-inactive:not(.delete) {
+.osext-inactive:not(.delete):not(tr:first-child > td) {
 	pointer-events: none;
 }
 
