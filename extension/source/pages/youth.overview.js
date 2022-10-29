@@ -204,7 +204,8 @@ Page.YouthOverview = class extends Page.Youth {
 
 			if (player.active) {
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN && player.getSkillAverage(player.getSecondarySkills()) > 0 ? player.pos : '');
+				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN 
+					&& (player.getSkillAverage(player.getPrimarySkills()) + player.getSkillAverage(player.getSecondarySkills())) > 0 ? player.pos : '');
 				row.cells['Talent'].textContent = player.talent;
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
 				if (row.cells['Pos'].textContent) {
