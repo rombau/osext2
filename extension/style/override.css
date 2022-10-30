@@ -182,6 +182,11 @@ table[id=teamstats] {
 	position: absolute;
 	left: 560px;
 	top: 10px;
+	background-color: var(--row-hover-color);
+	padding: 2px;
+}
+table[id=teamstats] td {
+	padding: 0 3px !important;
 }
 
 table[id=teamstats] tr:not(:first-child) td {
