@@ -109,7 +109,7 @@ Page.Main = class extends Page {
 				let infoCell = infoRow.cells[0];
 
 				infoCell.childNodes[1].textContent = 'Geplante Aktionen (vor dem nächsten Zat):';
-				infoCell.childNodes[3].remove();
+				infoCell.replaceChildren(infoCell.childNodes[1]);
 				infoCell.style.padding = '7px 0px';
 
 				if (contractExtensionPlayers.length) {
