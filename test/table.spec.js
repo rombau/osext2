@@ -83,6 +83,16 @@ describe('Managed table', () => {
 			expect(table.rows[0].cells[1].title).toEqual('Ypsilon');
 		});
 
+		it('two same named columns', () => {
+
+			table = new ManagedTable('Test', new Column('A').withRef('A1'), new Column('A').withRef('A2') );
+
+			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>A</td></tr></table>'));
+
+			expect(table.rows[0].cells['A1'].textContent).toEqual('A');
+			expect(table.rows[0].cells['A2'].textContent).toEqual('A');
+		});
+
 		it('three columns with header span', () => {
 
 			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C') );

@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/Coverage-84%25-83A603.svg?style=flat&logoColor=black&color=green&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logoColor=black&color=green&prefix=$coverage$)
 ![](https://img.shields.io/badge/style-eslint-green)
 
 # OnlineSoccer Extension

@@ -50,6 +50,9 @@ class Column {
 		/** @type {String} the column header; name as default */
 		this.header = name;
 
+		/** @type {String} the column reference name */
+		this.ref = name;
+
 		/** @type {String} the column title */
 		this.title;
 
@@ -61,6 +64,17 @@ class Column {
 
 		/** @type {Number} the original index of the cell based on the header */
 		this.originalIndex = null;
+	}
+
+	/**
+	 * Sets a header and reference replacement. 
+	 * 
+	 * @param {String} ref the new header and reference
+	 * @returns this column
+	 */
+	withRef (ref) {
+		this.ref = ref;
+		return this;
 	}
 
 	/**
@@ -160,10 +174,14 @@ class ManagedTable {
 
 		// find table with OS headers
 		let osColumns = this.columns.filter(column => column.origin === Origin.OS);
-		let osHeaders = osColumns.map(column => column.name);
 		this.table = Array.from(doc.getElementsByTagName('table')).find((table) => {
-			return osHeaders.every((header, i) => {
-				return Array.from(table.rows[0].cells).some(cell => cell.textContent === header);
+			return osColumns.every(column => {
+				let cell = Array.from(table.rows[0].cells).find(cell => cell.textContent === column.name);
+				if (cell) {
+					cell.textContent = column.name = column.ref;
+					return true;
+				}
+				return false;
 			});
 		});
 
@@ -509,14 +527,14 @@ class ManagedTable {
 	}
 
 	/**
-	 * @property {Node} parentNode of the table (container)
+	 * @property {Node} parentNode of the table (=container)
 	 */
 	get container () {
 		return this.table.parentNode;
 	}
 	
 	/**
-	 * @property {Node} parentNode of the table (container)
+	 * @property {Node} parentNode of the table container
 	 */
 	get parentNode () {
 		return this.container.parentNode;
