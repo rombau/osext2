@@ -34,7 +34,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			new Column('T'),
 			new Column('TS').withStyle('width','1.9em'),
 			new Column('&Oslash;P', Origin.Extension).withHeader('&Oslash;P', 'Durchschnitt Primärskills').withStyle('width','3.5em'),
-			new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenkills').withStyle('width','3.5em'),
+			new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenskills').withStyle('width','3.5em'),
 			new Column('&Oslash;U', Origin.Extension).withHeader('&Oslash;U', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em'),
 			new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width','3.5em')
 		);
