@@ -7,15 +7,27 @@ Page.FastTransfer = class extends Page {
 
 	}
 
-	static HEADERS = ['Name', 'Alter', 'Land', '', 'Skillschnitt', 'Opti', 'Laufzeit', 'Gehalt', 'Ablöse'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
 	extend(doc, data) {
 
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.FastTransfer.HEADERS).slice(0, -1).forEach((row, i) => {
+		this.table = new ManagedTable(this.name,
+			new Column('Name'),
+			new Column('Alter'),
+			new Column('Land'),
+			new Column('').withRef('U').withHeader('U'),
+			new Column('Skillschnitt'),
+			new Column('Opti'),
+			new Column('Laufzeit'),
+			new Column('Gehalt'),
+			new Column('Ablöse')
+		);
+
+		this.table.initialize(doc);
+
+		this.table.rows.slice(1, -1).forEach(row => {
 
 			let player = data.team.getSquadPlayer(HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href));
 
