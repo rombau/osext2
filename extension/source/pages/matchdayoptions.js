@@ -7,8 +7,6 @@ Page.MatchDayOptions = class extends Page {
 
 	}
 
-	static HEADERS = ['#', 'Spieler', 'FIT', 'Physio', 'Kosten'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
@@ -40,17 +38,24 @@ Page.MatchDayOptions = class extends Page {
 			}
 		}
 
-		HtmlUtil.getTableRowsByHeaderAndFooter(doc, ...Page.MatchDayOptions.HEADERS).forEach(row => {
+		this.table = new ManagedTable(this.name,
+			new Column('#'),
+			new Column('Spieler'),
+			new Column('FIT'),
+			new Column('Physio'),
+			new Column('Kosten')
+		);
 
-			let id = HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href);
-			let player = data.team.getSquadPlayer(id);
+		this.table.initialize(doc, false);
 
+		this.table.rows.slice(1, -1).forEach(row => {
+
+			let player = data.team.getSquadPlayer(HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href));
 			if (row.cells['Physio'].firstChild.checked) {
 				player.physioCosts = +row.cells['Kosten'].textContent.replaceAll('.', '');
 			} else {
 				player.physioCosts = null;
 			}
-
 		});
 	}
 }
