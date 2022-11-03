@@ -37,7 +37,7 @@ Page.AccountStatement = class extends Page {
 			new Column('Kontostand nach Buchung')
 		);
 		
-		this.table.initialize(doc);
+		this.table.initialize(doc, false);
 			
 		let zat;
 		this.table.rows.slice(1).forEach(row => {

@@ -6,13 +6,27 @@ Page.LeagueTable = class extends Page {
 		super('Ligatabelle', 'lt.php');
 	}
 
-	static HEADERS = ['#', '', 'Club', 'Spiele', 'Si.', 'Un.', 'Ni.', 'Tore+', 'Tore-', 'Tore +/-', 'Punkte'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
+
+		this.table = new ManagedTable(this.name,
+			new Column('#'),
+			new Column(''),
+			new Column('Club'),
+			new Column('Spiele'),
+			new Column('Si.'),
+			new Column('Un.'),
+			new Column('Ni.'),
+			new Column('Tore+'),
+			new Column('Tore-'),
+			new Column('Tore +/-'),
+			new Column('Punkte')
+		);
+
+		this.table.initialize(doc, false);
 
 		if (+doc.querySelector('select[name=ligaauswahl]').value && 
 			+doc.querySelector('select[name=landauswahl]').value && 
@@ -22,7 +36,7 @@ Page.LeagueTable = class extends Page {
 			let size = 0;
 			let leagueOfCurrentTeam = false;
 
-			HtmlUtil.getTableRowsByHeader(doc, ...Page.LeagueTable.HEADERS).forEach(row => {
+			this.table.rows.slice(1).forEach(row => {
 
 				size++;
 				if (HtmlUtil.extractIdFromHref(row.cells['Club'].firstChild.href) === data.team.id) {

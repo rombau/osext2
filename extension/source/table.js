@@ -167,8 +167,9 @@ class ManagedTable {
 	 * row.cells['Name'].textContent
 	 * 
 	 * @param {Document} doc the page document
+	 * @param {Boolean} customizable
 	 */
-	initialize (doc) {
+	initialize (doc, customizable = true) {
 
 		if (this.table) return;
 
@@ -265,11 +266,14 @@ class ManagedTable {
 
 		this.columnNames = Array.from(this.columnRelatedRows[0].cells).map(cell => cell.columnName || cell.textContent)
 
-		// add configuration button/menu
-		this._addColumnVisibilityConfiguration(doc);
+		if (customizable) {
 
-		// add column move handling
-		this._makeColumnsMovable();
+			// add configuration button/menu
+			this._addColumnVisibilityConfiguration(doc);
+	
+			// add column move handling
+			this._makeColumnsMovable();
+		}
 	}
 
 	/**
