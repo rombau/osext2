@@ -49,7 +49,7 @@ describe('Page.Trainer', () => {
 			try {
 				page.extract(doc, data);
 			} catch (e) {
-				expect(e.message).toEqual('Tabelle nicht gefunden (trainer.modified.php.html)!');
+				expect(e.message).toEqual('Tabelle nicht gefunden! (Trainer)');
 			}
 
 			done();

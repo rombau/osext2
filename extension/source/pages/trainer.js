@@ -18,7 +18,17 @@ Page.Trainer = class extends Page {
 
 			doc.getElementsByTagName('div')[0].classList.add(STYLE_TRAINER);
 
-			HtmlUtil.getTableRowsByHeader(doc, ...Page.Trainer.HEADERS).forEach(row => {
+			this.table = new ManagedTable(this.name,
+				new Column('#'),
+				new Column('Skill'),
+				new Column('Gehalt'),
+				new Column('Vertrag'),
+				new Column('Aktion')
+			);
+
+			this.table.initialize(doc, false);
+
+			this.table.rows.slice(1).forEach(row => {
 
 				let trainer = data.team.getTrainer(+row.cells['#'].textContent);
 
@@ -27,7 +37,6 @@ Page.Trainer = class extends Page {
 
 				trainer.legacySkill = Team.Trainer.LIST[row.cells['Skill'].textContent].legacySkill;
 				trainer.upToSkill = Team.Trainer.LIST[row.cells['Skill'].textContent].upToSkill;
-
 			});
 		}
 	}
