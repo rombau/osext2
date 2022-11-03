@@ -219,25 +219,25 @@ class ManagedTable {
 				
 				if (column.origin === Origin.OS) {
 					cell = row.cells[column.originalIndex];
-					if (row.isHeader) cell.innerHTML = column.header;
-					orderedCells.push(cell);
 				} else if (column.origin === Origin.Extension) {
 					cell = doc.createElement('td');
 					let classNameCell = Array.from(row.cells).find(cell => cell.className);
 					if (classNameCell) cell.className = classNameCell.className;
-					if (row.isHeader) {
-						if (column.title) {
-							cell.title = column.title;
-							let span = doc.createElement('span');
-							span.innerHTML = column.header;
-							span.className = 'abbr';
-							cell.appendChild(span);
-						} else {
-							cell.innerHTML = column.header;
-						}
-					}					
-					orderedCells.push(cell);
 				}
+				if (row.isHeader) {
+					if (column.title) {
+						cell.title = column.title;
+						let span = doc.createElement('span');
+						span.innerHTML = column.header;
+						span.className = 'abbr';
+						cell.textContent = '';
+						cell.appendChild(span);
+					} else {
+						cell.innerHTML = column.header;
+					}
+				}					
+				orderedCells.push(cell);
+
 				cell.columnName = column.name;
 				
 				column.stylesClasses.forEach(styleClass => cell.classList.add(styleClass));
