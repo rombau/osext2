@@ -6,33 +6,47 @@ Page.LoanView = class extends Page {
 		super('Leihübersicht', 'viewleih.php');
 	}
 
-	static HEADERS = ['Name', 'Alter', 'Land', 'U', 'Skillschnitt', 'Opt. Skill', 'Leihdauer', 'Gehalt', 'Leihgebühr', 'Leihclub'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
 	extract(doc, data) {
 
-		let expense = false;
+		let columns = [
+			new Column('Name'),
+			new Column('Alter'),
+			new Column('Land'),
+			new Column('U'),
+			new Column('Skillschnitt').withHeader('Skillschn.'),
+			new Column('Opt. Skill'),
+			new Column('Leihdauer'),
+			new Column('Gehalt'),
+			new Column('Leihgebühr'),
+			new Column('Leihclub')
+		];
 
-		/** @type {[HTMLTableRowElement]} */
-		let rows = Array.from(doc.querySelectorAll('table tr'));
-		rows.forEach(row => {
-			Page.LoanView.HEADERS.forEach((header, i) => row.cells[header] = row.cells[i]);
-			let nameCell = row.cells['Name'];
-			if (nameCell.firstChild) {
-				if (nameCell.firstChild.textContent === 'Übersicht der geliehenen Spieler') {
-					expense = true;
-				}
-				else if (nameCell.firstChild.href) {
-					let id = HtmlUtil.extractIdFromHref(nameCell.firstChild.href);
-					let player = data.team.getSquadPlayer(id);
-					player.loan.fee = +row.cells['Leihgebühr'].textContent.replaceAll('.', '');
-					if (expense) player.loan.fee *= -1;
-					player.pos = nameCell.className;
-				}
-			}
+		this.tableTo = new ManagedTable(this.name, ...columns);
+		this.tableTo.initialize(doc, false);
+
+		this.tableTo.rows.slice(1).forEach(row => {
+
+			let player = data.team.getSquadPlayer(HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href));
+			player.loan.fee = +row.cells['Leihgebühr'].textContent.replaceAll('.', '');
+			player.pos = row.cells['Name'].className;
+
+		});
+
+		// by changing the column headers of tableTo, the next table can be found with the same columns
+
+		this.tableFrom = new ManagedTable(this.name, ...columns);
+		this.tableFrom.initialize(doc, false);
+
+		this.tableFrom.rows.slice(1).forEach(row => {
+
+			let player = data.team.getSquadPlayer(HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href));
+			player.loan.fee = -row.cells['Leihgebühr'].textContent.replaceAll('.', '');
+			player.pos = row.cells['Name'].className;
+			
 		});
 
 		// initialize new players
