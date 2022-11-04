@@ -139,6 +139,31 @@ body:not(.mediawiki):not(#tplIndex) td {
 body:not(.mediawiki):not(#tplIndex) form td {
 	padding: 2px;
 }
+
+td.TOR {
+	color: #ffff00 !important;
+	background-color: transparent !important;
+}
+td.ABW {
+	color: #00ff00 !important;
+	background-color: transparent !important;
+}
+td.DMI {
+	color: #3366ff !important;
+	background-color: transparent !important;
+}
+td.MIT {
+	color: #66ffff !important;
+	background-color: transparent !important;
+}
+td.OMI {
+	color: #ff66ff !important;
+	background-color: transparent !important;
+}
+td.STU {
+	color: #ff0000 !important;
+	background-color: transparent !important;
+}
 td.BAK {
 	color: var(--background-color) !important;
 }

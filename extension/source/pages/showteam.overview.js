@@ -15,11 +15,11 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	extract(doc, data) {
 
 		this.table = new ManagedTable(this.name,
-			new Column('#'),
+			new Column('#').withStyle('text-align','left'),
 			new Column('Nr.'),
 			new Column('Name'),
 			new Column('Alter'),
-			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
 			new Column('Pos'),
 			new Column('Auf').withStyle('width','2.5em').withStyle('text-align','left'),
 			new Column('Land').withStyle('text-align','left'),
@@ -101,15 +101,6 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
-		this.table.rows.forEach(row => {
-
-			if (this.showExactAge) {
-				row.cells['Geb.'].classList.add(STYLE_HIDDEN);
-			} else {
-				row.cells['Geb.'].classList.remove(STYLE_HIDDEN);
-			}
-		});
-
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');
@@ -129,13 +120,11 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			if (player.active) {
 
 				if (this.showExactAge) {
-					row.cells['Alter'].textContent = '';
-					row.cells['Alter'].appendChild(
-						HtmlUtil.createAbbreviation(`ZAT ${player.birthday}`, player.ageExact.toFixed(2)));
+					row.cells['Alter'].textContent = player.ageExact.toFixed(2);
 				} else {
 					row.cells['Alter'].textContent = player.age;
-					row.cells['Geb.'].textContent = player.birthday;
 				}
+				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Pos'].textContent = player.pos;
 
 				row.cells['Auf'].textContent = player.posLastMatch || '';
@@ -180,7 +169,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			} else {
 
 				row.cells['Alter'].textContent = '';
-				if (!this.showExactAge) row.cells['Geb.'].textContent = '';
+				row.cells['Geb.'].textContent = '';
 				row.cells['Pos'].textContent = '';
 				row.cells['Auf'].textContent = '';
 				row.cells['MOR'].textContent = '';
