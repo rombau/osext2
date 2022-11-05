@@ -6,8 +6,6 @@ Page.Trainer = class extends Page {
 		super('Trainer', 'trainer.php');
 	}
 
-	static HEADERS = ['#', 'Skill', 'Gehalt', 'Vertrag', 'Aktion'];
-
 	/**
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
