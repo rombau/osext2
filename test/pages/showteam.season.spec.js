@@ -45,7 +45,7 @@ describe('Page.ShowteamSeason', () => {
 
 		Fixture.getDocument('showteam.php?s=6', doc => {
 
-			HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
+			Array.from(doc.querySelector('table[border="0"][cellspacing="3"][cellpadding="3"]').rows).slice(1).forEach(row => {
 				row.cells[3].textContent = '';
 			});
 

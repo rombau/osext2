@@ -15,8 +15,6 @@ Page.ShowteamSeason = class extends Page {
 		}
 	}
 
-	static HEADERS = ['ZAT', 'Spielart', 'Gegner', 'Ergebnis', 'Bericht'];
-
 	static GAMEINFO_NOT_SET = ['Blind Friendly gesucht!', 'reserviert', 'spielfrei'];
 
 	/**
@@ -30,7 +28,20 @@ Page.ShowteamSeason = class extends Page {
 
 		let nextRound = {};
 
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.ShowteamSeason.HEADERS).forEach(row => {
+		this.table = new ManagedTable(this.name,
+			new Column('ZAT'),
+			new Column('Spielart').withStyle('padding-right', '0.5em', true),
+			new Column('Gegner'),
+			new Column('Ergebnis'),
+			new Column('Bericht')
+		);
+
+		this.table.initialize(doc, false);
+		
+		this.table.rows.slice(1).forEach(row => {
+
+			row.cells['Info'] = row.cells[5];
+
 			let matchday = data.team.getMatchDay(season, +row.cells['ZAT'].textContent);
 			let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
 			if (!Page.ShowteamSeason.GAMEINFO_NOT_SET.includes(gameInfo)) {
@@ -38,7 +49,7 @@ Page.ShowteamSeason = class extends Page {
 				matchday.result = row.cells['Ergebnis'].textContent;
 				if (!matchday.result) {
 					if (matchday.competition === Competition.FRIENDLY) {
-						matchday.friendlyShare = +row.cells[5].textContent.split('/', 2)[0];
+						matchday.friendlyShare = +row.cells['Info'].textContent.split('/', 2)[0];
 					} else if (matchday.competition !== Competition.LEAGUE && !nextRound[matchday.competition]) {
 						matchday.nextRound = true;
 						nextRound[matchday.competition] = true;
@@ -76,11 +87,9 @@ Page.ShowteamSeason = class extends Page {
 
 		this.selectedSeason = +doc.querySelector('select[name=saison]').value;
 
-		this.table = HtmlUtil.getTableByHeader(doc, ...Page.ShowteamSeason.HEADERS);
-
 		let leagueRound = 1;
 
-		Array.from(this.table.rows).forEach((row, i) => {
+		this.table.rows.forEach((row, i) => {
 
 			row.cells['Info'] = row.cells[5];
 
@@ -117,7 +126,6 @@ Page.ShowteamSeason = class extends Page {
 						gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
 					}
 					row.cells['Spielart'].textContent = gameInfo.replace(/\s+/g, ' ');
-					row.cells['Spielart'].style.setProperty('padding-right', '0.5em', 'important');
 				}
 			}
 		});
@@ -135,7 +143,7 @@ Page.ShowteamSeason = class extends Page {
 				form.appendChild(scrollButton);
 			}
 
-			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 
 			this.balancedMatchDays = data.team.getMatchDaysWithBalance(this.selectedSeason, data.lastMatchDay, data.viewSettings);
 			this.updateWithMatchDays(this.balancedMatchDays);
@@ -149,7 +157,7 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	updateWithMatchDays (matchDays) {
 
-		Array.from(this.table.rows).forEach((row, i) => {
+		this.table.rows.forEach((row, i) => {
 
 			for (let season = matchDays[0].season; season <= matchDays[matchDays.length - 1].season; season++) {
 
