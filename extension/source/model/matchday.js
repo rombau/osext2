@@ -193,6 +193,21 @@ class MatchDay {
 	}
 
 	/**
+	 * Subtracts the given days (zats) from the match day.
+	 *
+	 * @param {Number} zats
+	 * @returns {MatchDay}
+	 */
+	subtract (zats) {
+		this.zat -= zats;
+		while (this.zat <= 0) {
+			this.zat += SEASON_MATCH_DAYS;
+			this.season--;
+		}
+		return this;
+	}
+
+	/**
 	 * Returns the match day income based on the available stadium.
 	 *
 	 * @param {Stadium} stadium the available stadium at this match day
