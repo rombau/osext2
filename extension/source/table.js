@@ -531,6 +531,13 @@ class ManagedTable {
 	}
 
 	/**
+	 * @property {Node} element of the table
+	 */
+	get element () {
+		return this.table;
+	}
+
+	/**
 	 * @property {Node} parentNode of the table (=container)
 	 */
 	get container () {

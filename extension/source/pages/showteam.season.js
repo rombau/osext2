@@ -143,7 +143,7 @@ Page.ShowteamSeason = class extends Page {
 				form.appendChild(scrollButton);
 			}
 
-			this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
+			this.table.container.insertBefore(this.createToolbar(doc, data), this.table.element);
 
 			this.balancedMatchDays = data.team.getMatchDaysWithBalance(this.selectedSeason, data.lastMatchDay, data.viewSettings);
 			this.updateWithMatchDays(this.balancedMatchDays);
