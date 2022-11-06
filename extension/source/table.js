@@ -543,5 +543,12 @@ class ManagedTable {
 	get parentNode () {
 		return this.container.parentNode;
 	}
+
+	/**
+	 * @property {DOMTokenList} classList of the table
+	 */
+	get classList () {
+		return this.table.classList;
+	}
 }
 

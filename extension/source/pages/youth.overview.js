@@ -5,11 +5,7 @@ Page.YouthOverview = class extends Page.Youth {
 
 		super('Jugendübersicht', 'ju.php', new Page.Param('page', 1, true));
 
-		/** @type {HTMLTableElement} */
-		this.table;
 	}
-
-	static HEADERS = ['Alter', 'Geb.', '|Land', 'U', 'Skillschnitt', 'Talent', 'Aktion', 'Aufwertung'];
 
 	/**
 	 * @param {Document} doc
@@ -26,7 +22,27 @@ Page.YouthOverview = class extends Page.Youth {
 
 			let oldYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
 
-			HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthOverview.HEADERS).forEach((row) => {
+			this.table = this.table || new ManagedTable(this.name,
+				new Column('Alter'),
+				new Column('Geb.').withStyle('text-align','left'),
+				new Column('Pos', Origin.Extension),
+				new Column('Land').withStyle('text-align','left').withStyle('padding-left','0.5em', true),
+				new Column('U'),
+				new Column('Skillschnitt').withHeader('Skillschn.'),
+				new Column('Opt.Skill', Origin.Extension).withStyle('padding-right','0.5em', true),
+				new Column('Talent').withStyle('width','4.5em'),
+				new Column('Aktion'),
+				new Column('Aufwertung').withStyle('width','9em'),
+				new Column('&Oslash;/Zat', Origin.Extension).withHeader('&Oslash;/Zat', 'Durchschnittliche Aufwertungen pro Zat'),
+				new Column('Marktwert', Origin.Extension).withStyle('width','6em').withStyle('text-align','right'),
+				new Column('&Oslash;P', Origin.Extension).withHeader('&Oslash;P', 'Durchschnitt Primärskills').withStyle('width','3.5em').withStyle('text-align','right'),
+				new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenskills').withStyle('width','3.5em').withStyle('text-align','right'),
+				new Column('&Oslash;U', Origin.Extension).withHeader('&Oslash;U', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em').withStyle('text-align','right')
+			);
+
+			this.table.initialize(doc);
+
+			this.table.rows.slice(1).forEach(row => {
 
 				if (this.isYearHeaderRow(row)) {
 
@@ -53,8 +69,8 @@ Page.YouthOverview = class extends Page.Youth {
 						player.pos = undefined;
 					}
 
-					player.countryCode = row.cells['Land'].textContent;
-					player.countryName = row.cells['Land'].firstChild.title;
+					player.countryCode = row.cells['Land'].textContent.trim();
+					player.countryName = row.cells['Land'].lastChild.title;
 					player.uefa = row.cells['U'].textContent ? false : true;
 
 					player.talent = row.cells['Talent'].textContent;
@@ -108,79 +124,9 @@ Page.YouthOverview = class extends Page.Youth {
 				element = next;
 			}
 
-			this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOverview.HEADERS);
-
 			this.table.classList.add(STYLE_YOUTH);
 
-			Array.from(this.table.rows)
-				.filter(row => !this.handleYearHeader(row))
-				.slice(0, -1)
-				.forEach((row, index) => {
-
-				let baseCell = row.cells['Alter'].cloneNode(true);
-				baseCell.style.color = null;
-				baseCell.style.fontWeight = null;
-				baseCell.style.opacity = null;
-
-				row.cells['Pos'] = baseCell;
-				row.cells['Opt.Skill'] = baseCell.cloneNode(true);
-				row.cells['&Oslash;/Zat'] = baseCell.cloneNode(true);
-				row.cells['Marktwert'] = baseCell.cloneNode(true);
-				row.cells['&Oslash;P'] = baseCell.cloneNode(true);
-				row.cells['&Oslash;N'] = baseCell.cloneNode(true);
-				row.cells['&Oslash;U'] = baseCell.cloneNode(true);
-
-				row.cells['&Oslash;P'].style.width = '45px';
-
-				if (index === 0) {
-
-					row.cells['Skillschnitt'].textContent = 'Skillschn.';
-					row.cells['Talent'].style.width = '4.5em';
-					row.cells['Aufwertung'].style.width = '9em';
-					row.cells['Marktwert'].style.width = '6em';
-					row.cells['Marktwert'].style.textAlign = 'right';
-					row.cells['&Oslash;P'].style.width = '3.5em';
-					row.cells['&Oslash;N'].style.width = '3.5em';
-					row.cells['&Oslash;U'].style.width = '3.5em';
-					row.cells['&Oslash;P'].style.textAlign = 'right';
-					row.cells['&Oslash;N'].style.textAlign = 'right';
-					row.cells['&Oslash;U'].style.textAlign = 'right';
-
-					row.cells['Pos'].textContent = 'Pos';
-					row.cells['Opt.Skill'].textContent = 'Opt.Skill';
-					row.cells['&Oslash;/Zat'].innerHTML = '&Oslash;/Zat';
-					row.cells['Marktwert'].textContent = 'Marktwert';
-					row.cells['&Oslash;P'].innerHTML = '<abbr title="Durchschnitt Primärskills">&Oslash;P</abbr>';
-					row.cells['&Oslash;N'].innerHTML = '<abbr title="Durchschnitt Nebenkills">&Oslash;N</abbr>';
-					row.cells['&Oslash;U'].innerHTML = '<abbr title="Durchschnitt unveränderliche Skills">&Oslash;U</abbr>';
-
-				} else {
-
-					row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
-
-					let player = data.team.youthPlayers[index - 1];
-
-					row.cells['Pos'].textContent = player.pos;
-					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
-					if (player.pos) {
-						row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
-						row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
-					} else {
-						row.cells['Marktwert'].textContent = '0';
-						row.cells['&Oslash;P'].textContent = '0.00';
-					}
-					row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
-					row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
-				}
-
-				row.insertBefore(row.cells['Pos'], row.cells['Geb.'].nextSibling);
-				row.insertBefore(row.cells['Opt.Skill'], row.cells['Talent']);
-				row.appendChild(row.cells['&Oslash;/Zat']);
-				row.appendChild(row.cells['Marktwert']);
-				row.appendChild(row.cells['&Oslash;P']);
-				row.appendChild(row.cells['&Oslash;N']);
-				row.appendChild(row.cells['&Oslash;U']);
-			});
+			this.table.rows.forEach(row => this.handleYearHeader(row));
 
 			let form = doc.querySelector('form');
 			form.parentNode.insertBefore(this.createToolbar(doc, data), form);
@@ -193,10 +139,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 */
 	updateWithTeam (team, current, matchDay) {
 
-		Array.from(this.table.rows)
-			.filter(row => this.isPlayerRow(row))
-			.slice(1)
-			.forEach((row, index) => {
+		this.table.rows.filter(row => this.isPlayerRow(row)).slice(1).forEach((row, index) => {
 
 			let player = team.youthPlayers[index];
 
@@ -259,8 +202,9 @@ Page.YouthOverview = class extends Page.Youth {
 
 			// styling
 			Array.from(row.cells).forEach((cell) => {
+				Object.keys(Position).forEach(pos => cell.classList.remove(pos));
 				let pos = row.cells['Pos'].textContent;
-				if (!Object.keys(Position).includes(cell.className) && pos) {
+				if (pos) {
 					cell.classList.add(pos);
 				}
 				cell.classList.remove(STYLE_FORECAST);
@@ -271,6 +215,7 @@ Page.YouthOverview = class extends Page.Youth {
 				}
 			});
 
+			row.cells['U'].className = 'STU';
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
 			if (player.active && !current) {
@@ -284,5 +229,7 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
 			}
 		});
+
+		this.table.styleUnknownColumns(!current);
 	}
 }
