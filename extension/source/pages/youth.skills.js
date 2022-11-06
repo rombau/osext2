@@ -5,11 +5,7 @@ Page.YouthSkills = class extends Page.Youth {
 
 		super('Jugendeinzelskills', 'ju.php', new Page.Param('page', 2));
 
-		/** @type {HTMLTableElement} */
-		this.table;
 	}
-
-	static HEADERS = ['|Land|', 'U', 'Alter', 'SCH', 'BAK', 'KOB', 'ZWK', 'DEC', 'GES', 'FUQ', 'ERF', 'AGG', 'PAS', 'AUS', 'UEB', 'WID', 'SEL', 'DIS', 'ZUV', 'EIN'];
 
 	/**
 	 * @param {Document} doc
@@ -21,8 +17,36 @@ Page.YouthSkills = class extends Page.Youth {
 
 		let oldYouthTeamFingerprint = data.team.pageYouthPlayers.map(p => p.getFingerPrint()).join();
 
-		HtmlUtil.getTableRowsByHeader(doc, ...Page.YouthSkills.HEADERS)
-			.filter(row => this.isPlayerRow(row)).forEach((row) => {
+		this.table = this.table || new ManagedTable(this.name,
+			new Column('Alter'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Pos', Origin.Extension),
+			new Column('Land').withStyle('text-align','left'),
+			new Column('U'),
+			new Column('SCH'),
+			new Column('BAK'),
+			new Column('KOB'),
+			new Column('ZWK'),
+			new Column('DEC'),
+			new Column('GES'),
+			new Column('FUQ'),
+			new Column('ERF'),
+			new Column('AGG'),
+			new Column('PAS'),
+			new Column('AUS'),
+			new Column('UEB'),
+			new Column('WID'),
+			new Column('SEL'),
+			new Column('DIS'),
+			new Column('ZUV'),
+			new Column('EIN'),
+			new Column('Skillschn.', Origin.Extension).withStyle('padding-left','0.6em', true),
+			new Column('Opt.Skill', Origin.Extension).withStyle('padding-right','0.6em', true)
+		);
+
+		this.table.initialize(doc);
+
+		this.table.rows.slice(1).filter(row => this.isPlayerRow(row)).forEach(row => {
 
 			let player = data.team.pageYouthPlayers[index] || new YouthPlayer();
 			
@@ -51,57 +75,11 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthSkills.HEADERS);
-
 		this.table.classList.add(STYLE_YOUTH);
 
-		Array.from(this.table.rows)
-			.filter(row => !this.handleYearHeader(row))
-			.forEach((row, index) => {
+		this.table.rows.slice(1).forEach(row => this.handleYearHeader(row));
 
-			let oldAgeColumn = row.cells['Alter'];
-			let newAgeColumn = oldAgeColumn.cloneNode(true);
-			row.cells['Alter'] = newAgeColumn;
-
-			row.cells['Geb.'] = row.cells['Alter'].cloneNode(true);
-			row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
-			row.cells['Skillschn.'] = row.cells['Alter'].cloneNode(true);
-			row.cells['Opt.Skill'] = row.cells['Alter'].cloneNode(true);
-
-			row.cells['Skillschn.'].style.paddingLeft = '10px';
-
-			if (index === 0) {
-
-				row.cells['Geb.'].textContent = 'Geb.';
-				row.cells['Pos'].textContent = 'Pos';
-				row.cells['Skillschn.'].textContent = 'Skillschn.';
-				row.cells['Opt.Skill'].textContent = 'Opt.Skill';
-
-			} else {
-
-				row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
-
-				let player = data.team.youthPlayers[index - 1];
-
-				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN 
-					&& (player.getSkillAverage(player.getPrimarySkills()) + player.getSkillAverage(player.getSecondarySkills())) > 0 ? player.pos : '');
-				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
-				row.cells['Opt.Skill'].textContent = (row.cells['Pos'].textContent ? player.getOpti().toFixed(2) : '');
-			}
-
-			row.insertBefore(row.cells['Pos'], row.cells[0]);
-			row.insertBefore(row.cells['Geb.'], row.cells[0]);
-			row.insertBefore(newAgeColumn, row.cells[0]);
-
-			row.appendChild(row.cells['Skillschn.']);
-			row.appendChild(row.cells['Opt.Skill']);
-
-			row.removeChild(oldAgeColumn);
-
-		});
-
-		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 	}
 
 	/**
@@ -111,10 +89,7 @@ Page.YouthSkills = class extends Page.Youth {
 	 */
 	updateWithTeam (team, current, matchDay) {
 
-		Array.from(this.table.rows)
-			.filter(row => this.isPlayerRow(row))
-			.slice(1)
-			.forEach((row, index) => {
+		this.table.rows.slice(1).filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 
 			let player = team.youthPlayers[index];
 
@@ -123,8 +98,10 @@ Page.YouthSkills = class extends Page.Youth {
 			if (player.active) {
 
 				row.cells['Geb.'].textContent = player.birthday;
+				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN 
+					&& (player.getSkillAverage(player.getPrimarySkills()) + player.getSkillAverage(player.getSecondarySkills())) > 0 ? player.pos : '');
 
-				Object.keys(player.skills).forEach((skillname, s) => {
+				Object.keys(player.skills).forEach(skillname => {
 					row.cells[skillname.toUpperCase()].textContent = player.skills[skillname];
 				});
 
@@ -133,7 +110,9 @@ Page.YouthSkills = class extends Page.Youth {
 
 			} else {
 
-				Object.keys(player.skills).forEach((skillname, s) => {
+				row.cells['Pos'].textContent = '';
+
+				Object.keys(player.skills).forEach(skillname => {
 					row.cells[skillname.toUpperCase()].textContent = '';
 				});
 
@@ -142,9 +121,10 @@ Page.YouthSkills = class extends Page.Youth {
 			}
 
 			// styling
-			Array.from(row.cells).forEach((cell) => {
+			Array.from(row.cells).forEach(cell => {
+				Object.keys(Position).forEach(pos => cell.classList.remove(pos));
 				let pos = row.cells['Pos'].textContent;
-				if (!Object.keys(Position).includes(cell.className) && pos) {
+				if (pos) {
 					cell.classList.add(pos);
 				}
 				cell.classList.remove(STYLE_FORECAST);
@@ -155,6 +135,7 @@ Page.YouthSkills = class extends Page.Youth {
 				}
 			});
 
+			row.cells['U'].className = 'STU';
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
 			if (player.active && !current) {
@@ -165,10 +146,12 @@ Page.YouthSkills = class extends Page.Youth {
 					row.cells[skillname.toUpperCase()].classList.add(STYLE_FORECAST);
 				});
 			}
-			Object.keys(player.getPrimarySkills()).forEach((skillname, s) => {
+			Object.keys(player.getPrimarySkills()).forEach(skillname => {
 				row.cells[skillname.toUpperCase()].classList.add(STYLE_PRIMARY);
 			});
 		});
+
+		this.table.styleUnknownColumns(!current);
 	}
 }
 
