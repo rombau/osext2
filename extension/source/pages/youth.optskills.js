@@ -5,8 +5,6 @@ Page.YouthOptskills = class extends Page.Youth {
 
 		super('Jugend-Optis', 'ju.php', new Page.Param('page', 3));
 
-		/** @type {HTMLTableElement} */
-		this.table;
 	}
 
 	static HEADERS = ['|Land', 'U', 'Alter', 'Skill', 'TOR', 'ABW', 'DMI', 'MIT', 'OMI', 'STU'];
@@ -17,39 +15,40 @@ Page.YouthOptskills = class extends Page.Youth {
 	 */
 	extend(doc, data) {
 
-		this.table = HtmlUtil.getTableByHeader(doc, ...Page.YouthOptskills.HEADERS);
+		this.table = this.table || new ManagedTable(this.name,
+			new Column('Alter'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Pos', Origin.Extension),
+			new Column('Land').withStyle('text-align','left'),
+			new Column('U'),
+			new Column('Skill').withHeader('Skillschn.'),
+			new Column('TOR').withStyle('padding-left', '2em', true),
+			new Column('PullTOR', Origin.Extension).withHeader('', 'als TOR ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('ABW'),
+			new Column('PullABW', Origin.Extension).withHeader('', 'als ABW ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('DMI'),
+			new Column('PullDMI', Origin.Extension).withHeader('', 'als DMI ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('MIT'),
+			new Column('PullMIT', Origin.Extension).withHeader('', 'als MIT ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('OMI'),
+			new Column('PullOMI', Origin.Extension).withHeader('', 'als OMI ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('STU'),
+			new Column('PullSTU', Origin.Extension).withHeader('', 'als STU ziehen').withStyle('text-align','left').withStyle('width','1em'),
+			new Column('Pull', Origin.Extension).withHeader('Aktion').withStyle('text-align','left').withStyle('width','6.5em').withStyle('padding-left','1em', true)
+		);
+
+		this.table.initialize(doc);
 
 		this.table.classList.add(STYLE_YOUTH);
 
-		Array.from(this.table.rows)
-			.filter(row => !this.handleYearHeader(row))
-			.forEach((row, index) => {
+		this.table.rows.slice(1).filter(row => !this.handleYearHeader(row)).forEach((row, index) => {
 
-			let oldAgeColumn = row.cells['Alter'];
-			let newAgeColumn = oldAgeColumn.cloneNode(true);
-			row.cells['Alter'] = newAgeColumn;
-
-			row.cells['Geb.'] = row.cells['Alter'].cloneNode(true);
-			row.cells['Pos'] = row.cells['Alter'].cloneNode(true);
-
-			// pull information
-			row.cells['Pull'] = row.cells['Alter'].cloneNode(true);
-			row.cells['Pull'].style.textAlign = 'left';
-			row.cells['Pull'].style.width = '6.5em';
-			row.cells['Pull'].style.setProperty('padding-left', '1em', 'important');
-
-			let player = index > 0 ? data.team.youthPlayers[index - 1] : null;
+			let player = data.team.youthPlayers[index];
 
 			// pull columns by position
 			Object.keys(Position).forEach(pos => {
-				row.cells['Pull' + pos] = row.cells[pos].cloneNode(true);
-				row.cells['Pull' + pos].style.textAlign = 'left';
-				row.cells['Pull' + pos].style.width = '1em';
 				row.cells['Pull' + pos].textContent = '';
-
-				if (index === 0) {
-					row.cells['Pull' + pos].textContent = '';
-				} else if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
+				if ((pos === Position.TOR) == (player.pos === Position.TOR)) {
 					let setButton = HtmlUtil.createAwesomeButton(doc, 'fa-level-up-alt', (event) => {
 						let viewMatchday = data.viewSettings.youthPlayerMatchDay;
 						let daySpan = row.cells['Pull'].lastChild;
@@ -67,73 +66,55 @@ Page.YouthOptskills = class extends Page.Youth {
 					row.cells['Pull' + pos].classList.add(STYLE_SET_ZAT);
 					row.cells['Pull' + pos].appendChild(setButton);
 				}
-				row.insertBefore(row.cells['Pull' + pos], row.cells[pos].nextElementSibling);
 			});
 
-			row.cells['TOR'].style.setProperty('padding-left', '2em', 'important');
+			row.cells['Geb.'].textContent = player.birthday;
+			row.cells['Pos'].textContent = player.pos;
+			row.cells['Pull'].textContent = '';
 
-			if (index === 0) {
-				row.cells['Geb.'].textContent = 'Geb.';
-				row.cells['Pos'].textContent = 'Pos';
-				row.cells['Skill'].textContent = 'Skillschn.';
-				row.cells['Pull'].textContent = 'Zieh-Info';
-			} else {
-				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = player.pos;
-				row.cells['Pull'].textContent = '';
-
-				let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
-					let cell = event.target.parentNode;
-					let viewMatchday = ensurePrototype(data.viewSettings.youthPlayerMatchDay, MatchDay);
-					cell.classList.remove(STYLE_DELETE);
-					if (!data.lastMatchDay.equals(viewMatchday)) {
-						this._addPullClass(player, row, data.team.league.level);
-					}
-					player.pullMatchDay = null;
-					player.pullPosition = null;
-					player.pullContractTerm = null;
-					Persistence.storeExtensionData(data);
-					let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
-					this.updateWithTeam(matchDayTeam, false, viewMatchday);
-				});
-
-				let pullDaySpan = doc.createElement('span');
-				if (player.pullMatchDay) {
-					pullDaySpan.textContent = `${player.pullMatchDay.season}/${player.pullMatchDay.zat}`;
-					row.cells['Pull'].classList.add(STYLE_DELETE);
+			let removeButton = HtmlUtil.createAwesomeButton(doc, 'fa-trash-alt', (event) => {
+				let cell = event.target.parentNode;
+				let viewMatchday = ensurePrototype(data.viewSettings.youthPlayerMatchDay, MatchDay);
+				cell.classList.remove(STYLE_DELETE);
+				if (!data.lastMatchDay.equals(viewMatchday)) {
+					this._addPullClass(player, row, data.team.league.level);
 				}
+				player.pullMatchDay = null;
+				player.pullPosition = null;
+				player.pullContractTerm = null;
+				Persistence.storeExtensionData(data);
+				let matchDayTeam = data.team.getForecast(data.lastMatchDay, viewMatchday);
+				this.updateWithTeam(matchDayTeam, false, viewMatchday);
+			});
 
-				let pullContractSpan = doc.createElement('span');
-				pullContractSpan.addEventListener('click', () => {
-					player.pullContractTerm = CONTRACT_LENGTHS.find(length => length > player.pullContractTerm);
-					if (!player.pullContractTerm) player.pullContractTerm = CONTRACT_LENGTHS[0];
-					Persistence.storeExtensionData(data);
-					pullContractSpan.textContent = player.pullContractTerm;
-				});
-				pullContractSpan.title = 'Vetragslänge';
-				pullContractSpan.style.float = 'right';
-				pullContractSpan.classList.add(STYLE_SET_CONTRACT);
-				if (player.pullContractTerm) {
-					pullContractSpan.textContent = player.pullContractTerm;
-				}
-
-				row.cells['Pull'].classList.add(STYLE_SET_ZAT);
-
-				row.cells['Pull'].appendChild(removeButton);
-				row.cells['Pull'].appendChild(pullContractSpan);
-				row.cells['Pull'].appendChild(pullDaySpan);
+			let pullDaySpan = doc.createElement('span');
+			if (player.pullMatchDay) {
+				pullDaySpan.textContent = `${player.pullMatchDay.season}/${player.pullMatchDay.zat}`;
+				row.cells['Pull'].classList.add(STYLE_DELETE);
 			}
 
-			row.insertBefore(row.cells['Pos'], row.cells[0]);
-			row.insertBefore(row.cells['Geb.'], row.cells[0]);
-			row.insertBefore(newAgeColumn, row.cells[0]);
+			let pullContractSpan = doc.createElement('span');
+			pullContractSpan.addEventListener('click', () => {
+				player.pullContractTerm = CONTRACT_LENGTHS.find(length => length > player.pullContractTerm);
+				if (!player.pullContractTerm) player.pullContractTerm = CONTRACT_LENGTHS[0];
+				Persistence.storeExtensionData(data);
+				pullContractSpan.textContent = player.pullContractTerm;
+			});
+			pullContractSpan.title = 'Vetragslänge';
+			pullContractSpan.style.float = 'right';
+			pullContractSpan.classList.add(STYLE_SET_CONTRACT);
+			if (player.pullContractTerm) {
+				pullContractSpan.textContent = player.pullContractTerm;
+			}
 
-			row.removeChild(oldAgeColumn);
+			row.cells['Pull'].classList.add(STYLE_SET_ZAT);
 
-			row.appendChild(row.cells['Pull']);
+			row.cells['Pull'].appendChild(removeButton);
+			row.cells['Pull'].appendChild(pullContractSpan);
+			row.cells['Pull'].appendChild(pullDaySpan);
 		});
 
-		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table);
+		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 	}
 
 	/**
@@ -143,10 +124,7 @@ Page.YouthOptskills = class extends Page.Youth {
 	 */
 	updateWithTeam (team, current, matchDay) {
 
-		Array.from(this.table.rows)
-			.filter(row => this.isPlayerRow(row))
-			.slice(1)
-			.forEach((row, index) => {
+		this.table.rows.slice(1).filter(row => this.isPlayerRow(row)).forEach((row, index) => {
 
 			let player = team.youthPlayers[index];
 
@@ -172,7 +150,8 @@ Page.YouthOptskills = class extends Page.Youth {
 
 			// styling
 			Array.from(row.cells).forEach((cell) => {
-				if (player.pos) row.cells[player.pos].classList.add(STYLE_PRIMARY);
+				Object.keys(Position).forEach(pos => cell.classList.remove(pos));
+				if (player.pos === Position.TOR) cell.classList.add(player.pos);
 				cell.classList.remove(STYLE_FORECAST);
 				if (player.active) {
 					cell.classList.remove(STYLE_INACTIVE);
@@ -180,8 +159,12 @@ Page.YouthOptskills = class extends Page.Youth {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
-
+			
+			row.cells['U'].className = 'STU';
+			
 			Object.keys(Position).forEach(pos => {
+				row.cells[pos].classList.add(pos);
+				row.cells['Pull' + pos].classList.add(pos);
 				if (matchDay) {
 					row.cells['Pull'].classList.remove(STYLE_HIDDEN);
 					row.cells['Pull' + pos].classList.remove(STYLE_HIDDEN);
@@ -191,6 +174,8 @@ Page.YouthOptskills = class extends Page.Youth {
 				}
 				row.cells['Pull' + pos].classList.remove(STYLE_ADD);
 			});
+
+			if (player.pos) row.cells[player.pos].classList.add(STYLE_PRIMARY);
 
 			if ((player.origin && player.origin.pullMatchDay) || player.pullMatchDay) {
 				row.cells['Pull'].classList.add(STYLE_DELETE);
@@ -208,6 +193,8 @@ Page.YouthOptskills = class extends Page.Youth {
 			}
 
 		});
+
+		this.table.styleUnknownColumns(!current);
 
 	}
 
