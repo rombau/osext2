@@ -114,7 +114,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 		this.table.rows.slice(1, -1).forEach(row => {
 
-			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = team.getSquadPlayer(id);
 
 			if (player.active) {

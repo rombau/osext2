@@ -63,7 +63,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 			row.cells['Opt.Skill'].classList.add(STYLE_PRIMARY);
 
-			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = data.team.getSquadPlayer(id);
 
 			if ((player.loan && player.loan.duration > 0) || player.transferLock) {
@@ -162,7 +162,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 
 		this.table.rows.slice(1, -1).forEach(row => {
 
-			let id = HtmlUtil.extractIdFromHref(row.cells[2].firstChild.href);
+			let id = HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href);
 			let player = team.getSquadPlayer(id);
 
 			if (player.active) {
