@@ -228,12 +228,12 @@ class ManagedTable {
 					if (column.title) {
 						cell.title = column.title;
 						let span = doc.createElement('span');
-						span.innerHTML = column.header;
+						span.textContent = column.header;
 						span.className = 'abbr';
 						cell.textContent = '';
 						cell.appendChild(span);
 					} else {
-						cell.innerHTML = column.header;
+						cell.textContent = column.header;
 					}
 				}					
 				orderedCells.push(cell);
@@ -311,7 +311,7 @@ class ManagedTable {
 							cell.textContent = (cell.textContent + ' ' + cell.nextElementSibling.textContent).trim();
 							column.header = cell.textContent;
 						} else {
-							cell.innerHTML = (cell.innerHTML + ' ' + cell.nextElementSibling.innerHTML).trim();
+							cell.append(' ', ...cell.nextElementSibling.childNodes);
 						}
 						cell.nextElementSibling.remove();
 					});

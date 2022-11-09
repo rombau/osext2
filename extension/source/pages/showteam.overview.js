@@ -33,9 +33,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			new Column('Verl.'),
 			new Column('T'),
 			new Column('TS').withStyle('width','1.9em'),
-			new Column('&Oslash;P', Origin.Extension).withHeader('&Oslash;P', 'Durchschnitt Primärskills').withStyle('width','3.5em'),
-			new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenskills').withStyle('width','3.5em'),
-			new Column('&Oslash;U', Origin.Extension).withHeader('&Oslash;U', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em'),
+			new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width','3.5em'),
+			new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width','3.5em'),
+			new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em'),
 			new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width','3.5em')
 		);
 
@@ -140,9 +140,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 						HtmlUtil.createAbbreviation(special.description, special.abbr));
 				});
 
-				row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
-				row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
-				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
+				row.cells['ØP'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+				row.cells['ØN'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+				row.cells['ØU'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
 				row.cells['EQ19'].textContent = player.getPotential().toFixed(0);
 
@@ -183,9 +183,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 				row.cells['S'].textContent = '';
 
-				row.cells['&Oslash;P'].textContent = '';
-				row.cells['&Oslash;N'].textContent = '';
-				row.cells['&Oslash;U'].textContent = '';
+				row.cells['ØP'].textContent = '';
+				row.cells['ØN'].textContent = '';
+				row.cells['ØU'].textContent = '';
 
 				row.cells['EQ19'].textContent = '';
 			}
@@ -219,9 +219,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
 				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
 				row.cells['S'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
+				row.cells['ØP'].classList.add(STYLE_FORECAST);
+				row.cells['ØN'].classList.add(STYLE_FORECAST);
+				row.cells['ØU'].classList.add(STYLE_FORECAST);
 				row.cells['EQ19'].classList.add(STYLE_FORECAST);
 			}
 		});

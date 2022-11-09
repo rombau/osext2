@@ -33,11 +33,11 @@ Page.YouthOverview = class extends Page.Youth {
 				new Column('Talent').withStyle('width','4.5em'),
 				new Column('Aktion'),
 				new Column('Aufwertung').withStyle('width','9em'),
-				new Column('&Oslash;/Zat', Origin.Extension).withHeader('&Oslash;/Zat', 'Durchschnittliche Aufwertungen pro Zat'),
+				new Column('Ø/Zat', Origin.Extension).withHeader('Ø/Zat', 'Durchschnittliche Aufwertungen pro Zat'),
 				new Column('Marktwert', Origin.Extension).withStyle('width','6em').withStyle('text-align','right'),
-				new Column('&Oslash;P', Origin.Extension).withHeader('&Oslash;P', 'Durchschnitt Primärskills').withStyle('width','3.5em').withStyle('text-align','right'),
-				new Column('&Oslash;N', Origin.Extension).withHeader('&Oslash;N', 'Durchschnitt Nebenskills').withStyle('width','3.5em').withStyle('text-align','right'),
-				new Column('&Oslash;U', Origin.Extension).withHeader('&Oslash;U', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em').withStyle('text-align','right')
+				new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width','3.5em').withStyle('text-align','right'),
+				new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width','3.5em').withStyle('text-align','right'),
+				new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em').withStyle('text-align','right')
 			);
 
 			this.table.initialize(doc);
@@ -154,32 +154,32 @@ Page.YouthOverview = class extends Page.Youth {
 				if (row.cells['Pos'].textContent) {
 					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 					row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
-					row.cells['&Oslash;P'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
-					row.cells['&Oslash;N'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
+					row.cells['ØP'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);
+					row.cells['ØN'].textContent = player.getSkillAverage(player.getSecondarySkills()).toFixed(2);
 					if (current) {
-						row.cells['&Oslash;/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
+						row.cells['Ø/Zat'].textContent = player.getAverageIncreasePerDay(player.getYouthDays(matchDay)).toFixed(2);
 					} else {
-						row.cells['&Oslash;/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
+						row.cells['Ø/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
 					}
 				} else {
 					row.cells['Opt.Skill'].textContent = '';
 					row.cells['Marktwert'].textContent = '';
-					row.cells['&Oslash;P'].textContent = '';
-					row.cells['&Oslash;N'].textContent = '';
-					row.cells['&Oslash;/Zat'].textContent = '';
+					row.cells['ØP'].textContent = '';
+					row.cells['ØN'].textContent = '';
+					row.cells['Ø/Zat'].textContent = '';
 				}
-				row.cells['&Oslash;U'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
+				row.cells['ØU'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
 			} else {
 
 				row.cells['Talent'].textContent = '';
 				row.cells['Skillschnitt'].textContent = '';
 				row.cells['Opt.Skill'].textContent = '';
-				row.cells['&Oslash;/Zat'].textContent = '';
+				row.cells['Ø/Zat'].textContent = '';
 				row.cells['Marktwert'].textContent = '';
-				row.cells['&Oslash;P'].textContent = '';
-				row.cells['&Oslash;N'].textContent = '';
-				row.cells['&Oslash;U'].textContent = '';
+				row.cells['ØP'].textContent = '';
+				row.cells['ØN'].textContent = '';
+				row.cells['ØU'].textContent = '';
 			}
 
 			row.cells['Aktion'].textContent = '';
@@ -222,11 +222,11 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['Alter'].classList.add(STYLE_FORECAST);
 				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
 				row.cells['Opt.Skill'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;/Zat'].classList.add(STYLE_FORECAST);
+				row.cells['Ø/Zat'].classList.add(STYLE_FORECAST);
 				row.cells['Marktwert'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;P'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;N'].classList.add(STYLE_FORECAST);
-				row.cells['&Oslash;U'].classList.add(STYLE_FORECAST);
+				row.cells['ØP'].classList.add(STYLE_FORECAST);
+				row.cells['ØN'].classList.add(STYLE_FORECAST);
+				row.cells['ØU'].classList.add(STYLE_FORECAST);
 			}
 		});
 

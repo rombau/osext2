@@ -213,11 +213,11 @@ describe('Managed table', () => {
 					new Column('Talent', Origin.OS),
 					new Column('Aktion', Origin.OS),
 					new Column('Aufwertung', Origin.OS),
-					new Column('&Oslash;/Zat', Origin.Extension),
+					new Column('Ø/Zat', Origin.Extension),
 					new Column('Marktwert', Origin.Extension),
-					new Column('&Oslash;P', Origin.Extension),
-					new Column('&Oslash;N', Origin.Extension),
-					new Column('&Oslash;U', Origin.Extension)
+					new Column('ØP', Origin.Extension),
+					new Column('ØN', Origin.Extension),
+					new Column('ØU', Origin.Extension)
 				);
 				
 				table.initialize(doc);
