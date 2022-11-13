@@ -167,9 +167,10 @@ class ManagedTable {
 	 * row.cells['Name'].textContent
 	 * 
 	 * @param {Document} doc the page document
-	 * @param {Boolean} customizable
+	 * @param {Boolean} [customizable=true] true if columns could be toggled/moved
+	 * @param {Boolean} [keepDomUnchanged=false] true if columns contents should be kept unchanged
 	 */
-	initialize (doc, customizable = true) {
+	initialize (doc, customizable = true, keepDomUnchanged = false) {
 
 		if (this.table) return;
 
@@ -199,7 +200,7 @@ class ManagedTable {
 		this.columnRelatedRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'')));
 
 		// join spaned columns; headers could be changed
-		cellHeaders = this._removeColSpans(osColumns);
+		if (!keepDomUnchanged) cellHeaders = this._removeColSpans(osColumns);
 	
 		// find index of original columns
 		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
@@ -252,11 +253,11 @@ class ManagedTable {
 			});
 
 			// reorder
-			row.replaceChildren(...orderedCells);
+			if (!keepDomUnchanged) row.replaceChildren(...orderedCells);
 			
 			// customizing based on options
 			if (row.isHeader) this.columnNames = orderedCells.map(cell => cell.columnName || cell.textContent);
-			this._customizeCells(orderedCells);
+			if (!keepDomUnchanged) this._customizeCells(orderedCells);
 
 			// add named references
 			Object.entries(namedCellMap).forEach(([name, cell]) => {

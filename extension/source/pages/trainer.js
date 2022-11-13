@@ -24,7 +24,7 @@ Page.Trainer = class extends Page {
 				new Column('Aktion')
 			);
 
-			this.table.initialize(doc, false);
+			this.table.initialize(doc, false, true);
 
 			this.table.rows.slice(1).forEach(row => {
 

@@ -101,6 +101,8 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extend(doc, data) {
 
+		doc.getElementsByTagName('div')[0].classList.add(STYLE_TEAM);
+
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
 
 		HtmlUtil.appendScript(doc, 'sortables_init();');

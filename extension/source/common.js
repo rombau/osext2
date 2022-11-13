@@ -124,6 +124,7 @@ const STYLE_MANAGED = 'osext-managed';
 const STYLE_HIDDEN_COLUMN = 'osext-hidden-column';
 const STYLE_DRAG = 'osext-drag';
 const STYLE_DRAGOVER = 'osext-drag-over';
+const STYLE_TEAM = 'osext-team';
 const STYLE_YOUTH = 'osext-youth';
 const STYLE_YOUTH_YEAR_HEADER = 'osext-youth-year-header';
 const STYLE_TRAINER = 'osext-trainer';
