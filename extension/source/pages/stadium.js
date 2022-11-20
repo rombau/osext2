@@ -40,7 +40,6 @@ Page.Stadium = class extends Page {
 				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1]+1);
 				expansionFinished = data.team.getMatchDay(expansionFinished.season, expansionFinished.zat);
 				expansionFinished.stadium = this.extractExpandedStadium(data.team.stadium, expansionElement);
-				data.team.getMatchDay(expansionFinished.season, expansionFinished.zat - 1).stadium = undefined; // bugfix
 				if (data.team.stadium.getPlaces() !== expansionFinished.stadium.getPlaces()) {
 					data.team.stadium.coveredSeats = Math.round(data.team.stadium.coveredSeats * STADIUM_EXPANSION_CAPACITY / 100);
 					data.team.stadium.seats = Math.round(data.team.stadium.seats * STADIUM_EXPANSION_CAPACITY / 100);
@@ -67,7 +66,8 @@ Page.Stadium = class extends Page {
 		stadium.places = currentStadium.places
 		stadium.pitchHeating = currentStadium.pitchHeating;
 
-		while ((expansionElement = expansionElement.nextElementSibling)) {
+		expansionElement = expansionElement.nextElementSibling.firstChild;
+		do {
 			let text = expansionElement.textContent;
 			let value = +text.split(" ", 2)[0].replaceAll('.', '');
 			if (text.search(/Eine Rasenheizung wird gebaut/) != -1) {
@@ -101,9 +101,7 @@ Page.Stadium = class extends Page {
 				stadium.coveredPlaces += value;
 				stadium.places -= value;
 			}
-		}
+		} while ((expansionElement = expansionElement.nextSibling))
 		return stadium;
 	}
-
 }
-

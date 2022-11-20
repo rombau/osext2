@@ -46,8 +46,6 @@ Page.ShowteamInfo = class extends Page {
 				expansionFinished.stadium = this.extractExpandedStadium(data.team.stadium, Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 					return table.rows.length >= 3 && table.rows[0].cells[0].textContent === expansionElement.textContent;
 				}));
-				let expansionLastDay = new MatchDay(expansionFinished.season, expansionFinished.zat).subtract(1);
-				data.team.getMatchDay(expansionLastDay.season, expansionLastDay.zat).stadium = undefined; // bugfix
 				if (data.team.stadium.getPlaces() !== expansionFinished.stadium.getPlaces()) {
 					data.team.stadium.coveredSeats = Math.round(data.team.stadium.coveredSeats * STADIUM_EXPANSION_CAPACITY / 100);
 					data.team.stadium.seats = Math.round(data.team.stadium.seats * STADIUM_EXPANSION_CAPACITY / 100);

@@ -252,12 +252,12 @@ class Team {
 					balancedMatchDay = this.copyScheduledMatchDay(season, zat);
 					balancedMatchDays.push(balancedMatchDay);
 				}
-				stadium = balancedMatchDay.stadium || stadium;
 				if (balancedMatchDay.after(lastMatchDay)) {
 					balancedMatchDay.accountBalancePromise = getQueuedPromise((resolve, reject) => {
 						setTimeout(() => {
 							try {
 								balancedMatchDay.accountBalanceBefore = accountBalance;
+								stadium = balancedMatchDay.stadium || stadium;
 								accountBalance += balancedMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 								accountBalance += balancedMatchDay.calculatePremium(this.league, viewSettings);
 								let forecastedTeam = !calculatedMatchDays ? this.getForecast(lastMatchDay, balancedMatchDay) : new Team();
