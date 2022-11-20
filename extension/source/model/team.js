@@ -395,7 +395,7 @@ class Team {
 	 * @returns {Number} the bonus
 	 */
 	calculateWinBonusPerLeagueMatchDay (leagueRanking, leagueSize) {
-		let season = this.matchDays.slice().sort((day1, day2) => {
+		let season = this.matchDays.slice().filter(matchDay => matchDay.competition === Competition.LEAGUE).sort((day1, day2) => {
 			if (day1.before(day2)) return 1;
 			if (day1.after(day2)) return -1;
 			return 0;
