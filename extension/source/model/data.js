@@ -120,12 +120,12 @@ class ExtensionData {
 		this.pagesToRequest.push(new Page.YouthSkills());
 		this.pagesToRequest.push(new Page.YouthOptions());
 		this.pagesToRequest.push(new Page.AccountStatement());
-		// error during season interval
+		this.pagesToRequest.push(new Page.MatchDayReport());
+		this.pagesToRequest.push(new Page.MatchDayOptions());
+		// error during season interval	
 		this.pagesToRequest.push(new Page.Trainer());
 		this.pagesToRequest.push(new Page.Training());
 		this.pagesToRequest.push(new Page.ContractExtension());
-		this.pagesToRequest.push(new Page.MatchDayReport());
-		this.pagesToRequest.push(new Page.MatchDayOptions());
 	}
 
 	/**
@@ -166,17 +166,15 @@ class ExtensionData {
 	 * @returns {Boolean} true if the next zat season can be set and false otherwise
 	 */
 	initNextSeason (season) {
-		if (!this.nextZatSeason) {
-			if (this.nextZat == 1) {
-				let lastPlayedMatchDay = this.team.matchDays.slice().reverse().find(matchDay => matchDay.result);
-				if (lastPlayedMatchDay) {
-					this.nextZatSeason = lastPlayedMatchDay.season + 1;
-					return true;
-				}
-				return false;
+		if (this.nextZat == 1) {
+			let lastPlayedMatchDay = this.team.matchDays.slice().reverse().find(matchDay => matchDay.result);
+			if (lastPlayedMatchDay) {
+				this.nextZatSeason = lastPlayedMatchDay.season + 1;
+				return true;
 			}
-			this.nextZatSeason = season;
+			return false;
 		}
+		this.nextZatSeason = season;
 		return true;
 	}
 

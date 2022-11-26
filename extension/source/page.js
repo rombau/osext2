@@ -8,6 +8,13 @@ class Warning extends Error {
 	}
 }
 
+class SeasonIntervalWarning extends Warning {
+
+	constructor(message) {
+		super(message);
+	}
+}
+
 /**
  * Enum for http methods.
  * @readonly
@@ -157,7 +164,7 @@ class Page {
 			throw new Warning('Anmeldung erforderlich');
 		}
 		else if (contains(doc.body, /Diese Funktion ist erst ZAT 1 wieder verf.gbar/)) {
-			throw new Warning('Saisonwechsel läuft');
+			throw new SeasonIntervalWarning('Saisonwechsel läuft');
 		}
 	}
 
@@ -258,7 +265,16 @@ class Page {
 						});
 					});
 				}
-				return requestor.fetchPage(ensurePrototype(updatedData.pagesToRequest[0], Page));
+				return requestor.fetchPage(ensurePrototype(updatedData.pagesToRequest[0], Page)).catch(e => {
+					if (e instanceof SeasonIntervalWarning) {
+						Persistence.updateExtensionData(dataToCleanUp => {
+							dataToCleanUp.pagesToRequest = [];
+						}).then(() => {
+							requestor.finish();
+						});
+					}
+					throw e;
+				});
 			} else {
 				if (requestor) {
 					requestor.finish();

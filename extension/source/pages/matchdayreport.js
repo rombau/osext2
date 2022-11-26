@@ -73,7 +73,7 @@ Page.MatchDayReport = class extends Page {
 				Array.from(tables[1].rows).filter(row => row.cells.length == 2).forEach(row => {
 					if (row.cells[1].textContent.includes('erfolgreich')) {
 						let id = HtmlUtil.extractIdFromHref(row.cells[0].firstChild.href);
-						let player = data.team.getSquadPlayer(id);
+						let player = data.team.getSquadPlayer(id, false);
 						player.lastTraining = player.lastTraining || new SquadPlayer.Training();
 						player.lastTraining.successful = true;
 					}

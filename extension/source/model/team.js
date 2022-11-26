@@ -119,9 +119,10 @@ class Team {
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
 	 *
 	 * @param {Number} id the id of the player to find (or add)
+	 * @param {Boolean} considerSquadPlayerAdded true if an added squad player should be considered for reload fo data
 	 * @returns {SquadPlayer} the player
 	 */
-	getSquadPlayer (id) {
+	getSquadPlayer (id, considerSquadPlayerAdded = true) {
 		if (!id) return null;
 
 		let player = this.squadPlayers.find(player => player.id === id);
@@ -129,7 +130,7 @@ class Team {
 			player = new SquadPlayer();
 			player.id = id;
 			this.squadPlayers.push(player);
-			this.squadPlayerAdded = true;
+			this.squadPlayerAdded = considerSquadPlayerAdded;
 		}
 		return ensurePrototype(player, SquadPlayer);
 	}
@@ -450,7 +451,7 @@ class Team {
 				copyMatchDay.competition = scheduledMatchDay.competition;
 				copyMatchDay.location = scheduledMatchDay.location;
 				copyMatchDay.opponent = scheduledMatchDay.opponent;
-				copyMatchDay.friendlyShare = scheduledMatchDay.friendlyShare;
+				if (scheduledMatchDay.season === season) copyMatchDay.friendlyShare = scheduledMatchDay.friendlyShare;
 			}
 			copyMatchDay.accountBalance = scheduledMatchDay.accountBalance;
 			scheduledMatchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat) || scheduledMatchDay;
