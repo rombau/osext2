@@ -85,12 +85,12 @@ class Requestor {
 		}
 		let init = {};
 		if (page.method === HttpMethod.POST) {
-			let data = new URLSearchParams();
+			let data = new FormData();
 			page.params.forEach(param => {
 				data.append(param.name, param.value);
 			});
 			init.method = page.method;
-			init.body = data.toString();
+			init.body = data;
 		}
 		const response = await fetch(page.createUrl(), init);
 		const html = await response.text();

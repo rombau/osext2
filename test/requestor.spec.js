@@ -61,7 +61,10 @@ describe('Requestor', () => {
 
 		requestor.fetchPage(page).then(() => {
 			expect(requestor.status.lastChild.textContent).toEqual('Initialisiere ZAT-Report (Saison 15, Zat 43)');
-			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/zar\.php/), { method: 'POST', body: 'saison=15&zat=43' });
+			let data = new FormData();
+			data.append('saison', '15');
+			data.append('zat', '43');
+			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/zar\.php/), { method: 'POST', body: data });
 			done();
 		});
 
