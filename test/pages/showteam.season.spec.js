@@ -39,27 +39,6 @@ describe('Page.ShowteamSeason', () => {
 		});
 	});
 
-	it('should extract match days from previous season', (done) => {
-
-		data.nextZat = 1;
-
-		Fixture.getDocument('showteam.php?s=6', doc => {
-
-			Array.from(doc.querySelector('table[border="0"][cellspacing="3"][cellpadding="3"]').rows).slice(1).forEach(row => {
-				row.cells[3].textContent = '';
-			});
-
-			page.extract(doc, data);
-
-			expect(data.pagesToRequest.length).toEqual(1);
-			expect(data.pagesToRequest[0].name).toEqual('Saisonplan (Saison 9)');
-
-			expect(data.nextMatchDay).toBeNull();
-
-			done();
-		});
-	});
-
 	it('should extract match days and extend page', (done) => {
 
 		data.nextZat = 53;

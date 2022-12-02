@@ -11,9 +11,8 @@ describe('ExtensionData', () => {
 
 		data.initNextZat(27);
 
-		let ok = data.initNextSeason(12);
+		data.initNextSeason(12);
 
-		expect(ok).toBeTruthy();
 		expect(data.nextMatchDay.zat).toEqual(27);
 		expect(data.nextMatchDay.season).toEqual(12);
 	});
@@ -24,20 +23,10 @@ describe('ExtensionData', () => {
 
 		data.initNextZat(73);
 
-		let ok = data.initNextSeason(12);
+		data.initNextSeason(12);
 
-		expect(ok).toBeTruthy();
 		expect(data.nextMatchDay.zat).toEqual(1);
 		expect(data.nextMatchDay.season).toEqual(13);
-	});
-
-	it('should initializes the next zat before season', () => {
-
-		data.initNextZat(0);
-
-		let ok = data.initNextSeason(12);
-
-		expect(ok).toBeFalsy()
 	});
 
 	it('should return next match day from team match days', () => {

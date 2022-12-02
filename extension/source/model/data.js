@@ -158,24 +158,21 @@ class ExtensionData {
 	 *
 	 * During the season interval (zat=1) there are two possible options for the season schedule:
 	 * - the previous season was extracted (with all the already played games):
-	 *   the season of the next zat can be set (season + 1)
-	 * - the new season (or nothing) was extracted:
-	 *   the previous season has to be loaded for future forecasts; return false
+	 *   the next zat is in the season of the last played game + 1
+	 * - the new season was extracted:
+	 *   the next zat is in the current season
 	 *
 	 * @param {Number} the next zat season
-	 * @returns {Boolean} true if the next zat season can be set and false otherwise
 	 */
 	initNextSeason (season) {
 		if (this.nextZat == 1) {
 			let lastPlayedMatchDay = this.team.matchDays.slice().reverse().find(matchDay => matchDay.result);
 			if (lastPlayedMatchDay) {
 				this.nextZatSeason = lastPlayedMatchDay.season + 1;
-				return true;
+				return;
 			}
-			return false;
 		}
 		this.nextZatSeason = season;
-		return true;
 	}
 
 	/**

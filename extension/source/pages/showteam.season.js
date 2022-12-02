@@ -64,10 +64,9 @@ Page.ShowteamSeason = class extends Page {
 			}
 		});
 
-		if (!data.initNextSeason(season)) {
-			this.logger.info(`Initiate loading of previous season (${season - 1}) matchday schedule`);
-			data.pagesToRequest.unshift(new Page.ShowteamSeason(season - 1));
-		} else if (data.lastMatchDay 
+		data.initNextSeason(season);
+
+		if (data.lastMatchDay 
 			&& data.lastMatchDay.opponent 
 			&& data.lastMatchDay.competition !== Competition.FRIENDLY 
 			&& data.lastMatchDay.location === GameLocation.HOME 
