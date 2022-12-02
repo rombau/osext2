@@ -39,6 +39,10 @@ describe('Page.ShowteamContracts', () => {
 				doc.querySelector('.osext-set-zat.add > .fas.fa-bolt').dispatchEvent(new Event('click'));
 				doc.querySelector('td.osext-set-zat.delete > i.fas.fa-trash-alt').dispatchEvent(new Event('click'));
 
+				doc.querySelector('.osext-set-zat.add > .fas.fa-plus-circle').dispatchEvent(new Event('click'));
+				doc.querySelector('td.osext-set-zat.delete > .osext-set-contract').dispatchEvent(new Event('click'));
+				doc.querySelector('td.osext-set-zat.delete > i.fas.fa-trash-alt').dispatchEvent(new Event('click'));
+
 				done();
 			});
 
