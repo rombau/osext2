@@ -264,13 +264,13 @@ Page.ShowteamSeason = class extends Page {
 				winBonus.classList.add(STYLE_OFF);
 				winBonus.classList.remove(STYLE_ON);
 			}
-			page.updateWithMatchDays(data.team.getMatchDaysWithBalance(page.selectedSeason, data.lastMatchDay, data.viewSettings, this.balancedMatchDays));
 		};
 		winBonus.classList.add('fas');
 		winBonus.addEventListener('click', (event) => {
 			data.viewSettings.winBonus = !data.viewSettings.winBonus;
 			Persistence.storeExtensionData(data);
 			winBonus.update();
+			page.updateWithMatchDays(data.team.getMatchDaysWithBalance(page.selectedSeason, data.lastMatchDay, data.viewSettings, this.balancedMatchDays));
 		});
 		winBonus.update();
 		toolbar.appendChild(winBonus);

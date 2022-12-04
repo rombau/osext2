@@ -273,6 +273,8 @@ class Team {
 								if (viewSettings.winBonus && balancedMatchDay.competition === Competition.LEAGUE && balancedMatchDay.zat < 70) {
 									balancedMatchDay.winBonus = winBonusPerLeagueMatchDay;
 									accountBalance += winBonusPerLeagueMatchDay;
+								} else {
+									balancedMatchDay.winBonus = undefined;
 								}
 								balancedMatchDay.accountBalance = accountBalance;
 								resolve(balancedMatchDay);
@@ -438,11 +440,12 @@ class Team {
 			return ensurePrototype(JSON.parse(JSON.stringify(seasonMatchDay)), MatchDay);
 		}
 		let copyMatchDay = new MatchDay(season, zat);
-		let scheduledMatchDay = this.matchDays.slice().sort((day1, day2) => {
+		this.sortedMatchDays = this.sortedMatchDays || this.matchDays.slice().sort((day1, day2) => {
 			if (day1.before(day2)) return 1;
 			if (day1.after(day2)) return -1;
 			return 0;
-		}).find(matchDay => matchDay.zat === zat);
+		});
+		let scheduledMatchDay = this.sortedMatchDays.find(matchDay => matchDay.zat === zat);
 		if (scheduledMatchDay) {
 			if (scheduledMatchDay.season !== season &&
 				(scheduledMatchDay.competition === Competition.OSEQ || scheduledMatchDay.competition === Competition.OSE || scheduledMatchDay.competition === Competition.OSCQ || scheduledMatchDay.competition === Competition.OSC)) {
