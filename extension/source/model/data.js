@@ -172,7 +172,9 @@ class ExtensionData {
 				return;
 			}
 		}
-		this.nextZatSeason = season;
+		if (!this.nextZatSeason || season > this.nextZatSeason) {
+			this.nextZatSeason = season;
+		}
 	}
 
 	/**
