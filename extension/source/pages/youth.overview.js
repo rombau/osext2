@@ -204,7 +204,7 @@ Page.YouthOverview = class extends Page.Youth {
 			Array.from(row.cells).forEach((cell) => {
 				Object.keys(Position).forEach(pos => cell.classList.remove(pos));
 				let pos = row.cells['Pos'].textContent;
-				if (pos) {
+				if (pos && !cell.style.color) {
 					cell.classList.add(pos);
 				}
 				cell.classList.remove(STYLE_FORECAST);
