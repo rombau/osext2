@@ -13,6 +13,10 @@ Page.FastTransfer = class extends Page {
 	 */
 	extend(doc, data) {
 
+		if (!doc.querySelector('input[type="checkbox"][value]')) {
+			return;
+		}
+
 		this.table = new ManagedTable(this.name,
 			new Column('Name'),
 			new Column('Alter'),
