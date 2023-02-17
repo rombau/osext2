@@ -226,7 +226,7 @@ form > .fa-arrow-alt-circle-down {
 }
 .osext-balance-tooltip {
 	position: absolute;
-	width: 210%;
+	width: 225%;
 	vertical-align: bottom;
 	border: 1px solid var(--status-background-color);
 	background-color: var(--background-color);
@@ -257,6 +257,7 @@ form > .fa-arrow-alt-circle-down {
 .osext-balance:hover > .osext-balance-tooltip .left {
 	float: left;
 	font-size: 0.9em;
+	padding-top: 0.1em;
 }
 .osext-balance:hover > .osext-balance-tooltip .right {
 	float: right;

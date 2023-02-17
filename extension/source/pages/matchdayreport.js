@@ -62,7 +62,7 @@ Page.MatchDayReport = class extends Page {
 					matchday.physio = (matchday.physio || 0) + (-value);
 				} else if (label.search('Siegpr.mie') !== -1) {
 					matchday.winBonus = +value;
-				} else if (label.search('Aufstiegspr.mie') !== -1) {
+				} else if (label.search('Aufstiegspr.mie') !== -1 || label.search('Punktepr.mie OSC-Gruppenphase') !== -1) {
 					matchday.intPremium = +value;
 				} else if (label.search('Pokalpr.mie') !== -1) {
 					matchday.cupPremium = +value;

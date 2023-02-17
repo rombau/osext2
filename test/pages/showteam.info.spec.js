@@ -12,6 +12,7 @@ describe('Page.ShowteamInfo', () => {
 
 		data.nextZat = 72;
 		data.nextZatSeason = 5;
+		data.team.getMatchDay(5,72).location = GameLocation.HOME;
 
 		Fixture.getDocument('showteam.php?s=5', doc => {
 

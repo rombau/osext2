@@ -113,7 +113,7 @@ class MatchDay {
 		/** @type {Number} the premium for next cup round */
 		this.cupPremium;
 
-		/** @type {Number} the premium for next international round */
+		/** @type {Number} the premium for international success */
 		this.intPremium;
 
 		/** @type {Object} the other bookings (attribute key is the label) */

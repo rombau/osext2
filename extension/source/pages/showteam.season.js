@@ -54,6 +54,12 @@ Page.ShowteamSeason = class extends Page {
 						matchday.nextRound = true;
 						nextRound[matchday.competition] = true;
 					}
+				} else {
+					matchday.nextRound = null; // reset old attr
+					let goals = matchday.result.split(' : ');
+					if (matchday.competition === Competition.OSC && (+goals[0] >= +goals[1]) && matchday.intPremium == null) {
+						data.pagesToRequest.push(new Page.MatchDayReport(matchday.season, matchday.zat));
+					}
 				}
 				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {
@@ -185,7 +191,7 @@ Page.ShowteamSeason = class extends Page {
 							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));
 							if (day.loanCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leihausgaben', day.loanCosts.toLocaleString(), 'negative'));
 							if (day.youthSupport) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Jugendförderung', day.youthSupport.toLocaleString(), 'negative'));
-							if (day.intPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Aufstiegsprämie', day.intPremium.toLocaleString(), 'positive'));
+							if (day.intPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Internationale Erfolgsprämie', day.intPremium.toLocaleString(), 'positive'));
 							if (day.cupPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Pokalprämie', day.cupPremium.toLocaleString(), 'positive'));
 							if (day.winBonus) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Siegprämie', day.winBonus.toLocaleString(), 'positive'));
 							if (day.advertisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fernsehgelder', day.advertisingIncome.toLocaleString(), 'positive'));
