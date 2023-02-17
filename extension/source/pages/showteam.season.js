@@ -134,9 +134,9 @@ Page.ShowteamSeason = class extends Page {
 
 		if (data.lastMatchDay.season <= this.selectedSeason) {
 
-			if (data.lastMatchDay.zat > 3) {
+			if (data.lastMatchDay.zat > 4) {
 				let scrollButton = HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', () => {
-					this.table.rows[data.lastMatchDay.zat - 2].scrollIntoView();
+					this.table.rows[data.lastMatchDay.zat - 3].scrollIntoView();
 				}, 'zum aktuellen Zat');
 				scrollButton.style.marginLeft = '5px';
 				form.appendChild(scrollButton);
