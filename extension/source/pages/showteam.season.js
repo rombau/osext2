@@ -184,6 +184,8 @@ Page.ShowteamSeason = class extends Page {
 							let balanceTooltip = HtmlUtil.createDivElement('', 'osext-balance-tooltip');
 							balanceTooltip.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'right'));
 							if (day.stadiumIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), 'positive'));
+							if (day.ticketPrice) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('• Eintrittspreis ' + day.ticketPrice, '', 'positive'));
+							if (day.stadiumVisitors) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('• ' + day.stadiumVisitors.toLocaleString() + ' Zuschauer (' + (day.stadiumVisitors / day.stadiumCapacity * 100).toFixed(1) + '%)', '', 'positive'));
 							if (day.stadiumCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Stadionkosten', day.stadiumCosts.toLocaleString(), 'negative'));
 							if (day.friendlyIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.friendlyIncome.toLocaleString(), 'positive'));
 							if (day.squadSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Gehälter', day.squadSalary.toLocaleString(), 'negative'));
