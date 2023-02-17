@@ -33,10 +33,6 @@ Page.ShowteamInfo = class extends Page {
 		data.team.stadium.places = +table.rows[3].cells[1].textContent.replaceAll('.', '') - data.team.stadium.coveredPlaces;
 		data.team.stadium.pitchHeating = (table.rows[4].cells[3].textContent == 'Ja');
 
-		if (data.nextMatchDay.competition !== Competition.FRIENDLY && data.nextMatchDay.location === GameLocation.HOME) {
-			data.nextMatchDay.stadiumCapacity = data.team.stadium.getPlaces(); // for stadium load analysis
-		}
-		
 		let expansionElement = doc.querySelector('td.TOR > b');
 		if (expansionElement) {
 			let matches = /Das Stadion wird noch (\d+) ZAT\(s\) ausgebaut./gm.exec(expansionElement.textContent);
@@ -54,6 +50,10 @@ Page.ShowteamInfo = class extends Page {
 				}
 			}
 		}
+		
+		if (data.nextMatchDay.competition !== Competition.FRIENDLY && data.nextMatchDay.location === GameLocation.HOME) {
+			data.nextMatchDay.stadiumCapacity = data.team.stadium.getPlaces(); // for stadium load analysis
+		}	
 	}
 
 	/**
