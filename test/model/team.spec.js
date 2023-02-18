@@ -33,6 +33,8 @@ describe('Team', () => {
 
 	beforeEach(() => {
 		team = new Team();
+
+		window.sortedMatchDays = null;
 	});
 
 	it('should be created', () => {

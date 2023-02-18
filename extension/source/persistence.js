@@ -143,7 +143,7 @@ class Persistence {
 	 */
 	static prepare (dataObject) {
 		Object.entries(dataObject).forEach(([key, value]) => {
-			if (value === null || (Array.isArray(value) && value.length === 0 && key.startsWith('_'))) {
+			if (value === null || (Array.isArray(value) && value.length === 0 && key.startsWith('_')) || key === 'sortedMatchDays') {
 				delete dataObject[key];
 			} else if (typeof value === 'object') {
 				Persistence.prepare(value);	
