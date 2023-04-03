@@ -41,22 +41,13 @@ Page.Training = class extends Page {
 
 			if (!injured && trainerNr > 0 && Object.keys(Skill).includes(skill) && row.cells['Chance'].textContent.search(' %') != -1) {
 
-				if (!player.nextTraining) {
-					player.nextTraining = new SquadPlayer.Training();
-				}
+				player.nextTraining = player.nextTraining || new SquadPlayer.Training();
 				player.nextTraining.trainer = data.team.getTrainer(trainerNr);
 				player.nextTraining.skill = skill.toLowerCase();
 				player.nextTraining.chance = +row.cells['Chance'].textContent.split(' ', 2)[0];
 
-				// last training only undefined when initializing the first time
-				// otherwise it's initialized from the stored next training (main page)
-				if (!player.lastTraining) {
-					player.lastTraining = new SquadPlayer.Training();
-					player.lastTraining.trainer = player.nextTraining.trainer;
-					player.lastTraining.skill = player.nextTraining.skill;
-					player.lastTraining.chance = player.nextTraining.chance;
-				}
-			} else {
+			} else if (player.nextTraining && player.nextTraining.matchBonus === 1) {
+
 				player.nextTraining = null;
 			}
 		});

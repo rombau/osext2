@@ -43,15 +43,13 @@ Page.Main = class extends Page {
 
 			// take over the trainings settings from previous zat
 			data.team.squadPlayers.forEach(player => {
-				if (!player.injured || player.injured <= (Options.usePhysio ? 2 : 1)) {
-					if (player.nextTraining) {
-						player.lastTraining = new SquadPlayer.Training();
-						player.lastTraining.trainer = player.nextTraining.trainer;
-						player.lastTraining.skill = player.nextTraining.skill;
-						player.lastTraining.chance = player.nextTraining.chance;
-					} else {
-						player.lastTraining = null;
-					}
+				if (player.injured || !player.nextTraining || !player.nextTraining.trainer || !player.nextTraining.skill || !player.nextTraining.chance) {
+					player.lastTraining = null;
+				} else if (player.nextTraining) {
+					player.lastTraining = new SquadPlayer.Training();
+					player.lastTraining.trainer = player.nextTraining.trainer;
+					player.lastTraining.skill = player.nextTraining.skill;
+					player.lastTraining.chance = player.nextTraining.chance;
 				}
 			});
 

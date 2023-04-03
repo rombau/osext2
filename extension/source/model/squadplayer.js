@@ -230,7 +230,7 @@ class SquadPlayer extends Player {
 		while (!matchday.add(1).after(targetMatchDay)) {
 			this._forecastTransferLock(forecastPlayer);
 			this._forecastLoan(forecastPlayer);
-			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining : forecastPlayer.nextTraining);
+			this._forecastTraining(forecastPlayer, days % 2 === 0 ? forecastPlayer.lastTraining || forecastPlayer.nextTraining : forecastPlayer.nextTraining);
 			this._forecastInjury(forecastPlayer);
 			this._forecastAging(forecastPlayer, matchday);
 			this._forecastContractAndSalary(forecastPlayer, matchday);
