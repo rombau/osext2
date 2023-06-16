@@ -56,10 +56,6 @@ Page.ShowteamSeason = class extends Page {
 					}
 				} else {
 					matchday.nextRound = null; // reset old attr
-					let goals = matchday.result.split(' : ');
-					if (matchday.competition === Competition.OSC && (+goals[0] >= +goals[1]) && matchday.intPremium == null) {
-						data.pagesToRequest.push(new Page.MatchDayReport(matchday.season, matchday.zat));
-					}
 				}
 				let opponentCell = row.cells['Gegner'];
 				if (opponentCell.textContent) {
