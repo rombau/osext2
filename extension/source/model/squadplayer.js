@@ -299,17 +299,29 @@ class SquadPlayer extends Player {
 			forecastPlayer.age++;
 			let deductionYears = forecastPlayer.age - (forecastPlayer.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD);
 			if (deductionYears >= 0) {
-				let deduction = (deductionYears <= SKILL_DEDUCTION.length - 1 ? SKILL_DEDUCTION[deductionYears] : SKILL_DEDUCTION[SKILL_DEDUCTION.length - 1]);
+				let deductionSum = (deductionYears <= SKILL_DEDUCTION.length - 1 ? SKILL_DEDUCTION[deductionYears] : SKILL_DEDUCTION[SKILL_DEDUCTION.length - 1]);
+				let skillSum = Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0);
 				let skills = Object.entries(forecastPlayer.skills).filter(skill => skill[1] > 0).map(skill => {
-					return [skill[0], skill[1] * SKILL_DEDUCTION_WEIGHTING[skill[0].toUpperCase()]];
-				}).sort((s1, s2) => s2[1] - s1[1]);
-				let sum = Object.values(skills).reduce((accu, curr) => accu + curr[1], 0);
-				let remainder = deduction;
+					return {
+						name: skill[0],
+						value: skill[1],
+						weight: Math.pow(skill[1], SKILL_DEDUCTION_SKILL_WEIGHTING) * SKILL_DEDUCTION_WEIGHTING[skill[0].toUpperCase()]
+					};
+				}).sort((s1, s2) => s2.value - s1.value);
+				let weightSum = Object.values(skills).reduce((sum, skill) => sum + skill.weight, 0);
+				let remainder = deductionSum;
 				skills.forEach(skill => {
-					forecastPlayer.skills[skill[0]] -= Math.round(skill[1] / sum * deduction);
-					remainder -= Math.round(skill[1] / sum * deduction);
+					let deduction = skill.weight / weightSum * deductionSum;
+					forecastPlayer.skills[skill.name] -= Math.floor(deduction);
+					remainder -= Math.floor(deduction);
+					skill.remainder = deduction - Math.floor(deduction);
 				});
-				forecastPlayer.skills[skills[remainder > 0 ? 0 : 4][0]] -= remainder;
+				skills.sort((s1, s2) => s2.remainder - s1.remainder).forEach(skill => {
+					if (remainder > 0) {
+						forecastPlayer.skills[skill.name] --;
+						remainder --;
+					}
+				});
 			}
 		}
 	}

@@ -65,6 +65,27 @@ describe('SquadPlayer', () => {
 				'skill': 'ueb'
 			}
 		});
+
+		jasmine.addMatchers({
+			toEqualSkillValues: () => {
+				return {
+					compare: function(actualSkills, expectedValues) {
+						let result = { pass: true, error: undefined };
+						let message = {};
+						Object.entries(actualSkills).forEach(([key, value], index) => {
+							if (value != expectedValues[index]) {
+								message[key] = `Expected ${value} to equal ${expectedValues[index]}`;
+								result.pass = false;
+							}
+						});
+						if (!result.pass) {
+							result.message = 'Skills not matching\n' + JSON.stringify(message, undefined, 2);
+						}
+						return result;
+					}
+				};
+			}
+		});
 	});
 
 	it('should complete initialization', () => {
@@ -292,14 +313,12 @@ describe('SquadPlayer', () => {
 
 		player.age = 32;
 
-		expect(JSON.stringify(Object.values(player.skills)))
-			.toEqual('[31,64,46,63,29,40,0,1,38,86,32,79,6,16,46,33,38]');
+		expect(player.skills).toEqualSkillValues([31,64,46,63,29,40,0,1,38,86,32,79,6,16,46,33,38]);
 
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(33);
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[29,62,43,59,27,35,0,1,33,83,30,79,5,15,46,31,36]');
+		expect(forecastPlayer.skills).toEqualSkillValues([29,62,43,60,27,35,0,1,33,84,30,79,4,14,46,31,36]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(34);
 
 		player.age = 33;
@@ -307,8 +326,7 @@ describe('SquadPlayer', () => {
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(34);
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[28,61,42,57,26,32,0,1,31,82,29,79,5,14,46,30,34]');
+		expect(forecastPlayer.skills).toEqualSkillValues([28,62,42,58,26,32,0,1,31,83,29,79,3,14,46,29,34]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(51);
 
 		player.age = 34;
@@ -316,20 +334,51 @@ describe('SquadPlayer', () => {
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(35);
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[27,60,40,55,25,30,0,1,28,81,28,79,4,14,46,29,33]');
+		expect(forecastPlayer.skills).toEqualSkillValues([27,61,41,57,25,30,0,1,28,82,27,79,2,13,46,28,33]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(68);
 
 		player.age = 35;
-		player.skills.ges = 0;
 		skillSum = Object.values(player.skills).reduce((accu, curr) => accu + curr, 0);
 
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(36);
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[25,58,37,51,24,0,0,1,23,78,26,79,4,13,46,27,31]');
+		expect(forecastPlayer.skills).toEqualSkillValues([26,60,39,55,24,28,0,1,26,81,26,79,1,12,46,27,32]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(85);
+	});
+
+	it('should return skill forecast based on aging for Agron Devolli', () => {
+
+		let start = new MatchDay(19, 65);
+		let end = new MatchDay(19, 66);
+		let forecastPlayer;
+
+		player.age = 32;
+		player.birthday = 66;
+		player.skills.sch = 97;
+		player.skills.bak = 87;
+		player.skills.kob = 88;
+		player.skills.zwk = 89;
+		player.skills.dec = 38;
+		player.skills.ges = 88;
+		player.skills.fuq = 8;
+		player.skills.erf = 99;
+		player.skills.agg = 55;
+		player.skills.pas = 41;
+		player.skills.aus = 60;
+		player.skills.ueb = 80;
+		player.skills.wid = 9;
+		player.skills.sel = 4;
+		player.skills.dis = 27;
+		player.skills.zuv = 66;
+		player.skills.ein = 45;
+						
+		let skillSum = Object.values(player.skills).reduce((accu, curr) => accu + curr, 0);
+
+		forecastPlayer = player.getForecast(start, end);
+
+		expect(forecastPlayer.skills).toEqualSkillValues([94,86,85,86,36,82,8,99,50,40,58,80,7,3,27,63,43]);
+		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(34);
 	});
 
 	it('should return fast transfer value', () => {
