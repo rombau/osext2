@@ -230,6 +230,10 @@ table.jugend.osext-youth tr td:nth-child(odd) {
 	opacity: 1;
 }
 
+table.configTable {
+	color: var(--input-color) !important;
+}
+
 body:not(.mediawiki):not(#tplIndex) table {
 	border-spacing: 0px !important;
 }
