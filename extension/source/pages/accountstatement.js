@@ -24,6 +24,8 @@ Page.AccountStatement = class extends Page {
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
 
+		let currentSeason = data.nextMatchDay.season == season;
+
 		let matches = /Kontoauszug - Kontostand : ([-\d.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
 		if (matches) {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
@@ -38,30 +40,34 @@ Page.AccountStatement = class extends Page {
 		);
 		
 		this.table.initialize(doc, false);
-			
-		let zat;
+		
+		let zat = currentSeason ? data.nextMatchDay.zat : (season === 1 ? RELEGATION_START_MATCH_DAY : SEASON_MATCH_DAYS);
+
 		this.table.rows.slice(1).forEach(row => {
 			
-			let balanceText = row.cells['Kontostand nach Buchung'].textContent;
-			if (!balanceText.includes('Nicht möglich')) {
-				matches = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
-				if (matches) zat = +matches[1];
-				if (zat) {
-					let matchday = data.team.getMatchDay(season, zat);
-					let bookingValue = row.cells['Eingang'].textContent ? 
-						+row.cells['Eingang'].textContent.replaceAll('.', '') : +row.cells['Ausgang'].textContent.replaceAll('.', '');
-					if (matches) {
-						matchday.accountBalance = +balanceText.replaceAll('.', '');
-						matchday.accountBalanceBefore = matchday.accountBalance - bookingValue;
-						matchday.otherBookings = {};
-					} else {
-						let label = row.cells['Buchungstext'].textContent.split(' ')[0];
-						matchday.otherBookings[label] = (matchday.otherBookings[label] || 0) + bookingValue;
-						matchday.accountBalanceBefore = matchday.accountBalanceBefore - bookingValue;
-					}
+			let matchdayBooking = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
+			if (matchdayBooking) zat = +matchdayBooking[1];
+			let matchday = data.team.getMatchDay(season, zat);
+			let bookingValue = +(row.cells['Eingang'].textContent || row.cells['Ausgang'].textContent).replaceAll('.', '');
+			if (matchdayBooking && currentSeason) {
+				matchday.accountBalance = +row.cells['Kontostand nach Buchung'].textContent.replaceAll('.', '');
+				matchday.accountBalanceBefore = matchday.accountBalance - bookingValue;
+				matchday.otherBookings = {};
+			} else if (!matchdayBooking) {
+				matchday.otherBookings = matchday.otherBookings || {};
+				let label = row.cells['Buchungstext'].textContent;
+				if (label.includes('Saisonendpr')) {
+					let ranking = +/Saisonendprämie Platz (\d+)/gm.exec(label)[1];
+					if (data.team.league.size == 10) ranking = ranking * 2 - 1;
+					let advertising = PREMIUM_ADVERTISING[ranking - 1];
+					let merchandising = PREMIUM_MERCHANDISING[ranking - 1];
+					matchday.advertisingIncome = Math.round(bookingValue * (advertising / (advertising + merchandising)));
+					matchday.merchandisingIncome = Math.round(bookingValue * (merchandising / (advertising + merchandising)));
+				} else {
+					matchday.otherBookings[label.split(' ')[0]] = (matchday.otherBookings[label.split(' ')[0]] || 0) + bookingValue;
+					if (currentSeason) matchday.accountBalanceBefore = (matchday.accountBalanceBefore || data.team.accountBalance) - bookingValue;
 				}
 			}
 		});
-
 	}
 }

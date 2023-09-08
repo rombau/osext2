@@ -257,7 +257,7 @@ class Team {
 					balancedMatchDay.accountBalancePromise = getQueuedPromise((resolve, reject) => {
 						setTimeout(() => {
 							try {
-								balancedMatchDay.accountBalanceBefore = accountBalance;
+								balancedMatchDay.accountBalanceBefore = balancedMatchDay.accountBalanceBefore || accountBalance;
 								stadium = balancedMatchDay.stadium || stadium;
 								accountBalance += balancedMatchDay.calculateMatchDayIncome(stadium, viewSettings);
 								accountBalance += balancedMatchDay.calculatePremium(this.league, viewSettings);
