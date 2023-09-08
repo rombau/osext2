@@ -93,7 +93,7 @@ class YouthPlayer extends Player {
 			if (forecastPlayer.birthday === matchday.zat) {
 				forecastPlayer.age++;
 			}
-			forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
+			forecastPlayer.initializeExactAge(matchday);
 			if (forecastPlayer.age > YOUTH_AGE_MAX || (targetMatchDay && this.pullMatchDay && matchday.after(this.pullMatchDay))) {
 				forecastPlayer.active = false;
 			}

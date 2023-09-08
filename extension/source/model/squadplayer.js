@@ -294,9 +294,9 @@ class SquadPlayer extends Player {
 	}
 
 	_forecastAging (forecastPlayer, matchday) {
-		forecastPlayer.ageExact += (1 / SEASON_MATCH_DAYS);
 		if (forecastPlayer.birthday === matchday.zat) {
 			forecastPlayer.age++;
+			forecastPlayer.initializeExactAge(matchday);
 			let deductionYears = forecastPlayer.age - (forecastPlayer.pos == Position.TOR ? SKILL_DEDUCTION_TOR : SKILL_DEDUCTION_FIELD);
 			if (deductionYears >= 0) {
 				let deductionSum = (deductionYears <= SKILL_DEDUCTION.length - 1 ? SKILL_DEDUCTION[deductionYears] : SKILL_DEDUCTION[SKILL_DEDUCTION.length - 1]);

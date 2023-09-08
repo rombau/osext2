@@ -206,7 +206,7 @@ describe('Team', () => {
 		}
 		for (let index = 0; index < 5; index++) {
 			let player = new YouthPlayer();
-			player.age = YOUTH_AGE_MIN;
+			player.ageExact = YOUTH_AGE_MIN + 0.1;
 			team.youthPlayers.push(player);
 		}
 
@@ -239,6 +239,10 @@ describe('Team', () => {
 
 		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-2000);
 		expect(matchDay.youthSupport).toEqual(2000);
+
+		team.youthPlayers.forEach(player => player.ageExact = YOUTH_AGE_MIN);
+
+		expect(team.calculateYouthSupport(matchDay, team.youthPlayers, viewSettings)).toEqual(-0);
 	});
 
 	describe('should return squad salary', () => {
