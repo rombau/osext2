@@ -341,9 +341,9 @@ class Team {
 	 */
 	calculateLoan (matchDay, players) {
 		matchDay.loanIncome = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee > 0))
-			.reduce((sum, player) => sum + player.loan.fee, 0);
+			.reduce((sum, player) => sum + Math.min(player.loan.fee, MAX_LOAN), 0);
 		matchDay.loanCosts = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0))
-			.reduce((sum, player) => sum - player.loan.fee, 0);
+			.reduce((sum, player) => sum - Math.max(player.loan.fee, -MAX_LOAN), 0);
 		return matchDay.loanIncome - matchDay.loanCosts;
 	}
 

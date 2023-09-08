@@ -391,9 +391,17 @@ describe('Team', () => {
 
 		team.squadPlayers.push(new SquadPlayer());
 		team.squadPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1);
-		team.squadPlayers[0].loan.fee = 20000;
 		team.squadPlayers.push(new SquadPlayer());
 		team.squadPlayers[1].loan = new SquadPlayer.Loan('from', 'to', 2);
+
+		team.squadPlayers[0].loan.fee = 250001;
+		team.squadPlayers[1].loan.fee = -250001;
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(0);
+		expect(matchDay.loanIncome).toEqual(250000);
+		expect(matchDay.loanCosts).toEqual(250000);
+
+		team.squadPlayers[0].loan.fee = 20000;
 		team.squadPlayers[1].loan.fee = -10000;
 
 		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(10000);
