@@ -111,27 +111,29 @@ Page.ShowteamSeason = class extends Page {
 					row.classList.add(STYLE_MONTH);
 				}
 
-				let matchDay = data.team.getMatchDay(this.selectedSeason, i);
-				if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
-					let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
-					if (matchDay.competition === Competition.LEAGUE) {
-						gameInfo = i < RELEGATION_START_MATCH_DAY ? `${gameInfo.slice(0, 4)} (${leagueRound++}. Spieltag) ${gameInfo.slice(4)}` : 'Relegation';
+				if (this.selectedSeason > 1) {
+					let matchDay = data.team.getMatchDay(this.selectedSeason, i);
+					if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
+						let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
+						if (matchDay.competition === Competition.LEAGUE) {
+							gameInfo = i < RELEGATION_START_MATCH_DAY ? `${gameInfo.slice(0, 4)} (${leagueRound++}. Spieltag) ${gameInfo.slice(4)}` : 'Relegation';
+						}
+						else if (matchDay.competition === Competition.CUP) {
+							gameInfo = `${gameInfo.slice(0, 2)} (${Object.entries(CUP_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(2)}`
+						}
+						else if (matchDay.competition === Competition.OSE || matchDay.competition === Competition.OSEQ) {
+							gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSE_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
+						}
+						else if (matchDay.competition === Competition.OSC || matchDay.competition === Competition.OSCQ) {
+							gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
+						}
+						row.cells['Spielart'].textContent = gameInfo.replace(/\s+/g, ' ');
 					}
-					else if (matchDay.competition === Competition.CUP) {
-						gameInfo = `${gameInfo.slice(0, 2)} (${Object.entries(CUP_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(2)}`
-					}
-					else if (matchDay.competition === Competition.OSE || matchDay.competition === Competition.OSEQ) {
-						gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSE_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
-					}
-					else if (matchDay.competition === Competition.OSC || matchDay.competition === Competition.OSCQ) {
-						gameInfo = `${gameInfo.slice(0, 4)} (${Object.entries(OSC_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(4)}`
-					}
-					row.cells['Spielart'].textContent = gameInfo.replace(/\s+/g, ' ');
-				}
 
-				if (matchDay.competition === Competition.LEAGUE && i === RELEGATION_START_MATCH_DAY && !data.team.league.relegation) {
-					row.cells['ZAT'].className = Position.DMI;
-					row.cells['Spielart'].className = Position.DMI;
+					if (matchDay.competition === Competition.LEAGUE && i === RELEGATION_START_MATCH_DAY && !data.team.league.relegation) {
+						row.cells['ZAT'].className = Position.DMI;
+						row.cells['Spielart'].className = Position.DMI;
+					}
 				}
 			}
 		});
