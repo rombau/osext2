@@ -115,7 +115,7 @@ Page.ShowteamSeason = class extends Page {
 				if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
 					let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
 					if (matchDay.competition === Competition.LEAGUE) {
-						gameInfo = i < 70 ? `${gameInfo.slice(0, 4)} (${leagueRound++}. Spieltag) ${gameInfo.slice(4)}` : 'Relegation';
+						gameInfo = i < RELEGATION_START_MATCH_DAY ? `${gameInfo.slice(0, 4)} (${leagueRound++}. Spieltag) ${gameInfo.slice(4)}` : 'Relegation';
 					}
 					else if (matchDay.competition === Competition.CUP) {
 						gameInfo = `${gameInfo.slice(0, 2)} (${Object.entries(CUP_FIXTURES).find(fixture => fixture[0] == i)[1]}) ${gameInfo.slice(2)}`

@@ -120,6 +120,7 @@ describe('Matchday', () => {
 
 		expect(matchDay.calculatePremium()).toEqual(0);
 
+		matchDay.zat = 2;
 		matchDay.competition = Competition.LEAGUE;
 		expect(matchDay.calculatePremium()).toEqual(0);
 
@@ -138,6 +139,9 @@ describe('Matchday', () => {
 		expect(matchDay.calculatePremium(league, settings)).toEqual(1377419);
 		expect(matchDay.advertisingIncome).toEqual(733704);
 		expect(matchDay.merchandisingIncome).toEqual(643715);
+
+		matchDay.zat = 70;
+		expect(matchDay.calculatePremium()).toEqual(0);
 
 		matchDay.competition = Competition.FRIENDLY;
 		matchDay.zat = 72;

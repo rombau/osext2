@@ -248,7 +248,7 @@ class MatchDay {
 	 * @returns {Number}
 	 */
 	calculatePremium (league, viewSettings) {
-		if ((this.competition === Competition.LEAGUE && this.location == GameLocation.HOME) || this.zat === SEASON_MATCH_DAYS) {
+		if ((this.competition === Competition.LEAGUE && this.location == GameLocation.HOME && this.zat < RELEGATION_START_MATCH_DAY) || this.zat === SEASON_MATCH_DAYS) {
 			let ranking = viewSettings.leagueRanking;
 			if (league.size == 10) {
 				ranking = ranking * 2 - 1;
