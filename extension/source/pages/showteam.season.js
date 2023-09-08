@@ -128,6 +128,11 @@ Page.ShowteamSeason = class extends Page {
 					}
 					row.cells['Spielart'].textContent = gameInfo.replace(/\s+/g, ' ');
 				}
+
+				if (matchDay.competition === Competition.LEAGUE && i === RELEGATION_START_MATCH_DAY && !data.team.league.relegation) {
+					row.cells['ZAT'].className = Position.DMI;
+					row.cells['Spielart'].className = Position.DMI;
+				}
 			}
 		});
 
