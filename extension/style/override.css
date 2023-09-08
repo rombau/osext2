@@ -127,6 +127,9 @@ li.ui-state-default {
 li.ui-tabs-selected {
 	background-color:#fbf9b3 !important;
 }
+.ui-accordion-content-active table {
+	color: var(--input-color) !important;
+}
 
 body:not(.mediawiki):not(#tplIndex) a,
 body:not(.mediawiki):not(#tplIndex) td {
@@ -232,6 +235,10 @@ table.jugend.osext-youth tr td:nth-child(odd) {
 
 table.configTable {
 	color: var(--input-color) !important;
+}
+
+tr[bgcolor="#003300"] td {
+	border: 1px solid var(--background-color);
 }
 
 body:not(.mediawiki):not(#tplIndex) table {
