@@ -143,11 +143,11 @@ body:not(.mediawiki):not(#tplIndex) form td {
 	padding: 2px;
 }
 
-td.TOR {
+td.TOR, div.Liga {
 	color: #ffff00 !important;
 	background-color: transparent !important;
 }
-td.ABW {
+td.ABW, div.OSE, div.OSEQ {
 	color: #00ff00 !important;
 	background-color: transparent !important;
 }
@@ -155,7 +155,7 @@ td.DMI {
 	color: #3366ff !important;
 	background-color: transparent !important;
 }
-td.MIT {
+td.MIT, div.LP {
 	color: #66ffff !important;
 	background-color: transparent !important;
 }
@@ -163,7 +163,7 @@ td.OMI {
 	color: #ff66ff !important;
 	background-color: transparent !important;
 }
-td.STU {
+td.STU, div.OSC, div.OSCQ {
 	color: #ff0000 !important;
 	background-color: transparent !important;
 }

@@ -192,6 +192,7 @@ form > .fa-arrow-alt-circle-down {
 	outline: none;
 	opacity: 0.7;
 	transition: opacity .2s;
+	appearance: none;
 	-webkit-appearance: none;
 	-webkit-transition: .2s;
 	padding: 0px;
@@ -271,6 +272,74 @@ form > .fa-arrow-alt-circle-down {
 .osext-balance:hover > .osext-balance-tooltip .negative:before {
 	content: "-";
 }
+
+.osext-popup-base {
+	position: relative;
+	cursor: default;
+}
+.osext-popup-base > * {
+	display: inline-block;
+}
+.osext-popup {
+	position: absolute;
+	border: 1px solid var(--status-background-color);
+	background-color: var(--background-color);
+	color: var(--status-color);
+	box-shadow: 0px 0px 10px 0px var(--row-hover-color);
+	padding: 5px;
+	z-index: 1000;
+	visibility: hidden;
+	display: inline-grid;
+	opacity: 1 !important
+}
+.osext-popup > div {
+	vertical-align: bottom;
+}
+.osext-popup .header {
+	font-weight: bold;
+	padding-bottom: 0.3em;
+}
+.osext-popup-base:hover > .osext-popup {
+	visibility: visible;
+}
+.osext-popup .left {
+	text-align: left;
+}
+.osext-popup .right {
+	text-align: right;
+}
+.osext-popup .positive {
+	color: #0a0;
+}
+.osext-popup .negative {
+	color: #d00;
+}
+.osext-popup .negative:before {
+	content: "-";
+}
+
+.osext-popup.visitors {
+	width: 399%;
+	left: -203%;
+	top: 2.2em;
+	grid-template-columns: 1fr 1fr 1fr 2fr 1.5fr;
+	grid-row-gap: 0.1em;
+}
+.osext-popup.visitors .header {
+	grid-column: 1 / 6;
+	text-align: center !important;
+}
+.osext-popup.visitors.liga {
+	left: -1%;
+}
+.osext-popup.visitors.pokal {
+	left: -102%;
+}
+.osext-popup.visitors .top-gap {
+	border-top: 0.5px dotted var(--status-background-color);
+	padding-top: 0.2em;
+}
+
 
 td[title] > a.sortheader,
 td[title] > span.abbr {

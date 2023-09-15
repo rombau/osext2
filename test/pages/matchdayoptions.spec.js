@@ -8,6 +8,8 @@ describe('Page.MatchDayOptions', () => {
 		data = new ExtensionData();
 		page = new Page.MatchDayOptions();
 
+		spyOn(page, 'createPopupElement').and.callThrough();
+
 		data.nextZat = 53;
 		data.nextZatSeason = 16;
 		matchday = data.team.getMatchDay(data.nextZatSeason, data.nextZat);
@@ -91,4 +93,31 @@ describe('Page.MatchDayOptions', () => {
 			done();
 		});
 	});
+
+	it('should extend page with stadium report', (done) => {
+
+		Fixture.getDocument('zuzu.php', doc => {	
+
+			let matchDay = new MatchDay(1, 2);
+			matchDay.competition = Competition.LEAGUE;
+			matchDay.location = GameLocation.HOME;
+			matchDay.ticketPrice = 10;
+			matchDay.stadiumCapacity = 50000;
+			matchDay.stadiumVisitors = 40000;
+			data.team.matchDays.push(matchDay);
+
+			page.extend(doc, data);
+
+			expect(page.createPopupElement).toHaveBeenCalledTimes(3);
+			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten Ligaspiele', jasmine.any(Array));
+			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten Pokalspiele', jasmine.any(Array));
+			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten internationalen Spiele', jasmine.any(Array));
+			
+			expect(doc.querySelector('.osext-popup.visitors.liga')).not.toBeNull();
+			expect(doc.querySelector('.osext-popup.visitors.pokal')).toBeNull();
+			expect(doc.querySelector('.osext-popup.visitors.int')).toBeNull();
+
+			done();
+		});
+	});	
 });
