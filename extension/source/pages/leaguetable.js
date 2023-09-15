@@ -16,27 +16,27 @@ Page.LeagueTable = class extends Page {
 	 */
 	extract(doc, data) {
 
-		this.table = new ManagedTable(this.name,
-			new Column('#'),
-			new Column(''),
-			new Column('Club'),
-			new Column('Spiele'),
-			new Column('Si.'),
-			new Column('Un.'),
-			new Column('Ni.'),
-			new Column('Tore+'),
-			new Column('Tore-'),
-			new Column('Tore +/-'),
-			new Column('Punkte')
-		);
-
-		this.table.initialize(doc, false);
-
 		let leagueSelection = +doc.querySelector('select[name=ligaauswahl]').value;
 		if (leagueSelection && 
 			+doc.querySelector('select[name=landauswahl]').value && 
 			!(+doc.querySelector('select[name=tabauswahl]').value) &&
 			doc.querySelector('select[name=saauswahl]').value === doc.querySelector('select[name=saauswahl] :last-child').value) {
+
+			this.table = new ManagedTable(this.name,
+				new Column('#'),
+				new Column(''),
+				new Column('Club'),
+				new Column('Spiele'),
+				new Column('Si.'),
+				new Column('Un.'),
+				new Column('Ni.'),
+				new Column('Tore+'),
+				new Column('Tore-'),
+				new Column('Tore +/-'),
+				new Column('Punkte')
+			);
+
+			this.table.initialize(doc, false);
 
 			let size = 0;
 			let leagueOfCurrentTeam = false;
