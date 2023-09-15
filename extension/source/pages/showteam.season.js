@@ -111,7 +111,7 @@ Page.ShowteamSeason = class extends Page {
 					row.classList.add(STYLE_MONTH);
 				}
 
-				if (this.selectedSeason > 1) {
+				if (this.selectedSeason > 2) {
 					let matchDay = data.team.getMatchDay(this.selectedSeason, i);
 					if (matchDay && matchDay.competition !== Competition.FRIENDLY && !row.cells['Info'].textContent) {
 						let gameInfo = ScriptUtil.getCellContent(row.cells['Spielart'], true);
