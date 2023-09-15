@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Online Soccer Extension",
-	"version": "2.5.11",
+	"version": "2.6.0",
 	"description": "Erweitert die Seiten von Online Soccer um nützliche Zusatzfunktionen.",
 	"author": "Roman Bauer",
 	"homepage_url": "https://github.com/rombau/osext2",
