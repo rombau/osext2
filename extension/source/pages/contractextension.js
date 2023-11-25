@@ -13,6 +13,9 @@ Page.ContractExtension = class extends Page {
 	 */
 	extract(doc, data) {
 
+		this.form = doc.getElementsByTagName('form')[0];
+		this.submit = doc.querySelector('input[type="submit"]');
+
 		this.table = new ManagedTable(this.name,
 			new Column('Name'),
 			new Column('Alter'),
@@ -146,6 +149,19 @@ Page.ContractExtension = class extends Page {
 		});
 
 		this.table.parentNode.parentNode.insertBefore(this.createToolbar(doc, data), this.table.parentNode);
+
+		this.form.addEventListener('submit', event => {
+			let radios = doc.querySelectorAll('input[type="radio"]:checked');
+			if (radios && radios.length) {
+				Array.from(radios).forEach(radio => {
+					let id = +(/gehalt\[(\d+)\]/.exec(radio.name))[1];
+					let player = data.team.getSquadPlayer(id);
+					player.contractExtensionMatchDay = null;
+					player.contractExtensionTerm = null;
+				});
+				Persistence.storeExtensionData(data);
+			}
+		});
 	}
 
 	/**
@@ -280,5 +296,9 @@ Page.ContractExtension = class extends Page {
 				row.cells['Opt. Skill'].classList.add(STYLE_FORECAST);
 			} 
 		});
+
+		if (!current) {
+			this.submit.disabled = true;
+		}
 	}
 }
