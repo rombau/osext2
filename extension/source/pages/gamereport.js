@@ -29,9 +29,9 @@ Page.GameReport = class extends Page {
 
 		if (homeTeamId === data.team.id) {
 
-			let matches = /Datum\s+:\s+\d+\.\d+\.\d+\s+Stadion\s+:\s+Stadion\s+von.+\s+Spielart\s+:\s+.+Zuschaueranzahl\s*:\s+(\d+)/gm.exec(doc.body.textContent);
+			let matches = /Datum\s+:\s+\d+\.\d+\.\d+\s+Stadion\s+:\s+Stadion\s+von.+\s+Spielart\s+:\s+.+Zuschaueranzahl\s*:\s+(\d+\.?\d+)/gm.exec(doc.body.textContent);
 			if (matches) {
-				data.team.getMatchDay(season, zat).stadiumVisitors = +matches[1];
+				data.team.getMatchDay(season, zat).stadiumVisitors = +matches[1].replaceAll('.', '');
 			}
 		}
 	}
