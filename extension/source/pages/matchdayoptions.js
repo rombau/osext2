@@ -107,6 +107,7 @@ Page.MatchDayOptions = class extends Page {
 		tooltip.appendChild(HtmlUtil.createDivElement('Eintritt', 'right'));
 		tooltip.appendChild(HtmlUtil.createDivElement('Zuschauer', 'right'));
 		tooltip.appendChild(HtmlUtil.createDivElement('Auslastung', 'right'));
+		tooltip.appendChild(HtmlUtil.createDivElement('Einnahmen', 'right'));
 
 		matchdays.forEach(matchday => {
 			let cellClass = (lastSeason !== matchday.season ? 'top-gap ' : '') + matchday.competition;
@@ -115,6 +116,7 @@ Page.MatchDayOptions = class extends Page {
 			tooltip.appendChild(HtmlUtil.createDivElement(matchday.ticketPrice, `right ${cellClass}`));
 			tooltip.appendChild(HtmlUtil.createDivElement(matchday.stadiumVisitors.toLocaleString(), `right ${cellClass}`));
 			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumVisitors / matchday.stadiumCapacity * 100).toFixed(1) + '%', `right ${cellClass}`));
+			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumIncome - matchday.stadiumCosts).toLocaleString(), `right ${cellClass}`));
 			lastSeason = matchday.season;
 		});
 

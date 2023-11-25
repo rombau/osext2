@@ -322,11 +322,11 @@ form > .fa-arrow-alt-circle-down {
 	width: 399%;
 	left: -203%;
 	top: 2.2em;
-	grid-template-columns: 1fr 1fr 1fr 2fr 1.5fr;
+	grid-template-columns: 1fr 0.5fr 1fr 2fr 1.6fr 2fr;
 	grid-row-gap: 0.1em;
 }
 .osext-popup.visitors .header {
-	grid-column: 1 / 6;
+	grid-column: 1 / 7;
 	text-align: center !important;
 }
 .osext-popup.visitors.liga {
