@@ -42,6 +42,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 		this.table.initialize(doc);
 
 		let currentPlayerIds = [];
+		let newLoanedPlayer = false;
 
 		this.table.rows.slice(1, -1).forEach(row => {
 
@@ -67,7 +68,10 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			let transferLockCell = row.cells['TS'];
 			if (transferLockCell.textContent.charAt(0) === 'L') {
 				let matches = /Leihgabe von (.+) an (.+) für (\d+) ZATs/gm.exec(transferLockCell.firstChild.title);
-				player.loan = player.loan || new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
+				if (!player.loan) {
+					player.loan = new SquadPlayer.Loan(matches[1], matches[2], +matches[3]);
+					newLoanedPlayer = true;
+				}
 				player.loan.duration = +matches[3];
 				player.transferLock = +transferLockCell.textContent.substring(1);
 			} else {
@@ -90,7 +94,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 		data.team.squadPlayers = data.team.squadPlayers.filter(player => currentPlayerIds.includes(player.id));
 
 		// initialize new players
-		if (data.team.squadPlayerAdded) {
+		if (data.team.squadPlayerAdded || newLoanedPlayer) {
 			data.requestSquadPlayerPages();
 		}
 	}

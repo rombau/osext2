@@ -47,6 +47,8 @@ describe('Page.ShowteamOverview', () => {
 			expect(data.team.squadPlayers[21].loan.to).toEqual('Kickers Dresden');
 			expect(data.team.squadPlayers[21].loan.duration).toEqual(1);
 
+			expect(data.pagesToRequest.find(page => page instanceof Page.LoanView)).not.toBeNull();
+
 			page.extend(doc, data);
 
 			let slider = doc.querySelector('input[type=range]')
