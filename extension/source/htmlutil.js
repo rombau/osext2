@@ -143,12 +143,18 @@ class HtmlUtil {
 	 * Returns a div element with content element or text.
 	 *
 	 * @param {Element|String} content
-	 * @param {String} className
+	 * @param {String|Array} className
 	 * @param {Document} doc
 	 */
 	static createDivElement (content, className, doc = document) {
 		let div = doc.createElement('div');
-		if (className) div.className = className;
+		if (className) {
+			if (className instanceof Array) {
+				className.forEach(c => div.classList.add(c));
+			} else {
+				div.className = className;
+			}
+		}
 		if (content instanceof Element) {
 			div.appendChild(content);
 		} else {
@@ -160,16 +166,15 @@ class HtmlUtil {
 	/**
 	 * Returns a div element containing a left label and a right value element.
 	 *
+	 * @param {Element} container
 	 * @param {String} label
 	 * @param {String} value
 	 * @param {String} valueClass
 	 * @param {Document} doc
 	 */
-	static createLabelValueElement (label, value, valueClass, doc = document) {
-		let div = doc.createElement('div');
-		div.appendChild(HtmlUtil.createDivElement(label, 'left'));
-		div.appendChild(HtmlUtil.createDivElement(value, 'right ' + valueClass));
-		return div;
+	static appendLabelValueElement (container, label, value, valueClass, doc = document) {
+		container.appendChild(HtmlUtil.createDivElement(label, STYLE_LEFT));
+		container.appendChild(HtmlUtil.createDivElement(value, [STYLE_RIGHT, valueClass]));
 	}
 
 	/**

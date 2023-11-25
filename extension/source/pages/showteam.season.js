@@ -182,41 +182,41 @@ Page.ShowteamSeason = class extends Page {
 					let matchDay = matchDays.find(matchDay => matchDay.season === season && matchDay.zat === i)
 					matchDay.accountBalancePromise.then(day => {
 
+						balanceCell.textContent = '';
+						balanceCell.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString()));
+
 						if (day.youthSupport) {
 
-							let balanceTooltip = HtmlUtil.createDivElement('', 'osext-balance-tooltip');
-							balanceTooltip.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'right'));
-							if (day.stadiumIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), 'positive'));
-							if (day.ticketPrice) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('• Eintrittspreis ' + day.ticketPrice, '', 'positive'));
-							if (day.stadiumVisitors) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('• ' + day.stadiumVisitors.toLocaleString() + ' Zuschauer (' + (day.stadiumVisitors / day.stadiumCapacity * 100).toFixed(1) + '%)', '', 'positive'));
-							if (day.stadiumCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Stadionkosten', day.stadiumCosts.toLocaleString(), 'negative'));
-							if (day.friendlyIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Zuschauereinnahmen', day.friendlyIncome.toLocaleString(), 'positive'));
-							if (day.squadSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Gehälter', day.squadSalary.toLocaleString(), 'negative'));
-							if (day.trainerSalary) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Trainer', day.trainerSalary.toLocaleString(), 'negative'));
-							if (day.loanIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leiheinnahmen', day.loanIncome.toLocaleString(), 'positive'));
-							if (day.loanCosts) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Leihausgaben', day.loanCosts.toLocaleString(), 'negative'));
-							if (day.youthSupport) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Jugendförderung', day.youthSupport.toLocaleString(), 'negative'));
-							if (day.intPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Internationale Erfolgsprämie', day.intPremium.toLocaleString(), 'positive'));
-							if (day.cupPremium) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Pokalprämie', day.cupPremium.toLocaleString(), 'positive'));
-							if (day.winBonus) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Siegprämie', day.winBonus.toLocaleString(), 'positive'));
-							if (day.advertisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fernsehgelder', day.advertisingIncome.toLocaleString(), 'positive'));
-							if (day.merchandisingIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Fanartikel', day.merchandisingIncome.toLocaleString(), 'positive'));
-							if (day.physio) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Physio', day.physio.toLocaleString(), 'negative'));
-							if (day.fastTransferIncome) balanceTooltip.appendChild(HtmlUtil.createLabelValueElement('Schnelltransfer', day.fastTransferIncome.toLocaleString(), 'positive'));
+							let balancePopup = HtmlUtil.createDivElement('', [STYLE_POPUP, 'balance']);
+
+							balancePopup.appendChild(HtmlUtil.createDivElement(day.accountBalanceBefore.toLocaleString(), 'before'));
+
+							if (day.stadiumIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Zuschauereinnahmen', day.stadiumIncome.toLocaleString(), STYLE_POSITIVE);
+							if (day.ticketPrice) HtmlUtil.appendLabelValueElement(balancePopup, '• Eintrittspreis ' + day.ticketPrice, '', STYLE_POSITIVE);
+							if (day.stadiumVisitors) HtmlUtil.appendLabelValueElement(balancePopup, '• ' + day.stadiumVisitors.toLocaleString() + ' Zuschauer (' + (day.stadiumVisitors / day.stadiumCapacity * 100).toFixed(1) + '%)', '', STYLE_POSITIVE);
+							if (day.stadiumCosts) HtmlUtil.appendLabelValueElement(balancePopup, 'Stadionkosten', day.stadiumCosts.toLocaleString(), STYLE_NEGATIVE);
+							if (day.friendlyIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Zuschauereinnahmen', day.friendlyIncome.toLocaleString(), STYLE_POSITIVE);
+							if (day.squadSalary) HtmlUtil.appendLabelValueElement(balancePopup, 'Gehälter', day.squadSalary.toLocaleString(), STYLE_NEGATIVE);
+							if (day.trainerSalary) HtmlUtil.appendLabelValueElement(balancePopup, 'Trainer', day.trainerSalary.toLocaleString(), STYLE_NEGATIVE);
+							if (day.loanIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Leiheinnahmen', day.loanIncome.toLocaleString(), STYLE_POSITIVE);
+							if (day.loanCosts) HtmlUtil.appendLabelValueElement(balancePopup, 'Leihausgaben', day.loanCosts.toLocaleString(), STYLE_NEGATIVE);
+							if (day.youthSupport) HtmlUtil.appendLabelValueElement(balancePopup, 'Jugendförderung', day.youthSupport.toLocaleString(), STYLE_NEGATIVE);
+							if (day.intPremium) HtmlUtil.appendLabelValueElement(balancePopup, 'Internationale Erfolgsprämie', day.intPremium.toLocaleString(), STYLE_POSITIVE);
+							if (day.cupPremium) HtmlUtil.appendLabelValueElement(balancePopup, 'Pokalprämie', day.cupPremium.toLocaleString(), STYLE_POSITIVE);
+							if (day.winBonus) HtmlUtil.appendLabelValueElement(balancePopup, 'Siegprämie', day.winBonus.toLocaleString(), STYLE_POSITIVE);
+							if (day.advertisingIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Fernsehgelder', day.advertisingIncome.toLocaleString(), STYLE_POSITIVE);
+							if (day.merchandisingIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Fanartikel', day.merchandisingIncome.toLocaleString(), STYLE_POSITIVE);
+							if (day.physio) HtmlUtil.appendLabelValueElement(balancePopup, 'Physio', day.physio.toLocaleString(), STYLE_NEGATIVE);
+							if (day.fastTransferIncome) HtmlUtil.appendLabelValueElement(balancePopup, 'Schnelltransfer', day.fastTransferIncome.toLocaleString(), STYLE_POSITIVE);
 							if (day.otherBookings) Object.entries(day.otherBookings).forEach(([label, value]) => {
-								balanceTooltip.appendChild(HtmlUtil.createLabelValueElement(label, value.toLocaleString(), value >= 0 ? 'positive' : 'negative'));
+								HtmlUtil.appendLabelValueElement(balancePopup, label, value.toLocaleString(), value >= 0 ? STYLE_POSITIVE : STYLE_NEGATIVE);
 							});
 
-							let balanceElement = HtmlUtil.createDivElement('', 'osext-balance');
-							balanceElement.appendChild(HtmlUtil.createDivElement(day.accountBalance.toLocaleString(), day.result ? null : 'osext-forecast'));
-							balanceElement.appendChild(balanceTooltip);
+							balanceCell.appendChild(balancePopup);
+							balanceCell.classList.add('balance');
+							balanceCell.classList.add(STYLE_POPUP_BASE);
+							if (day.result) balanceCell.firstChild.classList.add(STYLE_FORECAST);
 
-							balanceCell.textContent = '';
-							balanceCell.appendChild(balanceElement);
-
-						} else {
-
-							balanceCell.textContent = day.accountBalance.toLocaleString();
 						}
 
 					}).catch(this.logger.error);

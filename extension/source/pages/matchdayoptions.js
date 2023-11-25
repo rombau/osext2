@@ -98,29 +98,32 @@ Page.MatchDayOptions = class extends Page {
 
 		let lastSeason = 0;
 
-		let tooltip = HtmlUtil.createDivElement('', 'osext-popup visitors ' + baseElement.name);
+		let tooltip = HtmlUtil.createDivElement('', [STYLE_POPUP, 'visitors', baseElement.name]);
 
 		tooltip.appendChild(HtmlUtil.createDivElement(header, 'header'));
 
-		tooltip.appendChild(HtmlUtil.createDivElement('Saison', 'left'));
-		tooltip.appendChild(HtmlUtil.createDivElement('Zat', 'left'));
-		tooltip.appendChild(HtmlUtil.createDivElement('Eintritt', 'right'));
-		tooltip.appendChild(HtmlUtil.createDivElement('Zuschauer', 'right'));
-		tooltip.appendChild(HtmlUtil.createDivElement('Auslastung', 'right'));
-		tooltip.appendChild(HtmlUtil.createDivElement('Einnahmen', 'right'));
+		tooltip.appendChild(HtmlUtil.createDivElement('Saison', STYLE_LEFT));
+		tooltip.appendChild(HtmlUtil.createDivElement('Zat', STYLE_LEFT));
+		tooltip.appendChild(HtmlUtil.createDivElement('Eintritt', STYLE_RIGHT));
+		tooltip.appendChild(HtmlUtil.createDivElement('Zuschauer', STYLE_RIGHT));
+		tooltip.appendChild(HtmlUtil.createDivElement('Auslastung', STYLE_RIGHT));
+		tooltip.appendChild(HtmlUtil.createDivElement('Einnahmen', STYLE_RIGHT));
 
 		matchdays.forEach(matchday => {
-			let cellClass = (lastSeason !== matchday.season ? 'top-gap ' : '') + matchday.competition;
-			tooltip.appendChild(HtmlUtil.createDivElement(matchday.season, `left ${cellClass}`));
-			tooltip.appendChild(HtmlUtil.createDivElement(matchday.zat, `left ${cellClass}`));
-			tooltip.appendChild(HtmlUtil.createDivElement(matchday.ticketPrice, `right ${cellClass}`));
-			tooltip.appendChild(HtmlUtil.createDivElement(matchday.stadiumVisitors.toLocaleString(), `right ${cellClass}`));
-			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumVisitors / matchday.stadiumCapacity * 100).toFixed(1) + '%', `right ${cellClass}`));
-			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumIncome - matchday.stadiumCosts).toLocaleString(), `right ${cellClass}`));
+
+			let cellClasses = [matchday.competition];
+			if (lastSeason !== matchday.season) cellClasses.unshift('season-seperator');
+
+			tooltip.appendChild(HtmlUtil.createDivElement(matchday.season, cellClasses.concat(STYLE_LEFT)));
+			tooltip.appendChild(HtmlUtil.createDivElement(matchday.zat, cellClasses.concat(STYLE_LEFT)));
+			tooltip.appendChild(HtmlUtil.createDivElement(matchday.ticketPrice, cellClasses.concat(STYLE_RIGHT)));
+			tooltip.appendChild(HtmlUtil.createDivElement(matchday.stadiumVisitors.toLocaleString(), cellClasses.concat(STYLE_RIGHT)));
+			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumVisitors / matchday.stadiumCapacity * 100).toFixed(1) + '%', cellClasses.concat(STYLE_RIGHT)));
+			tooltip.appendChild(HtmlUtil.createDivElement((matchday.stadiumIncome - matchday.stadiumCosts).toLocaleString(), cellClasses.concat(STYLE_RIGHT)));
 			lastSeason = matchday.season;
 		});
 
-		baseElement.parentElement.classList.add('osext-popup-base');
+		baseElement.parentElement.classList.add(STYLE_POPUP_BASE);
 		baseElement.parentElement.appendChild(tooltip);
 	}
 }

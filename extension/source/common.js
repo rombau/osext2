@@ -117,6 +117,13 @@ const STYLE_PRIMARY = 'osext-primary';
 const STYLE_HIDDEN = 'osext-hidden';
 const STYLE_IMPOSSIBLE = 'osext-impossible';
 
+const STYLE_POPUP_BASE = 'osext-popup-base';
+const STYLE_POPUP = 'osext-popup';
+const STYLE_LEFT = 'left';
+const STYLE_RIGHT = 'right';
+const STYLE_POSITIVE = 'positive';
+const STYLE_NEGATIVE = 'negative';
+
 const STYLE_SET_ZAT = 'osext-set-zat';
 const STYLE_ADD = 'add';
 const STYLE_DELETE = 'delete';

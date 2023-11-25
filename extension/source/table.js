@@ -354,7 +354,7 @@ class ManagedTable {
 	 */
 	_addColumnVisibilityConfiguration (doc) {
 
-		let menuArea = HtmlUtil.createDivElement('', STYLE_HIDDEN, doc);
+		let menuArea = HtmlUtil.createDivElement('', [STYLE_POPUP, 'menu', STYLE_HIDDEN], doc);
 		menuArea.addEventListener('click', (event) => {
 			event.stopPropagation();
 		});
@@ -396,25 +396,13 @@ class ManagedTable {
 					Options.save();
 				}));
 
-				let label = doc.createElement('span');
-				label.textContent = (column.desc || column.name);
-				menuArea.appendChild(label);
-				if (column.script) {
-					let script = doc.createElement('span');
-					script.textContent = ' script';
-					script.style.fontSize = 'xx-small';
-					script.style.opacity = 0.6;
-					label.style.opacity = 0.9;
-					menuArea.appendChild(script);
-				}
-				menuArea.appendChild(doc.createElement('br'));
+				menuArea.appendChild(HtmlUtil.createDivElement(column.desc || column.name, column.script ? 'script' : null, doc));
 			});
 		
-		if (menuArea.children.length) menuArea.appendChild(doc.createElement('br'));
 		menuArea.appendChild(this._createResetLink(doc));
 
 		let container = HtmlUtil.createDivElement(configButton, STYLE_MANAGED, doc);
-		container.appendChild(HtmlUtil.createDivElement(menuArea, null, doc));
+		container.appendChild(menuArea);
 		this.table.parentNode.insertBefore(container, this.table);
 		container.appendChild(this.table);
 	}
@@ -429,10 +417,8 @@ class ManagedTable {
 
 		let reset = doc.createElement('a');
 		reset.href = '#';
+		reset.className = 'reset';
 		reset.textContent = 'Alles zurücksetzen';
-		reset.style.float = 'right';
-		reset.style.fontSize = 'smaller';
-		reset.style.opacity = 0.8;
 		reset.addEventListener('click', (event) => {
 			event.preventDefault();
 			this.config.hiddenColumns = [];

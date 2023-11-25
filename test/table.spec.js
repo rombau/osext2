@@ -245,14 +245,14 @@ describe('Managed table', () => {
 
 		table.initialize(doc);
 
-		let menu = doc.querySelector('.osext-managed > .fa-cogs + div > div');
-		expect(menu.className).toEqual('osext-hidden');
+		let menu = doc.querySelector('.osext-managed .menu');
+		expect(menu.className).toEqual('osext-popup menu osext-hidden');
 
 		doc.querySelector('.osext-managed > .fa-cogs').dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('');
+		expect(menu.className).toEqual('osext-popup menu');
 
 		let columnButtons = menu.querySelectorAll('i');
-		let columnLabels = menu.querySelectorAll('span');
+		let columnLabels = menu.querySelectorAll('div');
 		expect(columnButtons[0].className).toEqual('fas fa-toggle-on');
 		expect(columnButtons[1].className).toEqual('fas fa-toggle-on');
 		expect(columnLabels[0].textContent).toEqual('X');
@@ -270,10 +270,10 @@ describe('Managed table', () => {
 		expect(Options.save).toHaveBeenCalled();
 
 		menu.dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('');
+		expect(menu.className).toEqual('osext-popup menu');
 
 		doc.body.dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('osext-hidden');
+		expect(menu.className).toEqual('osext-popup menu osext-hidden');
 
 		let cellMoveFrom = table.rows[0].cells[0];
 		let cellMoveTo = table.rows[0].cells[1];
