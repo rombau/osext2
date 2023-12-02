@@ -215,7 +215,7 @@ Page.ShowteamSeason = class extends Page {
 							balanceCell.appendChild(balancePopup);
 							balanceCell.classList.add('balance');
 							balanceCell.classList.add(STYLE_POPUP_BASE);
-							if (day.result) balanceCell.firstChild.classList.add(STYLE_FORECAST);
+							if (!day.result) balanceCell.firstChild.classList.add(STYLE_FORECAST);
 
 						}
 
