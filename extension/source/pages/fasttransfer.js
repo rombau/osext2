@@ -29,7 +29,7 @@ Page.FastTransfer = class extends Page {
 			new Column('Ablöse')
 		);
 
-		this.table.initialize(doc);
+		this.table.initialize(doc, false, true);
 
 		this.table.rows.slice(1, -1).forEach(row => {
 
