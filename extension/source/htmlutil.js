@@ -8,18 +8,6 @@ class HtmlUtil {
 	}
 
 	/**
-	 * Adds script element with the given code.
-	 *
-	 * @param {Document} doc
-	 * @param {String} text
-	 */
-	static appendScript (doc, text) {
-		let script = doc.createElement('script');
-		script.appendChild(doc.createTextNode(text));
-		doc.body.appendChild(script);
-	}
-
-	/**
 	 * Helps creating sticky toolbar by setting div style to 'inline-block' display.
 	 *
 	 * @param {Document} doc

@@ -148,9 +148,6 @@ Page.ShowteamContracts = class extends Page.Showteam {
 		});
 
 		this.table.parentNode.insertBefore(this.createToolbar(doc, data), this.table.container);
-
-		HtmlUtil.appendScript(doc, 'sortables_init();');
-
 	}
 
 	/**

@@ -174,6 +174,8 @@ class ManagedTable {
 
 		if (this.table) return;
 
+		this.sortLinkTemplate = doc.querySelector('.sortable .sortheader');
+
 		// find table with OS headers
 		let osColumns = this.columns.filter(column => column.origin === Origin.OS);
 		this.table = Array.from(doc.getElementsByTagName('table')).find((table) => {
@@ -275,6 +277,31 @@ class ManagedTable {
 			// add column move handling
 			this._makeColumnsMovable();
 		}
+
+		if (this.sortLinkTemplate) {
+			this._makeSortable(doc);
+		}
+	}
+
+	/**
+	 * Adds (or restores) the header link to sort the table.
+	 * 
+	 * @param {Document} doc 
+	 */
+	_makeSortable (doc) {
+		Array.from(this.rows[0].cells)
+			.filter(headerCell => !headerCell.querySelector('.sortheader'))
+			.forEach(headerCell => {
+				let headerLink = this.sortLinkTemplate.cloneNode(true);
+				headerLink.textContent = headerCell.textContent;
+
+				let headerLinkSortSpan = doc.createElement('span');
+				headerLinkSortSpan.className = 'sortarrow';
+				headerLink.appendChild(headerLinkSortSpan);
+
+				headerCell.textContent = '';
+				headerCell.appendChild(headerLink);
+			});
 	}
 
 	/**
