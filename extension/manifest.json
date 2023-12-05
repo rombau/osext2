@@ -1,5 +1,5 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "Online Soccer Extension",
 	"version": "2.6.1",
 	"description": "Erweitert die Seiten von Online Soccer um nützliche Zusatzfunktionen.",
@@ -93,10 +93,14 @@
 		}
 	],
 	"web_accessible_resources": [
-		"style/colors.css",
-		"style/fontawesome.min.css",
-		"style/solid.min.css",
-		"webfonts/fa-solid-900.woff2"
+		{
+			"resources": [ 
+				"style/colors.css", 
+				"style/fontawesome.min.css",
+				"style/solid.min.css"
+			],
+			"matches": [ "<all_urls>" ]
+		}
 	],
 	"permissions": [
 		"storage"
@@ -104,5 +108,8 @@
 	"options_ui": {
 		"page": "options.html",
 		"open_in_tab": false
-	}
+	},
+	"host_permissions": [
+		"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+	]
 }
