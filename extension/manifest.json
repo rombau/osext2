@@ -111,5 +111,10 @@
 	},
 	"host_permissions": [
 		"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
-	]
+	],
+	"browser_specific_settings": {
+		"gecko": {
+		  "id": "{08f962cf-b932-49d3-a2a3-e4fd99c66ad6}"
+		}
+	}
 }
