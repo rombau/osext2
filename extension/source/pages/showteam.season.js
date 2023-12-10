@@ -170,6 +170,7 @@ Page.ShowteamSeason = class extends Page {
 			for (let season = matchDays[0].season; season <= matchDays[matchDays.length - 1].season; season++) {
 
 				let balanceCell = row.cells['Saldo' + season] || row.cells['ZAT'].cloneNode(true);
+				HtmlUtil.styleExtensionElement(balanceCell);
 
 				if (i === 0) {
 
@@ -254,6 +255,7 @@ Page.ShowteamSeason = class extends Page {
 
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';
+		HtmlUtil.styleExtensionElement(toolbar);
 
 		let rankingTitle = doc.createElement('span');
 		rankingTitle.innerHTML = 'Platzierung: ';

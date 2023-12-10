@@ -226,6 +226,7 @@ class ManagedTable {
 					cell = doc.createElement('td');
 					let classNameCell = Array.from(row.cells).find(cell => cell.className);
 					if (classNameCell) cell.className = classNameCell.className;
+					HtmlUtil.styleExtensionElement(cell);
 				}
 				if (row.isHeader) {
 					if (column.title) {
@@ -382,6 +383,7 @@ class ManagedTable {
 	_addColumnVisibilityConfiguration (doc) {
 
 		let menuArea = HtmlUtil.createDivElement('', [STYLE_POPUP, 'menu', STYLE_HIDDEN], doc);
+		HtmlUtil.styleExtensionElement(menuArea);
 		menuArea.addEventListener('click', (event) => {
 			event.stopPropagation();
 		});

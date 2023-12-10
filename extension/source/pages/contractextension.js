@@ -180,6 +180,7 @@ Page.ContractExtension = class extends Page {
 
 		let toolbar = doc.createElement('div');
 		toolbar.id = 'osext-toolbar-container';
+		HtmlUtil.styleExtensionElement(toolbar);
 
 		let toolTitle = doc.createElement('span');
 		toolTitle.textContent = 'Aktion: ';

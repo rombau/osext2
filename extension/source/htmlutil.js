@@ -239,4 +239,20 @@ class HtmlUtil {
 
 		return container;
 	}
+
+	/**
+	 * Sets an element styling for extension en-/diabling.
+	 * 
+	 * The element is hidden as long as the CSS class osext-element is not applied,
+	 * and this CSS class is injected with extension.css and reverts the display style.
+	 * 
+	 * If the extesnion is disabled the style is removed from the page and the 
+	 * element disapears (falling back to initial element style).
+	 * 
+	 * @param {HTMLElement} element
+	 */
+	static styleExtensionElement (element) {
+		element.style.display = 'none';
+		element.classList.add('osext-element');
+	}
 }

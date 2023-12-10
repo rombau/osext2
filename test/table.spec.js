@@ -67,7 +67,7 @@ describe('Managed table', () => {
 
 			expect(table.rows[0].cells[1].style.width).toEqual('1em');
 			expect(table.rows[0].cells[1].style.textAlign).toEqual('left');
-			expect(table.rows[0].cells[1].classList.value).toEqual('test1 test2');
+			expect(table.rows[0].cells[1].classList.value).toEqual('osext-element test1 test2');
 		});
 
 		it('one column and different header', () => {
@@ -246,10 +246,10 @@ describe('Managed table', () => {
 		table.initialize(doc);
 
 		let menu = doc.querySelector('.osext-managed .menu');
-		expect(menu.className).toEqual('osext-popup menu osext-hidden');
+		expect(menu.className).toEqual('osext-popup menu osext-hidden osext-element');
 
 		doc.querySelector('.osext-managed > .fa-cogs').dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('osext-popup menu');
+		expect(menu.className).toEqual('osext-popup menu osext-element');
 
 		let columnButtons = menu.querySelectorAll('i');
 		let columnLabels = menu.querySelectorAll('div');
@@ -270,10 +270,10 @@ describe('Managed table', () => {
 		expect(Options.save).toHaveBeenCalled();
 
 		menu.dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('osext-popup menu');
+		expect(menu.className).toEqual('osext-popup menu osext-element');
 
 		doc.body.dispatchEvent(new Event('click'));
-		expect(menu.className).toEqual('osext-popup menu osext-hidden');
+		expect(menu.className).toEqual('osext-popup menu osext-element osext-hidden');
 
 		let cellMoveFrom = table.rows[0].cells[0];
 		let cellMoveTo = table.rows[0].cells[1];

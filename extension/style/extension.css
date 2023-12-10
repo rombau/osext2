@@ -1,3 +1,6 @@
+.osext-element {
+	display: revert !important;
+}
 
 .osext-forecast {
 	opacity: 0.7 !important;
@@ -145,6 +148,7 @@ form > .fa-arrow-alt-circle-down {
 	top: 0;
 	background-color: var(--background-color);
 	z-index: 999;
+	display: revert !important;
 }
 
 #osext-toolbar-container span {
@@ -281,6 +285,7 @@ form > .fa-arrow-alt-circle-down {
 	grid-template-columns: 0.1fr 4fr;
 	grid-row-gap: 0.1em;
 	color: inherit !important;
+	display: revert !important;
 }
 .osext-managed .osext-popup.menu.osext-hidden {
 	visibility: hidden;
