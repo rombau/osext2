@@ -237,6 +237,8 @@ class HtmlUtil {
 			container.appendChild(bugReportLink);
 		}
 
+		HtmlUtil.styleExtensionElement(container);
+
 		return container;
 	}
 
