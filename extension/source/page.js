@@ -52,6 +52,9 @@ class Page {
 
 		/** @type {Logger} the logger of the page */
 		this.logger = new Logger(name);
+
+		/** @type {Boolean} true if the page works without initialized team data */
+		this.dataIndependent = false;
 	}
 
 	/**
@@ -243,7 +246,7 @@ class Page {
 			page.logger = Object.assign(new Logger(page.name), page.logger);
 			page.logger.log('extract', Logger.prepare(data));
 			page.extract(doc, data);
-			if (!data.nextZat && !page.equals(new Page.Main())) {
+			if (!data.nextZat && !page.equals(new Page.Main()) && !page.dataIndependent) {
 				data.pagesToRequest = [];
 				data.pagesToRequest.push(new Page.Main());
 			} else {

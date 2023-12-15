@@ -9,6 +9,7 @@ Page.ShowPlayer = class extends Page {
 
 		super(`Spieler ${name}`, 'sp.php', new Page.Param('s', id));
 
+		this.dataIndependent = true;
 	}
 
 	/**
