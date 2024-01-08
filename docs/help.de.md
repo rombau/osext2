@@ -75,11 +75,12 @@ Die Erweiterung wurde bisher mit (den aktuellen Versionen von) Firefox, Chromium
 
 Je nach verwendetem Browser kann die aktuelle Version über den entsprechenden Addon-Store installiert bzw. dem Browser hinzugefügt werden:
 
-| Browser         | Link zur Extension im jeweiligen Store |
-| --------------- | ------- |
-| Firefox         | https://addons.mozilla.org/de/firefox/addon/online-soccer-extension |
-| Chrome/Chromium | https://chromewebstore.google.com/detail/online-soccer-extension/plhbikhfgkkommnghjaihagamgophofm |
-| Edge            | https://microsoftedge.microsoft.com/addons/detail/online-soccer-extension/eeeihfpogoedoamecdhlcelgnlnhkgcg |
+| Browser              | Link zur Extension im jeweiligen Store |
+| -------------------- | ------- |
+| Firefox              | https://addons.mozilla.org/de/firefox/addon/online-soccer-extension |
+| Chrome/Chromium/Edge | https://chromewebstore.google.com/detail/online-soccer-extension/plhbikhfgkkommnghjaihagamgophofm |
+
+Microsoft-Edge-Nutzer können die Extension über den Chrome-Store installieren. Dafür müssen lediglich Erweiterungen aus anderen Stores zugelassen werden (entweder über die Bestätigung einer entsprechenden Frage oder in den Erweiterungseinstellungen).
 
 ## Updates
 
