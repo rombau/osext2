@@ -147,11 +147,10 @@ Page.YouthOverview = class extends Page.Youth {
 
 			if (player.active) {
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN 
-					&& (player.getSkillAverage(player.getPrimarySkills()) + player.getSkillAverage(player.getSecondarySkills())) > 0 ? player.pos : '');
 				row.cells['Talent'].textContent = player.talent;
 				row.cells['Skillschnitt'].textContent = player.getSkillAverage().toFixed(2);
-				if (row.cells['Pos'].textContent) {
+				row.cells['Pos'].textContent = ((player.age >= YOUTH_AGE_MIN && player.getAverageIncreasePerDay(1) > 0) || player.pos === Position.TOR) ? player.pos : '';
+				if (player.age >= YOUTH_AGE_MIN) {
 					row.cells['Opt.Skill'].textContent = player.getOpti().toFixed(2);
 					row.cells['Marktwert'].textContent = player.getMarketValue().toLocaleString();
 					row.cells['ØP'].textContent = player.getSkillAverage(player.getPrimarySkills()).toFixed(2);

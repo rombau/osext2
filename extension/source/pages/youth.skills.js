@@ -98,19 +98,16 @@ Page.YouthSkills = class extends Page.Youth {
 			if (player.active) {
 
 				row.cells['Geb.'].textContent = player.birthday;
-				row.cells['Pos'].textContent = (player.age >= YOUTH_AGE_MIN 
-					&& (player.getSkillAverage(player.getPrimarySkills()) + player.getSkillAverage(player.getSecondarySkills())) > 0 ? player.pos : '');
+				row.cells['Pos'].textContent = ((player.age >= YOUTH_AGE_MIN && player.getAverageIncreasePerDay(1) > 0) || player.pos === Position.TOR) ? player.pos : '';
 
 				Object.keys(player.skills).forEach(skillname => {
 					row.cells[skillname.toUpperCase()].textContent = player.skills[skillname];
 				});
 
 				row.cells['Skillschn.'].textContent = player.getSkillAverage().toFixed(2);
-				row.cells['Opt.Skill'].textContent = (row.cells['Pos'].textContent ? player.getOpti().toFixed(2) : '')
+				row.cells['Opt.Skill'].textContent = (player.age >= YOUTH_AGE_MIN) ? player.getOpti().toFixed(2) : '';
 
 			} else {
-
-				row.cells['Pos'].textContent = '';
 
 				Object.keys(player.skills).forEach(skillname => {
 					row.cells[skillname.toUpperCase()].textContent = '';

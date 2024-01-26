@@ -134,6 +134,7 @@ Page.YouthOptskills = class extends Page.Youth {
 
 				row.cells['Geb.'].textContent = player.birthday;
 				row.cells['Skill'].textContent = player.getSkillAverage().toFixed(2);
+				row.cells['Pos'].textContent = ((player.age >= YOUTH_AGE_MIN && player.getAverageIncreasePerDay(1) > 0) || player.pos === Position.TOR) ? player.pos : '';
 
 				this._handlePosition(player, pos => {
 					row.cells[pos].textContent = player.getOpti(pos).toFixed(2);
