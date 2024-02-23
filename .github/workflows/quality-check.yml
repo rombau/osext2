@@ -1,5 +1,7 @@
 name: Quality check
 
+run-name: Quality check triggered on ${{ github.event_name }} by @${{ github.actor }}
+
 on:
   push:
     branches:
@@ -20,7 +22,7 @@ jobs:
         node-version: latest
     - name: Install
       run: npm ci
-    - name: Test
+    - name: Run Tests
       run: npm test
-    - name: Lint
+    - name: Run Linter
       run: npm run lint
