@@ -21,7 +21,7 @@ Page.MatchDayReport = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let season = +doc.querySelector('select[name=saison]').value;
 		let zat = +doc.querySelector('select[name=zat]').value;

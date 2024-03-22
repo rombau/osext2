@@ -11,7 +11,7 @@ Page.YouthSkills = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let index = 0;
 
@@ -19,9 +19,9 @@ Page.YouthSkills = class extends Page.Youth {
 
 		this.table = this.table || new ManagedTable(this.name,
 			new Column('Alter'),
-			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
 			new Column('Pos', Origin.Extension),
-			new Column('Land').withStyle('text-align','left'),
+			new Column('Land').withStyle('text-align', 'left'),
 			new Column('U'),
 			new Column('SCH'),
 			new Column('BAK'),
@@ -40,8 +40,8 @@ Page.YouthSkills = class extends Page.Youth {
 			new Column('DIS'),
 			new Column('ZUV'),
 			new Column('EIN'),
-			new Column('Skillschn.', Origin.Extension).withStyle('padding-left','0.6em', true),
-			new Column('Opt.Skill', Origin.Extension).withStyle('padding-right','0.6em', true)
+			new Column('Skillschn.', Origin.Extension).withStyle('padding-left', '0.6em', true),
+			new Column('Opt.Skill', Origin.Extension).withStyle('padding-right', '0.6em', true)
 		);
 
 		this.table.initialize(doc);
@@ -49,7 +49,7 @@ Page.YouthSkills = class extends Page.Youth {
 		this.table.rows.slice(1).filter(row => this.isPlayerRow(row)).forEach(row => {
 
 			let player = data.team.pageYouthPlayers[index] || new YouthPlayer();
-			
+
 			Object.keys(player.skills).forEach((skillname, s) => {
 				player.skills[skillname] = +ScriptUtil.getCellContent(row.cells[skillname.toUpperCase()], true);
 			});
@@ -73,7 +73,7 @@ Page.YouthSkills = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		this.table.classList.add(STYLE_YOUTH);
 

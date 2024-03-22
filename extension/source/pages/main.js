@@ -90,14 +90,14 @@ Page.Main = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extend (doc, data) {
-		
-		let contractExtensionPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.contractExtensionMatchDay 
+
+		let contractExtensionPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.contractExtensionMatchDay
 			&& data.lastMatchDay.equals(player.contractExtensionMatchDay));
-		let fastTransferPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.fastTransferMatchDay 
+		let fastTransferPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.fastTransferMatchDay
 			&& data.lastMatchDay.equals(player.fastTransferMatchDay));
-		let pullYouthPlayers = data.team.youthPlayers.filter(player => data.lastMatchDay && player.pullMatchDay 
+		let pullYouthPlayers = data.team.youthPlayers.filter(player => data.lastMatchDay && player.pullMatchDay
 			&& data.lastMatchDay.equals(player.pullMatchDay));
-					
+
 		if (contractExtensionPlayers.length || fastTransferPlayers.length || pullYouthPlayers.length) {
 
 			let table = doc.querySelector('div#a > table');

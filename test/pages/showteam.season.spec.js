@@ -27,7 +27,7 @@ describe('Page.ShowteamSeason', () => {
 
 			expect(data.team.matchDays[1].competition).toEqual(Competition.LEAGUE);
 			expect(data.team.matchDays[22].competition).toEqual(Competition.OSE);
-			
+
 			expect(data.team.matchDays[66].competition).toEqual(Competition.FRIENDLY);
 			expect(data.team.matchDays[66].friendlyShare).toEqual(50);
 			expect(data.team.matchDays[66].nextRound).toBeFalsy();

@@ -8,13 +8,13 @@ describe('Managed table', () => {
 
 		spyOn(Options, 'initialize').and.callFake(() => {});
 		spyOn(Options, 'save').and.callFake(() => {
-			return { then: () => {} };
+			return {then: () => {}};
 		});
 	});
 
 	it('should be not found ', () => {
 
-		table = new ManagedTable('Test', new Column('A', Origin.OS) );
+		table = new ManagedTable('Test', new Column('A', Origin.OS));
 
 		try {
 			table.initialize(Fixture.createDocument());
@@ -36,7 +36,7 @@ describe('Managed table', () => {
 
 		it('one appended column', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('B', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('B', Origin.Extension));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td></tr></table>'));
 
@@ -46,7 +46,7 @@ describe('Managed table', () => {
 
 		it('one inserted column', () => {
 
-			table = new ManagedTable('Test', new Column('B', Origin.Extension), new Column('A') );
+			table = new ManagedTable('Test', new Column('B', Origin.Extension), new Column('A'));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td></tr></table>'));
 
@@ -56,12 +56,12 @@ describe('Managed table', () => {
 
 		it('one appended styled column', () => {
 
-			table = new ManagedTable('Test', new Column('A'), 
+			table = new ManagedTable('Test', new Column('A'),
 				new Column('B', Origin.Extension)
-					.withStyle('width','1em')
-					.withStyle('text-align','left','important')
+					.withStyle('width', '1em')
+					.withStyle('text-align', 'left', 'important')
 					.withStyleClass('test1')
-					.withStyleClass('test2') );
+					.withStyleClass('test2'));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td></tr></table>'));
 
@@ -72,7 +72,7 @@ describe('Managed table', () => {
 
 		it('one column and different header', () => {
 
-			table = new ManagedTable('Test', new Column('A').withHeader('X'), new Column('B', Origin.Extension).withHeader('Y','Ypsilon') );
+			table = new ManagedTable('Test', new Column('A').withHeader('X'), new Column('B', Origin.Extension).withHeader('Y', 'Ypsilon'));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td></tr></table>'));
 
@@ -85,7 +85,7 @@ describe('Managed table', () => {
 
 		it('two same named columns', () => {
 
-			table = new ManagedTable('Test', new Column('A').withRef('A1'), new Column('A').withRef('A2') );
+			table = new ManagedTable('Test', new Column('A').withRef('A1'), new Column('A').withRef('A2'));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>A</td></tr></table>'));
 
@@ -95,7 +95,7 @@ describe('Managed table', () => {
 
 		it('three columns with header span', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C') );
+			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C'));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td colspan=2>B</td><td>C</td></tr><tr><td>1</td><td>2a</td><td>2b</td><td>3</td></tr></table>'));
 
@@ -112,7 +112,7 @@ describe('Managed table', () => {
 
 		it('three columns with data span', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C'), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('B'), new Column('C'), new Column('X', Origin.Extension));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td></td><td>C</td></tr><tr><td>1</td><td colspan=2>2a 2b</td><td>3</td></tr></table>'));
 
@@ -132,7 +132,7 @@ describe('Managed table', () => {
 
 		it('unmanaged columns', () => {
 
-			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension));
 
 			table.initialize(Fixture.createDocument('<table><tr><td colspan=2>A</td><td>B</td><td>C</td></tr><tr><td>1a</td><td>1b</td><td>2</td><td>3</td></tr></table>'));
 
@@ -157,7 +157,7 @@ describe('Managed table', () => {
 			config.hiddenColumns = ['X', 'B'];
 			Options.pageConfig['Test'] = config;
 
-			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td>C</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>'));
 
@@ -188,7 +188,7 @@ describe('Managed table', () => {
 			config.sortedColumns = ['D', 'X', 'A', 'E'];
 			Options.pageConfig['Test'] = config;
 
-			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+			table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension));
 
 			table.initialize(Fixture.createDocument('<table><tr><td>A</td><td>B</td><td>C</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>'));
 
@@ -219,19 +219,19 @@ describe('Managed table', () => {
 					new Column('ØN', Origin.Extension),
 					new Column('ØU', Origin.Extension)
 				);
-				
+
 				table.initialize(doc);
-				
+
 				const getCellContentArray = (row) => Array.from(row.cells).map(cell => cell.textContent);
 
-				expect(getCellContentArray(table.rows[0])).toEqual(['Alter','Pos','Geb.','Land','U','Skillschn.','Opt.Skill','Talent','Aktion','Aufwertung','Ø/Zat','Marktwert','ØP','ØN','ØU']);
+				expect(getCellContentArray(table.rows[0])).toEqual(['Alter', 'Pos', 'Geb.', 'Land', 'U', 'Skillschn.', 'Opt.Skill', 'Talent', 'Aktion', 'Aufwertung', 'Ø/Zat', 'Marktwert', 'ØP', 'ØN', 'ØU']);
 				expect(getCellContentArray(table.rows[1])).toEqual(['Jahrgang Saison 11']);
-				expect(getCellContentArray(table.rows[2])).toEqual(['18','','24',' CYP','','41.65','','normal','','','','','','','']);
+				expect(getCellContentArray(table.rows[2])).toEqual(['18', '', '24', ' CYP', '', '41.65', '', 'normal', '', '', '', '', '', '', '']);
 
 				table.columns.forEach((column, i) => {
 					expect(table.rows[0].cells[column.name]).toEqual(table.rows[0].cells[i]);
-				});			
-				
+				});
+
 				done();
 			});
 		});
@@ -239,7 +239,7 @@ describe('Managed table', () => {
 
 	it('should be customizable', () => {
 
-		table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension) );
+		table = new ManagedTable('Test', new Column('A'), new Column('X', Origin.Extension));
 
 		let doc = Fixture.createDocument('<table><tr><td>A</td><td>B</td></tr><tr><td>1</td><td>2</td></tr></table>');
 
@@ -281,16 +281,16 @@ describe('Managed table', () => {
 		expect(table.rows[0].cells[0].textContent).toEqual('A');
 		expect(table.rows[0].cells[1].textContent).toEqual('X');
 
-		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', { dataTransfer: new DataTransfer() }));
+		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', {dataTransfer: new DataTransfer()}));
 		cellMoveTo.dispatchEvent(new DragEvent('dragenter'));
-		cellMoveTo.dispatchEvent(new DragEvent('dragover', { dataTransfer: new DataTransfer() }));
+		cellMoveTo.dispatchEvent(new DragEvent('dragover', {dataTransfer: new DataTransfer()}));
 		cellMoveTo.dispatchEvent(new DragEvent('drop'));
 		cellMoveTo.dispatchEvent(new DragEvent('dragend'));
 
 		expect(table.rows[0].cells[0].textContent).toEqual('X');
 		expect(table.rows[0].cells[1].textContent).toEqual('A');
 
-		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', { dataTransfer: new DataTransfer() }));
+		cellMoveFrom.dispatchEvent(new DragEvent('dragstart', {dataTransfer: new DataTransfer()}));
 		cellMoveTo.dispatchEvent(new DragEvent('drop'));
 
 		expect(table.rows[0].cells[0].textContent).toEqual('A');

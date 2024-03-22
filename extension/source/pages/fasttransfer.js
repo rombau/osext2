@@ -11,7 +11,7 @@ Page.FastTransfer = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		if (!doc.querySelector('input[type="checkbox"][value]')) {
 			return;

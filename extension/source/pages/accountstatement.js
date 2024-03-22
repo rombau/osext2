@@ -19,7 +19,7 @@ Page.AccountStatement = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
@@ -30,7 +30,7 @@ Page.AccountStatement = class extends Page {
 		if (matches) {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
 		}
-		
+
 		this.table = new ManagedTable(this.name,
 			new Column('Datum'),
 			new Column('Eingang'),
@@ -38,13 +38,13 @@ Page.AccountStatement = class extends Page {
 			new Column('Buchungstext'),
 			new Column('Kontostand nach Buchung')
 		);
-		
+
 		this.table.initialize(doc, false);
-		
+
 		let zat = currentSeason ? data.nextMatchDay.zat : (season === 1 ? RELEGATION_START_MATCH_DAY : SEASON_MATCH_DAYS);
 
 		this.table.rows.slice(1).forEach(row => {
-			
+
 			let matchdayBooking = /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent);
 			if (matchdayBooking) zat = +matchdayBooking[1];
 			let matchday = data.team.getMatchDay(season, zat);

@@ -159,7 +159,7 @@ class SquadPlayer extends Player {
 			let salary24 = Math.exp(43.4141558006601 - age * 5.54570281665499 + skill * 0.158961589662974 + opti * 0.0621816258155144
 				+ Math.pow(age, 2) * 0.291391890680615 - Math.pow(skill, 2) * 0.00156875101235568 - Math.pow(opti, 2) * 0.000708828068471812
 				- Math.pow(age, 3) * 0.00690374205734566 + Math.pow(skill, 3) * 0.0000185915532095852 + Math.pow(opti, 3) * 7.30138929949129 * Math.pow(10, -6)
-				+ Math.pow(age, 4) * 0.0000608351611664875 - Math.pow(skill, 4) * 8.52842263501928 * Math.pow(10, -8) - Math.pow(opti,4) * 3.00334542939177 * Math.pow(10, -8) + skills * 0.0271361133643198);
+				+ Math.pow(age, 4) * 0.0000608351611664875 - Math.pow(skill, 4) * 8.52842263501928 * Math.pow(10, -8) - Math.pow(opti, 4) * 3.00334542939177 * Math.pow(10, -8) + skills * 0.0271361133643198);
 			if (age >= 32) {
 				salary24 = salary24 * (0.0274395216316261 * Math.pow(age, 2) - 2.01524742754527 * age + 37.4122435618068);
 			}
@@ -183,8 +183,8 @@ class SquadPlayer extends Player {
 		let trainedSkills = {...this.getPrimarySkills(), ...this.getSecondarySkills()};
 		delete trainedSkills.fuq;
 		delete trainedSkills.erf;
-		return Object.values(trainedSkills).reduce((sum, value) => sum + POTENTIAL_DURATION[value], 0) 
-			- (POTENTIAL_DAYS[this.age] + Math.round( Math.round(SEASON_MATCH_DAYS * (this.ageExact - this.age)) * POTENTIAL_FACTOR[this.age] / 100));
+		return Object.values(trainedSkills).reduce((sum, value) => sum + POTENTIAL_DURATION[value], 0)
+			- (POTENTIAL_DAYS[this.age] + Math.round(Math.round(SEASON_MATCH_DAYS * (this.ageExact - this.age)) * POTENTIAL_FACTOR[this.age] / 100));
 	}
 
 	/**
@@ -250,7 +250,7 @@ class SquadPlayer extends Player {
 	 */
 	getTrainingChance (skill, trainer) {
 		if (skill >= trainer.upToSkill) return 0;
-		let chance = Math.pow((100 - this.age) / 37, 7) * (100 - (this.skills[skill] + (99 - trainer.legacySkill) / 2)) / (100 - (99 - (this.skills[skill] + (99 - trainer.legacySkill)/ 2 ))) * Math.pow(0.99, 99);
+		let chance = Math.pow((100 - this.age) / 37, 7) * (100 - (this.skills[skill] + (99 - trainer.legacySkill) / 2)) / (100 - (99 - (this.skills[skill] + (99 - trainer.legacySkill) / 2))) * Math.pow(0.99, 99);
 		return chance > CHANCE_LIMIT ? CHANCE_LIMIT : chance;
 	}
 
@@ -263,7 +263,7 @@ class SquadPlayer extends Player {
 			let onlyOneTraining = forecastPlayer.lastTraining && forecastPlayer.nextTraining && (forecastPlayer.lastTraining.skill === forecastPlayer.nextTraining.skill);
 			let refObject = (onlyOneTraining ? forecastPlayer : training);
 			refObject.daysUntilIncrease = (refObject.daysUntilIncrease || 0) - 1
-				+ daysUntilIncrease - (refObject.daysUntilIncrease > 0 ? (refObject.lastDaysUntilIncrease || 0): 0);
+				+ daysUntilIncrease - (refObject.daysUntilIncrease > 0 ? (refObject.lastDaysUntilIncrease || 0) : 0);
 			if (refObject.daysUntilIncrease <= 0) {
 				forecastPlayer.skills[training.skill]++;
 				this._handleTrainingLimit(forecastPlayer, training, onlyOneTraining);
@@ -272,7 +272,7 @@ class SquadPlayer extends Player {
 		}
 	}
 
-	_handleTrainingLimit(forecastPlayer, training, onlyOneTraining) {
+	_handleTrainingLimit (forecastPlayer, training, onlyOneTraining) {
 		let primary = Object.keys(forecastPlayer.getPrimarySkills()).includes(training.skill);
 		let limit = (primary ? Options.primarySkillTrainingLimit : Options.secondarySkillTrainingLimit) + Options.ageTrainingLimit - forecastPlayer.age;
 		let skills = (primary ? forecastPlayer.getPrimarySkills() : forecastPlayer.getSecondarySkills());
@@ -317,8 +317,8 @@ class SquadPlayer extends Player {
 				});
 				skills.sort((s1, s2) => s2.remainder - s1.remainder).forEach(skill => {
 					if (remainder > 0) {
-						forecastPlayer.skills[skill.name] --;
-						remainder --;
+						forecastPlayer.skills[skill.name]--;
+						remainder--;
 					}
 				});
 			}
@@ -389,11 +389,11 @@ class SquadPlayer extends Player {
 		}
 	}
 
-	_forecastTransferLock(forecastPlayer) {
+	_forecastTransferLock (forecastPlayer) {
 		if (forecastPlayer.transferLock > 0) forecastPlayer.transferLock--;
 	}
 
-	_forecastFastTransfer(forecastPlayer, matchday) {
+	_forecastFastTransfer (forecastPlayer, matchday) {
 		if (this.fastTransferMatchDay && matchday.after(this.fastTransferMatchDay)) {
 			forecastPlayer.active = false;
 		}
@@ -429,9 +429,9 @@ class SquadPlayer extends Player {
  * @readonly
  */
 const BanType = Object.freeze({
-	LEAGUE: { abbr: 'L', description: 'Ligaspiel', descriptionPlural: 'Ligaspiele' },
-	CUP: { abbr: 'P', description: 'Pokalspiel', descriptionPlural: 'Pokalspiele' },
-	INTERNATIONAL: { abbr: 'I', description: 'internationales Spiel', descriptionPlural: 'internationale Spiele' }
+	LEAGUE: {abbr: 'L', description: 'Ligaspiel', descriptionPlural: 'Ligaspiele'},
+	CUP: {abbr: 'P', description: 'Pokalspiel', descriptionPlural: 'Pokalspiele'},
+	INTERNATIONAL: {abbr: 'I', description: 'internationales Spiel', descriptionPlural: 'internationale Spiele'}
 });
 
 /**
@@ -507,7 +507,7 @@ SquadPlayer.Training = class {
 		return ensurePrototype(this._trainer, Team.Trainer);
 	}
 
-	set trainer(value) {
+	set trainer (value) {
 		this._trainer = value;
 	}
 

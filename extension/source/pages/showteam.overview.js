@@ -12,17 +12,17 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.table = new ManagedTable(this.name,
-			new Column('#').withStyle('text-align','left'),
+			new Column('#').withStyle('text-align', 'left'),
 			new Column('Nr.'),
 			new Column('Name'),
 			new Column('Alter'),
-			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
 			new Column('Pos'),
-			new Column('Auf').withStyle('width','2.5em').withStyle('text-align','left'),
-			new Column('Land').withStyle('text-align','left'),
+			new Column('Auf').withStyle('width', '2.5em').withStyle('text-align', 'left'),
+			new Column('Land').withStyle('text-align', 'left'),
 			new Column('U'),
 			new Column('MOR').withHeader('Mor'),
 			new Column('FIT').withHeader('Fit'),
@@ -32,11 +32,11 @@ Page.ShowteamOverview = class extends Page.Showteam {
 			new Column('Sperre').withHeader('Sp.', 'Sperre'),
 			new Column('Verl.'),
 			new Column('T'),
-			new Column('TS').withStyle('width','1.9em'),
-			new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width','3.5em'),
-			new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width','3.5em'),
-			new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em'),
-			new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width','3.5em')
+			new Column('TS').withStyle('width', '1.9em'),
+			new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width', '3.5em'),
+			new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width', '3.5em'),
+			new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width', '3.5em'),
+			new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width', '3.5em')
 		);
 
 		this.table.initialize(doc);
@@ -103,7 +103,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		doc.getElementsByTagName('div')[0].classList.add(STYLE_TEAM);
 

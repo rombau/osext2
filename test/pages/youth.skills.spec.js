@@ -8,7 +8,7 @@ describe('Page.YouthSkills', () => {
 		page = new Page.YouthSkills();
 
 		spyOn(data.team, 'syncYouthPlayers').and.callThrough();
-		
+
 		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
 			return Promise.resolve();
 		});

@@ -11,7 +11,7 @@ Page.Training = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.table = new ManagedTable(this.name,
 			new Column(''),
@@ -22,10 +22,10 @@ Page.Training = class extends Page {
 			new Column('trainierter Skill').withHeader('Skill'),
 			new Column('Skill').withHeader('Wert'),
 			new Column('Chance'),
-			new Column('EB', Origin.Extension).withHeader('EB', 'Einsatzbonus lt. Zugabgabe').withStyle('width','3em').withStyle('text-align','right'),
+			new Column('EB', Origin.Extension).withHeader('EB', 'Einsatzbonus lt. Zugabgabe').withStyle('width', '3em').withStyle('text-align', 'right'),
 			new Column('ChanceEB', Origin.Extension).withHeader('Chance', 'Chance mit Einsatzbonus'),
-			new Column('mögl. MW+', Origin.Extension).withStyle('padding-left','1em'),
-			new Column('zuletzt', Origin.Extension).withHeader('zuletzt trainiert').withStyle('padding-left','1em').withStyle('text-align','left')
+			new Column('mögl. MW+', Origin.Extension).withStyle('padding-left', '1em'),
+			new Column('zuletzt', Origin.Extension).withHeader('zuletzt trainiert').withStyle('padding-left', '1em').withStyle('text-align', 'left')
 		);
 
 		this.table.initialize(doc);
@@ -62,7 +62,7 @@ Page.Training = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		let matchdayConfirmed = data.team.squadPlayers.find(player => player.nextTraining && player.nextTraining.matchBonus !== 1);
 
@@ -122,7 +122,7 @@ Page.Training = class extends Page {
 					}
 				}
 			}
-			
+
 			if (!matchdayConfirmed) {
 				row.cells['EB'].classList.add(STYLE_HIDDEN);
 				row.cells['ChanceEB'].classList.add(STYLE_HIDDEN);

@@ -20,10 +20,10 @@ describe('Page.AccountStatement', () => {
 			expect(data.team.accountBalance).toEqual(32221833);
 
 			expect(data.team.getMatchDay(16, 54).accountBalanceBefore).toEqual(32221833);
-			expect(data.team.getMatchDay(16, 54).otherBookings).toEqual({'Transfer':0});
+			expect(data.team.getMatchDay(16, 54).otherBookings).toEqual({'Transfer': 0});
 
 			expect(data.team.getMatchDay(16, 53).accountBalanceBefore).toEqual(46161833);
-			expect(data.team.getMatchDay(16, 53).otherBookings).toEqual({'Transfer':-14000000});
+			expect(data.team.getMatchDay(16, 53).otherBookings).toEqual({'Transfer': -14000000});
 			expect(data.team.getMatchDay(16, 53).accountBalance).toEqual(32221833);
 			expect(data.team.getMatchDay(16, 52).accountBalanceBefore).toEqual(46351833);
 			expect(data.team.getMatchDay(16, 52).accountBalance).toEqual(46161833);
@@ -46,11 +46,11 @@ describe('Page.AccountStatement', () => {
 
 			expect(data.team.accountBalance).toEqual(32221833);
 
-			expect(data.team.getMatchDay(16, 72).otherBookings).toEqual({'Transfer':0});
+			expect(data.team.getMatchDay(16, 72).otherBookings).toEqual({'Transfer': 0});
 			expect(data.team.getMatchDay(16, 72).advertisingIncome).toEqual(1332416);
 			expect(data.team.getMatchDay(16, 72).merchandisingIncome).toEqual(1175694);
 
-			expect(data.team.getMatchDay(16, 53).otherBookings).toEqual({'Transfer':-14000000});
+			expect(data.team.getMatchDay(16, 53).otherBookings).toEqual({'Transfer': -14000000});
 
 			data.team.league.size = 10;
 

@@ -6,7 +6,7 @@ class Requestor {
 	/**
 	 * @param {HTMLElement} the element with the progress
 	 */
-	constructor (status) {
+	constructor(status) {
 
 		/** @type {HTMLElement} the element with the progress */
 		this.status = status;
@@ -59,7 +59,7 @@ class Requestor {
 	 * @param {finishCallback} finished the method called when requests finished
 	 * @returns {Requestor} the new requestor
 	 */
-	static create (doc, finished = () => {} ) {
+	static create (doc, finished = () => {}) {
 
 		Requestor.addOverlays();
 
@@ -95,7 +95,7 @@ class Requestor {
 		const response = await fetch(page.createUrl(), init);
 		const html = await response.text();
 		const doc = new DOMParser().parseFromString(html, 'text/html');
-		
+
 		// prototype of the page implementation needed for the right extract method
 		Object.setPrototypeOf(page, Object.getPrototypeOf(Page.byLocation(page.createUrl().href)));
 
@@ -128,7 +128,7 @@ class Requestor {
 	/**
 	 * Adds overlay(s) to all frames/windows.
 	 */
-	static addOverlays() {
+	static addOverlays () {
 		let addOverlay = (frameWindow) => {
 			let overlay = frameWindow.document.getElementById(Requestor.OVERLAY_ID);
 			if (!overlay && frameWindow.document.body) {
@@ -148,7 +148,7 @@ class Requestor {
 						});
 					});
 				});
-				Requestor.menuObserver.observe(frame.document, { childList: true });
+				Requestor.menuObserver.observe(frame.document, {childList: true});
 			}
 			if (frame.document.readyState === 'complete') {
 				addOverlay(frame);

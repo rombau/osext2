@@ -2,7 +2,7 @@
  * Enum for column origins.
  * @readonly
  */
- const Origin = Object.freeze({
+const Origin = Object.freeze({
 	OS: 'OS',
 	Extension: 'Extension'
 });
@@ -17,7 +17,7 @@ class StyleProperty {
 	 * @param {String} value
 	 * @param {String} priority
 	 */
-	constructor (propertyName, value, priority) {
+	constructor(propertyName, value, priority) {
 
 		/** @type {String} the property name */
 		this.propertyName = propertyName;
@@ -39,11 +39,11 @@ class Column {
 	 * @param {String} name the name
 	 * @param {Origin} origin=Origin.OS the origin
 	 */
-	constructor (name, origin = Origin.OS) {
+	constructor(name, origin = Origin.OS) {
 
 		/** @type {String} the column name */
 		this.name = name;
-		
+
 		/** @type {Origin} the origin */
 		this.origin = origin;
 
@@ -126,14 +126,14 @@ class ManagedTable {
 	 * @param {String} page name of the page containing the table
 	 * @param {...Column} columns of the table
 	 */
-	constructor (page, ...columns) {
-		
+	constructor(page, ...columns) {
+
 		/** @type {String} the page name containing the table */
 		this.page = page;
-	
+
 		/** @type {[Column]} the columns of the table */
 		this.columns = columns;
-		
+
 		/** @type {HTMLTableElement} the managed HTML table element */
 		this.table;
 
@@ -199,27 +199,27 @@ class ManagedTable {
 			let spanAttr = cell.getAttributeNode('colspan');
 			return spanAttr && +spanAttr.value > 3; // limit col span joining
 		}));
-		this.columnRelatedRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g,'') === cellHeaders.join('').replaceAll(/\s/g,'')));
+		this.columnRelatedRows.forEach(row => row.isHeader = (row.textContent.replaceAll(/\s/g, '') === cellHeaders.join('').replaceAll(/\s/g, '')));
 
 		// join spaned columns; headers could be changed
 		if (!keepDomUnchanged) cellHeaders = this._removeColSpans(osColumns);
-	
+
 		// find index of original columns
 		osColumns.forEach(column => column.originalIndex = cellHeaders.indexOf(column.name));
 
 		// reorder and add named cell references
 		this.columnRelatedRows.forEach(row => {
 
-			/** @type {[HTMLTableCellElement]} */ 
+			/** @type {[HTMLTableCellElement]} */
 			let orderedCells = [];
 			let namedCellMap = [];
 
 			// known columns
 			this.columns.forEach(column => {
-				
-				/** @type {[HTMLTableCellElement]} */ 
+
+				/** @type {[HTMLTableCellElement]} */
 				let cell;
-				
+
 				if (column.origin === Origin.OS) {
 					cell = row.cells[column.originalIndex];
 				} else if (column.origin === Origin.Extension) {
@@ -239,11 +239,11 @@ class ManagedTable {
 					} else {
 						cell.textContent = column.header;
 					}
-				}					
+				}
 				orderedCells.push(cell);
 
 				cell.columnName = column.name;
-				
+
 				column.stylesClasses.forEach(styleClass => cell.classList.add(styleClass));
 				column.styles.forEach(style => cell.style.setProperty(style.propertyName, style.value, style.priority));
 
@@ -257,7 +257,7 @@ class ManagedTable {
 
 			// reorder
 			if (!keepDomUnchanged) row.replaceChildren(...orderedCells);
-			
+
 			// customizing based on options
 			if (row.isHeader) this.columnNames = orderedCells.map(cell => cell.columnName || cell.textContent);
 			if (!keepDomUnchanged) this._customizeCells(orderedCells);
@@ -274,7 +274,7 @@ class ManagedTable {
 
 			// add configuration button/menu
 			this._addColumnVisibilityConfiguration(doc);
-	
+
 			// add column move handling
 			this._makeColumnsMovable();
 		}
@@ -398,10 +398,10 @@ class ManagedTable {
 
 		this.columns
 			.filter(column => column.origin === Origin.Extension)
-			.map(({ name, header, title }) => ({ name: name, desc: title || header || name }))
+			.map(({name, header, title}) => ({name: name, desc: title || header || name}))
 			.concat(this.columnNames
 				.filter(columnName => !this.columns.map(column => column.name).includes(columnName))
-				.map(name => ({ name: name, script: true })))
+				.map(name => ({name: name, script: true})))
 			.forEach(column => {
 
 				let hidden = this.config.hiddenColumns.includes(column.name);
@@ -427,7 +427,7 @@ class ManagedTable {
 
 				menuArea.appendChild(HtmlUtil.createDivElement(column.desc || column.name, column.script ? 'script' : null, doc));
 			});
-		
+
 		menuArea.appendChild(this._createResetLink(doc));
 
 		let container = HtmlUtil.createDivElement(configButton, STYLE_MANAGED, doc);
@@ -442,7 +442,7 @@ class ManagedTable {
 	 * @param {Document} doc 
 	 * @returns {HTMLAnchorElement}
 	 */
-	_createResetLink(doc) {
+	_createResetLink (doc) {
 
 		let reset = doc.createElement('a');
 		reset.href = '#';
@@ -516,7 +516,7 @@ class ManagedTable {
 				return;
 			});
 		});
-		
+
 	}
 
 	/**
@@ -526,7 +526,7 @@ class ManagedTable {
 	 * @param {Boolean} forecast indicates a forecast view
 	 */
 	styleUnknownColumns (forecast) {
-		
+
 		this.columnNames.filter(columnName => !this.columns.map(column => column.name).includes(columnName)).forEach(columnName => {
 			this.columnRelatedRows.forEach(row => {
 				let cell = row.cells[this.columnNames.indexOf(columnName)];
@@ -559,7 +559,7 @@ class ManagedTable {
 	get container () {
 		return this.table.parentNode;
 	}
-	
+
 	/**
 	 * @property {Node} parentNode of the table container
 	 */

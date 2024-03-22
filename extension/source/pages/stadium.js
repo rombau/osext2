@@ -10,7 +10,7 @@ Page.Stadium = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 			return table.rows.length >= 6 && table.rows[1].cells.length >= 6
@@ -37,7 +37,7 @@ Page.Stadium = class extends Page {
 		if (expansionElement) {
 			let matches = /f.hrt w.hrend der n.chsten (\d+) ZATs folgende Arbeiten durch/gm.exec(expansionElement.textContent);
 			if (matches) {
-				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1]+1);
+				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1] + 1);
 				expansionFinished = data.team.getMatchDay(expansionFinished.season, expansionFinished.zat);
 				expansionFinished.stadium = this.extractExpandedStadium(data.team.stadium, expansionElement);
 				if (data.team.stadium.getPlaces() !== expansionFinished.stadium.getPlaces()) {
@@ -57,7 +57,7 @@ Page.Stadium = class extends Page {
 	 * @param {HTMLElement} expansionElement
 	 * @returns {Stadium}
 	 */
-	extractExpandedStadium(currentStadium, expansionElement) {
+	extractExpandedStadium (currentStadium, expansionElement) {
 		let stadium = new Stadium();
 
 		stadium.coveredSeats = currentStadium.coveredSeats

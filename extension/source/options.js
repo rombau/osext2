@@ -69,7 +69,7 @@ const Options = {
 	/** @type {Object<string, PageConfig>} dictionary of page configurations */
 	pageConfig: {},
 
-	initialize : () => {
+	initialize: () => {
 		getQueuedPromise((resolve, reject) => {
 			chrome.storage.local.get(JSON.parse(JSON.stringify(Options)), (data) => {
 				if (chrome.runtime.lastError) {
@@ -100,7 +100,7 @@ const Options = {
 		});
 	},
 
-	initSlider : (slider, value) => {
+	initSlider: (slider, value) => {
 		let output = document.getElementById(slider.id + '-value');
 		output.textContent = value;
 		slider.value = value;
@@ -109,7 +109,7 @@ const Options = {
 		});
 	},
 
-	setRootTheme : (theme) => {
+	setRootTheme: (theme) => {
 		// Theme set on each frame
 		document.documentElement.className = theme;
 
@@ -123,10 +123,10 @@ const Options = {
 					}
 				});
 			});
-		}).observe(document, { childList: true });
+		}).observe(document, {childList: true});
 	},
 
-	save : () => {
+	save: () => {
 		if (themeSelect) {
 			Options.theme = themeSelect.value;
 			Options.logLevel = loggingSelect.value;

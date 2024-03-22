@@ -1,0 +1,22 @@
+{
+	"javascript.preferences.quoteStyle": "single",
+	"javascript.format.enable": true,
+	"javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+	"karmaTestExplorer.projectType": "karma",
+	"karmaTestExplorer.autoWatchEnabled": false,
+	"karmaTestExplorer.debuggerConfig": {
+		"name": "Debug tests",
+		"type": "chrome",
+		"request": "attach",
+		"port": 9222,
+		"browserAttachLocation": "workspace",
+		"address": "localhost",
+		"timeout": 60000,
+		"pathMapping": {
+			"/": "${workspaceRoot}",
+			"/base/": "${workspaceRoot}/"
+		}
+	}
+}

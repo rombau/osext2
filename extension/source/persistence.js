@@ -146,7 +146,7 @@ class Persistence {
 			if (value === null || (Array.isArray(value) && value.length === 0 && key.startsWith('_')) || key === 'sortedMatchDays') {
 				delete dataObject[key];
 			} else if (typeof value === 'object') {
-				Persistence.prepare(value);	
+				Persistence.prepare(value);
 			}
 		});
 		return JSON.parse(JSON.stringify(dataObject));

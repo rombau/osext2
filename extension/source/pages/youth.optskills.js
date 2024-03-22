@@ -13,28 +13,28 @@ Page.YouthOptskills = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		this.table = this.table || new ManagedTable(this.name,
 			new Column('Alter'),
-			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
 			new Column('Pos', Origin.Extension),
-			new Column('Land').withStyle('text-align','left'),
+			new Column('Land').withStyle('text-align', 'left'),
 			new Column('U'),
 			new Column('Skill').withHeader('Skillschn.'),
 			new Column('TOR').withStyle('padding-left', '2em', true),
-			new Column('PullTOR', Origin.Extension).withHeader('', 'als TOR ziehen').withStyle('text-align','left').withStyle('width','1.1em'),
+			new Column('PullTOR', Origin.Extension).withHeader('', 'als TOR ziehen').withStyle('text-align', 'left').withStyle('width', '1.1em'),
 			new Column('ABW'),
-			new Column('PullABW', Origin.Extension).withHeader('', 'als ABW ziehen').withStyle('text-align','left').withStyle('width','1.1em'),
+			new Column('PullABW', Origin.Extension).withHeader('', 'als ABW ziehen').withStyle('text-align', 'left').withStyle('width', '1.1em'),
 			new Column('DMI'),
-			new Column('PullDMI', Origin.Extension).withHeader('', 'als DMI ziehen').withStyle('text-align','left').withStyle('width','1.1em'),
+			new Column('PullDMI', Origin.Extension).withHeader('', 'als DMI ziehen').withStyle('text-align', 'left').withStyle('width', '1.1em'),
 			new Column('MIT'),
-			new Column('PullMIT', Origin.Extension).withHeader('', 'als MIT ziehen').withStyle('text-align','left').withStyle('width','1.1em'),
+			new Column('PullMIT', Origin.Extension).withHeader('', 'als MIT ziehen').withStyle('text-align', 'left').withStyle('width', '1.1em'),
 			new Column('OMI'),
-			new Column('PullOMI', Origin.Extension).withHeader('', 'als OMI ziehen').withStyle('text-align','left').withStyle('width','1.1em'),
+			new Column('PullOMI', Origin.Extension).withHeader('', 'als OMI ziehen').withStyle('text-align', 'left').withStyle('width', '1.1em'),
 			new Column('STU'),
-			new Column('PullSTU', Origin.Extension).withHeader('', 'als STU ziehen').withStyle('text-align','left').withStyle('width','1em'),
-			new Column('Pull', Origin.Extension).withHeader('Aktion').withStyle('text-align','left').withStyle('width','6.5em').withStyle('padding-left','1em', true)
+			new Column('PullSTU', Origin.Extension).withHeader('', 'als STU ziehen').withStyle('text-align', 'left').withStyle('width', '1em'),
+			new Column('Pull', Origin.Extension).withHeader('Aktion').withStyle('text-align', 'left').withStyle('width', '6.5em').withStyle('padding-left', '1em', true)
 		);
 
 		this.table.initialize(doc);
@@ -160,9 +160,9 @@ Page.YouthOptskills = class extends Page.Youth {
 					cell.classList.add(STYLE_INACTIVE);
 				}
 			});
-			
+
 			row.cells['U'].className = 'STU';
-			
+
 			Object.keys(Position).forEach(pos => {
 				row.cells[pos].classList.add(pos);
 				row.cells['Pull' + pos].classList.add(pos);

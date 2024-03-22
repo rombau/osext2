@@ -11,7 +11,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.params[0].value = 1; // to ensure the correct value for this param
 
@@ -24,20 +24,20 @@ Page.YouthOverview = class extends Page.Youth {
 
 			this.table = this.table || new ManagedTable(this.name,
 				new Column('Alter'),
-				new Column('Geb.').withStyle('text-align','left'),
+				new Column('Geb.').withStyle('text-align', 'left'),
 				new Column('Pos', Origin.Extension),
-				new Column('Land').withStyle('text-align','left').withStyle('padding-left','0.5em', true),
+				new Column('Land').withStyle('text-align', 'left').withStyle('padding-left', '0.5em', true),
 				new Column('U'),
 				new Column('Skillschnitt').withHeader('Skillschn.'),
-				new Column('Opt.Skill', Origin.Extension).withStyle('padding-right','0.5em', true),
-				new Column('Talent').withStyle('width','4.5em'),
+				new Column('Opt.Skill', Origin.Extension).withStyle('padding-right', '0.5em', true),
+				new Column('Talent').withStyle('width', '4.5em'),
 				new Column('Aktion'),
-				new Column('Aufwertung').withStyle('width','9em'),
+				new Column('Aufwertung').withStyle('width', '9em'),
 				new Column('Ø/Zat', Origin.Extension).withHeader('Ø/Zat', 'Durchschnittliche Aufwertungen pro Zat'),
-				new Column('Marktwert', Origin.Extension).withStyle('width','6em').withStyle('text-align','right'),
-				new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width','3.5em').withStyle('text-align','right'),
-				new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width','3.5em').withStyle('text-align','right'),
-				new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width','3.5em').withStyle('text-align','right')
+				new Column('Marktwert', Origin.Extension).withStyle('width', '6em').withStyle('text-align', 'right'),
+				new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width', '3.5em').withStyle('text-align', 'right'),
+				new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width', '3.5em').withStyle('text-align', 'right'),
+				new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width', '3.5em').withStyle('text-align', 'right')
 			);
 
 			this.table.initialize(doc);
@@ -100,7 +100,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @returns {Number}
 	 */
-	getPullId(doc) {
+	getPullId (doc) {
 
 		let pullInput = doc.querySelector('input[name="ziehmich"][type="hidden"]');
 		return pullInput ? +pullInput.value : null;
@@ -110,7 +110,7 @@ Page.YouthOverview = class extends Page.Youth {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		if (!this.getPullId(doc)) {
 

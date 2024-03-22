@@ -32,7 +32,7 @@ describe('Page', () => {
 
 			let page = new Page('Testseite', 'xyz.php', new Page.Param('s'));
 
-			expect(() => { page.createUrl(); }).toThrowError(/Parameter s fehlt \(url: .+\)/);
+			expect(() => {page.createUrl();}).toThrowError(/Parameter s fehlt \(url: .+\)/);
 		});
 
 		it('with path param', () => {
@@ -160,7 +160,7 @@ describe('Page', () => {
 			jasmine.addMatchers({
 				toEqualWithoutLogger: (matchersUtil) => {
 					return {
-						compare: function(actual, expected) {
+						compare: function (actual, expected) {
 							delete actual.logger;
 							delete expected.logger;
 							let result = {};

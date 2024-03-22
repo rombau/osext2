@@ -13,14 +13,14 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.table = new ManagedTable(this.name,
-			new Column('#').withStyle('text-align','left'),
+			new Column('#').withStyle('text-align', 'left'),
 			new Column('Name'),
 			new Column('Alter', Origin.Extension),
-			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
-			new Column('Land').withStyle('text-align','left'),
+			new Column('Geb.', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
+			new Column('Land').withStyle('text-align', 'left'),
 			new Column('U'),
 			new Column('SCH'),
 			new Column('BAK'),
@@ -39,8 +39,8 @@ Page.ShowteamSkills = class extends Page.Showteam {
 			new Column('DIS'),
 			new Column('ZUV'),
 			new Column('EIN'),
-			new Column('Skillschn.', Origin.Extension).withStyle('padding-left','0.6em', true),
-			new Column('Opt.Skill', Origin.Extension).withStyle('padding-right','0.6em', true)
+			new Column('Skillschn.', Origin.Extension).withStyle('padding-left', '0.6em', true),
+			new Column('Opt.Skill', Origin.Extension).withStyle('padding-right', '0.6em', true)
 		);
 
 		this.table.initialize(doc);
@@ -65,7 +65,7 @@ Page.ShowteamSkills = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		this.table.rows.slice(1, -1).forEach(row => {
 

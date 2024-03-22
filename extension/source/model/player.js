@@ -16,14 +16,14 @@ const Position = Object.freeze({
  * @readonly
  */
 const SpecialSkill = Object.freeze({
-	E: { abbr: 'E', description: 'Elfmetertöter' },
-	L: { abbr: 'L', description: 'Libero' },
-	S: { abbr: 'S', description: 'Spielmacher' },
-	F: { abbr: 'F', description: 'Freistoßspezialist' },
-	T: { abbr: 'T', description: 'Torinstinkt' },
-	G: { abbr: 'G', description: 'Flankengott' },
-	K: { abbr: 'K', description: 'Kapitän' },
-	P: { abbr: 'P', description: 'Pferdelunge' }
+	E: {abbr: 'E', description: 'Elfmetertöter'},
+	L: {abbr: 'L', description: 'Libero'},
+	S: {abbr: 'S', description: 'Spielmacher'},
+	F: {abbr: 'F', description: 'Freistoßspezialist'},
+	T: {abbr: 'T', description: 'Torinstinkt'},
+	G: {abbr: 'G', description: 'Flankengott'},
+	K: {abbr: 'K', description: 'Kapitän'},
+	P: {abbr: 'P', description: 'Pferdelunge'}
 });
 
 /**

@@ -11,7 +11,7 @@ Page.MatchDayConfirmation = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let tables = doc.getElementsByTagName('table');
 

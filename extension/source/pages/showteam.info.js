@@ -10,7 +10,7 @@ Page.ShowteamInfo = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let table = Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 			return table.rows.length >= 5 && table.rows[2].cells.length >= 4
@@ -37,7 +37,7 @@ Page.ShowteamInfo = class extends Page {
 		if (expansionElement) {
 			let matches = /Das Stadion wird noch (\d+) ZAT\(s\) ausgebaut./gm.exec(expansionElement.textContent);
 			if (matches) {
-				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1]+1);
+				let expansionFinished = new MatchDay(data.lastMatchDay.season, data.lastMatchDay.zat).add(+matches[1] + 1);
 				expansionFinished = data.team.getMatchDay(expansionFinished.season, expansionFinished.zat);
 				expansionFinished.stadium = this.extractExpandedStadium(data.team.stadium, Array.from(doc.getElementsByTagName('table')).find((table, t) => {
 					return table.rows.length >= 3 && table.rows[0].cells[0].textContent === expansionElement.textContent;
@@ -50,10 +50,10 @@ Page.ShowteamInfo = class extends Page {
 				}
 			}
 		}
-		
+
 		if (data.nextMatchDay.competition !== Competition.FRIENDLY && data.nextMatchDay.location === GameLocation.HOME) {
 			data.nextMatchDay.stadiumCapacity = data.team.stadium.getPlaces(); // for stadium load analysis
-		}	
+		}
 	}
 
 	/**
@@ -63,7 +63,7 @@ Page.ShowteamInfo = class extends Page {
 	 * @param {HTMLTableElement} expansionTable
 	 * @returns {Stadium}
 	 */
-	extractExpandedStadium(currentStadium, expansionTable) {
+	extractExpandedStadium (currentStadium, expansionTable) {
 		let stadium = new Stadium();
 
 		stadium.coveredSeats = currentStadium.coveredSeats

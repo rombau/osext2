@@ -11,7 +11,7 @@ Page.ContractExtension = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.form = doc.getElementsByTagName('form')[0];
 		this.submit = doc.querySelector('input[type="submit"]');
@@ -19,7 +19,7 @@ Page.ContractExtension = class extends Page {
 		this.table = new ManagedTable(this.name,
 			new Column('Name'),
 			new Column('Alter'),
-			new Column('Geb.Tag', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Geb.Tag', Origin.Extension).withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
 			new Column('Land'),
 			new Column('Gehalt'),
 			new Column('Laufzeit'),
@@ -27,22 +27,22 @@ Page.ContractExtension = class extends Page {
 			new Column('Skillschnitt'),
 			new Column('Opt. Skill'),
 			new Column('24').withRef('24M').withHeader('24M'),
-			new Column('Monate').withRef('Gehalt24').withHeader('Gehalt','für 24 Monate'),
+			new Column('Monate').withRef('Gehalt24').withHeader('Gehalt', 'für 24 Monate'),
 			new Column('Alter24', Origin.Extension).withHeader('Alter', 'Alter vor Ablauf 24 Monate'),
 			new Column('36').withRef('36M').withHeader('36M'),
-			new Column('Monate').withRef('Gehalt36').withHeader('Gehalt','für 36 Monate'),
+			new Column('Monate').withRef('Gehalt36').withHeader('Gehalt', 'für 36 Monate'),
 			new Column('Alter36', Origin.Extension).withHeader('Alter', 'Alter vor Ablauf 36 Monate'),
 			new Column('48').withRef('48M').withHeader('48M'),
-			new Column('Monate').withRef('Gehalt48').withHeader('Gehalt','für 48 Monate'),
+			new Column('Monate').withRef('Gehalt48').withHeader('Gehalt', 'für 48 Monate'),
 			new Column('Alter48', Origin.Extension).withHeader('Alter', 'Alter vor Ablauf 48 Monate'),
 			new Column('60').withRef('60M').withHeader('60M'),
-			new Column('Monate').withRef('Gehalt60').withHeader('Gehalt','für 60 Monate'),
+			new Column('Monate').withRef('Gehalt60').withHeader('Gehalt', 'für 60 Monate'),
 			new Column('Alter60', Origin.Extension).withHeader('Alter', 'Alter vor Ablauf 60 Monate'),
-			new Column('Aktion', Origin.Extension).withStyle('text-align','left').withStyle('width','6em').withStyle('padding-left','1em', true)
+			new Column('Aktion', Origin.Extension).withStyle('text-align', 'left').withStyle('width', '6em').withStyle('padding-left', '1em', true)
 		);
 
 		this.table.initialize(doc);
-		
+
 		this.table.container.classList.add(STYLE_CONTRACT_EXTENSION);
 
 		this.table.rows.slice(1).forEach(row => {
@@ -69,7 +69,7 @@ Page.ContractExtension = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		let page = this;
 
@@ -83,7 +83,7 @@ Page.ContractExtension = class extends Page {
 			row.cells['Geb.Tag'].textContent = player.birthday;
 
 			row.cells['AlterAblauf'].textContent = '';
-			row.cells['AlterAblauf'].appendChild(HtmlUtil.createAbbreviation(`Saison ${lastDay.season} / Zat ${lastDay.zat}`, 
+			row.cells['AlterAblauf'].appendChild(HtmlUtil.createAbbreviation(`Saison ${lastDay.season} / Zat ${lastDay.zat}`,
 				(player.ageExact + lastDay.intervalTo(data.lastMatchDay) / SEASON_MATCH_DAYS).toFixed(2)));
 
 			row.cells['AlterAblauf'].classList.add(STYLE_FORECAST);
@@ -220,19 +220,19 @@ Page.ContractExtension = class extends Page {
 				lastDay.add((player.contractTerm * MONTH_MATCH_DAYS) - (lastDay.zat % MONTH_MATCH_DAYS) - 1);
 
 				row.cells['AlterAblauf'].textContent = '';
-				row.cells['AlterAblauf'].appendChild(HtmlUtil.createAbbreviation(`Saison ${lastDay.season} / Zat ${lastDay.zat}`, 
+				row.cells['AlterAblauf'].appendChild(HtmlUtil.createAbbreviation(`Saison ${lastDay.season} / Zat ${lastDay.zat}`,
 					(player.ageExact + lastDay.intervalTo(matchDay) / SEASON_MATCH_DAYS).toFixed(2)));
 
 				if (current && player.contractExtensionMatchDay && matchDay.equals(player.contractExtensionMatchDay) && player.contractExtensionTerm) {
 					let radio = row.cells[player.contractExtensionTerm + 'M'].firstChild;
 					if (radio) radio.checked = true;
 				}
-	
+
 				CONTRACT_LENGTHS.slice(0, -1).forEach((term, t) => {
-					
+
 					let lastDay = new MatchDay(matchDay.season, matchDay.zat);
 					lastDay.add((term * MONTH_MATCH_DAYS) - (lastDay.zat % MONTH_MATCH_DAYS) - 1);
-			
+
 					row.cells['Alter' + term].textContent = (player.ageExact + lastDay.intervalTo(matchDay) / SEASON_MATCH_DAYS).toFixed(2);
 					row.cells['Alter' + term].classList.add(STYLE_FORECAST);
 				});
@@ -295,7 +295,7 @@ Page.ContractExtension = class extends Page {
 				row.cells['Laufzeit'].classList.add(STYLE_FORECAST);
 				row.cells['Skillschnitt'].classList.add(STYLE_FORECAST);
 				row.cells['Opt. Skill'].classList.add(STYLE_FORECAST);
-			} 
+			}
 		});
 
 		if (!current) {

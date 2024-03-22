@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logoColor=black&color=green&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-84%25-83A603.svg?style=flat&logoColor=black&color=green&prefix=$coverage$)
 ![](https://img.shields.io/badge/style-eslint-green)
 
 # OnlineSoccer Extension
@@ -14,22 +14,13 @@ The `OnlineSoccer Extension` extension adds useful details and forecasts to the 
 
 ## Development with Visual Studio Code
 
-For testing the extension `Karma Test Explorer for Angular, Jasmine, and Mocha` from Lucas Ononiwu is used. You need the following entries in your `settings.json` in order to debug your tests:
+Basic formatter configuration and settings for `Karma Test Explorer for Angular, Jasmine, and Mocha` from Lucas Ononiwu are provided in `.vscode/settings.json`.
+
+In order to apply formatting rules on every change the following additional user settings are recommended:
 <pre>
-	"karmaTestExplorer.projectType": "karma",
-	"karmaTestExplorer.debuggerConfig": {
-		"name": "Debug tests",
-		"type": "chrome",
-		"request": "attach",
-		"port": 9222,
-		"browserAttachLocation": "workspace",
-		"address": "localhost",
-		"timeout": 60000,
-		"pathMapping": {
-			"/": "${workspaceRoot}",
-			"/base/": "${workspaceRoot}/"
-		}
-	}
+	"files.autoSave": "onFocusChange",
+	"editor.insertSpaces": false,
+	"editor.formatOnSave": true,
 </pre>
 
 ### Node and Gulp tools

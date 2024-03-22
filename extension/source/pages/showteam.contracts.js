@@ -11,26 +11,26 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		this.table = new ManagedTable(this.name,
-			new Column('#').withStyle('text-align','left'),
+			new Column('#').withStyle('text-align', 'left'),
 			new Column('Nr.'),
 			new Column('Name'),
 			new Column('Alter'),
-			new Column('Geb.Tag').withHeader('Geb.', 'Geburtstag').withStyle('text-align','left'),
+			new Column('Geb.Tag').withHeader('Geb.', 'Geburtstag').withStyle('text-align', 'left'),
 			new Column('Pos'),
-			new Column('Land').withStyle('text-align','left'),
+			new Column('Land').withStyle('text-align', 'left'),
 			new Column('U'),
 			new Column('Skillschnitt').withHeader('Skillschn.'),
 			new Column('Opt.Skill'),
 			new Column('Vertrag'),
 			new Column('Monatsgehalt'),
 			new Column('Spielerwert').withStyle('padding-left', '0.5em', true),
-			new Column('TF', Origin.Extension).withHeader('TF', 'Trainingsfaktor').withStyle('width','3em').withStyle('text-align','right'),
-			new Column('TS').withStyle('width','1.9em').withStyle('text-align','right'),
-			new Column('Blitzerlös', Origin.Extension).withStyle('text-align','right'),
-			new Column('Aktion', Origin.Extension).withHeader('').withStyle('text-align','left').withStyle('padding-left', '0.5em', true)
+			new Column('TF', Origin.Extension).withHeader('TF', 'Trainingsfaktor').withStyle('width', '3em').withStyle('text-align', 'right'),
+			new Column('TS').withStyle('width', '1.9em').withStyle('text-align', 'right'),
+			new Column('Blitzerlös', Origin.Extension).withStyle('text-align', 'right'),
+			new Column('Aktion', Origin.Extension).withHeader('').withStyle('text-align', 'left').withStyle('padding-left', '0.5em', true)
 		);
 
 		this.table.initialize(doc);
@@ -57,7 +57,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		this.table.rows.slice(1, -1).forEach(row => {
 

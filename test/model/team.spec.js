@@ -115,14 +115,14 @@ describe('Team', () => {
 			expect(team.youthPlayers[0].data).toEqual('data2');
 		});
 	});
-	
+
 	it('should return requested match day', () => {
 
 		expect(team.getMatchDay()).toBeNull();
-		expect(team.getMatchDay(5,34)).toBeDefined();
-		expect(team.getMatchDay(5,34).zat).toEqual(34);
-		expect(team.getMatchDay(5,34).season).toEqual(5);
-		expect(team.getMatchDay(7,11)).toBe(team.getMatchDay(7,11));
+		expect(team.getMatchDay(5, 34)).toBeDefined();
+		expect(team.getMatchDay(5, 34).zat).toEqual(34);
+		expect(team.getMatchDay(5, 34).season).toEqual(5);
+		expect(team.getMatchDay(7, 11)).toBe(team.getMatchDay(7, 11));
 	});
 
 	it('should return requested trainer', () => {
@@ -136,14 +136,14 @@ describe('Team', () => {
 	it('should return forecast', () => {
 
 		team.squadPlayers.push(new SquadPlayer());
-		team.matchDays.push(new MatchDay(15,50));
-		team.matchDays.push(new MatchDay(15,51));
+		team.matchDays.push(new MatchDay(15, 50));
+		team.matchDays.push(new MatchDay(15, 51));
 
-		let lastMatchDay = new MatchDay(15,50);
+		let lastMatchDay = new MatchDay(15, 50);
 
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,50))).toBe(team);
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,51))).not.toBe(team);
-		expect(team.getForecast(lastMatchDay, new MatchDay(15,51)).squadPlayers.length).toEqual(team.squadPlayers.length);
+		expect(team.getForecast(lastMatchDay, new MatchDay(15, 50))).toBe(team);
+		expect(team.getForecast(lastMatchDay, new MatchDay(15, 51))).not.toBe(team);
+		expect(team.getForecast(lastMatchDay, new MatchDay(15, 51)).squadPlayers.length).toEqual(team.squadPlayers.length);
 	});
 
 	it('should return match days in range', () => {
@@ -182,7 +182,7 @@ describe('Team', () => {
 
 		Options.forecastSeasons = 2;
 
-		let matchDaysInRange = team.getMatchDaysInRange(new MatchDay(15,50), new MatchDay(16,40));
+		let matchDaysInRange = team.getMatchDaysInRange(new MatchDay(15, 50), new MatchDay(16, 40));
 
 		expect(matchDaysInRange.length).toEqual(63);
 		expect(matchDaysInRange.filter(matchDay => matchDay.competition === Competition.FRIENDLY).length).toEqual(41);
@@ -202,7 +202,7 @@ describe('Team', () => {
 
 		let matchDay = new MatchDay(15, 51);
 		let viewSettings = {
-			youthSupportPerDay : 1000,
+			youthSupportPerDay: 1000,
 		}
 		for (let index = 0; index < 5; index++) {
 			let player = new YouthPlayer();
@@ -448,7 +448,7 @@ describe('Team', () => {
 		team.squadPlayers[0].pos = Position.TOR;
 		team.squadPlayers[0].ageExact = 32.958333333;
 		Object.keys(team.squadPlayers[0].skills).forEach((skillname, s) => {
-			team.squadPlayers[0].skills[skillname] = [18,64,86,85,84,84,0,26,14,29,19,24,46,44,82,29,53][s];
+			team.squadPlayers[0].skills[skillname] = [18, 64, 86, 85, 84, 84, 0, 26, 14, 29, 19, 24, 46, 44, 82, 29, 53][s];
 		});
 		team.squadPlayers[0].contractTerm = 1;
 		team.squadPlayers[0].salary = 100000;
@@ -521,15 +521,15 @@ describe('Team', () => {
 
 		for (let zat = 2; zat < SEASON_MATCH_DAYS; zat += 2) {
 			let matchDay = new MatchDay(15, zat);
-			matchDay.competition = Competition.LEAGUE;			
+			matchDay.competition = Competition.LEAGUE;
 			team.matchDays.push(matchDay);
 		}
 
-		let viewSettings = { leagueRanking : 1 };
+		let viewSettings = {leagueRanking: 1};
 		team.league.size = 10;
 		Options.forecastSeasons = 1;
 
-		let balancedMatchDays = team.getMatchDaysWithBalance(15, new MatchDay(15,3), viewSettings);
+		let balancedMatchDays = team.getMatchDaysWithBalance(15, new MatchDay(15, 3), viewSettings);
 
 		expect(balancedMatchDays.length).toEqual(72);
 	});
@@ -539,7 +539,7 @@ describe('Team', () => {
 
 		for (let zat = 2; zat < SEASON_MATCH_DAYS; zat += 2) {
 			let matchDay = new MatchDay(15, zat);
-			matchDay.competition = Competition.LEAGUE;			
+			matchDay.competition = Competition.LEAGUE;
 			team.matchDays.push(matchDay);
 		}
 

@@ -19,7 +19,7 @@ Page.TeamOverview = class extends Page.ShowteamOverview {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 	}
 
@@ -27,7 +27,7 @@ Page.TeamOverview = class extends Page.ShowteamOverview {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 	}
 

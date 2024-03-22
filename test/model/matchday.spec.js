@@ -11,13 +11,13 @@ describe('Matchday', () => {
 		stadium.coveredSeats = 50000;
 		league = new Team.League();
 		settings = {
-			ticketPrice : {
-				league : 20,
-				cup : 30,
-				international : 40
+			ticketPrice: {
+				league: 20,
+				cup: 30,
+				international: 40
 			},
-			stadiumLoad : 100,
-			leagueRanking : 1
+			stadiumLoad: 100,
+			leagueRanking: 1
 		}
 	});
 
@@ -145,7 +145,7 @@ describe('Matchday', () => {
 
 		matchDay.competition = Competition.FRIENDLY;
 		matchDay.zat = 72;
-		settings.leagueRanking =1;
+		settings.leagueRanking = 1;
 		expect(matchDay.calculatePremium(league, settings)).toEqual(2803830);
 		expect(matchDay.advertisingIncome).toEqual(1495504);
 		expect(matchDay.merchandisingIncome).toEqual(1308326);

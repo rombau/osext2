@@ -12,11 +12,11 @@ describe('Page.ContractExtension', () => {
 
 		data.nextZat = 31;
 		data.nextZatSeason = 18;
-		
+
 		Fixture.getDocument('vt.php', doc => {
-			
+
 			page.extract(doc, data);
-			
+
 			expect(data.team.squadPlayers[0].followUpSalary['24']).toEqual(59597);
 			expect(data.team.squadPlayers[0].followUpSalary['36']).toEqual(50565);
 			expect(data.team.squadPlayers[0].followUpSalary['48']).toEqual(42901);

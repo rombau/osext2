@@ -21,7 +21,7 @@ Page.ShowteamSeason = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let season = +doc.querySelector('select[name=saison]').value;
 		this.params.push(new Page.Param('saison', season, true));
@@ -37,7 +37,7 @@ Page.ShowteamSeason = class extends Page {
 		);
 
 		this.table.initialize(doc, false);
-		
+
 		this.table.rows.slice(1).forEach(row => {
 
 			row.cells['Info'] = row.cells[5];
@@ -68,15 +68,15 @@ Page.ShowteamSeason = class extends Page {
 
 		data.initNextSeason(season);
 
-		if (data.lastMatchDay 
-			&& data.lastMatchDay.opponent 
-			&& data.lastMatchDay.competition !== Competition.FRIENDLY 
-			&& data.lastMatchDay.location === GameLocation.HOME 
+		if (data.lastMatchDay
+			&& data.lastMatchDay.opponent
+			&& data.lastMatchDay.competition !== Competition.FRIENDLY
+			&& data.lastMatchDay.location === GameLocation.HOME
 			&& !data.lastMatchDay.stadiumVisitors) {
-				data.pagesToRequest.push(new Page.GameReport(
-					data.lastMatchDay.season, data.lastMatchDay.zat, 
-					data.lastMatchDay.location === GameLocation.HOME ? data.team.id : data.lastMatchDay.opponent.id, 
-					data.lastMatchDay.location === GameLocation.AWAY ? data.team.id : data.lastMatchDay.opponent.id));
+			data.pagesToRequest.push(new Page.GameReport(
+				data.lastMatchDay.season, data.lastMatchDay.zat,
+				data.lastMatchDay.location === GameLocation.HOME ? data.team.id : data.lastMatchDay.opponent.id,
+				data.lastMatchDay.location === GameLocation.AWAY ? data.team.id : data.lastMatchDay.opponent.id));
 		}
 	}
 
@@ -84,7 +84,7 @@ Page.ShowteamSeason = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		this.selectedSeason = +doc.querySelector('select[name=saison]').value;
 

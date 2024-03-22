@@ -12,7 +12,7 @@ describe('Page.ShowteamInfo', () => {
 
 		data.nextZat = 72;
 		data.nextZatSeason = 5;
-		data.team.getMatchDay(5,72).location = GameLocation.HOME;
+		data.team.getMatchDay(5, 72).location = GameLocation.HOME;
 
 		Fixture.getDocument('showteam.php?s=5', doc => {
 
@@ -24,16 +24,16 @@ describe('Page.ShowteamInfo', () => {
 			expect(data.team.stadium.coveredSeats).toEqual(22500);
 			expect(data.team.stadium.pitchHeating).toEqual(false);
 
-			expect(data.team.getMatchDay(5,72).stadiumCapacity).toEqual(32250);
-			expect(data.team.getMatchDay(5,72).stadium).toBeUndefined();
+			expect(data.team.getMatchDay(5, 72).stadiumCapacity).toEqual(32250);
+			expect(data.team.getMatchDay(5, 72).stadium).toBeUndefined();
 
-			expect(data.team.getMatchDay(6,1).stadium.places).toEqual(10000);
-			expect(data.team.getMatchDay(6,1).stadium.coveredPlaces).toEqual(0);
-			expect(data.team.getMatchDay(6,1).stadium.seats).toEqual(3000);
-			expect(data.team.getMatchDay(6,1).stadium.coveredSeats).toEqual(31000);
-			expect(data.team.getMatchDay(6,1).stadium.pitchHeating).toEqual(false);
+			expect(data.team.getMatchDay(6, 1).stadium.places).toEqual(10000);
+			expect(data.team.getMatchDay(6, 1).stadium.coveredPlaces).toEqual(0);
+			expect(data.team.getMatchDay(6, 1).stadium.seats).toEqual(3000);
+			expect(data.team.getMatchDay(6, 1).stadium.coveredSeats).toEqual(31000);
+			expect(data.team.getMatchDay(6, 1).stadium.pitchHeating).toEqual(false);
 
-			expect(data.team.getMatchDay(6,2).stadium).toBeUndefined();
+			expect(data.team.getMatchDay(6, 2).stadium).toBeUndefined();
 
 			done();
 		});

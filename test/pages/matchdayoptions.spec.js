@@ -33,7 +33,7 @@ describe('Page.MatchDayOptions', () => {
 
 			expect(data.team.squadPlayers[13].id).toEqual(111254);
 			expect(data.team.squadPlayers[13].physioCosts).toEqual(50000);
-			
+
 			done();
 		});
 	});
@@ -47,7 +47,7 @@ describe('Page.MatchDayOptions', () => {
 			page.extract(doc, data);
 
 			expect(matchday.ticketPrice).toEqual(31);
-			
+
 			done();
 		});
 	});
@@ -61,7 +61,7 @@ describe('Page.MatchDayOptions', () => {
 			page.extract(doc, data);
 
 			expect(matchday.ticketPrice).toEqual(36);
-			
+
 			done();
 		});
 	});
@@ -75,7 +75,7 @@ describe('Page.MatchDayOptions', () => {
 			page.extract(doc, data);
 
 			expect(matchday.ticketPrice).toEqual(43);
-			
+
 			done();
 		});
 	});
@@ -89,14 +89,14 @@ describe('Page.MatchDayOptions', () => {
 			page.extract(doc, data);
 
 			expect(matchday.ticketPrice).toBeNull();
-			
+
 			done();
 		});
 	});
 
 	it('should extend page with stadium report', (done) => {
 
-		Fixture.getDocument('zuzu.php', doc => {	
+		Fixture.getDocument('zuzu.php', doc => {
 
 			let matchDay = new MatchDay(1, 2);
 			matchDay.competition = Competition.LEAGUE;
@@ -112,12 +112,12 @@ describe('Page.MatchDayOptions', () => {
 			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten Ligaspiele', jasmine.any(Array));
 			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten Pokalspiele', jasmine.any(Array));
 			expect(page.createPopupElement).toHaveBeenCalledWith(jasmine.any(HTMLInputElement), 'Übersicht der gespeicherten internationalen Spiele', jasmine.any(Array));
-			
+
 			expect(doc.querySelector('.osext-popup.visitors.liga')).not.toBeNull();
 			expect(doc.querySelector('.osext-popup.visitors.pokal')).toBeNull();
 			expect(doc.querySelector('.osext-popup.visitors.int')).toBeNull();
 
 			done();
 		});
-	});	
+	});
 });

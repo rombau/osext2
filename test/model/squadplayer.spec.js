@@ -69,8 +69,8 @@ describe('SquadPlayer', () => {
 		jasmine.addMatchers({
 			toEqualSkillValues: () => {
 				return {
-					compare: function(actualSkills, expectedValues) {
-						let result = { pass: true, error: undefined };
+					compare: function (actualSkills, expectedValues) {
+						let result = {pass: true, error: undefined};
 						let message = {};
 						Object.entries(actualSkills).forEach(([key, value], index) => {
 							if (value != expectedValues[index]) {
@@ -113,9 +113,9 @@ describe('SquadPlayer', () => {
 
 	it('should return static forecast values', () => {
 
-		expect(player.getForecast(new MatchDay(15,10), new MatchDay(15,10))).toBe(player);
+		expect(player.getForecast(new MatchDay(15, 10), new MatchDay(15, 10))).toBe(player);
 
-		let forecastPlayer = player.getForecast(new MatchDay(15,10), new MatchDay(15,72));
+		let forecastPlayer = player.getForecast(new MatchDay(15, 10), new MatchDay(15, 72));
 
 		expect(forecastPlayer.moral).toBeNull();
 		expect(forecastPlayer.fitness).toBeNull();
@@ -313,12 +313,12 @@ describe('SquadPlayer', () => {
 
 		player.age = 32;
 
-		expect(player.skills).toEqualSkillValues([31,64,46,63,29,40,0,1,38,86,32,79,6,16,46,33,38]);
+		expect(player.skills).toEqualSkillValues([31, 64, 46, 63, 29, 40, 0, 1, 38, 86, 32, 79, 6, 16, 46, 33, 38]);
 
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(33);
-		expect(forecastPlayer.skills).toEqualSkillValues([29,62,43,60,27,35,0,1,33,84,30,79,4,14,46,31,36]);
+		expect(forecastPlayer.skills).toEqualSkillValues([29, 62, 43, 60, 27, 35, 0, 1, 33, 84, 30, 79, 4, 14, 46, 31, 36]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(34);
 
 		player.age = 33;
@@ -326,7 +326,7 @@ describe('SquadPlayer', () => {
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(34);
-		expect(forecastPlayer.skills).toEqualSkillValues([28,62,42,58,26,32,0,1,31,83,29,79,3,14,46,29,34]);
+		expect(forecastPlayer.skills).toEqualSkillValues([28, 62, 42, 58, 26, 32, 0, 1, 31, 83, 29, 79, 3, 14, 46, 29, 34]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(51);
 
 		player.age = 34;
@@ -334,7 +334,7 @@ describe('SquadPlayer', () => {
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(35);
-		expect(forecastPlayer.skills).toEqualSkillValues([27,61,41,57,25,30,0,1,28,82,27,79,2,13,46,28,33]);
+		expect(forecastPlayer.skills).toEqualSkillValues([27, 61, 41, 57, 25, 30, 0, 1, 28, 82, 27, 79, 2, 13, 46, 28, 33]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(68);
 
 		player.age = 35;
@@ -343,7 +343,7 @@ describe('SquadPlayer', () => {
 		forecastPlayer = player.getForecast(start, end);
 
 		expect(forecastPlayer.age).toEqual(36);
-		expect(forecastPlayer.skills).toEqualSkillValues([26,60,39,55,24,28,0,1,26,81,26,79,1,12,46,27,32]);
+		expect(forecastPlayer.skills).toEqualSkillValues([26, 60, 39, 55, 24, 28, 0, 1, 26, 81, 26, 79, 1, 12, 46, 27, 32]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(85);
 	});
 
@@ -372,12 +372,12 @@ describe('SquadPlayer', () => {
 		player.skills.dis = 27;
 		player.skills.zuv = 66;
 		player.skills.ein = 45;
-						
+
 		let skillSum = Object.values(player.skills).reduce((accu, curr) => accu + curr, 0);
 
 		forecastPlayer = player.getForecast(start, end);
 
-		expect(forecastPlayer.skills).toEqualSkillValues([94,86,85,86,36,82,8,99,50,40,58,80,7,3,27,63,43]);
+		expect(forecastPlayer.skills).toEqualSkillValues([94, 86, 85, 86, 36, 82, 8, 99, 50, 40, 58, 80, 7, 3, 27, 63, 43]);
 		expect(skillSum - Object.values(forecastPlayer.skills).reduce((accu, curr) => accu + curr, 0)).toEqual(34);
 	});
 

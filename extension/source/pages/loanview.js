@@ -10,7 +10,7 @@ Page.LoanView = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let columns = [
 			new Column('Name'),
@@ -46,7 +46,7 @@ Page.LoanView = class extends Page {
 			let player = data.team.getSquadPlayer(HtmlUtil.extractIdFromHref(row.cells['Name'].firstChild.href));
 			player.loan.fee = -row.cells['Leihgebühr'].textContent.replaceAll('.', '');
 			player.pos = row.cells['Name'].className;
-			
+
 		});
 
 		// initialize new players

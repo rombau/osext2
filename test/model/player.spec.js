@@ -9,36 +9,36 @@ describe('Player', () => {
 
 	it('should return primary skills', () => {
 
-		expect(player.getPrimarySkills(Position.TOR)).toEqual({ kob: 0, zwk: 0, dec: 0, ges: 0 });
-		expect(player.getPrimarySkills(Position.ABW)).toEqual({ kob: 0, zwk: 0, dec: 0, zuv: 0 });
-		expect(player.getPrimarySkills(Position.DMI)).toEqual({ bak: 0, pas: 0, ueb: 0, dec: 0 });
-		expect(player.getPrimarySkills(Position.MIT)).toEqual({ bak: 0, pas: 0, ueb: 0, zwk: 0 });
-		expect(player.getPrimarySkills(Position.OMI)).toEqual({ bak: 0, pas: 0, ueb: 0, ges: 0 });
-		expect(player.getPrimarySkills(Position.STU)).toEqual({ sch: 0, kob: 0, zwk: 0, ges: 0 });
+		expect(player.getPrimarySkills(Position.TOR)).toEqual({kob: 0, zwk: 0, dec: 0, ges: 0});
+		expect(player.getPrimarySkills(Position.ABW)).toEqual({kob: 0, zwk: 0, dec: 0, zuv: 0});
+		expect(player.getPrimarySkills(Position.DMI)).toEqual({bak: 0, pas: 0, ueb: 0, dec: 0});
+		expect(player.getPrimarySkills(Position.MIT)).toEqual({bak: 0, pas: 0, ueb: 0, zwk: 0});
+		expect(player.getPrimarySkills(Position.OMI)).toEqual({bak: 0, pas: 0, ueb: 0, ges: 0});
+		expect(player.getPrimarySkills(Position.STU)).toEqual({sch: 0, kob: 0, zwk: 0, ges: 0});
 
 	});
 
 	it('should return secondary skills', () => {
 
-		expect(player.getSecondarySkills(Position.TOR)).toEqual({ sch: 0, bak: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0, zuv: 0 });
-		expect(player.getSecondarySkills(Position.ABW)).toEqual({ sch: 0, bak: 0, ges: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0 });
-		expect(player.getSecondarySkills(Position.DMI)).toEqual({ sch: 0, kob: 0, zwk: 0, ges: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0 });
-		expect(player.getSecondarySkills(Position.MIT)).toEqual({ sch: 0, kob: 0, dec: 0, ges: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0 });
-		expect(player.getSecondarySkills(Position.OMI)).toEqual({ sch: 0, kob: 0, zwk: 0, dec: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0 });
-		expect(player.getSecondarySkills(Position.STU)).toEqual({ bak: 0, dec: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0, zuv: 0 });
+		expect(player.getSecondarySkills(Position.TOR)).toEqual({sch: 0, bak: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0, zuv: 0});
+		expect(player.getSecondarySkills(Position.ABW)).toEqual({sch: 0, bak: 0, ges: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0});
+		expect(player.getSecondarySkills(Position.DMI)).toEqual({sch: 0, kob: 0, zwk: 0, ges: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0});
+		expect(player.getSecondarySkills(Position.MIT)).toEqual({sch: 0, kob: 0, dec: 0, ges: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0});
+		expect(player.getSecondarySkills(Position.OMI)).toEqual({sch: 0, kob: 0, zwk: 0, dec: 0, fuq: 0, erf: 0, agg: 0, aus: 0, zuv: 0});
+		expect(player.getSecondarySkills(Position.STU)).toEqual({bak: 0, dec: 0, fuq: 0, erf: 0, agg: 0, pas: 0, aus: 0, ueb: 0, zuv: 0});
 
 	});
 
 	it('should return unchangable skills', () => {
 
-		expect(player.getUnchangeableSkills()).toEqual({ wid: 0, sel: 0, dis: 0, ein: 0 });
+		expect(player.getUnchangeableSkills()).toEqual({wid: 0, sel: 0, dis: 0, ein: 0});
 
 	});
 
 	it('should return average from skills', () => {
 
 		Object.keys(player.skills).forEach((skillname, s) => {
-			player.skills[skillname] = [68,30,62,53,29,56,0,0,29,24,25,16,95,38,76,26,79][s];
+			player.skills[skillname] = [68, 30, 62, 53, 29, 56, 0, 0, 29, 24, 25, 16, 95, 38, 76, 26, 79][s];
 		});
 
 		expect(player.getSkillAverage()).toEqual(41.53);
@@ -80,7 +80,7 @@ describe('Player', () => {
 		player.pos = Position.TOR;
 		player.ageExact = 22.958333333;
 		Object.keys(player.skills).forEach((skillname, s) => {
-			player.skills[skillname] = [18,64,86,85,84,84,0,26,14,29,19,24,46,44,82,29,53][s];
+			player.skills[skillname] = [18, 64, 86, 85, 84, 84, 0, 26, 14, 29, 19, 24, 46, 44, 82, 29, 53][s];
 		});
 
 		expect(player.getMarketValue()).toEqual(12669161);

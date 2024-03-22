@@ -9,7 +9,7 @@ Page.GameReport = class extends Page {
 	 */
 	constructor(season, zat, homeTeamId, awayTeamId) {
 
-		super('Spielbericht', 'rep/saison/{season}/{zat}/{homeTeamId}-{awayTeamId}.html', 
+		super('Spielbericht', 'rep/saison/{season}/{zat}/{homeTeamId}-{awayTeamId}.html',
 			new Page.Param('{season}', season),
 			new Page.Param('{zat}', zat),
 			new Page.Param('{homeTeamId}', homeTeamId),
@@ -20,7 +20,7 @@ Page.GameReport = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let season = +this.params[0].value;
 		let zat = +this.params[1].value;

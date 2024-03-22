@@ -14,11 +14,11 @@ Page.LeagueTable = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		let leagueSelection = +doc.querySelector('select[name=ligaauswahl]').value;
-		if (leagueSelection && 
-			+doc.querySelector('select[name=landauswahl]').value && 
+		if (leagueSelection &&
+			+doc.querySelector('select[name=landauswahl]').value &&
 			!(+doc.querySelector('select[name=tabauswahl]').value) &&
 			doc.querySelector('select[name=saauswahl]').value === doc.querySelector('select[name=saauswahl] :last-child').value) {
 
@@ -60,9 +60,9 @@ Page.LeagueTable = class extends Page {
 					}
 				}
 			} else if (size &&
-				doc.querySelector('select[name=landauswahl]').selectedOptions[0].text === data.team.league.countryName && 
+				doc.querySelector('select[name=landauswahl]').selectedOptions[0].text === data.team.league.countryName &&
 				doc.querySelector('select[name=ligaauswahl]').selectedOptions[0].text.startsWith(data.team.league.level)) {
-					data.team.league.relegation = true;
+				data.team.league.relegation = true;
 			}
 		}
 	}

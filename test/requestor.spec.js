@@ -3,7 +3,7 @@ describe('Requestor', () => {
 	/** @type {Requestor} */ let requestor;
 
 	beforeEach(() => {
-		spyOn(window, 'fetch').and.resolveTo(new Response('', { status: 200, statusText: 'OK' }));
+		spyOn(window, 'fetch').and.resolveTo(new Response('', {status: 200, statusText: 'OK'}));
 	});
 
 	afterEach(() => {
@@ -64,7 +64,7 @@ describe('Requestor', () => {
 			let data = new FormData();
 			data.append('saison', '15');
 			data.append('zat', '43');
-			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/zar\.php/), { method: 'POST', body: data });
+			expect(window.fetch).toHaveBeenCalledWith(jasmine.stringMatching(/zar\.php/), {method: 'POST', body: data});
 			done();
 		});
 

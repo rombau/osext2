@@ -71,7 +71,7 @@ class Page {
 		let url = new URL(location, document.location.href);
 		if (url.pathname !== ('/' + path)) {
 			return false;
-		} 
+		}
 		return this.params.every(param => {
 			let value = url.searchParams.get(param.name);
 			return value ? (param.value === undefined || value == param.value) : (param.optional || /{\w+}/.test(param.name));
@@ -141,7 +141,7 @@ class Page {
 			let url = new URL(location, document.location.href);
 			pageFound.params.forEach((param) => {
 				let paramValue = url.searchParams.get(param.name);
-				if (paramValue)	param.value = (isNaN(paramValue) ? paramValue : +paramValue);
+				if (paramValue) param.value = (isNaN(paramValue) ? paramValue : +paramValue);
 			});
 		}
 		return pageFound;
@@ -161,8 +161,8 @@ class Page {
 			throw new Warning('Auswertung läuft');
 		}
 		else if (contains(doc.body, /Willkommen im Managerb.ro von Demo[Tt]eam/) ||
-			contains(doc.body, /Diese Seite ist ohne Team nicht verf.gbar!/) ||			
-			contains(doc.body, /Du ben.tigst ein Team um diese Seite verwenden zu k.nnen!/) ||			
+			contains(doc.body, /Diese Seite ist ohne Team nicht verf.gbar!/) ||
+			contains(doc.body, /Du ben.tigst ein Team um diese Seite verwenden zu k.nnen!/) ||
 			contains(doc.querySelector('a[href="javascript:writePM()"]'), /DemoManager/)) {
 			throw new Warning('Anmeldung erforderlich');
 		}

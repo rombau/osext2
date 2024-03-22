@@ -11,7 +11,7 @@ Page.MatchDayOptions = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extract(doc, data) {
+	extract (doc, data) {
 
 		data.viewSettings.ticketPrice.league = +doc.getElementsByName("liga")[0].value;
 		data.viewSettings.ticketPrice.cup = +doc.getElementsByName("pokal")[0].value;
@@ -63,7 +63,7 @@ Page.MatchDayOptions = class extends Page {
 	 * @param {Document} doc
 	 * @param {ExtensionData} data
 	 */
-	extend(doc, data) {
+	extend (doc, data) {
 
 		let leagueInput = doc.getElementsByName("liga")[0];
 		let cupInput = doc.getElementsByName("pokal")[0];
@@ -77,12 +77,12 @@ Page.MatchDayOptions = class extends Page {
 				return 0;
 			});
 
-		this.createPopupElement(leagueInput, 'Übersicht der gespeicherten Ligaspiele', 
+		this.createPopupElement(leagueInput, 'Übersicht der gespeicherten Ligaspiele',
 			homeMatchdaysWith.filter(matchday => matchday.competition === Competition.LEAGUE));
 
-		this.createPopupElement(cupInput, 'Übersicht der gespeicherten Pokalspiele', 
+		this.createPopupElement(cupInput, 'Übersicht der gespeicherten Pokalspiele',
 			homeMatchdaysWith.filter(matchday => matchday.competition === Competition.CUP));
-		
+
 		this.createPopupElement(intInput, 'Übersicht der gespeicherten internationalen Spiele',
 			homeMatchdaysWith.filter(matchday => matchday.competition === Competition.OSC || matchday.competition === Competition.OSCQ || matchday.competition === Competition.OSE || matchday.competition === Competition.OSEQ));
 	}
@@ -92,7 +92,7 @@ Page.MatchDayOptions = class extends Page {
 	 * @param {String} header
 	 * @param {[MatchDay]} matchdays
 	 */
-	createPopupElement(baseElement, header, matchdays) {
+	createPopupElement (baseElement, header, matchdays) {
 
 		if (!matchdays || matchdays.length == 0) return;
 

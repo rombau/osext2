@@ -35,7 +35,7 @@ describe('Page.MatchDayConfirmation', () => {
 			expect(data.team.squadPlayers[3].nextTraining.matchBonus).toEqual(1.1);
 			expect(data.team.squadPlayers[4].nextTraining).toBeUndefined();
 			expect(data.team.squadPlayers[5].nextTraining.matchBonus).toEqual(1);
-			
+
 			done();
 		});
 	});

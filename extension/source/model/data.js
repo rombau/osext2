@@ -12,7 +12,7 @@ const YouthSupportBarrierType = Object.freeze({
  */
 class ExtensionData {
 
-	constructor () {
+	constructor() {
 
 		/** @type {[Page]} the queue with the pages to request */
 		this._pagesToRequest;
@@ -29,43 +29,43 @@ class ExtensionData {
 		this.viewSettings = {
 
 			/** @type {MatchDay} */
-			squadPlayerMatchDay : null,
+			squadPlayerMatchDay: null,
 
 			/** @type {MatchDay} */
-			youthPlayerMatchDay : null,
+			youthPlayerMatchDay: null,
 
 			/** @type {Boolean} */
-			youthMax : false,
+			youthMax: false,
 
 			/** @type {Number} */
-			youthSupportPerDay : YOUTH_SUPPORT_MIN,
+			youthSupportPerDay: YOUTH_SUPPORT_MIN,
 
 			/** @type {Number} */
-			youthSupportBarrierSeason : null,
+			youthSupportBarrierSeason: null,
 
 			/** @type {YouthSupportBarrierType} */
-			youthSupportBarrierType : null,
+			youthSupportBarrierType: null,
 
 			/** @type {Number} */
-			leagueRanking : 1,
+			leagueRanking: 1,
 
-			ticketPrice : {
-
-				/** @type {Number} */
-				league : 0,
+			ticketPrice: {
 
 				/** @type {Number} */
-				cup : 0,
+				league: 0,
 
 				/** @type {Number} */
-				international : 0
+				cup: 0,
+
+				/** @type {Number} */
+				international: 0
 			},
 
 			/** @type {Number} */
-			stadiumLoad : 100,
+			stadiumLoad: 100,
 
 			/** @type {Boolean} */
-			winBonus : false,
+			winBonus: false,
 		};
 	}
 

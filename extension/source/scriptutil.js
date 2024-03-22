@@ -17,14 +17,14 @@ new MutationObserver((records, observer) => {
 			observer.disconnect();
 		}
 	});
-}).observe(document, { childList: true, subtree: true });
+}).observe(document, {childList: true, subtree: true});
 
 /**
  * Utilities for user script handling.
  */
 class ScriptUtil {
 
-	constructor () {
+	constructor() {
 		// utility
 	}
 
@@ -35,7 +35,7 @@ class ScriptUtil {
 	 * @param {Boolean} textContentIfNull if true, the current textContent is returned if ther is no original value (false by default)
 	 * @returns {String} value
 	 */
-	static getCellContent(cell, textContentIfNull = false) {
+	static getCellContent (cell, textContentIfNull = false) {
 		if (cell instanceof HTMLTableCellElement) {
 			let original = cell.getAttribute(ATTR_ORIGINAL);
 			return original || (textContentIfNull ? cell.textContent : null);
