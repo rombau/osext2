@@ -14,7 +14,7 @@ const TransferState = Object.freeze({
  */
 class SquadPlayer extends Player {
 
-	constructor() {
+	constructor () {
 
 		super();
 
@@ -443,7 +443,7 @@ SquadPlayer.Ban = class {
 	 * @param {BanType} type the ban type
 	 * @param {Number} duration the duration in matchdays of type
 	 */
-	constructor(type, duration) {
+	constructor (type, duration) {
 
 		/** @type {BanType} the ban type */
 		this.type = type;
@@ -463,7 +463,7 @@ SquadPlayer.Loan = class {
 	 * @param {String} to the team (name) to which the player is loaned
 	 * @param {Number} duration the duration of the loan in matchdays
 	 */
-	constructor(from, to, duration) {
+	constructor (from, to, duration) {
 
 		/** @type {String} from team name */
 		this.from = from;
@@ -484,7 +484,7 @@ SquadPlayer.Loan = class {
  */
 SquadPlayer.Training = class {
 
-	constructor() {
+	constructor () {
 
 		/** @private @type {Team.Trainer} */
 		this._trainer;

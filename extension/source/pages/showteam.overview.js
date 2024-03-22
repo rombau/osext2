@@ -1,7 +1,7 @@
 
 Page.ShowteamOverview = class extends Page.Showteam {
 
-	constructor() {
+	constructor () {
 
 		super('Teamübersicht', 'showteam.php', new Page.Param('s', 0, true));
 

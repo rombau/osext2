@@ -3,14 +3,14 @@
  */
 class Warning extends Error {
 
-	constructor(message) {
+	constructor (message) {
 		super(message);
 	}
 }
 
 class SeasonIntervalWarning extends Warning {
 
-	constructor(message) {
+	constructor (message) {
 		super(message);
 	}
 }
@@ -36,7 +36,7 @@ class Page {
 	 * @param {String} path the path; could include path parameters with curly brackets
 	 * @param {...Page.Param} params the parameters this page can handle
 	 */
-	constructor(name, path, ...params) {
+	constructor (name, path, ...params) {
 
 		/** @type {String} the request method */
 		this.method = HttpMethod.GET;
@@ -324,7 +324,7 @@ Page.Param = class {
 	 * @param {String} value the parameter value
 	 * @param {Boolean} optional flag indicating an optional parameter (default = false)
 	 */
-	constructor(name, value, optional = false) {
+	constructor (name, value, optional = false) {
 
 		/** @type {String} the parameter name; path parameters are surrounded with curly brackets */
 		this.name = name;

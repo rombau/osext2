@@ -1,7 +1,7 @@
 
 Page.ContractExtension = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Vertragsverlängerungen', 'vt.php');
 

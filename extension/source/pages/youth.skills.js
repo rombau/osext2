@@ -1,7 +1,7 @@
 
 Page.YouthSkills = class extends Page.Youth {
 
-	constructor() {
+	constructor () {
 
 		super('Jugendeinzelskills', 'ju.php', new Page.Param('page', 2));
 

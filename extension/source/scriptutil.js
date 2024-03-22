@@ -24,7 +24,7 @@ new MutationObserver((records, observer) => {
  */
 class ScriptUtil {
 
-	constructor() {
+	constructor () {
 		// utility
 	}
 

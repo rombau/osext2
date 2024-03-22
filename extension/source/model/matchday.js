@@ -31,7 +31,7 @@ class MatchDay {
 	 * @param {Number} season
 	 * @param {Number} zat
 	 */
-	constructor(season, zat) {
+	constructor (season, zat) {
 
 		/** @type {Number} the season number */
 		this.season = season;

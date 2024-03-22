@@ -1,7 +1,7 @@
 
 Page.Training = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Training', 'training.php');
 

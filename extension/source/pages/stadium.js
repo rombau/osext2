@@ -1,7 +1,7 @@
 
 Page.Stadium = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Stadionausbau', 'osneu/stadion');
 	}

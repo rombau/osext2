@@ -1,7 +1,7 @@
 
 Page.FastTransfer = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Schnelltransfer', 'blitz.php');
 

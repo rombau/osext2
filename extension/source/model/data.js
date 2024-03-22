@@ -12,7 +12,7 @@ const YouthSupportBarrierType = Object.freeze({
  */
 class ExtensionData {
 
-	constructor() {
+	constructor () {
 
 		/** @type {[Page]} the queue with the pages to request */
 		this._pagesToRequest;

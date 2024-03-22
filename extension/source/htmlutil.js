@@ -3,7 +3,7 @@
  */
 class HtmlUtil {
 
-	constructor() {
+	constructor () {
 		// utility
 	}
 

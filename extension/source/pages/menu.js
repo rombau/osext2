@@ -1,7 +1,7 @@
 
 Page.Menu = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Menüframe', 'os_menu_haupt.html');
 	}

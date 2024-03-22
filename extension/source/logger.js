@@ -7,7 +7,7 @@ class Logger {
 	/**
 	 * @param {String} className the class this logger is related
 	 */
-	constructor(className) {
+	constructor (className) {
 
 		let msgTemplate = '[' + className + '] %s';
 

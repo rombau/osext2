@@ -6,7 +6,7 @@ class Requestor {
 	/**
 	 * @param {HTMLElement} the element with the progress
 	 */
-	constructor(status) {
+	constructor (status) {
 
 		/** @type {HTMLElement} the element with the progress */
 		this.status = status;

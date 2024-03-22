@@ -1,7 +1,7 @@
 
 Page.LoanView = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Leihübersicht', 'viewleih.php');
 	}

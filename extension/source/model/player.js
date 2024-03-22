@@ -55,7 +55,7 @@ const Skill = Object.freeze({
  */
 class Skillset {
 
-	constructor() {
+	constructor () {
 
 		this.sch = 0;
 		this.bak = 0;
@@ -82,7 +82,7 @@ class Skillset {
  */
 class Player {
 
-	constructor() {
+	constructor () {
 
 		/** @type {Boolean} flag indicating the palyer is active */
 		this.active = true;

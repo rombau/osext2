@@ -1,7 +1,7 @@
 
 Page.MatchDayOptions = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('ZA-Einstellungen', 'zuzu.php');
 

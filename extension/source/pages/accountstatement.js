@@ -4,7 +4,7 @@ Page.AccountStatement = class extends Page {
 	/**
 	 * @param {Number} season
 	 */
-	constructor(season) {
+	constructor (season) {
 
 		super('Kontoauszug', 'ka.php');
 

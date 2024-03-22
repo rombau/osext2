@@ -5,7 +5,7 @@ Page.TeamOverview = class extends Page.ShowteamOverview {
 	 * @param {Number} id the team id
 	 * @param {String} id the team name
 	 */
-	constructor(id, name) {
+	constructor (id, name) {
 
 		super();
 

@@ -24,7 +24,7 @@ const LogLevel = Object.freeze({
  */
 class PageConfig {
 
-	constructor() {
+	constructor () {
 
 		/** @type {[String]} the column sort order */
 		this.sortedColumns = [];

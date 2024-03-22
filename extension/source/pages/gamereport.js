@@ -7,7 +7,7 @@ Page.GameReport = class extends Page {
 	 * @param {Number} homeTeamId
 	 * @param {Number} awayTeamId
 	 */
-	constructor(season, zat, homeTeamId, awayTeamId) {
+	constructor (season, zat, homeTeamId, awayTeamId) {
 
 		super('Spielbericht', 'rep/saison/{season}/{zat}/{homeTeamId}-{awayTeamId}.html',
 			new Page.Param('{season}', season),

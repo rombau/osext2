@@ -1,7 +1,7 @@
 
 Page.YouthOptions = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Jugendoptionen', 'ju.php', new Page.Param('page', 4));
 	}

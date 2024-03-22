@@ -2,6 +2,7 @@
 	"javascript.preferences.quoteStyle": "single",
 	"javascript.format.enable": true,
 	"javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+	"javascript.format.insertSpaceAfterConstructor": true,
 	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
 	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
 	"karmaTestExplorer.projectType": "karma",

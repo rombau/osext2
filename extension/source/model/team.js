@@ -7,7 +7,7 @@ class Team {
 	 * @param {Number} id
 	 * @param {String} name
 	 */
-	constructor(id, name) {
+	constructor (id, name) {
 
 		/** @type {Number} the internal id */
 		this.id = id;
@@ -484,7 +484,7 @@ class Team {
  */
 Team.League = class {
 
-	constructor() {
+	constructor () {
 
 		/** @type {Number} the league level */
 		this.level;
@@ -505,7 +505,7 @@ Team.League = class {
  */
 Team.Trainer = class {
 
-	constructor() {
+	constructor () {
 
 		/** @type {Number} the number of the trainer */
 		this.nr;

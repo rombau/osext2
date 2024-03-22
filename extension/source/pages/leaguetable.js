@@ -1,7 +1,7 @@
 
 Page.LeagueTable = class extends Page {
 
-	constructor(leagueSelection) {
+	constructor (leagueSelection) {
 
 		super('Ligatabelle', 'lt.php');
 

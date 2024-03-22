@@ -1,6 +1,6 @@
 Page.Main = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Managerbüro', 'haupt.php');
 	}

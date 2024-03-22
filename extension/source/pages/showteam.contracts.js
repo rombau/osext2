@@ -1,7 +1,7 @@
 
 Page.ShowteamContracts = class extends Page.Showteam {
 
-	constructor() {
+	constructor () {
 
 		super('Verträge', 'showteam.php', new Page.Param('s', 1));
 

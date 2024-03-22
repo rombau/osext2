@@ -1,7 +1,7 @@
 
 Page.Showteam = class extends Page {
 
-	constructor(name, path, ...params) {
+	constructor (name, path, ...params) {
 
 		super(name, path, ...params);
 

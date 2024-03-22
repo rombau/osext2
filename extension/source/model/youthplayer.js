@@ -13,7 +13,7 @@ const Talent = Object.freeze({
  */
 class YouthPlayer extends Player {
 
-	constructor() {
+	constructor () {
 
 		super();
 

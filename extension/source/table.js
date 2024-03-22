@@ -17,7 +17,7 @@ class StyleProperty {
 	 * @param {String} value
 	 * @param {String} priority
 	 */
-	constructor(propertyName, value, priority) {
+	constructor (propertyName, value, priority) {
 
 		/** @type {String} the property name */
 		this.propertyName = propertyName;
@@ -39,7 +39,7 @@ class Column {
 	 * @param {String} name the name
 	 * @param {Origin} origin=Origin.OS the origin
 	 */
-	constructor(name, origin = Origin.OS) {
+	constructor (name, origin = Origin.OS) {
 
 		/** @type {String} the column name */
 		this.name = name;
@@ -126,7 +126,7 @@ class ManagedTable {
 	 * @param {String} page name of the page containing the table
 	 * @param {...Column} columns of the table
 	 */
-	constructor(page, ...columns) {
+	constructor (page, ...columns) {
 
 		/** @type {String} the page name containing the table */
 		this.page = page;

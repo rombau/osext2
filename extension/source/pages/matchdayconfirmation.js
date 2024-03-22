@@ -1,7 +1,7 @@
 
 Page.MatchDayConfirmation = class extends Page {
 
-	constructor() {
+	constructor () {
 
 		super('Zugabgabe', 'checkza.php');
 

@@ -4,7 +4,7 @@
  */
 class Stadium {
 
-	constructor() {
+	constructor () {
 
 		/** @type {Number} the number of standing places */
 		this.places;

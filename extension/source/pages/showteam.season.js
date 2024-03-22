@@ -4,7 +4,7 @@ Page.ShowteamSeason = class extends Page {
 	/**
 	 * @param {Number} season
 	 */
-	constructor(season) {
+	constructor (season) {
 
 		super('Saisonplan', 'showteam.php', new Page.Param('s', 6));
 

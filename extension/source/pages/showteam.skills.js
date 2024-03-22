@@ -1,7 +1,7 @@
 
 Page.ShowteamSkills = class extends Page.Showteam {
 
-	constructor() {
+	constructor () {
 
 		super('Einzelskills', 'showteam.php', new Page.Param('s', 2));
 
