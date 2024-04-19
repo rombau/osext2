@@ -218,6 +218,7 @@ form > .fa-arrow-alt-circle-down {
 }
 .osext-popup-base:hover > .osext-popup {
 	visibility: visible;
+	display: inline-grid;
 }
 .osext-popup {
 	position: absolute;
@@ -228,7 +229,7 @@ form > .fa-arrow-alt-circle-down {
 	padding: 5px 7px;
 	z-index: 1000;
 	visibility: hidden;
-	display: inline-grid;
+	display: inline-flex;
 	opacity: 1 !important;
 }
 .osext-popup > div {
@@ -285,7 +286,7 @@ form > .fa-arrow-alt-circle-down {
 	grid-template-columns: 0.1fr 4fr;
 	grid-row-gap: 0.1em;
 	color: inherit !important;
-	display: revert !important;
+	display: inline-grid !important;
 }
 .osext-managed .osext-popup.menu.osext-hidden {
 	visibility: hidden;
