@@ -17,7 +17,7 @@
 	font-weight: bold;
 }
 
-.osext-message.osext-hidden, 
+.osext-message.osext-hidden,
 .osext-hidden:not(.osext-set-zat):not(.osext-popup) {
 	display: none;
 }
@@ -134,7 +134,7 @@ form > .fa-arrow-alt-circle-down {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: rgba(0,0,0,0.1);
+	background-color: rgba(0, 0, 0, 0.1);
 	z-index: 2;
 	cursor: progress;
 }

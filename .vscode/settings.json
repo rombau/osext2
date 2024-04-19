@@ -19,5 +19,8 @@
 			"/": "${workspaceRoot}",
 			"/base/": "${workspaceRoot}/"
 		}
-	}
+	},
+	"css.format.newlineBetweenRules": false,
+	"css.format.spaceAroundSelectorSeparator": true,
+	"css.format.newlineBetweenSelectors": false
 }

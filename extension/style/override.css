@@ -1,4 +1,3 @@
-
 #TopThema {
 	display: none;
 }
@@ -125,7 +124,7 @@ li.ui-state-default {
 	background-image: none !important;
 }
 li.ui-tabs-selected {
-	background-color:#fbf9b3 !important;
+	background-color: #fbf9b3 !important;
 }
 .ui-accordion-content-active table {
 	color: var(--input-color) !important;
