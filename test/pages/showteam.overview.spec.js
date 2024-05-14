@@ -14,6 +14,8 @@ describe('Page.ShowteamOverview', () => {
 
 	it('should extract team data and extend page', (done) => {
 
+		data.team.id = 0;
+
 		data.nextZat = 53;
 		data.nextZatSeason = 16;
 
@@ -24,6 +26,8 @@ describe('Page.ShowteamOverview', () => {
 		Fixture.getDocument('showteam.php', doc => {
 
 			page.extract(doc, data);
+
+			expect(data.team.id).toEqual(19);
 
 			expect(data.team.squadPlayers.length).toEqual(32);
 			expect(data.team.squadPlayers[0].id).toEqual(41930);

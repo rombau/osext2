@@ -14,6 +14,9 @@ Page.ShowteamOverview = class extends Page.Showteam {
 	 */
 	extract (doc, data) {
 
+		// initialize team id, if it can't be extracted from logo on main page
+		data.team.id = HtmlUtil.extractIdFromHref(doc.querySelector('a[href*=tabellenplatz]').href);
+
 		this.table = new ManagedTable(this.name,
 			new Column('#').withStyle('text-align', 'left'),
 			new Column('Nr.'),
