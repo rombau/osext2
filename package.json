@@ -1,6 +1,6 @@
 {
 	"name": "osext2",
-	"version": "2.6.2",
+	"version": "2.6.3",
 	"description": "Online Soccer extension for browsers with chrome API",
 	"scripts": {
 		"test": "karma start karma.conf.js",
