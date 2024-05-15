@@ -21,10 +21,11 @@ Page.AccountStatement = class extends Page {
 	 */
 	extract (doc, data) {
 
-		let season = +doc.querySelector('select[name=saison]').value;
-		this.params.push(new Page.Param('saison', season, true));
+		let seasonSelect = doc.querySelector('select[name=saison]');
+		let season = +seasonSelect.value;
+		let currentSeason = seasonSelect.length == season;
 
-		let currentSeason = data.nextMatchDay.season == season;
+		this.params.push(new Page.Param('saison', season, true));
 
 		let matches = /Kontoauszug - Kontostand : ([-\d.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
 		if (matches) {
@@ -41,7 +42,13 @@ Page.AccountStatement = class extends Page {
 
 		this.table.initialize(doc, false);
 
-		let zat = currentSeason ? data.nextMatchDay.zat : (season === 1 ? RELEGATION_START_MATCH_DAY : SEASON_MATCH_DAYS);
+		let zat = data.nextMatchDay.zat;
+
+		if (currentSeason && zat === 1 && this.table.rows.slice(1).find(row => /Abrechnung ZAT (\d+)/gm.exec(row.cells['Buchungstext'].textContent))) {
+			// before zat 1 with balanced matchday the old account statement is displayed
+			// so bookings must be assigned to the last season zat
+			zat = (season === 1 ? RELEGATION_START_MATCH_DAY : SEASON_MATCH_DAYS);
+		}
 
 		this.table.rows.slice(1).forEach(row => {
 
