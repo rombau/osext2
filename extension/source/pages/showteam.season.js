@@ -23,7 +23,8 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	extract (doc, data) {
 
-		let season = +doc.querySelector('select[name=saison]').value;
+		let seasonSelect = doc.querySelector('select[name=saison]');
+		let season = +seasonSelect.value;
 		this.params.push(new Page.Param('saison', season, true));
 
 		let nextRound = {};
@@ -66,7 +67,9 @@ Page.ShowteamSeason = class extends Page {
 			}
 		});
 
-		data.initNextSeason(season);
+		if (season === seasonSelect.length) {
+			data.initNextSeason(season);
+		}
 
 		if (data.lastMatchDay
 			&& data.lastMatchDay.opponent
@@ -86,7 +89,8 @@ Page.ShowteamSeason = class extends Page {
 	 */
 	extend (doc, data) {
 
-		this.selectedSeason = +doc.querySelector('select[name=saison]').value;
+		let seasonSelect = doc.querySelector('select[name=saison]');
+		this.selectedSeason = +seasonSelect.value;
 
 		let leagueRound = 1;
 
@@ -141,7 +145,7 @@ Page.ShowteamSeason = class extends Page {
 		let form = doc.querySelector('form');
 		form.style.paddingLeft = '4px';
 
-		if (data.lastMatchDay.season <= this.selectedSeason) {
+		if (this.selectedSeason === seasonSelect.length) {
 
 			if (data.lastMatchDay.zat > 4) {
 				let scrollButton = HtmlUtil.createAwesomeButton(doc, 'fa-arrow-alt-circle-down', () => {
