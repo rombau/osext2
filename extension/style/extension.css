@@ -19,7 +19,7 @@
 
 .osext-message.osext-hidden,
 .osext-hidden:not(.osext-set-zat):not(.osext-popup) {
-	display: none;
+	display: none !important;
 }
 .osext-set-zat.osext-hidden {
 	visibility: hidden;
@@ -49,7 +49,7 @@
 	margin-top: 5px;
 }
 .osext-managed td.osext-hidden-column {
-	display: none;
+	display: none !important;
 }
 .osext-managed .fa-toggle-off,
 .osext-managed .fa-toggle-on {
