@@ -7,7 +7,7 @@ describe('Page.Main', () => {
 		data = new ExtensionData();
 		page = new Page.Main();
 
-		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+		spyOn(Persistence, 'updateCurrentTeam').and.callFake(() => {
 			return Promise.resolve();
 		});
 	});
@@ -16,9 +16,6 @@ describe('Page.Main', () => {
 
 		Fixture.getDocument('haupt.php', doc => {
 
-			spyOn(Persistence, 'updateCurrentTeam').and.callFake(() => {
-				return Promise.resolve();
-			});
 			spyOn(Object.getPrototypeOf(Object.getPrototypeOf(page)), 'process').and.callFake(() => {
 				done();
 			});
