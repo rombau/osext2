@@ -33,6 +33,8 @@ describe('Page.Main', () => {
 
 		Fixture.getDocument('haupt.php', doc => {
 
+			page.process(doc, data);
+
 			page.extract(doc, data);
 
 			expect(data.nextZat).toEqual(49);

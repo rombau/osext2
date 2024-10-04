@@ -15,13 +15,13 @@ Page.Main = class extends Page {
 
 		super.check(doc);
 
-		let teamChangeLink = doc.querySelector('a[href="?changetosecond=true"]');
-		let matches = /Willkommen im Managerb.ro von (.+)/gm.exec(teamChangeLink.parentElement.childNodes[0].textContent);
+		this.titleContainer = doc.querySelector('div#a a[href="?changetosecond=true"]').parentElement;
+		this.teamName = /Willkommen im Managerb.ro von (.+)/gm.exec(this.titleContainer.childNodes[0].textContent)[1];
 
 		let page = this;
 		let superProcess = super.process;
 
-		Persistence.updateCurrentTeam(matches[1]).then(() => {
+		Persistence.updateCurrentTeam(this.teamName).then(() => {
 			superProcess.call(page, doc, win);
 		});
 	}
@@ -32,7 +32,7 @@ Page.Main = class extends Page {
 	 */
 	extract (doc, data) {
 
-		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.getElementsByTagName('b')[1].textContent);
+		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.querySelectorAll('div#a b')[1].textContent);
 
 		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];
 		if (data.nextZat !== nextZat) {
@@ -62,23 +62,19 @@ Page.Main = class extends Page {
 			data.requestAllPages();
 		}
 
-		matches = /images\/wappen\/((\d+)\.[a-z]+)/gm.exec(doc.querySelector('img[src*=wappen]').src);
+		matches = /images\/wappen\/((\d+)\.[a-z]+)/gm.exec(doc.querySelector('div#a img[src*=wappen]').src);
 
 		data.team.id = +matches[2];
 		data.team.emblem = matches[1];
 
-		let titleContainer = doc.querySelector('a[href="?changetosecond=true"]').parentElement;
+		data.team.name = this.teamName;
 
-		matches = /Willkommen im Managerb.ro von (.+)/gm.exec(titleContainer.childNodes[0].textContent);
-
-		data.team.name = matches[1];
-
-		matches = /(\d)\. Liga ?[A-D]? (.+)/gm.exec(titleContainer.childNodes[2].textContent);
+		matches = /(\d)\. Liga ?[A-D]? (.+)/gm.exec(this.titleContainer.childNodes[2].textContent);
 
 		data.team.league.level = +matches[1];
 		data.team.league.countryName = matches[2];
 
-		let accountBalanceElement = doc.querySelector('a[href="ka.php"]');
+		let accountBalanceElement = doc.querySelector('div#a a[href="ka.php"]');
 		if (accountBalanceElement && accountBalanceElement.textContent.includes('Euro')) {
 			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
 		}
