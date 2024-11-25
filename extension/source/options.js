@@ -20,6 +20,15 @@ const LogLevel = Object.freeze({
 });
 
 /**
+ * Enum for themes; root classes defined in colors.css.
+ * @readonly
+ */
+const YouthSkillForecastMethod = Object.freeze({
+	DEFAULT: 'default',
+	SAINTE_LAGUE: 'sainte-lague'
+});
+
+/**
  * Page configuration
  */
 class PageConfig {
@@ -66,6 +75,12 @@ const Options = {
 	/** @type {Number} the follow up contract term */
 	followUpContractTerm: 24,
 
+	/** @type {YouthSkillForecastMethod} the skill forecast method */
+	youthSkillForecastMethod: YouthSkillForecastMethod.DEFAULT,
+
+	/** @type {Boolean} flag indicating to respect previous sharing between primary and secondary skills (SAINTE_LAGUE only) */
+	youthSkillForecastRespectShare: true,
+
 	/** @type {Object<string, PageConfig>} dictionary of page configurations */
 	pageConfig: {},
 
@@ -84,6 +99,8 @@ const Options = {
 						Options.initSlider(ageLimitSlider, Options.ageTrainingLimit);
 						Options.initSlider(psLimitSlider, Options.primarySkillTrainingLimit);
 						Options.initSlider(nsLimitSlider, Options.secondarySkillTrainingLimit);
+						youthForecastSelect.value = Options.youthSkillForecastMethod;
+						youthForecastRespectShare.checked = Options.youthSkillForecastRespectShare;
 					} else {
 						Options.setRootTheme(Options.theme);
 						chrome.storage.onChanged.addListener((changes) => {
@@ -135,6 +152,8 @@ const Options = {
 			Options.ageTrainingLimit = ageLimitSlider.value;
 			Options.primarySkillTrainingLimit = psLimitSlider.value;
 			Options.secondarySkillTrainingLimit = nsLimitSlider.value;
+			Options.youthSkillForecastMethod = youthForecastSelect.value;
+			Options.youthSkillForecastRespectShare = youthForecastRespectShare.checked;
 		}
 		return getQueuedPromise((resolve, reject) => {
 			chrome.storage.local.set(JSON.parse(JSON.stringify(Options)), () => {
@@ -164,7 +183,8 @@ let followupSelect = document.getElementById('options-followup');
 let ageLimitSlider = document.getElementById('options-age-limit');
 let psLimitSlider = document.getElementById('options-ps-limit');
 let nsLimitSlider = document.getElementById('options-ns-limit');
-
+let youthForecastSelect = document.getElementById('options-youth-forecast');
+let youthForecastRespectShare = document.getElementById('options-youth-forecast-respect-share');
 let saveButton = document.getElementById('options-save');
 let editorButton = document.getElementById('options-editor');
 
@@ -174,6 +194,10 @@ if (saveButton) {
 	editorButton.addEventListener('click', () => {
 		chrome.tabs.create({url: 'editor.html'});
 	});
+	youthForecastSelect.addEventListener('change', () => {
+		youthForecastRespectShare.disabled = (youthForecastSelect.value == 'default');
+	})
+	youthForecastRespectShare.disabled = (youthForecastSelect.value == 'default');
 } else {
 	Options.initialize();
 }

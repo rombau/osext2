@@ -4,6 +4,7 @@ describe('YouthPlayer', () => {
 	let player;
 
 	beforeEach(() => {
+		Options.youthSkillForecastMethod = YouthSkillForecastMethod.DEFAULT;
 		player = Object.assign(new YouthPlayer(), {
 			'skills': {
 				'sch': 19,
@@ -29,6 +30,28 @@ describe('YouthPlayer', () => {
 			'countryCode': 'GUA',
 			'countryName': 'Guatemala',
 			'uefa': false
+		});
+		player.pos = player.getBestPosition();
+
+		jasmine.addMatchers({
+			toEqualSkillValues: () => {
+				return {
+					compare: function (actualSkills, expectedValues) {
+						let result = {pass: true, error: undefined};
+						let message = {};
+						Object.entries(actualSkills).forEach(([key, value], index) => {
+							if (value != expectedValues[index]) {
+								message[key] = `Expected ${value} to equal ${expectedValues[index]}`;
+								result.pass = false;
+							}
+						});
+						if (!result.pass) {
+							result.message = 'Skills not matching\n' + JSON.stringify(message, undefined, 2);
+						}
+						return result;
+					}
+				};
+			}
 		});
 	});
 
@@ -86,17 +109,94 @@ describe('YouthPlayer', () => {
 
 		player.age = 15;
 
+		expect(player.skills).toEqualSkillValues([19, 33, 25, 26, 35, 19, 0, 0, 23, 34, 25, 37, 15, 5, 95, 21, 29]);
+
 		let forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
 
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[21,36,27,29,38,21,0,0,25,37,27,41,15,5,95,23,29]');
+		expect(forecastPlayer.skills).toEqualSkillValues([21, 36, 27, 29, 38, 21, 0, 0, 25, 37, 27, 41, 15, 5, 95, 23, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(28);
 
 		player.skills.bak = 98;
 
 		forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
 
-		expect(JSON.stringify(Object.values(forecastPlayer.skills)))
-			.toEqual('[21,99,27,29,38,21,0,0,25,37,27,41,15,5,95,23,29]');
+		expect(forecastPlayer.skills).toEqualSkillValues([21, 99, 27, 29, 38, 21, 0, 0, 25, 37, 27, 41, 15, 5, 95, 23, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(26);
+	});
+
+	it('should return skill forecast based on current skills and average increase per day', () => {
+
+		Options.youthSkillForecastMethod = YouthSkillForecastMethod.SAINTE_LAGUE;
+		player.age = 15;
+
+		expect(player.getAverageIncreasePerDay(player.getYouthDays(new MatchDay(15, 65))).toFixed(3))
+			.toEqual('1.605');
+		expect(player.skills).toEqualSkillValues([19, 33, 25, 26, 35, 19, 0, 0, 23, 34, 25, 37, 15, 5, 95, 21, 29]);
+
+		let forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(15, 67));
+
+		expect(forecastPlayer.skills).toEqualSkillValues([19, 33, 26, 27, 35, 19, 0, 0, 23, 34, 25, 38, 15, 5, 95, 21, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(3);
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
+
+		expect(forecastPlayer.skills).toEqualSkillValues([21, 36, 27, 29, 39, 21, 0, 0, 25, 37, 27, 41, 15, 5, 95, 23, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(29);
+
+		player.skills.bak = 98;
+		expect(player.getAverageIncreasePerDay(player.getYouthDays(new MatchDay(15, 65))).toFixed(3))
+			.toEqual('1.957');
+
+		forecastPlayer = player.getForecast(new MatchDay(15, 65), new MatchDay(16, 11));
+
+		expect(forecastPlayer.skills).toEqualSkillValues([21, 99, 27, 29, 41, 21, 0, 0, 25, 40, 27, 44, 15, 5, 95, 23, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(35);
+
+		Options.youthSkillForecastMethod = YouthSkillForecastMethod.DEFAULT;
+	});
+
+	it('should return skill forecast based on current skills and average increase per day edge case poor', () => {
+
+		Options.youthSkillForecastMethod = YouthSkillForecastMethod.SAINTE_LAGUE;
+		player = Object.assign(new YouthPlayer(), {
+			'skills': {
+				'sch': 0,
+				'bak': 1,
+				'kob': 0,
+				'zwk': 0,
+				'dec': 0,
+				'ges': 0,
+				'fuq': 0,
+				'erf': 0,
+				'agg': 0,
+				'pas': 1,
+				'aus': 0,
+				'ueb': 0,
+				'wid': 15,
+				'sel': 5,
+				'dis': 95,
+				'zuv': 0,
+				'ein': 29
+			},
+			'age': 13,
+			'birthday': 24,
+		});
+		player.pos = player.getBestPosition();
+
+		expect(player.getAverageIncreasePerDay(player.getYouthDays(new MatchDay(15, 25)))).toEqual(2);
+
+		let forecastPlayer = player.getForecast(new MatchDay(15, 25), new MatchDay(21, 23));
+
+		expect(forecastPlayer.skills).toEqualSkillValues([0, 99, 0, 0, 0, 0, 0, 0, 0, 99, 0, 0, 15, 5, 95, 0, 29]);
+		expect(Object.values(forecastPlayer.skills).reduce((sum, value) => sum + value, 0) - Object.values(player.skills).reduce((sum, value) => sum + value, 0))
+			.toEqual(196);
+
+		Options.youthSkillForecastMethod = YouthSkillForecastMethod.DEFAULT;
 	});
 
 	it('should return salary forecast when pulled', () => {

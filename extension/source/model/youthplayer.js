@@ -115,12 +115,79 @@ class YouthPlayer extends Player {
 		let forecastDays = forecastPlayer.getForecastDays(lastMatchDay, targetMatchDay);
 		let youthDays = forecastPlayer.getYouthDays(lastMatchDay);
 
-		Object.keys(forecastPlayer.getTrainableSkills()).forEach(key => {
-			let change = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
-			forecastPlayer.skills[key] += Math.round(change);
-			if (forecastPlayer.skills[key] > SKILL_LIMIT) forecastPlayer.skills[key] = SKILL_LIMIT;
-		});
+		if (Options.youthSkillForecastMethod === YouthSkillForecastMethod.SAINTE_LAGUE) {
+
+			let primarySkillQuotients = this._prepareQuotients(forecastPlayer, forecastPlayer.getPrimarySkills());
+			let secondarySkillQuotients = this._prepareQuotients(forecastPlayer, forecastPlayer.getSecondarySkills());
+
+			let averageIncreasePerDay = this.getAverageIncreasePerDay(youthDays);
+			let increaseSum = Math.round(forecastDays * averageIncreasePerDay);
+
+			let share = 0.53;
+			if (Options.youthSkillForecastRespectShare) {
+				let trainableSkillSum = Object.values(this.getTrainableSkills()).reduce((sum, value) => sum + value, 0);
+				let primarySkillSum = Object.values(this.getPrimarySkills()).reduce((sum, value) => sum + value, 0);
+				share = primarySkillSum / trainableSkillSum;
+			}
+			let increasePrimary = Math.round(increaseSum * share);
+
+			this._increaseSkillsByQuotients(forecastPlayer, primarySkillQuotients, increasePrimary);
+			this._increaseSkillsByQuotients(forecastPlayer, secondarySkillQuotients, increaseSum - increasePrimary);
+
+		} else {
+
+			Object.keys(forecastPlayer.getTrainableSkills()).forEach(key => {
+				let increase = youthDays ? forecastPlayer.skills[key] * forecastDays / youthDays : 0;
+				forecastPlayer.skills[key] += Math.round(increase);
+				if (forecastPlayer.skills[key] > SKILL_LIMIT) forecastPlayer.skills[key] = SKILL_LIMIT;
+			});
+		}
+
 		return youthDays + forecastDays;
+	}
+
+	/**
+	 * @param {YouthPlayer} forecastPlayer
+	 * @param {Skillset} skillset
+	 * @returns {} skillQuotients
+	 */
+	_prepareQuotients (forecastPlayer, skillset) {
+		let skillQuotients = {};
+		Object.keys(skillset).forEach(key => {
+			if (forecastPlayer.skills[key] > 0) {
+				skillQuotients[key] = [];
+				for (let index = 0; index < SKILL_LIMIT; index++) {
+					skillQuotients[key].push(+(Math.round((forecastPlayer.skills[key] / (index + 0.5)) + "e+10") + "e-10"));
+				}
+			}
+		});
+		return skillQuotients;
+	}
+
+	/**
+	 * @param {YouthPlayer} forecastPlayer
+	 * @param {} skillQuotients
+	 * @param {Number} increaseSum
+	 */
+	_increaseSkillsByQuotients (forecastPlayer, skillQuotients, increaseSum) {
+		while (increaseSum > 0) {
+			let sortedQuotients = [].concat(...Object.values(skillQuotients)).sort(((a, b) => b - a));
+			if (increaseSum > sortedQuotients.length) increaseSum = sortedQuotients.length;
+			let limitQuotient = sortedQuotients[increaseSum - 1];
+			Object.keys(skillQuotients).forEach(key => {
+				if (increaseSum > 0) {
+					let increase = Math.min(skillQuotients[key].filter(q => q >= limitQuotient).length, increaseSum);
+					forecastPlayer.skills[key] += increase;
+					skillQuotients[key].splice(0, increase); // remove already "used" quotients
+					increaseSum -= increase;
+					if (forecastPlayer.skills[key] > SKILL_LIMIT) {
+						delete skillQuotients[key];
+						increaseSum += (forecastPlayer.skills[key] - SKILL_LIMIT);
+						forecastPlayer.skills[key] = SKILL_LIMIT;
+					}
+				}
+			});
+		}
 	}
 
 	/**

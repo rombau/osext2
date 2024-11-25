@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>OSext Einstellungen</title>
 </head>
+
 <body>
 	<h3>Allgemein</h3>
 	<div style="padding: 3px;">
@@ -21,7 +23,7 @@
 			<option value="4">Fehler</option>
 		</select>
 	</div>
-	<h3>Prognose</h3>
+	<h3>Team-Prognose</h3>
 	<div style="padding: 3px;">
 		<label>Physio bei Verletzung:</label>
 		<input type="checkbox" id="options-physio">
@@ -51,13 +53,28 @@
 		<input type="range" min="50" max="99" id="options-ns-limit">
 		<span id="options-ns-limit-value"></span>
 	</div>
+	<h3>Jugend-Prognose</h3>
+	<div style="padding: 3px;">
+		<label>Prognose-Methode:</label>
+		<select id="options-youth-forecast">
+			<option value="default">Standard</option>
+			<option value="sainte-lague">Sainte-Lague</option>
+		</select>
+	</div>
+	<div style="padding: 3px;">
+		<label>Bisherige Verteilung ber&uuml;cksichtigen:</label>
+		<input type="checkbox" id="options-youth-forecast-respect-share">
+	</div>
 	<div style="margin-top: 15px; padding: 15px 0px; border-top: 1px solid darkgray;">
-		<button id="options-save" >Speichern</button>
+		<button id="options-save">Speichern</button>
 		<button id="options-editor" style="float: right;">Daten-Editor &ouml;ffnen</button>
 	</div>
-	<div style="display: inline-block; color:green; position: absolute; right: 20px; vertical-align: bottom;" id="options-status"></div>
+	<div style="display: inline-block; color:green; position: absolute; right: 20px; vertical-align: bottom;"
+		id="options-status">
+	</div>
 	<script src="source/common.js"></script>
 	<script src="source/logger.js"></script>
 	<script src="source/options.js"></script>
 </body>
+
 </html>
