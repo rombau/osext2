@@ -437,34 +437,4 @@ describe('SquadPlayer', () => {
 
 		expect(player.nextTraining.getChanceWithBonus()).toEqual(99);
 	});
-
-	it('should return potential', () => {
-
-		let potentialPlayer = new SquadPlayer();
-		potentialPlayer.skills = {
-			'sch': 21,
-			'bak': 26,
-			'kob': 85,
-			'zwk': 87,
-			'dec': 85,
-			'ges': 37,
-			'fuq': 0,
-			'erf': 17,
-			'agg': 33,
-			'pas': 35,
-			'aus': 31,
-			'ueb': 35,
-			'wid': 56,
-			'sel': 1,
-			'dis': 36,
-			'zuv': 71,
-			'ein': 78
-		};
-		potentialPlayer.pos = Position.ABW;
-		potentialPlayer.age = 21;
-		potentialPlayer.ageExact = 21.84722222222222;
-
-		expect(potentialPlayer.getPotential()).toEqual(513);
-
-	});
 });

@@ -37,7 +37,8 @@ Page.YouthOverview = class extends Page.Youth {
 				new Column('Marktwert', Origin.Extension).withStyle('width', '6em').withStyle('text-align', 'right'),
 				new Column('ØP', Origin.Extension).withHeader('ØP', 'Durchschnitt Primärskills').withStyle('width', '3.5em').withStyle('text-align', 'right'),
 				new Column('ØN', Origin.Extension).withHeader('ØN', 'Durchschnitt Nebenskills').withStyle('width', '3.5em').withStyle('text-align', 'right'),
-				new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width', '3.5em').withStyle('text-align', 'right')
+				new Column('ØU', Origin.Extension).withHeader('ØU', 'Durchschnitt unveränderliche Skills').withStyle('width', '3.5em').withStyle('text-align', 'right'),
+				new Column('EQ19', Origin.Extension).withHeader('EQ19', 'Qualität / Potential / Talent').withStyle('width', '3.5em')
 			);
 
 			this.table.initialize(doc);
@@ -160,12 +161,14 @@ Page.YouthOverview = class extends Page.Youth {
 					} else {
 						row.cells['Ø/Zat'].textContent = player.averageIncreasePerDay.toFixed(2);
 					}
+					row.cells['EQ19'].textContent = player.getPotential().toFixed(0);
 				} else {
 					row.cells['Opt.Skill'].textContent = '';
 					row.cells['Marktwert'].textContent = '';
 					row.cells['ØP'].textContent = '';
 					row.cells['ØN'].textContent = '';
 					row.cells['Ø/Zat'].textContent = '';
+					row.cells['EQ19'].textContent = '';
 				}
 				row.cells['ØU'].textContent = player.getSkillAverage(player.getUnchangeableSkills()).toFixed(2);
 
@@ -179,6 +182,7 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['ØP'].textContent = '';
 				row.cells['ØN'].textContent = '';
 				row.cells['ØU'].textContent = '';
+				row.cells['EQ19'].textContent = '';
 			}
 
 			row.cells['Aktion'].textContent = '';
@@ -226,6 +230,7 @@ Page.YouthOverview = class extends Page.Youth {
 				row.cells['ØP'].classList.add(STYLE_FORECAST);
 				row.cells['ØN'].classList.add(STYLE_FORECAST);
 				row.cells['ØU'].classList.add(STYLE_FORECAST);
+				row.cells['EQ19'].classList.add(STYLE_FORECAST);
 			}
 		});
 

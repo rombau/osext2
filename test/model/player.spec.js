@@ -96,4 +96,16 @@ describe('Player', () => {
 
 	});
 
+	it('should return potential', () => {
+
+		player.pos = Position.ABW;
+		player.age = 21;
+		player.ageExact = 21.84722222222222;
+		Object.keys(player.skills).forEach((skillname, s) => {
+			player.skills[skillname] = [21, 26, 85, 87, 85, 37, 0, 17, 33, 35, 31, 35, 56, 1, 36, 71, 78][s];
+		});
+
+		expect(player.getPotential()).toEqual(513);
+
+	});
 });

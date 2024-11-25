@@ -174,20 +174,6 @@ class SquadPlayer extends Player {
 	}
 
 	/**
-	 * Returns the potential.
-	 * The formula was provided by Michael Bertram.
-	 *
-	 * @returns {Number}
-	 */
-	getPotential () {
-		let trainedSkills = {...this.getPrimarySkills(), ...this.getSecondarySkills()};
-		delete trainedSkills.fuq;
-		delete trainedSkills.erf;
-		return Object.values(trainedSkills).reduce((sum, value) => sum + POTENTIAL_DURATION[value], 0)
-			- (POTENTIAL_DAYS[this.age] + Math.round(Math.round(SEASON_MATCH_DAYS * (this.ageExact - this.age)) * POTENTIAL_FACTOR[this.age] / 100));
-	}
-
-	/**
 	 * Returns the calculated fast transfer value ('Blitzerlös').
 	 *
 	 * @returns {Number}
