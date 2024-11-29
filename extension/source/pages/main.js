@@ -32,6 +32,8 @@ Page.Main = class extends Page {
 	 */
 	extract (doc, data) {
 
+		// --- office ---
+
 		let matches = /Der nächste ZAT ist ZAT (\d+) und liegt auf/gm.exec(doc.querySelectorAll('div#a b')[1].textContent);
 
 		let nextZat = (+matches[1] <= 1 || +matches[1] > SEASON_MATCH_DAYS) ? 1 : +matches[1];
@@ -79,6 +81,20 @@ Page.Main = class extends Page {
 			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
 		}
 
+		// --- observed players ---
+
+		this.table = new ManagedTable(this.name,
+			new Column('Spieler'),
+			new Column('Team'),
+			new Column('Alter'),
+			new Column('Skill'),
+			new Column('Opti'),
+			new Column('Marktwert'),
+			new Column('Notiz'),
+			new Column('Aktion')
+		);
+
+		this.table.initialize(doc, false);
 	}
 
 	/**
