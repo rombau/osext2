@@ -23,12 +23,20 @@ In order to apply formatting rules on every change the following additional user
 	"editor.formatOnSave": true,
 </pre>
 
-### Node and Gulp tools
+### Test
 
 The coverage reports are created with `npm test` in the folder `.coverage`. Based on the `summary.json` the coverage badge is updated in the README with `npm run badge`.
 
-The release can be created by running `gulp --release major.minor.patch`:
-- this updates the version in the relevant files
+### Release and publishing
+
+The release can be created by running `scripts/release.sh x.x.x`:
+- updates the version in the relevant files
 - pushes these updates in a separate commit
-- creates the extension archive (for uploading to AMO) in the folder `release`
-- creates a new release/tag in github (env variable `GITHUB_TOKEN` is needed)
+- creates the extension archives for Firefox and Chrome in the folder `release`
+- creates a new release/tag in github (requires env variable `GITHUB_TOKEN`)
+
+The new version can be published by running `scripts/publish.sh`:
+- uploads the new version to Mozilla Addons (requires env variable `AMO_API_KEY` and `AMO_API_SECRET`)
+- uploads the new version to Google Web Store (requires env variable `GWS_API_KEY`, `GWS_API_SECRET` and `GWS_API_REFRESHTOKEN`)
+
+Remark: The uploaded publication is listed as draft, still needs to be approved. 
