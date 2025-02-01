@@ -94,11 +94,29 @@ Page.Main = class extends Page {
 			new Column('Skill'),
 			new Column('Opti'),
 			new Column('Marktwert'),
-			new Column('Notiz'),
-			new Column('Aktion')
+			new Column('Art', Origin.Extension),
+			new Column('Notiz').withHeader(''),
+			new Column('Transferdetails', Origin.Extension).withHeader(''),
+			new Column('Aktion').withHeader('')
 		);
 
 		this.table.initialize(doc, false);
+
+		let currentobservedPlayerIds = [];
+
+		this.table.rows.slice(1).forEach(row => {
+
+			let id = HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href);
+			currentobservedPlayerIds.push(id);
+
+			let player = data.team.getObservedPlayer(id);
+
+			player.marketValue = +row.cells['Marktwert'].textContent.replaceAll('.', '');
+
+		});
+
+		// remove all no longer observed players
+		data.team.observedPlayers = data.team.observedPlayers.filter(player => currentobservedPlayerIds.includes(player.id));
 	}
 
 	/**
@@ -106,6 +124,8 @@ Page.Main = class extends Page {
 	 * @param {ExtensionData} data
 	 */
 	extend (doc, data) {
+
+		// --- office ---
 
 		let contractExtensionPlayers = data.team.squadPlayers.filter(player => data.lastMatchDay && player.contractExtensionMatchDay
 			&& data.lastMatchDay.equals(player.contractExtensionMatchDay));
@@ -159,6 +179,111 @@ Page.Main = class extends Page {
 				table.tBodies[0].insertBefore(infoRow, tipRow);
 			}
 		}
+
+		// --- observed players ---
+
+		this.table.table.classList.add(STYLE_MANAGED);
+
+		this.table.rows.slice(1).forEach(row => {
+
+			let id = HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href);
+			let player = data.team.getObservedPlayer(id);
+
+			let typeSelect = HtmlUtil.createSelect(doc, Object.values(ObservationType), player.type, (newValue) => {
+				player.type = newValue;
+				if (player.type === ObservationType.NOTE) {
+					player.matchDay = null;
+					player.transferPriceType = null;
+					player.transferPrice = null;
+					player.loan = null;
+					row.cells['Notiz'].classList.remove(STYLE_HIDDEN_COLUMN);
+					row.cells['Transferdetails'].classList.add(STYLE_HIDDEN_COLUMN);
+				} else {
+					player.matchDay = new MatchDay(data.nextMatchDay.season, data.nextMatchDay.zat);
+					row.cells['Notiz'].classList.add(STYLE_HIDDEN_COLUMN);
+					row.cells['Transferdetails'].classList.remove(STYLE_HIDDEN_COLUMN);
+					if (player.type === ObservationType.LOAN) {
+						player.loan = player.loan || new SquadPlayer.Loan();
+						player.transferPriceType = null;
+						player.transferPrice = null;
+						priceSelect.classList.add(STYLE_HIDDEN);
+						priceInput.classList.add(STYLE_HIDDEN);
+						feeSelect.classList.remove(STYLE_HIDDEN);
+						durationSelect.classList.remove(STYLE_HIDDEN);
+						feeSelect.changeTo(player.loan.fee || 1);
+						durationSelect.changeTo(player.loan.duration || 36);
+					} else {
+						player.loan = null;
+						priceSelect.classList.remove(STYLE_HIDDEN);
+						priceInput.classList.remove(STYLE_HIDDEN);
+						feeSelect.classList.add(STYLE_HIDDEN);
+						durationSelect.classList.add(STYLE_HIDDEN);
+						priceSelect.changeTo(player.transferPriceType || TransferPrice.MARKETVALUE);
+					}
+				}
+			});
+
+			let currentSeason = data.lastMatchDay.season === data.nextMatchDay.season;
+			let minZat = currentSeason ? data.nextMatchDay.zat : 1;
+			let seasonSelect = HtmlUtil.createSelect(doc, Array.from({length: Options.forecastSeasons - (currentSeason ? 0 : 1)}, (_, i) => ({
+				label: 'Saison ' + (data.nextMatchDay.season + i),
+				value: data.nextMatchDay.season + i
+			})), player.matchDay ? player.matchDay.season : data.nextMatchDay.season, (newValue) => {
+				player.matchDay.season = +newValue;
+				Array.from(zatSelect.options).forEach(zatOption => {
+					zatOption.disabled = false;
+					if (player.matchDay.season === data.nextMatchDay.season && +zatOption.value < minZat) zatOption.disabled = true;
+				});
+				if (player.matchDay.season === data.nextMatchDay.season && +zatSelect.value < minZat) {
+					zatSelect.changeTo(minZat);
+				}
+			});
+			let zatSelect = HtmlUtil.createSelect(doc, Array.from({length: SEASON_MATCH_DAYS}, (_, i) => ({
+				label: 'Zat ' + (i + 1),
+				value: (i + 1)
+			})), player.matchDay ? player.matchDay.zat : data.nextMatchDay.zat, (newValue) => {
+				player.matchDay.zat = +newValue;
+			});
+
+			let priceSelect = HtmlUtil.createSelect(doc, Object.values(TransferPrice), player.transferPriceType, (newValue) => {
+				player.transferPriceType = newValue;
+				priceInput.disabled = true;
+				switch (player.transferPriceType) {
+					case TransferPrice.MAX:
+						player.transferPrice = Math.round(player.marketValue * 100 / 75);
+						break;
+					case TransferPrice.MIN:
+						player.transferPrice = Math.round(player.marketValue * 75 / 100);
+						break;
+					case TransferPrice.MARKETVALUE:
+						player.transferPrice = player.marketValue;
+						break;
+					default:
+						player.transferPrice = player.transferPrice || player.marketValue;
+						priceInput.disabled = false;
+						break;
+				}
+				priceInput.value = player.transferPrice.toLocaleString();
+			});
+
+			let priceInput = doc.createElement('input');
+			priceInput.type = 'text';
+
+			let feeSelect = HtmlUtil.createSelect(doc, ['1,00 %', '1,25 %', '1,50 %'], '1,00 %');
+
+			let durationSelect = HtmlUtil.createSelect(doc, ['36 Zats'], '36 Zats');
+
+			row.cells['Art'].appendChild(typeSelect);
+
+			row.cells['Transferdetails'].appendChild(seasonSelect);
+			row.cells['Transferdetails'].appendChild(zatSelect);
+			row.cells['Transferdetails'].appendChild(priceSelect);
+			row.cells['Transferdetails'].appendChild(priceInput);
+			row.cells['Transferdetails'].appendChild(feeSelect);
+			row.cells['Transferdetails'].appendChild(durationSelect);
+
+			typeSelect.dispatchEvent(new Event('change'));
+		});
 	}
 }
 

@@ -183,6 +183,34 @@ class HtmlUtil {
 	}
 
 	/**
+	 * Returns a new select with options
+	 *
+	 * @param {Document} doc document for element creation
+	 * @param {[String|Object]} options option values and titles
+	 * @param {String} defaultoption default option value
+	 * @param {Function} listener called on change with new value
+	 * @returns {HTMLSelectElement}
+	 */
+	static createSelect (doc, options, defaultoption, listener = (value) => {}) {
+		let select = doc.createElement('select');
+		options.forEach(option => {
+			let optionElement = doc.createElement('option');
+			optionElement.textContent = option.label || option;
+			optionElement.value = option.value || option;
+			select.appendChild(optionElement);
+		});
+		select.addEventListener('change', (event) => {
+			listener(event.target.value);
+		});
+		select.changeTo = (value) => {
+			select.value = value;
+			select.dispatchEvent(new Event('change'));
+		};
+		if (defaultoption) select.value = defaultoption;
+		return select;
+	}
+
+	/**
 	 * Returns a new message box element (status, warning, error).
 	 *
 	 * @param {Document} doc the document for element creation
@@ -255,6 +283,6 @@ class HtmlUtil {
 	 */
 	static styleExtensionElement (element) {
 		element.style.display = 'none';
-		element.classList.add('osext-element');
+		element.classList.add(STYLE_ELEMENT);
 	}
 }

@@ -131,6 +131,7 @@ const STYLE_DELETE = 'delete';
 const STYLE_ON = 'fa-toggle-on';
 const STYLE_OFF = 'fa-toggle-off';
 
+const STYLE_ELEMENT = 'osext-element';
 const STYLE_SET_CONTRACT = 'osext-set-contract';
 const STYLE_MANAGED = 'osext-managed';
 const STYLE_HIDDEN_COLUMN = 'osext-hidden-column';

@@ -12,13 +12,23 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+				"*://os.ongapo.com/*",
+				"*://*.online-soccer.eu/*",
+				"*://*.os-zeitungen.com/*"
 			],
 			"exclude_matches": [
-				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
-				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
-				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
-				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
+				"*://os.ongapo.com/forum/*",
+				"*://*.online-soccer.eu/forum/*",
+				"*://*.os-zeitungen.com/forum/*",
+				"*://os.ongapo.com/wiki/*",
+				"*://*.online-soccer.eu/wiki/*",
+				"*://*.os-zeitungen.com/wiki/*",
+				"*://os.ongapo.com/shop/*",
+				"*://*.online-soccer.eu/shop/*",
+				"*://*.os-zeitungen.com/shop/*",
+				"*://os.ongapo.com/bug/*",
+				"*://*.online-soccer.eu/bug/*",
+				"*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
 				"source/handler.js"
@@ -27,13 +37,23 @@
 		},
 		{
 			"matches": [
-				"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+				"*://os.ongapo.com/*",
+				"*://*.online-soccer.eu/*",
+				"*://*.os-zeitungen.com/*"
 			],
 			"exclude_matches": [
-				"*://os.ongapo.com/forum/*", "*://*.online-soccer.eu/forum/*", "*://*.os-zeitungen.com/forum/*",
-				"*://os.ongapo.com/wiki/*", "*://*.online-soccer.eu/wiki/*", "*://*.os-zeitungen.com/wiki/*",
-				"*://os.ongapo.com/shop/*", "*://*.online-soccer.eu/shop/*", "*://*.os-zeitungen.com/shop/*",
-				"*://os.ongapo.com/bug/*", "*://*.online-soccer.eu/bug/*", "*://*.os-zeitungen.com/bug/*"
+				"*://os.ongapo.com/forum/*",
+				"*://*.online-soccer.eu/forum/*",
+				"*://*.os-zeitungen.com/forum/*",
+				"*://os.ongapo.com/wiki/*",
+				"*://*.online-soccer.eu/wiki/*",
+				"*://*.os-zeitungen.com/wiki/*",
+				"*://os.ongapo.com/shop/*",
+				"*://*.online-soccer.eu/shop/*",
+				"*://*.os-zeitungen.com/shop/*",
+				"*://os.ongapo.com/bug/*",
+				"*://*.online-soccer.eu/bug/*",
+				"*://*.os-zeitungen.com/bug/*"
 			],
 			"js": [
 				"source/common.js",
@@ -44,6 +64,7 @@
 				"source/model/player.js",
 				"source/model/squadplayer.js",
 				"source/model/youthplayer.js",
+				"source/model/observedplayer.js",
 				"source/model/team.js",
 				"source/model/stadium.js",
 				"source/requestor.js",
@@ -94,12 +115,14 @@
 	],
 	"web_accessible_resources": [
 		{
-			"resources": [ 
-				"style/colors.css", 
+			"resources": [
+				"style/colors.css",
 				"style/fontawesome.min.css",
 				"style/solid.min.css"
 			],
-			"matches": [ "<all_urls>" ]
+			"matches": [
+				"<all_urls>"
+			]
 		}
 	],
 	"permissions": [
@@ -110,11 +133,13 @@
 		"open_in_tab": false
 	},
 	"host_permissions": [
-		"*://os.ongapo.com/*", "*://*.online-soccer.eu/*", "*://*.os-zeitungen.com/*"
+		"*://os.ongapo.com/*",
+		"*://*.online-soccer.eu/*",
+		"*://*.os-zeitungen.com/*"
 	],
 	"browser_specific_settings": {
 		"gecko": {
-		  "id": "{08f962cf-b932-49d3-a2a3-e4fd99c66ad6}"
+			"id": "{08f962cf-b932-49d3-a2a3-e4fd99c66ad6}"
 		}
 	}
 }

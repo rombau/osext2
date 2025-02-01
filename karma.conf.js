@@ -1,14 +1,14 @@
-module.exports = function(config) {
+module.exports = function (config) {
 
 	config.set({
-		plugins : [
+		plugins: [
 			'karma-chrome-launcher',
 			'karma-jasmine',
 			'karma-spec-reporter',
 			'karma-coverage'],
-		frameworks : ['jasmine'],
-		files : [
-			{ pattern: 'test/fixtures/**/*', included: false },
+		frameworks: ['jasmine'],
+		files: [
+			{pattern: 'test/fixtures/**/*', included: false},
 			'test/lib/**/*',
 			'extension/source/common.js',
 			'extension/source/logger.js',
@@ -18,6 +18,7 @@ module.exports = function(config) {
 			'extension/source/model/player.js',
 			'extension/source/model/squadplayer.js',
 			'extension/source/model/youthplayer.js',
+			'extension/source/model/observedplayer.js',
 			'extension/source/model/team.js',
 			'extension/source/model/matchday.js',
 			'extension/source/model/stadium.js',
@@ -30,7 +31,7 @@ module.exports = function(config) {
 			'extension/source/pages/youth.base.js',
 			'extension/source/pages/*.js',
 			'test/**/*.spec.js'],
-		exclude : [
+		exclude: [
 			'test/handler.spec.js'
 		],
 		proxies: {
@@ -40,26 +41,26 @@ module.exports = function(config) {
 			'/css/': '/base/spec/fixtures/css/',
 			'/images/': '/base/spec/fixtures/images/'
 		},
-		preprocessors : {
+		preprocessors: {
 			'extension/source/**/*.js': 'coverage'
 		},
-		reporters : ['spec', 'coverage'],
-		coverageReporter:{
+		reporters: ['spec', 'coverage'],
+		coverageReporter: {
 			dir: '.coverage/',
 			reporters: [
-				{ type: 'html', subdir: 'html-report' },
-				{ type: 'json-summary', subdir: '.', file: 'summary.json' },
+				{type: 'html', subdir: 'html-report'},
+				{type: 'json-summary', subdir: '.', file: 'summary.json'},
 			]
 		},
 		client: {
 			"captureConsole": false,
 		},
-		port : 9876,
-		colors : true,
-		logLevel : config.LOG_WARN,
-		autoWatch : true,
-		browsers : ['ChromeHeadless'],
-		singleRun : true,
-		concurrency : Infinity
+		port: 9876,
+		colors: true,
+		logLevel: config.LOG_WARN,
+		autoWatch: true,
+		browsers: ['ChromeHeadless'],
+		singleRun: true,
+		concurrency: Infinity
 	});
 };

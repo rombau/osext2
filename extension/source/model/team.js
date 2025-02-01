@@ -44,6 +44,9 @@ class Team {
 
 		/** @type {Number} the current account balance */
 		this.accountBalance;
+
+		/** @private @type {[ObservedPlayer]} */
+		this._observedPlayers;
 	}
 
 	/**
@@ -126,6 +129,18 @@ class Team {
 	}
 
 	/**
+	 * @type {[ObservedPlayer]} the observed players
+	 */
+	get observedPlayers () {
+		this._observedPlayers = this._observedPlayers || [];
+		return ensurePrototype(this._observedPlayers, ObservedPlayer);
+	}
+
+	set observedPlayers (value) {
+		this._observedPlayers = value;
+	}
+
+	/**
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
 	 *
 	 * @param {Number} id the id of the player to find (or add)
@@ -143,6 +158,24 @@ class Team {
 			this.squadPlayerAdded = considerSquadPlayerAdded;
 		}
 		return ensurePrototype(player, SquadPlayer);
+	}
+
+	/**
+	 * Returns the observed player with the given id. If the player can't be found, a new one is added to the team and returned.
+	 *
+	 * @param {Number} id the id of the player to find (or add)
+	 * @returns {ObservedPlayer} the observed player
+	 */
+	getObservedPlayer (id) {
+		if (!id) return null;
+
+		let player = this.observedPlayers.find(player => player.id === id);
+		if (!player) {
+			player = new ObservedPlayer();
+			player.id = id;
+			this.observedPlayers.push(player);
+		}
+		return ensurePrototype(player, ObservedPlayer);
 	}
 
 	/**

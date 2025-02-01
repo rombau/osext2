@@ -48,6 +48,15 @@ input[type=submit], input[type=button], input[type=reset] {
 	margin-left: 10px;
 }
 
+div#c td > input:first-child {
+	margin-left: 0px !important;
+	margin-right: 0px;
+}
+
+div#c td > input:not(:first-child), select:not(:first-child) {
+	margin-left: 2px !important;
+}
+
 input[type=checkbox] {
 	vertical-align: middle;
 }

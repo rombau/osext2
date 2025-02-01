@@ -8,7 +8,9 @@ new MutationObserver((records, observer) => {
 		if (record.target.nodeName == 'TR') {
 			record.addedNodes.forEach(node => {
 				if (node.nodeName == 'TD' && node.textContent.length > 0 && !node.textContent.match(/[\r\n]+/)) {
-					if (!node.getAttribute(ATTR_ORIGINAL)) node.setAttribute(ATTR_ORIGINAL, node.textContent);
+					if (!node.getAttribute(ATTR_ORIGINAL) && (!node.getAttribute('class') || !node.getAttribute('class').includes(STYLE_ELEMENT))) {
+						node.setAttribute(ATTR_ORIGINAL, node.textContent);
+					}
 				}
 			});
 		}
