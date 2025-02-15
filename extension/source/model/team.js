@@ -400,12 +400,15 @@ class Team {
 	 * @returns {Number} the bonus
 	 */
 	calculateWinBonusPerLeagueMatchDay (leagueRanking, leagueSize) {
-		let season = this.matchDays.slice().filter(matchDay => matchDay.competition === Competition.LEAGUE).sort((day1, day2) => {
+		let leagueMatchDays = this.matchDays.slice().filter(matchDay => matchDay.competition === Competition.LEAGUE).sort((day1, day2) => {
 			if (day1.before(day2)) return 1;
 			if (day1.after(day2)) return -1;
 			return 0;
-		})[0].season;
-		let leagueMatchDays = this.matchDays.filter(matchDay => matchDay.season === season && matchDay.competition === Competition.LEAGUE);
+		});
+		if (!leagueMatchDays.length) {
+			return 0;
+		}
+		leagueMatchDays = this.matchDays.filter(matchDay => matchDay.season === leagueMatchDays[0].season && matchDay.competition === Competition.LEAGUE);
 		return Math.round((WIN_BONUS_BY_RANKING[leagueSize][leagueRanking - 1] * WIN_BONUS) / leagueMatchDays.length);
 	}
 
@@ -443,8 +446,8 @@ class Team {
 		}
 		let copyMatchDay = new MatchDay(season, zat);
 		window.sortedMatchDays = window.sortedMatchDays || this.matchDays.slice().sort((day1, day2) => {
-			if (day1.before(day2)) return 1;
-			if (day1.after(day2)) return -1;
+			if (day1.before(day2)) return -1;
+			if (day1.after(day2)) return 1;
 			return 0;
 		});
 		let scheduledMatchDay = window.sortedMatchDays.find(matchDay => matchDay.zat === zat);

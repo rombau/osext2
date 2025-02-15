@@ -198,6 +198,22 @@ describe('Team', () => {
 
 	});
 
+	it('should return match day copy with extended stadium', () => {
+
+		let templateZat = new MatchDay(15, 2);
+		templateZat.competition = Competition.LEAGUE;
+		team.matchDays.push(templateZat);
+
+		let extendedStadiumZat = new MatchDay(16, 2);
+		extendedStadiumZat.stadium = new Stadium();
+		team.matchDays.push(extendedStadiumZat);
+
+		let copy = team.copyScheduledMatchDay(16, 2);
+
+		expect(copy.competition).toEqual(Competition.LEAGUE);
+		expect(copy.stadium).toBeDefined();
+	});
+
 	it('should calculate youth support', () => {
 
 		let matchDay = new MatchDay(15, 51);
@@ -519,12 +535,6 @@ describe('Team', () => {
 
 	it('should return balanced match days', () => {
 
-		for (let zat = 2; zat < SEASON_MATCH_DAYS; zat += 2) {
-			let matchDay = new MatchDay(15, zat);
-			matchDay.competition = Competition.LEAGUE;
-			team.matchDays.push(matchDay);
-		}
-
 		let viewSettings = {leagueRanking: 1};
 		team.league.size = 10;
 		Options.forecastSeasons = 1;
@@ -533,7 +543,6 @@ describe('Team', () => {
 
 		expect(balancedMatchDays.length).toEqual(72);
 	});
-
 
 	it('should return win bonus per league match day', () => {
 
