@@ -30,6 +30,7 @@ Page.AccountStatement = class extends Page {
 		let matches = /Kontoauszug - Kontostand : ([-\d.]+) Euro/gm.exec(doc.querySelector('b > font').textContent);
 		if (matches) {
 			data.team.accountBalance = +matches[1].replaceAll('.', '');
+			data.lastMatchDay.accountBalance = data.team.accountBalance;
 		}
 
 		this.table = new ManagedTable(this.name,

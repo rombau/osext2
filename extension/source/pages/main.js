@@ -79,6 +79,10 @@ Page.Main = class extends Page {
 		let accountBalanceElement = doc.querySelector('div#a a[href="ka.php"]');
 		if (accountBalanceElement && accountBalanceElement.textContent.includes('Euro')) {
 			data.team.accountBalance = +accountBalanceElement.textContent.replaceAll('.', '').replace(' Euro', '');
+			let balancedMatchdays = data.team.sortedMatchDays.filter(matchday => matchday.accountBalance && matchday.result);
+			if (balancedMatchdays.length && balancedMatchdays[0].accountBalance !== data.team.accountBalance && data.pagesToRequest.length === 0) {
+				data.pagesToRequest.push(new Page.AccountStatement());
+			}
 		}
 
 		// --- observed players ---

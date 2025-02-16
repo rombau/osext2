@@ -114,6 +114,16 @@ class Team {
 		this._trainers = value;
 	}
 
+	/**
+	 * @type {[MatchDay]} the sorted match days (copy with youngest first)
+	 */
+	get sortedMatchDays () {
+		return this.matchDays.slice().sort((day1, day2) => {
+			if (day1.before(day2)) return 1;
+			if (day1.after(day2)) return -1;
+			return 0;
+		});
+	}
 
 	/**
 	 * Returns the squad player with the given id. If the player can't be found, a new one is added to the team and returned.
@@ -400,11 +410,7 @@ class Team {
 	 * @returns {Number} the bonus
 	 */
 	calculateWinBonusPerLeagueMatchDay (leagueRanking, leagueSize) {
-		let leagueMatchDays = this.matchDays.slice().filter(matchDay => matchDay.competition === Competition.LEAGUE).sort((day1, day2) => {
-			if (day1.before(day2)) return 1;
-			if (day1.after(day2)) return -1;
-			return 0;
-		});
+		let leagueMatchDays = this.sortedMatchDays.filter(matchDay => matchDay.competition === Competition.LEAGUE);
 		if (!leagueMatchDays.length) {
 			return 0;
 		}
@@ -445,11 +451,7 @@ class Team {
 			return ensurePrototype(JSON.parse(JSON.stringify(seasonMatchDay)), MatchDay);
 		}
 		let copyMatchDay = new MatchDay(season, zat);
-		window.sortedMatchDays = window.sortedMatchDays || this.matchDays.slice().sort((day1, day2) => {
-			if (day1.before(day2)) return -1;
-			if (day1.after(day2)) return 1;
-			return 0;
-		});
+		window.sortedMatchDays = window.sortedMatchDays || this.sortedMatchDays.filter(matchDay => matchDay.competition);
 		let scheduledMatchDay = window.sortedMatchDays.find(matchDay => matchDay.zat === zat);
 		if (scheduledMatchDay) {
 			if (scheduledMatchDay.season !== season &&
