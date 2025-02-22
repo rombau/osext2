@@ -10,6 +10,14 @@ describe('Page.Main', () => {
 		spyOn(Persistence, 'updateCurrentTeam').and.callFake(() => {
 			return Promise.resolve();
 		});
+		spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+			return Promise.resolve();
+		});
+		spyOn(Requestor, 'create').and.callFake((doc, finished) => {
+			return {
+				fetchPage: () => {}
+			};
+		});
 	});
 
 	it('should extract team name', (done) => {
@@ -118,10 +126,6 @@ describe('Page.Main', () => {
 
 			typeSelect.value = ObservationType.LOAN;
 			typeSelect.dispatchEvent(new Event('change'));
-
-			spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
-				return Promise.resolve();
-			});
 
 			typeSelect.parentElement.parentElement.querySelector('input[type="button"][value="speichern"]').dispatchEvent(new Event('click'));
 			typeSelect.parentElement.parentElement.querySelector('input[type="button"][value="löschen"]').dispatchEvent(new Event('click'));

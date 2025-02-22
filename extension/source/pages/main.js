@@ -313,8 +313,9 @@ Page.Main = class extends Page {
 				label: (1 + i * 0.25).toFixed(2) + ' %',
 				value: (1 + i * 0.25)
 			})), player.loan ? player.loan.fee : 1, (newValue) => {
-				player.loan.fee = +newValue;
-				feeInput.value = Math.round(player.marketValue * player.loan.fee / 100).toLocaleString();
+				let fee = Math.round(player.marketValue * +newValue / 100)
+				player.loan.fee = fee * (data.team.id === player.teamId ? 1 : -1);
+				feeInput.value = fee.toLocaleString();
 			});
 
 			let feeInput = doc.createElement('input');
