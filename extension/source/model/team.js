@@ -266,6 +266,15 @@ class Team {
 			});
 		}
 
+		this.observedPlayers.forEach(player => {
+			if (player.type !== ObservationType.NOTE && player.matchDay) {
+				let squadPlayer = forecastTeam.squadPlayers.find(squadPlayer => squadPlayer.id === player.id);
+				if (squadPlayer && !ensurePrototype(player.matchDay, MatchDay).after(targetMatchDay)) {
+					squadPlayer.active = false;
+				}
+			}
+		});
+
 		this.youthPlayers.forEach(player => {
 			forecastTeam.youthPlayers.push(player.getForecast(lastMatchDay, targetMatchDay));
 		});
@@ -412,8 +421,13 @@ class Team {
 	 * @returns {Number} the income
 	 */
 	calculateFastTransferIncome (matchDay, players) {
-		matchDay.fastTransferIncome = players.filter(player => player.fastTransferMatchDay && matchDay.equals(player.fastTransferMatchDay))
-			.reduce((sum, player) => sum + player.getFastTransferValue(), 0);
+		matchDay.fastTransferIncome = players.filter(player => {
+			let observedPlayer = this.observedPlayers.find(observedPlayer => observedPlayer.id === player.id);
+			if (observedPlayer && observedPlayer.type !== ObservationType.NOTE && observedPlayer.matchDay && !ensurePrototype(observedPlayer.matchDay, MatchDay).after(matchDay)) {
+				return false;
+			}
+			return player.fastTransferMatchDay && matchDay.equals(player.fastTransferMatchDay);
+		}).reduce((sum, player) => sum + player.getFastTransferValue(), 0);
 		return matchDay.fastTransferIncome;
 	}
 

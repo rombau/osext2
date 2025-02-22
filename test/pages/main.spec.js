@@ -78,4 +78,55 @@ describe('Page.Main', () => {
 			done();
 		});
 	});
+
+	it('should extend observed players', (done) => {
+
+		Fixture.getDocument('haupt.php', doc => {
+
+			page.process(doc, data);
+
+			page.extract(doc, data);
+
+			data.nextZatSeason = 21; // initialized before extend
+
+			page.extend(doc, data);
+
+			expect(data.team.observedPlayers.length).toEqual(5);
+			expect(data.team.observedPlayers[0].id).toEqual(45313);
+			expect(data.team.observedPlayers[0].name).toEqual('Kenny Keegan');
+			expect(data.team.observedPlayers[0].teamName).toEqual('Mannheimer SC');
+			expect(data.team.observedPlayers[0].marketValue).toEqual(25695423);
+
+			let typeSelect = doc.querySelector('div#vps td.osext-element select');
+			typeSelect.value = ObservationType.TRANSFER;
+			typeSelect.dispatchEvent(new Event('change'));
+
+			let subSelects = typeSelect.parentElement.nextElementSibling.nextElementSibling.querySelectorAll('select');
+
+			subSelects[0].dispatchEvent(new Event('change'));
+			subSelects[1].dispatchEvent(new Event('change'));
+			subSelects[2].dispatchEvent(new Event('change'));
+			subSelects[2].value = TransferPrice.MAX;
+			subSelects[2].dispatchEvent(new Event('change'));
+			subSelects[2].value = TransferPrice.MIN;
+			subSelects[2].dispatchEvent(new Event('change'));
+			subSelects[2].value = TransferPrice.INPUT;
+			subSelects[2].dispatchEvent(new Event('change'));
+			subSelects[2].value = TransferPrice.INPUT;
+			subSelects[2].nextElementSibling.dispatchEvent(new Event('keypress'));
+			subSelects[2].nextElementSibling.dispatchEvent(new Event('change'));
+
+			typeSelect.value = ObservationType.LOAN;
+			typeSelect.dispatchEvent(new Event('change'));
+
+			spyOn(Persistence, 'storeExtensionData').and.callFake(() => {
+				return Promise.resolve();
+			});
+
+			typeSelect.parentElement.parentElement.querySelector('input[type="button"][value="speichern"]').dispatchEvent(new Event('click'));
+			typeSelect.parentElement.parentElement.querySelector('input[type="button"][value="löschen"]').dispatchEvent(new Event('click'));
+
+			done();
+		});
+	});
 });

@@ -146,6 +146,21 @@ describe('Team', () => {
 		expect(team.getForecast(lastMatchDay, new MatchDay(15, 51)).squadPlayers.length).toEqual(team.squadPlayers.length);
 	});
 
+	it('should return forecast with sold player', () => {
+
+		let squadPlayer = new SquadPlayer();
+		squadPlayer.id = 1;
+		team.squadPlayers.push(squadPlayer);
+
+		let observedPlayer = new ObservedPlayer();
+		observedPlayer.id = 1;
+		observedPlayer.type = ObservationType.TRANSFER;
+		observedPlayer.matchDay = new MatchDay(15, 51);
+		team.observedPlayers.push(observedPlayer);
+
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].active).toBeFalse();
+	});
+
 	it('should return match days in range', () => {
 
 		for (let zat = 1; zat < SEASON_MATCH_DAYS + 1; zat++) {
@@ -441,6 +456,8 @@ describe('Team', () => {
 		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(0);
 		expect(matchDay.loanIncome).toEqual(0);
 		expect(matchDay.loanCosts).toEqual(0);
+
+		// TBD planed loans
 	});
 
 	it('should return trainer salary', () => {
@@ -461,6 +478,7 @@ describe('Team', () => {
 		let matchDay = new MatchDay(16, 1); // zat 1
 
 		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].id = 1;
 		team.squadPlayers[0].pos = Position.TOR;
 		team.squadPlayers[0].ageExact = 32.958333333;
 		Object.keys(team.squadPlayers[0].skills).forEach((skillname, s) => {
@@ -477,6 +495,20 @@ describe('Team', () => {
 
 		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(4057261);
 		expect(matchDay.fastTransferIncome).toEqual(4057261);
+
+		let observedPlayer = new ObservedPlayer();
+		observedPlayer.id = 1;
+		observedPlayer.type = ObservationType.TRANSFER;
+		observedPlayer.matchDay = new MatchDay(16, 2);
+		team.observedPlayers.push(observedPlayer);
+
+		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(0);
+		expect(matchDay.fastTransferIncome).toEqual(0);
+	});
+
+	it('should return transfer bookings', () => {
+
+		// TBD planed transfers
 	});
 
 	it('should not return physio costs for awarded players', () => {

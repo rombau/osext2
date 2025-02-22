@@ -20,6 +20,12 @@ Page.ShowPlayer = class extends Page {
 
 		let id = HtmlUtil.extractIdFromHref(doc.querySelector('img[src^=face]').src);
 
+		// add salary to observed player
+		let observedPlayer = data.team.observedPlayers.find(player => player.id === id);
+		if (observedPlayer) {
+			let cell = doc.evaluate('.//td[contains(., "Monatsgehalt :")]', doc.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+			observedPlayer.salary = +cell.singleNodeValue.nextSibling.textContent.replaceAll(/[^\d]/g, '');
+		}
 
 	}
 

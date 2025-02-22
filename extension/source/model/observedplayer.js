@@ -29,8 +29,20 @@ class ObservedPlayer {
 		/** @type {Number} the internal id */
 		this.id;
 
+		/** @type {String} the name */
+		this.name;
+
+		/** @type {Number} the internal team id */
+		this.teamId;
+
+		/** @type {String} the team name */
+		this.teamName;
+
 		/** @type {Number} the market value */
 		this.marketValue;
+
+		/** @type {Number} the salary */
+		this.salary;
 
 		/** @type {ObservationType} the observation type (default = NOTE) */
 		this.type = ObservationType.NOTE;

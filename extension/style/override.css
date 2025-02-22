@@ -94,6 +94,14 @@ input[value="Zugabgabe speichern"] {
 	height: 25px;
 }
 
+input[type="text"].osext-element {
+	width: 100px;
+}
+input[type="text"][disabled].osext-element {
+	background-color: transparent;
+	border-color: transparent;
+}
+
 form[action="/osneu/stadion"] input, form[action="/osneu/stadion"] select {
 	margin: 2px;
 }
