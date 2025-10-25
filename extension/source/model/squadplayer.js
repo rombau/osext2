@@ -448,8 +448,9 @@ SquadPlayer.Loan = class {
 	 * @param {String} from the team (name) from which the player is loaned
 	 * @param {String} to the team (name) to which the player is loaned
 	 * @param {Number} duration the duration of the loan in matchdays
+	 * @param {Number} fee the monthly fee
 	 */
-	constructor (from, to, duration) {
+	constructor (from, to, duration, fee) {
 
 		/** @type {String} from team name */
 		this.from = from;
@@ -461,7 +462,7 @@ SquadPlayer.Loan = class {
 		this.duration = duration;
 
 		/** @type {Number} the monthly fee. If the player is loaned from other team, the value is negative (costs); otherwise positive (income). */
-		this.fee;
+		this.fee = fee;
 	}
 };
 

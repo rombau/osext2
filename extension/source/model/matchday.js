@@ -136,6 +136,15 @@ class MatchDay {
 	}
 
 	/**
+	 * Returns a new instance of this matchday.
+	 *
+	 * @returns {MatchDay}
+	 */
+	clone () {
+		return new MatchDay(this.season, this.zat);
+	}
+
+	/**
 	 * Returns ture if this and the given match day are equal.
 	 *
 	 * @param {MatchDay} matchday

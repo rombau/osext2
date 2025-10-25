@@ -179,6 +179,23 @@ class Team {
 	}
 
 	/**
+	 * Returns the observed player with the given id.
+	 *
+	 * @param {Number} id the id of the player to find
+	 * @returns {ObservedPlayer} the observed player
+	 */
+	findObservedPlayer (id) {
+		if (!id) return null;
+
+		let player = this.observedPlayers.find(player => player.id === id);
+		if (player) {
+			if (player.matchDay) player.matchDay = ensurePrototype(player.matchDay, MatchDay);
+			if (player.loan) player.loan = ensurePrototype(player.loan, SquadPlayer.Loan);
+		}
+		return ensurePrototype(player, ObservedPlayer);
+	}
+
+	/**
 	 * Synchronizes the youth players in the model with the fully initialized page youth players, 
 	 * based on the fingerprints.
 	 * 
@@ -259,6 +276,8 @@ class Team {
 		if (targetMatchDay) {
 			if (lastMatchDay.equals(targetMatchDay)) return this;
 
+			targetMatchDay = ensurePrototype(targetMatchDay, MatchDay);
+
 			let matchDaysInRange = this.getMatchDaysInRange(lastMatchDay, targetMatchDay).slice(1);
 
 			this.squadPlayers.forEach(player => {
@@ -269,8 +288,18 @@ class Team {
 		this.observedPlayers.forEach(player => {
 			if (player.type !== ObservationType.NOTE && player.matchDay) {
 				let squadPlayer = forecastTeam.squadPlayers.find(squadPlayer => squadPlayer.id === player.id);
-				if (squadPlayer && !ensurePrototype(player.matchDay, MatchDay).after(targetMatchDay)) {
-					squadPlayer.active = false;
+				let observedPlayer = forecastTeam.origin.findObservedPlayer(player.id); // to ensure prototypes
+				if (squadPlayer && !observedPlayer.matchDay.after(targetMatchDay)) {
+					if (player.type === ObservationType.TRANSFER) {
+						squadPlayer.active = false;
+					}
+					if (player.type === ObservationType.LOAN && targetMatchDay.before(observedPlayer.matchDay.clone().add(observedPlayer.loan.duration))) {
+						squadPlayer.loan = new SquadPlayer.Loan(
+							observedPlayer.loan.from,
+							observedPlayer.loan.to,
+							observedPlayer.loan.duration - observedPlayer.matchDay.intervalTo(targetMatchDay),
+							observedPlayer.loan.fee);
+					}
 				}
 			}
 		});
@@ -323,6 +352,7 @@ class Team {
 									accountBalance += (-balancedMatchDay.trainerSalary) || this.calculateTrainerSalary(balancedMatchDay, forecastedTeam.trainers);
 								}
 								accountBalance += (balancedMatchDay.fastTransferIncome) || this.calculateFastTransferIncome(balancedMatchDay, forecastedTeam.squadPlayers);
+								accountBalance += (balancedMatchDay.otherBookings) || this.calculateTransferBookings(balancedMatchDay, forecastedTeam.squadPlayers);
 								accountBalance += (-balancedMatchDay.physio) || this.calculatePhysioCosts(balancedMatchDay, forecastedTeam.squadPlayers);
 								if (viewSettings.winBonus && balancedMatchDay.competition === Competition.LEAGUE && balancedMatchDay.zat < 70) {
 									balancedMatchDay.winBonus = winBonusPerLeagueMatchDay;
@@ -378,11 +408,15 @@ class Team {
 	 * @returns {Number} the costs
 	 */
 	calculateSquadSalary (matchDay, squadPlayers, youthPlayers) {
-		let squad = squadPlayers.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0) || (player.active && !player.loan))
-			.reduce((sum, player) => sum + player.salary, 0);
-		let youth = youthPlayers.filter(player => player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).before(matchDay))
-			.reduce((sum, player) => sum + (player.salary || 0), 0);
-		matchDay.squadSalary = squad + youth;
+		let salaryPlayers = squadPlayers.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0) || (player.active && !player.loan))
+			.concat(youthPlayers.filter(player => player.pullMatchDay && ensurePrototype(player.pullMatchDay, MatchDay).before(matchDay)));
+		if (this.observedPlayers && this.observedPlayers.length) {
+			salaryPlayers = salaryPlayers.concat(this.observedPlayers.filter(player => !player.matchDay?.after(matchDay) && (
+				(player.type === ObservationType.LOAN && player.loan?.duration > 0 && player.loan?.fee < 0 && matchDay.before(player.matchDay.clone().add(player.loan.duration)))
+				|| (player.type === ObservationType.TRANSFER && !squadPlayers.find(squadPlayer => squadPlayer.id === player.id))
+			)));
+		}
+		matchDay.squadSalary = salaryPlayers.reduce((sum, player) => sum + (player.salary || 0), 0);
 		return -matchDay.squadSalary;
 	}
 
@@ -394,9 +428,14 @@ class Team {
 	 * @returns {Number} the income/costs
 	 */
 	calculateLoan (matchDay, players) {
-		matchDay.loanIncome = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee > 0))
+		let loanPlayers = players.filter(player => (player.loan?.duration >= 0));
+		if (this.observedPlayers && this.observedPlayers.length) {
+			loanPlayers = loanPlayers.concat(this.observedPlayers.filter(player => player.type === ObservationType.LOAN && player.loan?.duration > 0 && player.loan?.fee < 0
+				&& !player.matchDay.after(matchDay) && matchDay.before(player.matchDay.clone().add(player.loan.duration))));
+		}
+		matchDay.loanIncome = loanPlayers.filter(player => (player.loan.fee > 0))
 			.reduce((sum, player) => sum + Math.min(player.loan.fee, MAX_LOAN), 0);
-		matchDay.loanCosts = players.filter(player => (player.loan && player.loan.duration >= 0 && player.loan.fee < 0))
+		matchDay.loanCosts = loanPlayers.filter(player => (player.loan.fee < 0))
 			.reduce((sum, player) => sum - Math.max(player.loan.fee, -MAX_LOAN), 0);
 		return matchDay.loanIncome - matchDay.loanCosts;
 	}
@@ -422,13 +461,49 @@ class Team {
 	 */
 	calculateFastTransferIncome (matchDay, players) {
 		matchDay.fastTransferIncome = players.filter(player => {
-			let observedPlayer = this.observedPlayers.find(observedPlayer => observedPlayer.id === player.id);
-			if (observedPlayer && observedPlayer.type !== ObservationType.NOTE && observedPlayer.matchDay && !ensurePrototype(observedPlayer.matchDay, MatchDay).after(matchDay)) {
-				return false;
+			let observedPlayer = this.findObservedPlayer(player.id);
+			if (observedPlayer && observedPlayer.matchDay && !observedPlayer.matchDay.after(matchDay)) {
+				if (observedPlayer.type === ObservationType.TRANSFER ||
+					(observedPlayer.type === ObservationType.LOAN && player.fastTransferMatchDay && ensurePrototype(player.fastTransferMatchDay, MatchDay).before(observedPlayer.matchDay.clone().add(observedPlayer.loan.duration))))
+					return false;
 			}
 			return player.fastTransferMatchDay && matchDay.equals(player.fastTransferMatchDay);
 		}).reduce((sum, player) => sum + player.getFastTransferValue(), 0);
 		return matchDay.fastTransferIncome;
+	}
+
+	/**
+	 * Returns the transfer booking based on observed players.
+	 *
+	 * @param {MatchDay} matchDay
+	 * @param {[SquadPlayer]} players
+	 * @returns {Number} the income
+	 */
+	calculateTransferBookings (matchDay, players) {
+		let transferBookings = 0;
+		this.observedPlayers.filter(player => player.type === ObservationType.TRANSFER && player.matchDay.equals(matchDay)).forEach(player => {
+			let bookingValue = player.transferPrice || player.marketValue;
+			let squadPlayer = players.find(squadPlayer => squadPlayer.id === player.id);
+			if (squadPlayer) {
+				switch (player.transferPriceType) {
+					case TransferPrice.MARKETVALUE:
+						bookingValue = squadPlayer.marketValue;
+						break;
+					case TransferPrice.MIN:
+						bookingValue = squadPlayer.marketValue * 75 / 100;
+						break;
+					case TransferPrice.MAX:
+						bookingValue = squadPlayer.marketValue * 100 / 75;
+						break;
+				}
+			} else {
+				bookingValue *= -1;
+			}
+			matchDay.otherBookings = matchDay.otherBookings || {};
+			matchDay.otherBookings['Transfer'] = (matchDay.otherBookings['Transfer'] || 0) + bookingValue;
+			transferBookings += bookingValue;
+		});
+		return transferBookings
 	}
 
 	/**

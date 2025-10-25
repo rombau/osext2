@@ -146,7 +146,7 @@ describe('Team', () => {
 		expect(team.getForecast(lastMatchDay, new MatchDay(15, 51)).squadPlayers.length).toEqual(team.squadPlayers.length);
 	});
 
-	it('should return forecast with sold player', () => {
+	it('should return forecast with sold observed player', () => {
 
 		let squadPlayer = new SquadPlayer();
 		squadPlayer.id = 1;
@@ -159,6 +159,29 @@ describe('Team', () => {
 		team.observedPlayers.push(observedPlayer);
 
 		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].active).toBeFalse();
+	});
+
+	it('should return forecast with loaned observed player', () => {
+
+		let squadPlayer = new SquadPlayer();
+		squadPlayer.id = 1;
+		team.squadPlayers.push(squadPlayer);
+
+		let observedPlayer = new ObservedPlayer();
+		observedPlayer.id = 1;
+		observedPlayer.type = ObservationType.LOAN;
+		observedPlayer.matchDay = new MatchDay(15, 51);
+		observedPlayer.loan = new SquadPlayer.Loan('from', 'to', 2, 1);
+		team.observedPlayers.push(observedPlayer);
+
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].loan.from).toEqual('from');
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].loan.to).toEqual('to');
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].loan.duration).toEqual(2);
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 51)).squadPlayers[0].loan.fee).toEqual(1);
+
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 52)).squadPlayers[0].loan.duration).toEqual(1);
+
+		expect(team.getForecast(new MatchDay(15, 50), new MatchDay(15, 53)).squadPlayers[0].loan).toBeUndefined();
 	});
 
 	it('should return match days in range', () => {
@@ -414,6 +437,42 @@ describe('Team', () => {
 			expect(matchDay.squadSalary).toEqual(20000);
 		});
 
+		it('with observed player planned buy', () => {
+
+			team.observedPlayers.push(new ObservedPlayer());
+			team.observedPlayers[0].matchDay = new MatchDay(16, 2);
+			team.observedPlayers[0].type = ObservationType.TRANSFER;
+			team.observedPlayers[0].salary = 10000;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-0);
+
+			matchDay.add(1);
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-10000);
+
+			matchDay.add(1);
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-10000);
+		});
+
+		it('with observed player planned loan', () => {
+
+			team.observedPlayers.push(new ObservedPlayer());
+			team.observedPlayers[0].matchDay = new MatchDay(16, 2);
+			team.observedPlayers[0].type = ObservationType.LOAN;
+			team.observedPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1, -2000);
+			team.observedPlayers[0].salary = 10000;
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-0);
+
+			matchDay.add(1);
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-10000);
+
+			matchDay.add(1);
+
+			expect(team.calculateSquadSalary(matchDay, team.squadPlayers, team.youthPlayers, team.observedPlayers)).toEqual(-0);
+		});
 	});
 
 	it('should return loan income and costs', () => {
@@ -456,8 +515,34 @@ describe('Team', () => {
 		expect(team.calculateLoan(matchDay, team.squadPlayers)).toEqual(0);
 		expect(matchDay.loanIncome).toEqual(0);
 		expect(matchDay.loanCosts).toEqual(0);
+	});
 
-		// TBD planed loans
+	it('should return loan with observed players', () => {
+
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		team.observedPlayers.push(new ObservedPlayer());
+		team.observedPlayers[0].matchDay = new MatchDay(16, 2);
+		team.observedPlayers[0].type = ObservationType.LOAN;
+		team.observedPlayers[0].loan = new SquadPlayer.Loan('from', 'to', 1, -2000);
+		team.observedPlayers.push(new ObservedPlayer());
+		team.observedPlayers[1].matchDay = new MatchDay(16, 2);
+		team.observedPlayers[1].type = ObservationType.LOAN;
+		team.observedPlayers[1].loan = new SquadPlayer.Loan('from', 'to', 2, -5000);
+
+		expect(team.calculateLoan(matchDay, team.squadPlayers, team.observedPlayers)).toEqual(0);
+
+		expect(team.calculateLoan(matchDay.add(1), team.squadPlayers, team.observedPlayers)).toEqual(-7000);
+		expect(matchDay.loanIncome).toEqual(0);
+		expect(matchDay.loanCosts).toEqual(7000);
+
+		expect(team.calculateLoan(matchDay.add(1), team.squadPlayers, team.observedPlayers)).toEqual(-5000);
+		expect(matchDay.loanIncome).toEqual(0);
+		expect(matchDay.loanCosts).toEqual(5000);
+
+		expect(team.calculateLoan(matchDay.add(1), team.squadPlayers, team.observedPlayers)).toEqual(0);
+		expect(matchDay.loanIncome).toEqual(0);
+		expect(matchDay.loanCosts).toEqual(0);
 	});
 
 	it('should return trainer salary', () => {
@@ -499,8 +584,20 @@ describe('Team', () => {
 		let observedPlayer = new ObservedPlayer();
 		observedPlayer.id = 1;
 		observedPlayer.type = ObservationType.TRANSFER;
-		observedPlayer.matchDay = new MatchDay(16, 2);
+		observedPlayer.matchDay = new MatchDay(16, 1);
 		team.observedPlayers.push(observedPlayer);
+
+		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(0);
+		expect(matchDay.fastTransferIncome).toEqual(0);
+
+		observedPlayer.type = ObservationType.LOAN;
+		observedPlayer.loan = new SquadPlayer.Loan();
+		observedPlayer.loan.duration = 1;
+
+		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(4057261);
+		expect(matchDay.fastTransferIncome).toEqual(4057261);
+
+		observedPlayer.loan.duration = 2;
 
 		expect(team.calculateFastTransferIncome(matchDay, team.squadPlayers)).toEqual(0);
 		expect(matchDay.fastTransferIncome).toEqual(0);
@@ -508,7 +605,27 @@ describe('Team', () => {
 
 	it('should return transfer bookings', () => {
 
-		// TBD planed transfers
+		let matchDay = new MatchDay(16, 1); // zat 1
+
+		let observedPlayer = new ObservedPlayer();
+		observedPlayer.id = 1;
+		observedPlayer.type = ObservationType.TRANSFER;
+		observedPlayer.transferPriceType = TransferPrice.MARKETVALUE;
+		observedPlayer.matchDay = new MatchDay(16, 1);
+		observedPlayer.marketValue = 4057261;
+		team.observedPlayers.push(observedPlayer);
+
+		expect(team.calculateTransferBookings(matchDay, team.squadPlayers)).toEqual(-4057261);
+		expect(matchDay.otherBookings['Transfer']).toEqual(-4057261);
+
+		matchDay = new MatchDay(16, 1); // zat 1
+
+		team.squadPlayers.push(new SquadPlayer());
+		team.squadPlayers[0].id = 1;
+		team.squadPlayers[0].marketValue = 4000000;
+
+		expect(team.calculateTransferBookings(matchDay, team.squadPlayers)).toEqual(4000000);
+		expect(matchDay.otherBookings['Transfer']).toEqual(4000000);
 	});
 
 	it('should not return physio costs for awarded players', () => {

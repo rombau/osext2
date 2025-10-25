@@ -143,12 +143,10 @@ Page.Main = class extends Page {
 			}
 		}
 
-		console.log('extendObservedPlayers Normal');
 		this.extendObservedPlayers(doc, data);
 
 		// observe AJAX changes
 		new MutationObserver(() => {
-			console.log('extendObservedPlayers MutationObserver');
 			this.extendObservedPlayers(doc, data);
 		}).observe(doc.querySelector('div#vps'), {childList: true});
 	}
@@ -232,7 +230,7 @@ Page.Main = class extends Page {
 						feeSelect.classList.remove(STYLE_HIDDEN);
 						feeInput.classList.remove(STYLE_HIDDEN);
 						durationSelect.changeTo(player.loan.duration || 36);
-						feeSelect.changeTo(player.loan.fee || 1);
+						feeSelect.changeTo(player.loan.feePercent || 1);
 					} else {
 						player.loan = null;
 						priceSelect.classList.remove(STYLE_HIDDEN);
@@ -312,8 +310,9 @@ Page.Main = class extends Page {
 			let feeSelect = HtmlUtil.createSelect(doc, Array.from({length: 9}, (_, i) => ({
 				label: (1 + i * 0.25).toFixed(2) + ' %',
 				value: (1 + i * 0.25)
-			})), player.loan ? player.loan.fee : 1, (newValue) => {
-				let fee = Math.round(player.marketValue * +newValue / 100)
+			})), player.loan ? player.loan.feePercent : 1, (newValue) => {
+				player.loan.feePercent = +newValue;
+				let fee = Math.round(player.marketValue * player.loan.feePercent / 100);
 				player.loan.fee = fee * (data.team.id === player.teamId ? 1 : -1);
 				feeInput.value = fee.toLocaleString();
 			});
@@ -354,16 +353,19 @@ Page.Main = class extends Page {
 
 		// fetch salary for non squad players
 		Persistence.storeExtensionData(data);
-		let page = this;
-		Requestor.create(doc, () => {
-			Persistence.getExtensionData().then(updatedData => {
-				page.table.rows.slice(1).forEach(row => {
-					let id = HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href);
-					let player = ensurePrototype(updatedData, ExtensionData).team.getObservedPlayer(id);
-					row.cells['Gehalt'].textContent = player.salary.toLocaleString();
+		if (data.pagesToRequest.length) {
+			let page = this;
+			Requestor.create(doc, () => {
+				Persistence.getExtensionData().then(updatedData => {
+					data = updatedData;
+					page.table.rows.slice(1).forEach(row => {
+						let id = HtmlUtil.extractIdFromHref(row.cells['Spieler'].firstChild.href);
+						let player = ensurePrototype(updatedData, ExtensionData).team.getObservedPlayer(id);
+						row.cells['Gehalt'].textContent = player.salary.toLocaleString();
+					});
 				});
-			});
-		}).fetchPage(data.pagesToRequest[0]);
+			}).fetchPage(data.pagesToRequest[0]);
+		}
 	}
 }
 
