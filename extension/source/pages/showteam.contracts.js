@@ -214,6 +214,7 @@ Page.ShowteamContracts = class extends Page.Showteam {
 				if (+cell.textContent === 0 && i === 14) {
 					cell.classList.add('BAK');
 				} else if (player.loan && player.loan.duration > 0 && player.loan.fee > 0) {
+					cell.classList.remove(player.pos);
 					cell.classList.add('LEI');
 				} else {
 					cell.classList.add(player.pos);
