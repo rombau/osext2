@@ -50,7 +50,7 @@ class ObservedPlayer {
 		/** @type {MatchDay} the match day (ZAT) when the player will be transfered transfer or when the loan starts */
 		this.matchDay;
 
-		/** @type {TransferPrice} the observation type (default = NOTE) */
+		/** @type {TransferPrice} the transfer price type */
 		this.transferPriceType;
 
 		/** @type {Number} the price that will be payed for the player */

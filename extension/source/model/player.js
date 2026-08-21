@@ -261,11 +261,11 @@ class Player {
 	}
 
 	/**
- * Returns the potential.
- * The formula was provided by Michael Bertram.
- *
- * @returns {Number}
- */
+	 * Returns the potential.
+	 * The formula was provided by Michael Bertram.
+	 *
+	 * @returns {Number}
+	 */
 	getPotential () {
 		let trainedSkills = {...this.getPrimarySkills(), ...this.getSecondarySkills()};
 		delete trainedSkills.fuq;

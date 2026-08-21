@@ -242,14 +242,19 @@ describe('Team', () => {
 		templateZat.competition = Competition.LEAGUE;
 		team.matchDays.push(templateZat);
 
+		let copy = team.copyScheduledMatchDay(16, 2);
+
+		expect(copy.competition).toEqual(Competition.LEAGUE);
+		expect(copy.stadium).toBeUndefined();
+
 		let extendedStadiumZat = new MatchDay(16, 2);
 		extendedStadiumZat.stadium = new Stadium();
 		team.matchDays.push(extendedStadiumZat);
 
-		let copy = team.copyScheduledMatchDay(16, 2);
+		copy = team.copyScheduledMatchDay(16, 2);
 
 		expect(copy.competition).toEqual(Competition.LEAGUE);
-		expect(copy.stadium).toBeDefined();
+		expect(copy.stadium).toEqual(extendedStadiumZat.stadium);
 	});
 
 	it('should calculate youth support', () => {

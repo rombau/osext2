@@ -490,10 +490,10 @@ class Team {
 						bookingValue = squadPlayer.marketValue;
 						break;
 					case TransferPrice.MIN:
-						bookingValue = squadPlayer.marketValue * 75 / 100;
+						bookingValue = Math.round(squadPlayer.marketValue * 75 / 100);
 						break;
 					case TransferPrice.MAX:
-						bookingValue = squadPlayer.marketValue * 100 / 75;
+						bookingValue = Math.round(squadPlayer.marketValue * 100 / 75);
 						break;
 				}
 			} else {
@@ -587,7 +587,7 @@ class Team {
 			}
 			copyMatchDay.accountBalance = scheduledMatchDay.accountBalance;
 			scheduledMatchDay = this.matchDays.find(matchDay => matchDay.season === season && matchDay.zat === zat) || scheduledMatchDay;
-			copyMatchDay.stadium = scheduledMatchDay.stadium;
+			if (copyMatchDay.season === scheduledMatchDay.season) copyMatchDay.stadium = scheduledMatchDay.stadium;
 		} else {
 			copyMatchDay.competition = Competition.FRIENDLY;
 		}
