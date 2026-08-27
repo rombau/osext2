@@ -166,7 +166,7 @@ class ExtensionData {
 	 */
 	initNextSeason (season) {
 		if (this.nextZat == 1) {
-			let lastPlayedMatchDay = this.team.matchDays.slice().reverse().find(matchDay => matchDay.result);
+			let lastPlayedMatchDay = this.team.sortedMatchDays.find(matchDay => matchDay.result);
 			if (lastPlayedMatchDay) {
 				this.nextZatSeason = lastPlayedMatchDay.season + 1;
 				return;
