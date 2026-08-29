@@ -6,6 +6,7 @@ describe('Page.MatchDayConfirmation', () => {
 	beforeEach(() => {
 		data = new ExtensionData();
 		page = new Page.MatchDayConfirmation();
+		pageNew = new Page.MatchDayConfirmationNew();
 	});
 
 	it('should extract page data', (done) => {
@@ -39,4 +40,37 @@ describe('Page.MatchDayConfirmation', () => {
 			done();
 		});
 	});
+
+	it('should extract new page data', (done) => {
+
+		data.team.squadPlayers[0] = new SquadPlayer();
+		data.team.squadPlayers[0].name = 'Andrew Scully';
+		data.team.squadPlayers[1] = new SquadPlayer();
+		data.team.squadPlayers[1].name = 'James Geoghegan';
+		data.team.squadPlayers[2] = new SquadPlayer();
+		data.team.squadPlayers[2].name = 'Tyran Doyle';
+		data.team.squadPlayers[3] = new SquadPlayer();
+		data.team.squadPlayers[3].name = 'Christopher McCann';
+		data.team.squadPlayers[4] = new SquadPlayer();
+		data.team.squadPlayers[4].name = 'Hugo Boss';
+		data.team.squadPlayers[5] = new SquadPlayer();
+		data.team.squadPlayers[5].name = 'Emanuel Kant';
+		data.team.squadPlayers[5].nextTraining = new SquadPlayer.Training();
+		data.team.squadPlayers[5].nextTraining.matchBonus = 1.35;
+
+		Fixture.getDocument('checkza_neu.php', doc => {
+
+			pageNew.extract(doc, data);
+
+			expect(data.team.squadPlayers[0].nextTraining.matchBonus).toEqual(1.25);
+			expect(data.team.squadPlayers[1].nextTraining.matchBonus).toEqual(1.25);
+			expect(data.team.squadPlayers[2].nextTraining.matchBonus).toEqual(1.35);
+			expect(data.team.squadPlayers[3].nextTraining.matchBonus).toEqual(1.1);
+			expect(data.team.squadPlayers[4].nextTraining).toBeUndefined();
+			expect(data.team.squadPlayers[5].nextTraining.matchBonus).toEqual(1);
+
+			done();
+		});
+	});
+
 });

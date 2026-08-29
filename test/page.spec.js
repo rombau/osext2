@@ -236,6 +236,14 @@ describe('Page', () => {
 			expect(found.params[3].name).toEqual(reportPage.params[3].name);
 			expect(+found.params[3].value).toEqual(reportPage.params[3].value);
 		});
+
+		it('with path only', () => {
+
+			let matchDayConfirmation = new Page.MatchDayConfirmationNew();
+
+			expect(Page.byLocation('http://www.any.com/osneu/unknown')).toBeUndefined();
+			expect(Page.byLocation('http://www.any.com/osneu/checkza')).toEqualWithoutLogger(matchDayConfirmation);
+		});
 	});
 
 	describe('should be checked', () => {

@@ -80,6 +80,7 @@
 				"source/pages/matchdayoptions.js",
 				"source/pages/matchdayreport.js",
 				"source/pages/matchdayconfirmation.js",
+				"source/pages/matchdayconfirmation.new.js",
 				"source/pages/showteam.base.js",
 				"source/pages/showteam.overview.js",
 				"source/pages/showteam.skills.js",
