@@ -14,13 +14,13 @@ JWT_PAYLOAD=$(echo -n '{"iss":"'"$AMO_API_KEY"'","jti":"'"$(uuidgen)"'","iat":'$
 JWT_SIGNATURE=$(echo -n "$JWT_HEADER.$JWT_PAYLOAD" | openssl dgst -binary -sha256 -hmac "$AMO_API_SECRET" | base64encode )
 JWT="JWT $JWT_HEADER.$JWT_PAYLOAD.$JWT_SIGNATURE"
 
-UPLOAD_ID=$(curl -L -s -H "Authorization: $JWT" -F "channel=listed" \
+UPLOAD_ID=$(curl -L -sS -H "Authorization: $JWT" -F "channel=listed" \
 	-F "upload=@$(find release -name 'osext*firefox.zip')" \
 	"https://addons.mozilla.org/api/v5/addons/upload/" | jq -r '.uuid')
 ATTEMPTS=1
 while true;
 do
-	UPLOAD_RESPONSE=$(curl -L -s -H "Authorization: $JWT" \
+	UPLOAD_RESPONSE=$(curl -L -sS -H "Authorization: $JWT" \
 		"https://addons.mozilla.org/api/v5/addons/upload/$UPLOAD_ID/")
 	UPLOAD_VALID=$(echo $UPLOAD_RESPONSE | jq -r '.valid')
 	echo -n "."
@@ -35,10 +35,10 @@ do
     fi;
     sleep 1;
 done
-curl -L -s -H "Authorization: $JWT" \
+curl -L -sS -H "Authorization: $JWT" \
 	-H "Content-Type: application/json" \
 	-d '{"upload": "'"$UPLOAD_ID"'"}' \
-	"https://addons.mozilla.org/api/v5/addons/addon/$EXTENSION_ID/versions/"
+	"https://addons.mozilla.org/api/v5/addons/addon/$EXTENSION_ID/versions/" > /dev/null
 echo " OK"
 
 # Chrome
@@ -47,16 +47,16 @@ echo -n "Publish extension on Google Web Store ..."
 
 EXTENSION_ID=plhbikhfgkkommnghjaihagamgophofm
 
-GWS_TOKEN=$(curl -L -s \
+GWS_TOKEN=$(curl -L -sS \
 	-d "client_id=$GWS_API_KEY&client_secret=$GWS_API_SECRET&grant_type=refresh_token&refresh_token=$GWS_API_REFRESHTOKEN" \
 	"https://oauth2.googleapis.com/token" | jq -r '.access_token')
 echo -n "."
-UPLOAD_RESPONSE=$(curl -L -s \
+curl -L -sS \
 	-H "Authorization: Bearer $GWS_TOKEN" \
 	-T $(find release -name 'osext*chrome.zip') \
-	"https://www.googleapis.com/upload/chromewebstore/v1.1/items/$EXTENSION_ID")
+	"https://www.googleapis.com/upload/chromewebstore/v1.1/items/$EXTENSION_ID" > /dev/null
 echo -n "."
-UPLOAD_RESPONSE=$(curl -L -s -X POST \
+curl -L -sS -X POST \
 	-H "Authorization: Bearer $GWS_TOKEN" \
-	"https://www.googleapis.com/chromewebstore/v1.1/items/$EXTENSION_ID/publish")
+	"https://www.googleapis.com/chromewebstore/v1.1/items/$EXTENSION_ID/publish" > /dev/null
 echo " OK"
