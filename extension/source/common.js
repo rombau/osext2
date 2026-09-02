@@ -75,7 +75,7 @@ const OSE_FIXTURES = {
 	35: 'Zwischenrunde Hin',
 	37: 'Zwischenrunde Rück',
 	41: '1. Runde Hin',
-	43: '2. Runde Rück',
+	43: '1. Runde Rück',
 	47: 'Achtelfinale Hin',
 	49: 'Achtelfinale Rück',
 	53: 'Viertelfinale Hin',
