@@ -18,7 +18,12 @@ Page.ShowPlayer = class extends Page {
 	 */
 	extract (doc, data) {
 
-		let id = HtmlUtil.extractIdFromHref(doc.querySelector('img[src^=face]').src);
+		let face = doc.querySelector('img[src^=face]');
+		if (!face) {
+			return;
+		}
+
+		let id = HtmlUtil.extractIdFromHref(face.src);
 
 		// add salary to observed player
 		let observedPlayer = data.team.observedPlayers.find(player => player.id === id);

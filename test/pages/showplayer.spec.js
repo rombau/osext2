@@ -19,4 +19,14 @@ describe('Page.ShowPlayer', () => {
 			done();
 		});
 	});
+
+	it('should not extract zero player', () => {
+
+		let page = new Page.ShowPlayer();
+
+		let doc = Fixture.createDocument('Any content');
+
+		page.extract(doc, data);
+
+	});
 });
