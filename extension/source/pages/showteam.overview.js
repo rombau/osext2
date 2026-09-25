@@ -56,7 +56,7 @@ Page.ShowteamOverview = class extends Page.Showteam {
 
 			this.showExactAge = row.cells['Alter'].textContent.includes('.');
 
-			player.name = row.cells['Name'].textContent;
+			player.name = row.cells['Name'].textContent.trim();
 			player.age = Math.floor(+row.cells['Alter'].textContent);
 			player.pos = player.pos || row.cells['Pos'].textContent;
 			player.posLastMatch = row.cells['Auf'].textContent;
