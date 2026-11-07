@@ -22,5 +22,6 @@
 	},
 	"css.format.newlineBetweenRules": false,
 	"css.format.spaceAroundSelectorSeparator": true,
-	"css.format.newlineBetweenSelectors": false
+	"css.format.newlineBetweenSelectors": false,
+	"html.format.enable": false
 }
